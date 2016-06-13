@@ -1,0 +1,776 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="Dkf0E0xe3Q" />
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="优化," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="体积优化
+全局图片开关管控，针对商品、店铺、页头、入口图等图片通过开关全局系数裁剪压缩处理，降低页面图片整体体积；
+zCache打包，js和css离线化，减少固定大资源阻塞和请求时间耗损；
+
+请求优化
+通过全局开关控制，针对走节点懒加载模块图片做域名收敛管控，降低Mobile端的http建连和dns握手的成本；
+常用图标iconfont化，减少请求；
+节点懒加载接入，避免非首屏dom载入；
+空背景">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tmall 前端11.11">
+<meta property="og:url" content="http://www.wmtcore.com/2015/12/04/tmall-前端11-11/index.html">
+<meta property="og:site_name" content="大碗拉面">
+<meta property="og:description" content="体积优化
+全局图片开关管控，针对商品、店铺、页头、入口图等图片通过开关全局系数裁剪压缩处理，降低页面图片整体体积；
+zCache打包，js和css离线化，减少固定大资源阻塞和请求时间耗损；
+
+请求优化
+通过全局开关控制，针对走节点懒加载模块图片做域名收敛管控，降低Mobile端的http建连和dns握手的成本；
+常用图标iconfont化，减少请求；
+节点懒加载接入，避免非首屏dom载入；
+空背景">
+<meta property="og:updated_time" content="2015-12-04T06:56:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tmall 前端11.11">
+<meta name="twitter:description" content="体积优化
+全局图片开关管控，针对商品、店铺、页头、入口图等图片通过开关全局系数裁剪压缩处理，降低页面图片整体体积；
+zCache打包，js和css离线化，减少固定大资源阻塞和请求时间耗损；
+
+请求优化
+通过全局开关控制，针对走节点懒加载模块图片做域名收敛管控，降低Mobile端的http建连和dns握手的成本；
+常用图标iconfont化，减少请求；
+节点懒加载接入，避免非首屏dom载入；
+空背景">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> tmall 前端11.11 | 大碗拉面 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?8fc1dcdaa63dc57073d1f217ba27dc7d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大碗拉面</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '1zo1-KPbS2sqsk4pXnSQ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                tmall 前端11.11
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-04T14:06:24+08:00" content="2015-12-04">
+              2015-12-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/04/tmall-前端11-11/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/04/tmall-前端11-11/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h4 id="u4F53_u79EF_u4F18_u5316"><a href="#u4F53_u79EF_u4F18_u5316" class="headerlink" title="体积优化"></a>体积优化</h4><ul>
+<li>全局图片开关管控，针对商品、店铺、页头、入口图等图片通过开关全局系数裁剪压缩处理，降低页面图片整体体积；</li>
+<li>zCache打包，js和css离线化，减少固定大资源阻塞和请求时间耗损；</li>
+</ul>
+<h4 id="u8BF7_u6C42_u4F18_u5316"><a href="#u8BF7_u6C42_u4F18_u5316" class="headerlink" title="请求优化"></a>请求优化</h4><ul>
+<li>通过全局开关控制，针对走节点懒加载模块图片做域名收敛管控，降低Mobile端的http建连和dns握手的成本；</li>
+<li>常用图标iconfont化，减少请求；</li>
+<li>节点懒加载接入，避免非首屏dom载入；</li>
+<li>空背景图请求修复，避免资源耗损；</li>
+<li>模块小图片base64化，减少不必要的请求；</li>
+</ul>
+<h4 id="u6E32_u67D3_u4F18_u5316"><a href="#u6E32_u67D3_u4F18_u5316" class="headerlink" title="渲染优化"></a>渲染优化</h4><ul>
+<li>gif动画去处和部分模块高度计算有误兼容避免引起重绘性能耗损；</li>
+</ul>
+<h4 id="u52A8_u6001_u964D_u9891_28_u9875_u9762_u6E32_u67D3wormhole_29"><a href="#u52A8_u6001_u964D_u9891_28_u9875_u9762_u6E32_u67D3wormhole_29" class="headerlink" title="动态降频(页面渲染wormhole)"></a>动态降频(页面渲染wormhole)</h4><ul>
+<li>整个渲染策略就是，定时备份页面到OSS集群，每次请求过来，都会去判断当前系统Load是否过载，若果过载则直接读取上次备份的页面返回，而不使用模板引擎渲染，达到动态降低系统负载，快速响应的目的。 如果发生了最极端的情况，源站全部挂掉，由当天的值班人员，手工切换CDN指向已经备份了的OSS文件，保障页面可访问。</li>
+</ul>
+<p>CDN根据终端类型（使用user-agent判断）转发到node渲染服务</p>
+<p>模块开发者需要编写一份模块需要数据的 JSON Schema 描述</p>
+<h4 id="u6BCF_u4E00_u4E2A_u9875_u9762_u90FD_u53D8_u6210_u4E86_u4EE5_u4E0B_u51E0_u4E2A_u90E8_u5206_uFF1A"><a href="#u6BCF_u4E00_u4E2A_u9875_u9762_u90FD_u53D8_u6210_u4E86_u4EE5_u4E0B_u51E0_u4E2A_u90E8_u5206_uFF1A" class="headerlink" title="每一个页面都变成了以下几个部分："></a>每一个页面都变成了以下几个部分：</h4><ul>
+<li>一份页面的描述文件，声明了这个页面依赖的所有模块，以及渲染这些模块所需的数据的地址。</li>
+<li>一系列相互独立的模块。</li>
+<li>一份包含页面上所有模块需要的数据的数据文件。</li>
+</ul>
+<h4 id="node_u4F18_u5316"><a href="#node_u4F18_u5316" class="headerlink" title="node优化"></a>node优化</h4><p>对于 node 应用自身而言，我们首先要保证它有充足的测试，通过 mocha + istanbul ，尽可能让测试覆盖每一个功能点和边缘情况。</p>
+<ul>
+<li>没有单点 多个节点，主备读取，同时对所有的文件都加上磁盘文件容灾，每一个依赖都不能够出现单点问题</li>
+<li><p>弱化依赖 对于每个依赖异常都有容灾的方案</p>
+</li>
+<li><p>预案自动化 对于每一个可能出现问题的环节，都需要有针对性的预案，做到自动化，通过健康检查自动剔除</p>
+</li>
+<li><p>视窗内渲染，就是只渲染可视区域的元素，以减少绘制消耗</p>
+</li>
+<li><p>懒加载，就是图片资源一开始是不加载的，在用户滚动到附近区域的时候才加载，减少网络请求</p>
+</li>
+<li>加载限流 限制同时只能加载4个图片，并实时调整加载顺序，优先加载用户当前可见区域的图片</li>
+</ul>
+<h4 id="u5BF9_u4E8E_u591A_u5C3A_u5BF8_u56FE_u7247"><a href="#u5BF9_u4E8E_u591A_u5C3A_u5BF8_u56FE_u7247" class="headerlink" title="对于多尺寸图片"></a>对于多尺寸图片</h4><p>自动处理图片的gulp任务，可以自动生成多种尺寸的图片，然后压缩、上传到cdn，最后生成一个imgs.js的文件，使用只需要依赖这个js，然后以原始文件名引用即可</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/优化/" rel="tag">#优化</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/04/Libvirt/" rel="prev" title="Libvirt">
+                Libvirt <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/12/04/tmall-前端11-11/"
+           data-title="tmall 前端11.11" data-url="http://www.wmtcore.com/2015/12/04/tmall-前端11-11/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="http://www.wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">WMT</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">不扯犊子 -NOT ALONE</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/WMTcore" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#u4F53_u79EF_u4F18_u5316"><span class="nav-number">1.</span> <span class="nav-text">体积优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u8BF7_u6C42_u4F18_u5316"><span class="nav-number">2.</span> <span class="nav-text">请求优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u6E32_u67D3_u4F18_u5316"><span class="nav-number">3.</span> <span class="nav-text">渲染优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u52A8_u6001_u964D_u9891_28_u9875_u9762_u6E32_u67D3wormhole_29"><span class="nav-number">4.</span> <span class="nav-text">动态降频(页面渲染wormhole)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u6BCF_u4E00_u4E2A_u9875_u9762_u90FD_u53D8_u6210_u4E86_u4EE5_u4E0B_u51E0_u4E2A_u90E8_u5206_uFF1A"><span class="nav-number">5.</span> <span class="nav-text">每一个页面都变成了以下几个部分：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#node_u4F18_u5316"><span class="nav-number">6.</span> <span class="nav-text">node优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u5BF9_u4E8E_u591A_u5C3A_u5BF8_u56FE_u7247"><span class="nav-number">7.</span> <span class="nav-text">对于多尺寸图片</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015-12 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMT</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wmtcore"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>

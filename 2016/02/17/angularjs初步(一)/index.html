@@ -1,0 +1,800 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="Dkf0E0xe3Q" />
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="angularjs," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="AngularJS 应用组成如下：
+View(视图), 即 HTML。
+Model(模型), 当前视图中可用的数据。
+Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
+表达式
+使用 表达式 把数据绑定到 HTML
+表达式写在双大括号内：，类似ng-bind
+
+1234567&amp;lt; div ng-app=&quot;&quot; ng-init=&quot;quantity=1;cost=">
+<meta property="og:type" content="article">
+<meta property="og:title" content="angularjs初步(一)">
+<meta property="og:url" content="http://www.wmtcore.com/2016/02/17/angularjs初步(一)/index.html">
+<meta property="og:site_name" content="大碗拉面">
+<meta property="og:description" content="AngularJS 应用组成如下：
+View(视图), 即 HTML。
+Model(模型), 当前视图中可用的数据。
+Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
+表达式
+使用 表达式 把数据绑定到 HTML
+表达式写在双大括号内：，类似ng-bind
+
+1234567&amp;lt; div ng-app=&quot;&quot; ng-init=&quot;quantity=1;cost=">
+<meta property="og:updated_time" content="2016-02-18T03:21:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="angularjs初步(一)">
+<meta name="twitter:description" content="AngularJS 应用组成如下：
+View(视图), 即 HTML。
+Model(模型), 当前视图中可用的数据。
+Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
+表达式
+使用 表达式 把数据绑定到 HTML
+表达式写在双大括号内：，类似ng-bind
+
+1234567&amp;lt; div ng-app=&quot;&quot; ng-init=&quot;quantity=1;cost=">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> angularjs初步(一) | 大碗拉面 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?8fc1dcdaa63dc57073d1f217ba27dc7d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大碗拉面</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '1zo1-KPbS2sqsk4pXnSQ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                angularjs初步(一)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-02-17T15:28:09+08:00" content="2016-02-17">
+              2016-02-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/17/angularjs初步(一)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/17/angularjs初步(一)/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>AngularJS 应用组成如下：</p>
+<pre><code>View(视图), 即 HTML。
+Model(模型), 当前视图中可用的数据。
+Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
+</code></pre><h3 id="u8868_u8FBE_u5F0F"><a href="#u8868_u8FBE_u5F0F" class="headerlink" title="表达式"></a>表达式</h3><ul>
+<li>使用 表达式 把数据绑定到 HTML</li>
+<li>表达式写在双大括号内：，类似ng-bind</li>
+</ul>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">""</span> <span class="attribute">ng-init</span>=<span class="value">"quantity=1;cost=5"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span>总价： </span><span class="expression">&#123;&#123; <span class="variable">quantity</span> * <span class="variable">cost</span> &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">div</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">""</span> <span class="attribute">ng-init</span>=<span class="value">"quantity=1;cost=5"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span>总价： <span class="tag">&lt;<span class="title">span</span> <span class="attribute">ng-bind</span>=<span class="value">"quantity * cost"</span>&gt;</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; /<span class="attribute">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="u6307_u4EE4"><a href="#u6307_u4EE4" class="headerlink" title="指令"></a>指令</h3><p><code>ng-app</code> 指令初始化一个 AngularJS 应用程序,定义根元素,在网页加载完毕时会自动引导应用程序</p>
+<p><code>ng-init</code> 指令为 AngularJS 应用程序定义了 初始值,通常情况下，不使用 ng-init，用控制器或模块来代替它</p>
+<p><code>ng-model</code> 指令把元素值（比如输入域的值）绑定到应用程序，提供类型验证（number、email、required），提供状态（invalid、dirty、touched、error），为 HTML 元素提供 CSS 类。绑定 HTML 元素到 HTML 表单。</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">""</span> <span class="attribute">ng-init</span>=<span class="value">"firstName='John'"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="title">p</span>&gt;</span>在输入框中尝试输入：<span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">p</span>&gt;</span>姓名：<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">ng-model</span>=<span class="value">"firstName"</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">p</span>&gt;</span>你输入的为： </span><span class="expression">&#123;&#123; <span class="variable">firstName</span> &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="title">p</span>&gt;</span> //AngularJS 数据绑定表达式</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p><code>ng-repeat</code> 指令对于集合中（数组中）的每个项会 克隆一次 HTML 元素</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">""</span> <span class="attribute">ng-init</span>=<span class="value">"names=['Jani','Hege','Kai']"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt; <span class="attribute">p</span>&gt;</span>使用 ng-repeat 来循环数组<span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt; <span class="attribute">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt; <span class="attribute">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"x in names"</span>&gt;</span></span><br><span class="line">      </span><span class="expression">&#123;&#123; <span class="variable">x</span> &#125;&#125;</span><span class="xml"></span><br><span class="line">    <span class="tag">&lt; /<span class="attribute">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt; /<span class="attribute">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; <span class="attribute">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">""</span> <span class="attribute">ng-init</span>=<span class="value">"names=[</span><br><span class="line">&#123;name:'Jani',country:'Norway'&#125;,</span><br><span class="line">&#123;name:'Hege',country:'Sweden'&#125;,</span><br><span class="line">&#123;name:'Kai',country:'Denmark'&#125;]"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span>循环对象：<span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; <span class="attribute">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"x in names"</span>&gt;</span></span><br><span class="line">    </span><span class="expression">&#123;&#123; <span class="variable">x.name</span> + ', ' + <span class="variable">x.country</span> &#125;&#125;</span><span class="xml"></span><br><span class="line">  <span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; /<span class="attribute">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<h4 id="u521B_u5EFA_u81EA_u5B9A_u4E49_u7684_u6307_u4EE4"><a href="#u521B_u5EFA_u81EA_u5B9A_u4E49_u7684_u6307_u4EE4" class="headerlink" title="创建自定义的指令"></a>创建自定义的指令</h4><p>使用 <code>.directive</code> 函数来添加自定义的指令</p>
+<p>使用驼峰法来命名一个指令， runoobDirective, 但在使用它时需要以 - 分割, runoob-directive:</p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">body</span> ng-app=<span class="string">"myApp"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt; runoob-directive&gt;&lt;/runoob-directive&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line">var app = angular.<span class="keyword">module</span>(<span class="string">"myApp"</span>, []);</span><br><span class="line">app.directive(<span class="string">"runoobDirective"</span>, <span class="built_in">function</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="keyword">template</span> : <span class="string">"&lt; h1&gt;自定义指令!&lt;/h1&gt;"</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br><span class="line">&lt; /script&gt;</span><br><span class="line"></span><br><span class="line">&lt; /<span class="keyword">body</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>以通过以下方式来调用指令:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">元素名 <span class="tag">&lt;<span class="title">runoob-directive</span>&gt;</span><span class="tag">&lt;/<span class="title">runoob-directive</span>&gt;</span></span><br><span class="line">属性 <span class="tag">&lt;<span class="title">div</span> <span class="attribute">runoob-directive</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line">类名 <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"runoob-directive"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line">注释 <span class="comment">&lt;!-- 指令: runoob-directive --&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>限制你的指令只能通过特定的方式来调用</code></p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> app = angular.module(<span class="string">"myApp"</span>, []);</span><br><span class="line">app.directive(<span class="string">"runoobDirective"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        restrict : <span class="string">"A"</span>,<span class="comment">// E 只限元素名使用, A 只限属性使用, C 只限类名使用,M 只限注释使用,restrict 默认值为 EA</span></span><br><span class="line">        <span class="comment">//对于注释 要添加 replace：true 属性</span></span><br><span class="line">        template : <span class="string">"&lt;h1&gt;自定义指令!&lt;/h1&gt;"</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="u6A21_u578B_ng-model"><a href="#u6A21_u578B_ng-model" class="headerlink" title="模型 ng-model"></a>模型 ng-model</h3><ul>
+<li>将输入域的值与 AngularJS 创建的变量绑定</li>
+</ul>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> &lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"myCtrl"</span>&gt;</span><br><span class="line">    名字: &lt;input ng-model=<span class="string">"name"</span>&gt;</span><br><span class="line">&lt; /div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">app.controller(<span class="string">'myCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>) &#123;</span><br><span class="line">    <span class="variable">$scope</span>.name = <span class="string">"John Doe"</span>;</span><br><span class="line">&#125;);</span><br><span class="line">&lt; /script&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>双向绑定</li>
+</ul>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"myCtrl"</span>&gt;</span><br><span class="line">    名字: &lt;input ng-model=<span class="string">"name"</span>&gt;</span><br><span class="line">    &lt;h1&gt;你输入了: <span class="expansion">&#123;&#123;name&#125;&#125;</span>&lt;<span class="regexp">/h1&gt;</span><br><span class="line">&lt;/div</span>&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>验证用户输入</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="tag">form</span> ng-app=<span class="string">""</span> name=<span class="string">"myForm"</span>&gt;</span><br><span class="line">    Email:</span><br><span class="line">    &lt;<span class="tag">input</span> type=<span class="string">"email"</span> name=<span class="string">"myAddress"</span> ng-model=<span class="string">"text"</span>&gt;</span><br><span class="line">    &lt;<span class="tag">span</span> ng-show=<span class="string">"myForm.myAddress.$error.email"</span>&gt;不是一个合法的邮箱地址&lt;/span&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>应用状态(invalid合法, dirty改变, touched触屏点击, error)</li>
+</ul>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt; form ng-app=<span class="string">""</span> name=<span class="string">"myForm"</span> ng-init=<span class="string">"myText = 'test@runoob.com'"</span>&gt;</span><br><span class="line">    Email:</span><br><span class="line">    &lt;input type=<span class="string">"email"</span> name=<span class="string">"myAddress"</span> ng-model=<span class="string">"myText"</span> required&gt;&lt;/p&gt;</span><br><span class="line">    &lt;h1&gt;状态&lt;/h1&gt;</span><br><span class="line">&lt; p&gt;Valid: &#123;&#123;myForm.myAddress.<span class="variable">$valid</span>&#125;&#125; (如果输入的值是合法的则为 <span class="literal">true</span>)。&lt;/p&gt;</span><br><span class="line">&lt; p&gt;Dirty: &#123;&#123;myForm.myAddress.<span class="variable">$dirty</span>&#125;&#125; (如果值改变则为 <span class="literal">true</span>)。&lt;/p&gt;</span><br><span class="line">&lt; p&gt;Touched: &#123;&#123;myForm.myAddress.<span class="variable">$touched</span>&#125;&#125; (如果通过触屏点击则为 <span class="literal">true</span>)。&lt;/p&gt;</span><br><span class="line">&lt; /form&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>CSS 类</li>
+</ul>
+<p><code>可用状态</code>:ng-empty ,ng-not-empty ,ng-touched ,ng-untouched ,ng-valid ,ng-invalid ,ng-dirty ,ng-pending ,ng-pristine</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css"></span><br><span class="line"><span class="tag">input</span><span class="class">.ng-invalid</span> <span class="rules">&#123;</span><br><span class="line">    <span class="rule"><span class="attribute">background-color</span>:<span class="value"> lightblue</span></span>;</span><br><span class="line">&#125;</span></span><br><span class="line"></span><span class="tag">&lt;/<span class="title">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">form</span> <span class="attribute">ng-app</span>=<span class="value">""</span> <span class="attribute">name</span>=<span class="value">"myForm"</span>&gt;</span></span><br><span class="line">    输入你的名字:</span><br><span class="line">    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">name</span>=<span class="value">"myAddress"</span> <span class="attribute">ng-model</span>=<span class="value">"text"</span> <span class="attribute">required</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; /<span class="attribute">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span>编辑文本域，不同状态背景颜色会发送变化。<span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span>文本域添加了 required 属性，该值是必须的，如果为空则是不合法的。<span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Scope_28_u4F5C_u7528_u57DF_29"><a href="#Scope_28_u4F5C_u7528_u57DF_29" class="headerlink" title="Scope(作用域)"></a>Scope(作用域)</h3><ul>
+<li>scope 是模型</li>
+<li>Scope(作用域) 是应用在 HTML (视图) 和 JavaScript (控制器)之间的纽带，是一个对象，有可用的方法和属性，可应用在视图和控制器上</li>
+</ul>
+<p>可以将 $scope 对象当作一个参数传递，当在控制器中添加 $scope 对象时，视图 (HTML) 可以获取了这些属性:</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"myCtrl"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt; h1&gt;&#123;&#123;carname&#125;&#125;&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line"></span><br><span class="line">app.controller(<span class="string">'myCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>) &#123;</span><br><span class="line">    <span class="variable">$scope</span>.carname = <span class="string">"Volvo"</span>;</span><br><span class="line">&#125;);</span><br><span class="line">&lt; /script&gt;</span><br></pre></td></tr></table></figure>
+<p><code>根作用域</code> 所有的应用都有一个 $rootScope，它可以作用在 ng-app 指令包含的所有 HTML 元素中,是各个 controller 中 scope 的桥梁，用 rootscope 定义的值，可以在各个 controller 中使用。</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"myCtrl"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt; h1&gt;&#123;&#123;lastname&#125;&#125; 家族成员:&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">&lt; ul&gt;</span><br><span class="line">    &lt;li ng-repeat=<span class="string">"x in names"</span>&gt;&#123;&#123;x&#125;&#125; &#123;&#123;lastname&#125;&#125;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line"></span><br><span class="line">&lt; /div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line"></span><br><span class="line">app.controller(<span class="string">'myCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>, <span class="variable">$rootScope</span>) &#123;</span><br><span class="line">    <span class="variable">$scope</span>.names = [<span class="string">"Emil"</span>, <span class="string">"Tobias"</span>, <span class="string">"Linus"</span>];</span><br><span class="line">    <span class="variable">$rootScope</span>.lastname = <span class="string">"Refsnes"</span>;</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="u63A7_u5236_u5668_ng-controller"><a href="#u63A7_u5236_u5668_ng-controller" class="headerlink" title="控制器 ng-controller"></a>控制器 ng-controller</h3><ul>
+<li>控制 AngularJS 应用程序的数据</li>
+</ul>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//定义AngularJS 应用程序  定义控制器</span><br><span class="line"> &lt; div ng-app=<span class="string">"myApp"</span>  ng-controller=<span class="string">"myCtrl"</span> &gt;</span><br><span class="line">//ng-model 指令绑定输入域到控制器的属性（firstName 和 lastName）</span><br><span class="line">名: &lt;input type=<span class="string">"text"</span> ng-model=<span class="string">"firstName"</span>&gt;&lt;br&gt;</span><br><span class="line">名: &lt;input type=<span class="string">"text"</span> ng-model=<span class="string">"lastName"</span>&gt;&lt;br&gt;</span><br><span class="line">&lt;br&gt;</span><br><span class="line">姓名: &#123;&#123;firstName + <span class="string">" "</span> + lastName&#125;&#125;</span><br><span class="line"></span><br><span class="line">&lt; /div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">//<span class="variable">$scope</span> （相当于作用域、控制范围）用来保存AngularJS Model(模型)的对象</span><br><span class="line">app.controller(<span class="string">'myCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>) &#123;</span><br><span class="line">//控制器在作用域中创建了两个属性 (firstName 和 lastName)</span><br><span class="line">    <span class="variable">$scope</span>.firstName = <span class="string">"John"</span>;</span><br><span class="line">    <span class="variable">$scope</span>.lastName = <span class="string">"Doe"</span>;</span><br><span class="line">&#125;);</span><br><span class="line">&lt; /script&gt;</span><br></pre></td></tr></table></figure>
+<p><code>控制器方法</code></p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"> &lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"personCtrl"</span>&gt;</span><br><span class="line"></span><br><span class="line">名: &lt;input type=<span class="string">"text"</span> ng-model=<span class="string">"firstName"</span>&gt;&lt;br&gt;</span><br><span class="line">姓: &lt;input type=<span class="string">"text"</span> ng-model=<span class="string">"lastName"</span>&gt;&lt;br&gt;</span><br><span class="line">&lt;br&gt;</span><br><span class="line">姓名: &#123;&#123;fullName()&#125;&#125;</span><br><span class="line"></span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">app.controller(<span class="string">'personCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>) &#123;</span><br><span class="line">    <span class="variable">$scope</span>.firstName = <span class="string">"John"</span>;</span><br><span class="line">    <span class="variable">$scope</span>.lastName = <span class="string">"Doe"</span>;</span><br><span class="line">    <span class="variable">$scope</span>.fullName = function() &#123;</span><br><span class="line">        return <span class="variable">$scope</span>.firstName + <span class="string">" "</span> + <span class="variable">$scope</span>.lastName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p><code>外部文件中的控制器</code> 只需要把 &lt; script&gt; 标签中的代码复制到名为 personController.js 的外部文件中即可：</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"> <span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">"myApp"</span> <span class="attribute">ng-controller</span>=<span class="value">"personCtrl"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">First Name: <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">ng-model</span>=<span class="value">"firstName"</span>&gt;</span><span class="tag">&lt;<span class="title">br</span>&gt;</span></span><br><span class="line">Last Name: <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">ng-model</span>=<span class="value">"lastName"</span>&gt;</span><span class="tag">&lt;<span class="title">br</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">br</span>&gt;</span></span><br><span class="line">Full Name: </span><span class="expression">&#123;&#123;<span class="variable">firstName</span> + <span class="string">" "</span> + <span class="variable">lastName</span>&#125;&#125;</span><span class="xml"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; /<span class="attribute">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">script</span> <span class="attribute">src</span>=<span class="value">"personController.js"</span>&gt;</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure></span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/angularjs/" rel="tag">#angularjs</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/25/js-call和apply/" rel="next" title="js call和apply">
+                <i class="fa fa-chevron-left"></i> js call和apply
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/18/angularjs初步-二/" rel="prev" title="angularjs初步(二)">
+                angularjs初步(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/02/17/angularjs初步(一)/"
+           data-title="angularjs初步(一)" data-url="http://www.wmtcore.com/2016/02/17/angularjs初步(一)/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="http://www.wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">WMT</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">不扯犊子 -NOT ALONE</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/WMTcore" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u8868_u8FBE_u5F0F"><span class="nav-number">1.</span> <span class="nav-text">表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6307_u4EE4"><span class="nav-number">2.</span> <span class="nav-text">指令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u521B_u5EFA_u81EA_u5B9A_u4E49_u7684_u6307_u4EE4"><span class="nav-number">2.1.</span> <span class="nav-text">创建自定义的指令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6A21_u578B_ng-model"><span class="nav-number">3.</span> <span class="nav-text">模型 ng-model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scope_28_u4F5C_u7528_u57DF_29"><span class="nav-number">4.</span> <span class="nav-text">Scope(作用域)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u63A7_u5236_u5668_ng-controller"><span class="nav-number">5.</span> <span class="nav-text">控制器 ng-controller</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015-12 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMT</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wmtcore"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>

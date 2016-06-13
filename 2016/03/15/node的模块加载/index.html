@@ -1,0 +1,752 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="Dkf0E0xe3Q" />
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nodejs," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="模块实现依照CommonJS的模块规范，使用require()引入模块的api,使用exports导出模块的方法、变量；其中module对象代表模块本身，exports是它的属性
+优点： 每个模块有独立的空间、不必考虑变量污染
+Node引入模块通过路径分析、文件定位、编译执行，会对引入的模块缓存其编译和执行后的对象，加载时缓存优先其后只核心模块。加载自定义模块（第三方包）最慢，要向上逐级递归查找n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="node的模块加载">
+<meta property="og:url" content="http://www.wmtcore.com/2016/03/15/node的模块加载/index.html">
+<meta property="og:site_name" content="大碗拉面">
+<meta property="og:description" content="模块实现依照CommonJS的模块规范，使用require()引入模块的api,使用exports导出模块的方法、变量；其中module对象代表模块本身，exports是它的属性
+优点： 每个模块有独立的空间、不必考虑变量污染
+Node引入模块通过路径分析、文件定位、编译执行，会对引入的模块缓存其编译和执行后的对象，加载时缓存优先其后只核心模块。加载自定义模块（第三方包）最慢，要向上逐级递归查找n">
+<meta property="og:updated_time" content="2016-05-26T05:58:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="node的模块加载">
+<meta name="twitter:description" content="模块实现依照CommonJS的模块规范，使用require()引入模块的api,使用exports导出模块的方法、变量；其中module对象代表模块本身，exports是它的属性
+优点： 每个模块有独立的空间、不必考虑变量污染
+Node引入模块通过路径分析、文件定位、编译执行，会对引入的模块缓存其编译和执行后的对象，加载时缓存优先其后只核心模块。加载自定义模块（第三方包）最慢，要向上逐级递归查找n">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> node的模块加载 | 大碗拉面 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?8fc1dcdaa63dc57073d1f217ba27dc7d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大碗拉面</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '1zo1-KPbS2sqsk4pXnSQ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                node的模块加载
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-03-15T10:53:32+08:00" content="2016-03-15">
+              2016-03-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/15/node的模块加载/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/15/node的模块加载/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h3 id="u6A21_u5757_u5B9E_u73B0"><a href="#u6A21_u5757_u5B9E_u73B0" class="headerlink" title="模块实现"></a>模块实现</h3><p>依照CommonJS的模块规范，使用require()引入模块的api,使用exports导出模块的方法、变量；其中module对象代表模块本身，exports是它的属性</p>
+<p><code>优点： 每个模块有独立的空间、不必考虑变量污染</code></p>
+<p>Node引入模块通过<strong>路径分析、文件定位、编译执行</strong>，会对引入的模块缓存其编译和执行后的对象，加载时缓存优先其后只核心模块。加载自定义模块（第三方包）最慢，要向上逐级递归查找node_modules目录</p>
+<p>因为允许require()中不含文件拓展名，Node会按照<code>.js、.node、.json的次序补足，依次尝试</code>,并且需要调用fs模块同步阻塞判断文件是否存在，会因为Node单线程引起性能问题，<code>对于.node、.json文件带上拓展名能快些</code></p>
+<h4 id="u5206_u6790_u76EE_u5F55_u548C_u5305"><a href="#u5206_u6790_u76EE_u5F55_u548C_u5305" class="headerlink" title="分析目录和包"></a>分析目录和包</h4><p>require()通过分析文件拓展名后仍然没有查到文件、但取到一个目录，此时Node会将目录当做包来处理。</p>
+<ol>
+<li>在当前目录下查找package.json(CommonJS规定的包描述文件)</li>
+<li>通过JSON.parse()解析，取出main属性指定的文件名，若无拓展名就遍历拓展名</li>
+</ol>
+<p>如果mian属性指定文件名错误、没有package.json文件，Node会把index.当做默认文件名，依次查找、遍历拓展名。</p>
+<p>如果分析目录后没有定位成功，就进入下一个模块路径查找，模块路径都都遍历完了还没找到就抛错。</p>
+<h3 id="u6A21_u5757_u7F16_u8BD1"><a href="#u6A21_u5757_u7F16_u8BD1" class="headerlink" title="模块编译"></a>模块编译</h3><p><code>.js 通过fs同步读取文件后编译执行</code> ,Node对获取的js文件内容进行了头尾包装</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="list">(<span class="keyword">function</span><span class="list">(<span class="keyword">exports</span>,require,module,__filename,__dirname)</span><span class="collection">&#123;//头尾包装</span><br><span class="line">  var math=require<span class="list">(<span class="keyword">'math'</span>)</span><span class="comment">;</span></span><br><span class="line">&#125;</span>)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>如此每个模块都有作作用域隔离，包装后的代码通过vm原生模块runInThisContext()执行，返回一个function对象，再将当前模块对象的exports属性、require()、module、文件的完整路径和文件目录作为参数传给function()。最后调用方拿到了exports属性</p>
+<p><strong>exports和module.exports 的区别 </strong>exports对象是以形参形式传入的，直接赋值不会改变作用域外的值。所以需要对module.exports对象赋值，对exports属性赋值则无碍</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> change = <span class="function"><span class="keyword">function</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">	a = <span class="number">100</span>;</span><br><span class="line">	<span class="built_in">console</span>.log(a); <span class="comment">// =&gt; 100</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>;</span><br><span class="line">change(a);</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// =&gt; 10</span></span><br></pre></td></tr></table></figure>
+<p><code>.node 这是用c/c++编写的拓展文件，通过dlopen()加载再编译</code> 在windows、*nix有不同的实现，通过libuv兼容层封装,实际不用编译，它是c/c++编译生成的，只要加载、执行，exports对象直接和.node联系，执行效率高</p>
+<p><code>.json 通过fs读取，使用JSON.parse()解析，再赋值给exports</code> ,对于JSON文件直接用require()比fs高效</p>
+<p>将编译后的模块，以文件路径为索引缓存在Module.cache对象上</p>
+<h3 id="u6838_u5FC3_u6A21_u5757"><a href="#u6838_u5FC3_u6A21_u5757" class="headerlink" title="核心模块"></a>核心模块</h3><ul>
+<li>将核心模块中纯用c/c++写的称为建内模块，因为通常不被用户调用</li>
+<li>部分模块通过c/c++编写核心部分，js实现包装、导出来提高性能</li>
+</ul>
+<p>Node使用v8的js2c.py将所有内置js转成c++里的数组，生成node_natives.sh头文件，在Node启动时加入内存，然后再根据require()加载、执行;也要经历头尾包装，缓存在NativeModule._cache对象上</p>
+<h3 id="NPM"><a href="#NPM" class="headerlink" title="NPM"></a>NPM</h3><p><code>package.json 包描述文件</code>  dependencies npm根据这个自动加载依赖的包,scripts 用于包管理器来安装、编译、测试和卸载包(钩子命令，preinstall之类的) devDependencies 开发时的依赖包，bin 命令行工具</p>
+<p><code>全局安装 -g</code> 将包变成全局可用的执行命令，不是require()到</p>
+<p><code>其他方式安装包</code> npm install 指定package.json的位置，npm install [pg] –registry=<a href="http://registry.url" target="_blank" rel="external">http://registry.url</a> 或者直接采用镜像源 npm config set registry <a href="http://registry.url" target="_blank" rel="external">http://registry.url</a></p>
+<p><code>局域NPM</code></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag">#nodejs</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/06/mysql事务与锁/" rel="next" title="mysql事务与锁">
+                <i class="fa fa-chevron-left"></i> mysql事务与锁
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/29/Node异步I-O/" rel="prev" title="Node异步I/O">
+                Node异步I/O <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/15/node的模块加载/"
+           data-title="node的模块加载" data-url="http://www.wmtcore.com/2016/03/15/node的模块加载/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="http://www.wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">WMT</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">不扯犊子 -NOT ALONE</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/WMTcore" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6A21_u5757_u5B9E_u73B0"><span class="nav-number">1.</span> <span class="nav-text">模块实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u5206_u6790_u76EE_u5F55_u548C_u5305"><span class="nav-number">1.1.</span> <span class="nav-text">分析目录和包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6A21_u5757_u7F16_u8BD1"><span class="nav-number">2.</span> <span class="nav-text">模块编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6838_u5FC3_u6A21_u5757"><span class="nav-number">3.</span> <span class="nav-text">核心模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NPM"><span class="nav-number">4.</span> <span class="nav-text">NPM</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015-12 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMT</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wmtcore"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>

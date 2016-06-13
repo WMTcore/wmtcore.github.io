@@ -1,0 +1,995 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="Dkf0E0xe3Q" />
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="ORM,Sequelize," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="SELECT、DELETE、UPDATE
+
+
+sql
+orm
+
+
+
+
+select
+findAll,findOne,findById,findOrCreate,findAndCountAll
+
+
+delete
+destroy
+
+
+update
+update
+
+
+insert
+create
+
+
+
+
+
+
+sql
+orm
+
+
+
+
+SELECT foo, bar …
+Model.findAll({attr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sequelize 基本sql语句">
+<meta property="og:url" content="http://www.wmtcore.com/2015/12/18/Sequelize-基本sql语句/index.html">
+<meta property="og:site_name" content="大碗拉面">
+<meta property="og:description" content="SELECT、DELETE、UPDATE
+
+
+sql
+orm
+
+
+
+
+select
+findAll,findOne,findById,findOrCreate,findAndCountAll
+
+
+delete
+destroy
+
+
+update
+update
+
+
+insert
+create
+
+
+
+
+
+
+sql
+orm
+
+
+
+
+SELECT foo, bar …
+Model.findAll({attr">
+<meta property="og:updated_time" content="2016-04-19T06:07:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sequelize 基本sql语句">
+<meta name="twitter:description" content="SELECT、DELETE、UPDATE
+
+
+sql
+orm
+
+
+
+
+select
+findAll,findOne,findById,findOrCreate,findAndCountAll
+
+
+delete
+destroy
+
+
+update
+update
+
+
+insert
+create
+
+
+
+
+
+
+sql
+orm
+
+
+
+
+SELECT foo, bar …
+Model.findAll({attr">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> Sequelize 基本sql语句 | 大碗拉面 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?8fc1dcdaa63dc57073d1f217ba27dc7d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大碗拉面</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '1zo1-KPbS2sqsk4pXnSQ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Sequelize 基本sql语句
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-18T10:18:59+08:00" content="2015-12-18">
+              2015-12-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/18/Sequelize-基本sql语句/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/18/Sequelize-基本sql语句/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h4 id="SELECT_u3001DELETE_u3001UPDATE"><a href="#SELECT_u3001DELETE_u3001UPDATE" class="headerlink" title="SELECT、DELETE、UPDATE"></a>SELECT、DELETE、UPDATE</h4><table>
+<thead>
+<tr>
+<th>sql</th>
+<th>orm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>select</td>
+<td>findAll,findOne,findById,findOrCreate,findAndCountAll</td>
+</tr>
+<tr>
+<td>delete</td>
+<td>destroy</td>
+</tr>
+<tr>
+<td>update</td>
+<td>update</td>
+</tr>
+<tr>
+<td>insert</td>
+<td>create</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>sql</th>
+<th>orm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT foo, bar …</td>
+<td>Model.findAll({attributes: [‘foo’, ‘bar’]});</td>
+</tr>
+<tr>
+<td>SELECT foo, bar AS baz …</td>
+<td>Model.findAll({attributes: [‘foo’, <strong>[‘bar’, ‘baz’]</strong>]});</td>
+</tr>
+<tr>
+<td>SELECT COUNT(hats) AS no_hats …</td>
+<td>Model.findAll({attributes: [[<strong>sequelize.fn(‘COUNT’, sequelize.col(‘hats’))</strong>, ‘no_hats’]]});</td>
+</tr>
+<tr>
+<td>SELECT id, foo, bar, quz …</td>
+<td>Model.findAll({attributes: {<strong>exclude</strong>: [‘baz’] }});</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">Model</span><span class="class">.findAll</span>(&#123;</span><br><span class="line">  <span class="attribute">attributes</span>: [<span class="string">'id'</span>, <span class="string">'foo'</span>, <span class="string">'bar'</span>, <span class="string">'baz'</span>, <span class="string">'quz'</span>, [sequelize.<span class="function">fn</span>(<span class="string">'COUNT'</span>, sequelize.<span class="function">col</span>(<span class="string">'hats'</span>)), <span class="string">'no_hats'</span>]]</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//等于</span></span><br><span class="line"><span class="tag">Model</span><span class="class">.findAll</span>(&#123;</span><br><span class="line">  <span class="tag">attributes</span>: &#123; <span class="attribute">include</span>: [[sequelize.<span class="function">fn</span>(<span class="string">'COUNT'</span>, sequelize.<span class="function">col</span>(<span class="string">'hats'</span>)), <span class="string">'no_hats'</span>]] &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="tag">SELECT</span> <span class="tag">id</span>, <span class="tag">foo</span>, <span class="tag">bar</span>, <span class="tag">baz</span>, <span class="tag">quz</span>, <span class="tag">COUNT</span>(hats) <span class="tag">AS</span> <span class="tag">no_hats</span> ...</span><br></pre></td></tr></table></figure>
+<h4 id="WHERE"><a href="#WHERE" class="headerlink" title="WHERE"></a>WHERE</h4><table>
+<thead>
+<tr>
+<th>sql</th>
+<th>orm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> SELECT * FROM post WHERE authorId = 12 AND status = ‘active’</td>
+<td>Post.findAll({where: { authorId: 2,status: ‘active’}});</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Operators"><a href="#Operators" class="headerlink" title="Operators"></a>Operators</h4><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">Post.<span class="keyword">update</span>(&#123;</span><br><span class="line">  updatedAt: null,</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    deletedAt: &#123;</span><br><span class="line">      <span class="variable">$ne</span>: null</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line">// UPDATE post SET updatedAt = null WHERE deletedAt NOT NULL;</span><br><span class="line"></span><br><span class="line">Post.findAll(&#123;</span><br><span class="line">  where: sequelize.where(sequelize.fn(<span class="string">'char_length'</span>, sequelize.col(<span class="string">'status'</span>)), <span class="number">6</span>)</span><br><span class="line">&#125;);</span><br><span class="line">// SELECT * FROM post WHERE char_length(status) = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  rank: &#123;</span><br><span class="line">    <span class="variable">$or</span>: &#123;</span><br><span class="line">      <span class="variable">$lt</span>: <span class="number">1000</span>,</span><br><span class="line">      <span class="variable">$eq</span>: null</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">// rank &lt; <span class="number">1000</span> OR rank IS NULL</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  createdAt: &#123;</span><br><span class="line">    <span class="variable">$lt</span>: new Date(),</span><br><span class="line">    <span class="variable">$gt</span>: new Date(new Date() - <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">// createdAt &lt; [timestamp] AND createdAt &gt; [timestamp]</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="variable">$or</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      title: &#123;</span><br><span class="line">        <span class="variable">$like</span>: <span class="string">'Boat%'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      description: &#123;</span><br><span class="line">        <span class="variable">$like</span>: <span class="string">'%boat%'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">// title LIKE <span class="string">'Boat%'</span> OR description LIKE <span class="string">'%boat%'</span></span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>op</th>
+<th>define</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$and: {a: 5}</td>
+<td>AND (a = 5)</td>
+</tr>
+<tr>
+<td>$or: [{a: 5}, {a: 6}]</td>
+<td>(a = 5 OR a = 6)</td>
+</tr>
+<tr>
+<td>$gt: 6,</td>
+<td>&gt; 6</td>
+</tr>
+<tr>
+<td>$gte: 6,</td>
+<td>&gt;= 6</td>
+</tr>
+<tr>
+<td>$lt: 10,</td>
+<td>&lt; 10</td>
+</tr>
+<tr>
+<td>$lte: 10,</td>
+<td>&lt;= 10</td>
+</tr>
+<tr>
+<td>$ne: 20,</td>
+<td>!= 20</td>
+</tr>
+<tr>
+<td>$between: [6, 10],</td>
+<td>BETWEEN 6 AND 10</td>
+</tr>
+<tr>
+<td>$notBetween: [11, 15],</td>
+<td>NOT BETWEEN 11 AND 15</td>
+</tr>
+<tr>
+<td>$in: [1, 2],</td>
+<td>IN [1, 2]</td>
+</tr>
+<tr>
+<td>$notIn: [1, 2],</td>
+<td>NOT IN [1, 2]</td>
+</tr>
+<tr>
+<td>$like: ‘%hat’,</td>
+<td>LIKE ‘%hat’</td>
+</tr>
+<tr>
+<td>$notLike: ‘%hat’</td>
+<td>NOT LIKE ‘%hat’</td>
+</tr>
+<tr>
+<td>$iLike: ‘%hat’</td>
+<td>ILIKE ‘%hat’ (case insensitive) (PG only)</td>
+</tr>
+<tr>
+<td>$notILike: ‘%hat’</td>
+<td>NOT ILIKE ‘%hat’  (PG only)</td>
+</tr>
+<tr>
+<td>$like: { $any: [‘cat’, ‘hat’]}</td>
+<td>LIKE ANY ARRAY[‘cat’, ‘hat’] - also works for iLike and notLike</td>
+</tr>
+<tr>
+<td>$overlap: [1, 2]</td>
+<td>&amp;&amp; [1, 2] (PG array overlap operator)</td>
+</tr>
+<tr>
+<td>$contains: [1, 2]</td>
+<td>@&gt; [1, 2] (PG array contains operator)</td>
+</tr>
+<tr>
+<td>$contained: [1, 2]</td>
+<td>&lt;@ [1, 2] (PG array contained by operator)</td>
+</tr>
+<tr>
+<td>$any: [2,3]</td>
+<td>ANY ARRAY[2, 3]::INTEGER (PG only)</td>
+</tr>
+<tr>
+<td>$col: ‘user.organization_id’</td>
+<td>“user”.”organization_id”, with dialect specific column identifiers, PG in this example  –$col取表的字段</td>
+</tr>
+</tbody>
+</table>
+<h4 id="WARNING"><a href="#WARNING" class="headerlink" title="WARNING"></a>WARNING</h4><p><code>tabel need primarykey</code>:如果没有，Sequlize会自己加个自增主键，可能引起错误</p>
+<h4 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h4><p><code>findOrCreate</code>: 查到一个，查不到就新建</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">models</span><span class="class">.BrandReview</span><span class="class">.findOrCreate</span>(&#123;</span><br><span class="line">     <span class="tag">where</span>: &#123;</span><br><span class="line">         <span class="tag">mem_id</span>: <span class="tag">mem_id</span>,</span><br><span class="line">         <span class="tag">brand_id</span>: <span class="tag">brand_id</span></span><br><span class="line">     &#125;,</span><br><span class="line">     <span class="tag">defaults</span>: &#123;</span><br><span class="line">         <span class="attribute">score</span>: score <span class="comment">//新建的数据</span></span><br><span class="line">     &#125;</span><br><span class="line"> &#125;)</span><br><span class="line"><span class="comment">//返回值为数组，[json,created] 第一位是查询或创建的数据，第二位标识是否新建</span></span><br></pre></td></tr></table></figure>
+<p><code>update</code>:返回值为数据，[2],数字代码改动记录数</p>
+<p><code>destroy</code>:返回数字，代表删除记录数</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ORM/" rel="tag">#ORM</a>
+          
+            <a href="/tags/Sequelize/" rel="tag">#Sequelize</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/14/es6-Promise/" rel="next" title="es6 Promise">
+                <i class="fa fa-chevron-left"></i> es6 Promise
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/22/Sequelize事务实现/" rel="prev" title="Sequelize事务实现">
+                Sequelize事务实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/12/18/Sequelize-基本sql语句/"
+           data-title="Sequelize 基本sql语句" data-url="http://www.wmtcore.com/2015/12/18/Sequelize-基本sql语句/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="http://www.wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">WMT</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">不扯犊子 -NOT ALONE</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/WMTcore" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#SELECT_u3001DELETE_u3001UPDATE"><span class="nav-number">1.</span> <span class="nav-text">SELECT、DELETE、UPDATE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WHERE"><span class="nav-number">2.</span> <span class="nav-text">WHERE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Operators"><span class="nav-number">3.</span> <span class="nav-text">Operators</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WARNING"><span class="nav-number">4.</span> <span class="nav-text">WARNING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Node"><span class="nav-number">5.</span> <span class="nav-text">Node</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015-12 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMT</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wmtcore"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>

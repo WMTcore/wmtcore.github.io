@@ -1,0 +1,731 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="Dkf0E0xe3Q" />
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="angularjs," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="事件ng-click 定义了 AngularJS 点击事件。
+1234567&amp;lt; div ng-app=&quot;&quot; ng-controller=&quot;myCtrl&quot;&amp;gt;&amp;lt; button ng-click=&quot;count = count + 1&quot;&amp;gt;点我！&amp;lt;/button&amp;gt;&amp;lt; p&amp;gt;&amp;#123;&amp;#123; count &amp;#125;&amp;#125;&amp;lt;/p&amp;gt; &amp;lt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="angularjs初步(三)">
+<meta property="og:url" content="http://www.wmtcore.com/2016/02/19/angularjs初步-三/index.html">
+<meta property="og:site_name" content="大碗拉面">
+<meta property="og:description" content="事件ng-click 定义了 AngularJS 点击事件。
+1234567&amp;lt; div ng-app=&quot;&quot; ng-controller=&quot;myCtrl&quot;&amp;gt;&amp;lt; button ng-click=&quot;count = count + 1&quot;&amp;gt;点我！&amp;lt;/button&amp;gt;&amp;lt; p&amp;gt;&amp;#123;&amp;#123; count &amp;#125;&amp;#125;&amp;lt;/p&amp;gt; &amp;lt">
+<meta property="og:updated_time" content="2016-02-19T09:11:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="angularjs初步(三)">
+<meta name="twitter:description" content="事件ng-click 定义了 AngularJS 点击事件。
+1234567&amp;lt; div ng-app=&quot;&quot; ng-controller=&quot;myCtrl&quot;&amp;gt;&amp;lt; button ng-click=&quot;count = count + 1&quot;&amp;gt;点我！&amp;lt;/button&amp;gt;&amp;lt; p&amp;gt;&amp;#123;&amp;#123; count &amp;#125;&amp;#125;&amp;lt;/p&amp;gt; &amp;lt">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> angularjs初步(三) | 大碗拉面 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?8fc1dcdaa63dc57073d1f217ba27dc7d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大碗拉面</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '1zo1-KPbS2sqsk4pXnSQ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                angularjs初步(三)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-02-19T13:58:14+08:00" content="2016-02-19">
+              2016-02-19
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/19/angularjs初步-三/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/angularjs初步-三/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h3 id="u4E8B_u4EF6"><a href="#u4E8B_u4EF6" class="headerlink" title="事件"></a>事件</h3><p><code>ng-click</code> 定义了 AngularJS 点击事件。</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">""</span> <span class="attribute">ng-controller</span>=<span class="value">"myCtrl"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">button</span> <span class="attribute">ng-click</span>=<span class="value">"count = count + 1"</span>&gt;</span>点我！<span class="tag">&lt;/<span class="title">button</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span></span><span class="expression">&#123;&#123; <span class="variable">count</span> &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt; /<span class="attribute">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p><code>ng-show</code> 显示 HTML 元素<br><code>ng-hide</code> 隐藏 HTML 元素</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"personCtrl"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt;button ng-click=<span class="string">"toggle()"</span>&gt;&gt;隐藏/显示&lt;/button&gt;</span><br><span class="line"></span><br><span class="line">&lt; p ng-hide=<span class="string">"myVar"</span>&gt;</span><br><span class="line">名: &lt;input type=<span class="string">"text"</span> ng-model=<span class="string">"firstName"</span>&gt;&lt;br&gt;</span><br><span class="line">姓名: &lt;input type=<span class="string">"text"</span> ng-model=<span class="string">"lastName"</span>&gt;&lt;br&gt;</span><br><span class="line">&lt;br&gt;</span><br><span class="line">Full Name: &#123;&#123;firstName + <span class="string">" "</span> + lastName&#125;&#125;</span><br><span class="line">&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">app.controller(<span class="string">'personCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>) &#123;</span><br><span class="line">    <span class="variable">$scope</span>.firstName = <span class="string">"John"</span>,</span><br><span class="line">    <span class="variable">$scope</span>.lastName = <span class="string">"Doe"</span></span><br><span class="line">    <span class="variable">$scope</span>.myVar = false;</span><br><span class="line">    <span class="variable">$scope</span>.toggle = function() &#123;</span><br><span class="line">        <span class="variable">$scope</span>.myVar = !<span class="variable">$scope</span>.myVar;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="u6A21_u5757_angular-module"><a href="#u6A21_u5757_angular-module" class="headerlink" title="模块 angular.module"></a>模块 angular.module</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt; div ng-<span class="keyword">app</span>=<span class="string">"myApp"</span>&gt;...&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">//在模块定义中 [] 参数用于定义模块的依赖关系。中括号[]表示该模块没有依赖，如果有依赖的话会在中括号写上依赖的模块名字。</span></span><br><span class="line"><span class="keyword">var</span> <span class="keyword">app</span> = angular.module(<span class="string">"myApp"</span>, []); </span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p><code>添加控制器</code> 用 ng-controller 指令来添加应用的控制器</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"myCtrl"</span>&gt;</span><br><span class="line">&#123;&#123; firstName + <span class="string">" "</span> + lastName &#125;&#125;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line"></span><br><span class="line">var app = angular.module(<span class="string">"myApp"</span>, []);</span><br><span class="line"></span><br><span class="line">app.controller(<span class="string">"myCtrl"</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>) &#123;</span><br><span class="line">    <span class="variable">$scope</span>.firstName = <span class="string">"John"</span>;</span><br><span class="line">    <span class="variable">$scope</span>.lastName = <span class="string">"Doe"</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="u8868_u5355"><a href="#u8868_u5355" class="headerlink" title="表单"></a>表单</h3><ul>
+<li>输入控件的集合</li>
+</ul>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"formCtrl"</span>&gt;</span><br><span class="line">//novalidate 属性是在 HTML5 中新增的。禁用了使用浏览器的默认验证</span><br><span class="line">  &lt;form novalidate&gt;</span><br><span class="line">    First Name:&lt;br&gt;</span><br><span class="line">    //ng-model 指令绑定了两个 input 元素到模型的 user 对象</span><br><span class="line">    &lt;input type=<span class="string">"text"</span> ng-model=<span class="string">"user.firstName"</span>&gt;&lt;br&gt;</span><br><span class="line">    Last Name:&lt;br&gt;</span><br><span class="line">    &lt;input type=<span class="string">"text"</span> ng-model=<span class="string">"user.lastName"</span>&gt;</span><br><span class="line">    &lt;br&gt;&lt;br&gt;</span><br><span class="line">    //ng-click 指令调用了 reset() 方法，且在点击按钮时调用</span><br><span class="line">    &lt;button ng-click=<span class="string">"reset()"</span>&gt;RESET&lt;/button&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">  &lt;p&gt;form = &#123;&#123;user&#125;&#125;&lt;/p&gt;</span><br><span class="line">  &lt;p&gt;master = &#123;&#123;master&#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">//formCtrl 函数设置了 master 对象的初始值，并定义了 reset() 方法</span><br><span class="line">app.controller(<span class="string">'formCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>) &#123;</span><br><span class="line">    <span class="variable">$scope</span>.master = &#123;firstName: <span class="string">"John"</span>, lastName: <span class="string">"Doe"</span>&#125;;</span><br><span class="line">    <span class="variable">$scope</span>.reset = function() &#123;</span><br><span class="line">        <span class="variable">$scope</span>.user = angular.copy(<span class="variable">$scope</span>.master);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="variable">$scope</span>.reset();</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="u8F93_u5165_u9A8C_u8BC1"><a href="#u8F93_u5165_u9A8C_u8BC1" class="headerlink" title="输入验证"></a>输入验证</h3><ul>
+<li>表单和控件可以提供验证功能</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt; <span class="attribute">form</span>  <span class="attribute">ng-app</span>=<span class="value">"myApp"</span>  <span class="attribute">ng-controller</span>=<span class="value">"validateCtrl"</span></span><br><span class="line"><span class="attribute">name</span>=<span class="value">"myForm"</span> <span class="attribute">novalidate</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span>用户名:<span class="tag">&lt;<span class="title">br</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt; <span class="attribute">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"user"</span> <span class="attribute">ng-model</span>=<span class="value">"user"</span> <span class="attribute">required</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt; <span class="attribute">span</span> <span class="attribute">style</span>=<span class="value">"color:red"</span> <span class="attribute">ng-show</span>=<span class="value">"myForm.user.$dirty &amp;&amp; myForm.user.$invalid"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt; <span class="attribute">span</span> <span class="attribute">ng-show</span>=<span class="value">"myForm.user.$error.required"</span>&gt;</span>用户名是必须的。<span class="tag">&lt;/<span class="title">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span>邮箱:<span class="tag">&lt;<span class="title">br</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt; <span class="attribute">input</span> <span class="attribute">type</span>=<span class="value">"email"</span> <span class="attribute">name</span>=<span class="value">"email"</span> <span class="attribute">ng-model</span>=<span class="value">"email"</span> <span class="attribute">required</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt; <span class="attribute">span</span> <span class="attribute">style</span>=<span class="value">"color:red"</span> <span class="attribute">ng-show</span>=<span class="value">"myForm.email.$dirty &amp;&amp; myForm.email.$invalid"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt; <span class="attribute">span</span> <span class="attribute">ng-show</span>=<span class="value">"myForm.email.$error.required"</span>&gt;</span>邮箱是必须的。<span class="tag">&lt;/<span class="title">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt; <span class="attribute">span</span> <span class="attribute">ng-show</span>=<span class="value">"myForm.email.$error.email"</span>&gt;</span>非法的邮箱。<span class="tag">&lt;/<span class="title">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; /<span class="attribute">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt; <span class="attribute">input</span> <span class="attribute">type</span>=<span class="value">"submit"</span></span><br><span class="line">   <span class="attribute">ng-disabled</span>=<span class="value">"myForm.user.$dirty &amp;&amp; myForm.user.$invalid ||</span><br><span class="line">  myForm.email.$dirty &amp;&amp; myForm.email.$invalid"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; /<span class="attribute">form</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">script</span>&gt;</span></span><br><span class="line">var app = angular.module('myApp', []);</span><br><span class="line">app.controller('validateCtrl', function($scope) &#123;</span><br><span class="line">    $scope.user = 'John Doe';</span><br><span class="line">    $scope.email = 'john.doe@gmail.com';</span><br><span class="line">&#125;);</span><br><span class="line"><span class="tag">&lt; /<span class="attribute">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><ul>
+<li>比较、迭代、转换</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">angular.<span class="function"><span class="title">lowercase</span><span class="params">()</span></span>	</span><br><span class="line">angular.<span class="function"><span class="title">uppercase</span><span class="params">()</span></span>	</span><br><span class="line">angular.<span class="function"><span class="title">isString</span><span class="params">()</span></span>	</span><br><span class="line">angular.<span class="function"><span class="title">isNumber</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="u5305_u542B_ng-include"><a href="#u5305_u542B_ng-include" class="headerlink" title="包含 ng-include"></a>包含 ng-include</h3><ul>
+<li>可以在 HTML 中包含 HTML 文件</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt; <span class="attribute">body</span> <span class="attribute">ng-app</span>=<span class="value">"myApp"</span> <span class="attribute">ng-controller</span>=<span class="value">"userCtrl"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">class</span>=<span class="value">"container"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">ng-include</span>=<span class="value">"'myUsers_List.htm'"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">ng-include</span>=<span class="value">"'myUsers_Form.htm'"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; /<span class="attribute">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; /<span class="attribute">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="u52A8_u753B_angular-animate-min-js_ngAnimate"><a href="#u52A8_u753B_angular-animate-min-js_ngAnimate" class="headerlink" title="动画 angular-animate.min.js ngAnimate"></a>动画 angular-animate.min.js ngAnimate</h3><p><code>ngAnimate</code> 监测事件,添加或移除 class</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">body</span> <span class="attribute">ng-app</span>=<span class="value">"myApp"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; <span class="attribute">h1</span>&gt;</span>隐藏 DIV: <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">ng-model</span>=<span class="value">"myCheck"</span>&gt;</span><span class="tag">&lt;/<span class="title">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-hide</span>=<span class="value">"myCheck"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">script</span>&gt;</span></span><br><span class="line">var app = angular.module('myApp', ['ngAnimate']);</span><br><span class="line"><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">style</span>&gt;</span></span><br><span class="line">@keyframes myChange &#123;</span><br><span class="line">    from &#123;</span><br><span class="line">        height: 100px;</span><br><span class="line">    &#125; to &#123;</span><br><span class="line">        height: 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">div &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    background-color: lightblue;</span><br><span class="line">&#125;</span><br><span class="line">div.ng-hide &#123;</span><br><span class="line">    animation: 0.5s myChange;</span><br><span class="line">&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="title">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/angularjs/" rel="tag">#angularjs</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/18/angularjs初步-二/" rel="next" title="angularjs初步(二)">
+                <i class="fa fa-chevron-left"></i> angularjs初步(二)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/24/angularjs-布局模板和路由/" rel="prev" title="angularjs 布局模板和路由">
+                angularjs 布局模板和路由 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/02/19/angularjs初步-三/"
+           data-title="angularjs初步(三)" data-url="http://www.wmtcore.com/2016/02/19/angularjs初步-三/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="http://www.wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">WMT</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">不扯犊子 -NOT ALONE</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/WMTcore" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u4E8B_u4EF6"><span class="nav-number">1.</span> <span class="nav-text">事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6A21_u5757_angular-module"><span class="nav-number">2.</span> <span class="nav-text">模块 angular.module</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u8868_u5355"><span class="nav-number">3.</span> <span class="nav-text">表单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u8F93_u5165_u9A8C_u8BC1"><span class="nav-number">4.</span> <span class="nav-text">输入验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-number">5.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5305_u542B_ng-include"><span class="nav-number">6.</span> <span class="nav-text">包含 ng-include</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u52A8_u753B_angular-animate-min-js_ngAnimate"><span class="nav-number">7.</span> <span class="nav-text">动画 angular-animate.min.js ngAnimate</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015-12 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMT</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wmtcore"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>
