@@ -2,13 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://www.wmtcore.com/baidu_verify_Dkf0E0xe3Q.html</loc>
-    <lastmod>2016-06-12T07:21:51.000Z</lastmod>
+    <loc>http://www.wmtcore.com/2016/06/08/redux-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/</loc>
+    <lastmod>2016-06-15T06:08:16.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://www.wmtcore.com/2016/06/08/redux-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/</loc>
-    <lastmod>2016-06-08T08:12:57.000Z</lastmod>
+    <loc>http://www.wmtcore.com/404.html</loc>
+    <lastmod>2016-06-14T02:16:26.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.wmtcore.com/baidu_verify_Dkf0E0xe3Q.html</loc>
+    <lastmod>2016-06-12T07:21:51.000Z</lastmod>
   </url>
   
   <url>
@@ -24,6 +29,11 @@
   <url>
     <loc>http://www.wmtcore.com/2016/03/29/Node%E5%BC%82%E6%AD%A5I-O/</loc>
     <lastmod>2016-05-20T05:58:03.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.wmtcore.com/webserver.js</loc>
+    <lastmod>2016-05-18T09:11:39.000Z</lastmod>
   </url>
   
   <url>
@@ -204,11 +214,6 @@
   <url>
     <loc>http://www.wmtcore.com/%E5%89%8D%E7%AB%AF/index.html</loc>
     <lastmod>2015-12-04T06:05:09.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.wmtcore.com/404.html</loc>
-    <lastmod>2015-12-04T05:28:35.000Z</lastmod>
   </url>
   
 </urlset>
