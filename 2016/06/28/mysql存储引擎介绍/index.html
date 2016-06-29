@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="ORM,Sequelize," />
+  <meta name="keywords" content="mysql," />
 
 
 
@@ -51,124 +51,16 @@
 
 
 
-<meta name="description" content="SELECT、DELETE、UPDATE
-
-
-sql
-orm
-
-
-
-
-select
-findAll,findOne,findById,findOrCreate,findAndCountAll
-
-
-delete
-destroy
-
-
-update
-update
-
-
-insert
-create
-
-
-
-
-
-
-sql
-orm
-
-
-
-
-SELECT foo, bar …
-Model.findAll({attr">
+<meta name="description" content="###">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Sequelize 基本sql语句">
-<meta property="og:url" content="http://www.wmtcore.com/2015/12/18/Sequelize-基本sql语句/index.html">
+<meta property="og:title" content="mysql存储引擎介绍">
+<meta property="og:url" content="http://www.wmtcore.com/2016/06/28/mysql存储引擎介绍/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="SELECT、DELETE、UPDATE
-
-
-sql
-orm
-
-
-
-
-select
-findAll,findOne,findById,findOrCreate,findAndCountAll
-
-
-delete
-destroy
-
-
-update
-update
-
-
-insert
-create
-
-
-
-
-
-
-sql
-orm
-
-
-
-
-SELECT foo, bar …
-Model.findAll({attr">
-<meta property="og:updated_time" content="2016-04-19T06:07:28.000Z">
+<meta property="og:description" content="###">
+<meta property="og:updated_time" content="2016-06-28T07:01:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Sequelize 基本sql语句">
-<meta name="twitter:description" content="SELECT、DELETE、UPDATE
-
-
-sql
-orm
-
-
-
-
-select
-findAll,findOne,findById,findOrCreate,findAndCountAll
-
-
-delete
-destroy
-
-
-update
-update
-
-
-insert
-create
-
-
-
-
-
-
-sql
-orm
-
-
-
-
-SELECT foo, bar …
-Model.findAll({attr">
+<meta name="twitter:title" content="mysql存储引擎介绍">
+<meta name="twitter:description" content="###">
 
 
 
@@ -180,7 +72,7 @@ Model.findAll({attr">
   };
 </script>
 
-  <title> Sequelize 基本sql语句 | 大碗拉面 </title>
+  <title> mysql存储引擎介绍 | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -346,7 +238,7 @@ Model.findAll({attr">
             
             
               
-                Sequelize 基本sql语句
+                mysql存储引擎介绍
               
             
           </h1>
@@ -355,8 +247,8 @@ Model.findAll({attr">
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2015-12-18T10:18:59+08:00" content="2015-12-18">
-              2015-12-18
+            <time itemprop="dateCreated" datetime="2016-06-28T14:59:39+08:00" content="2016-06-28">
+              2016-06-28
             </time>
           </span>
 
@@ -365,8 +257,8 @@ Model.findAll({attr">
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
                   </a>
                 </span>
 
@@ -381,8 +273,8 @@ Model.findAll({attr">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/12/18/Sequelize-基本sql语句/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/18/Sequelize-基本sql语句/" itemprop="commentsCount"></span>
+                <a href="/2016/06/28/mysql存储引擎介绍/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/28/mysql存储引擎介绍/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -401,173 +293,7 @@ Model.findAll({attr">
       
 
       
-        <span itemprop="articleBody"><h4 id="SELECT_u3001DELETE_u3001UPDATE"><a href="#SELECT_u3001DELETE_u3001UPDATE" class="headerlink" title="SELECT、DELETE、UPDATE"></a>SELECT、DELETE、UPDATE</h4><table>
-<thead>
-<tr>
-<th>sql</th>
-<th>orm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>select</td>
-<td>findAll,findOne,findById,findOrCreate,findAndCountAll</td>
-</tr>
-<tr>
-<td>delete</td>
-<td>destroy</td>
-</tr>
-<tr>
-<td>update</td>
-<td>update</td>
-</tr>
-<tr>
-<td>insert</td>
-<td>create</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>sql</th>
-<th>orm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>SELECT foo, bar …</td>
-<td>Model.findAll({attributes: [‘foo’, ‘bar’]});</td>
-</tr>
-<tr>
-<td>SELECT foo, bar AS baz …</td>
-<td>Model.findAll({attributes: [‘foo’, <strong>[‘bar’, ‘baz’]</strong>]});</td>
-</tr>
-<tr>
-<td>SELECT COUNT(hats) AS no_hats …</td>
-<td>Model.findAll({attributes: [[<strong>sequelize.fn(‘COUNT’, sequelize.col(‘hats’))</strong>, ‘no_hats’]]});</td>
-</tr>
-<tr>
-<td>SELECT id, foo, bar, quz …</td>
-<td>Model.findAll({attributes: {<strong>exclude</strong>: [‘baz’] }});</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">Model</span><span class="class">.findAll</span>(&#123;</span><br><span class="line">  <span class="attribute">attributes</span>: [<span class="string">'id'</span>, <span class="string">'foo'</span>, <span class="string">'bar'</span>, <span class="string">'baz'</span>, <span class="string">'quz'</span>, [sequelize.<span class="function">fn</span>(<span class="string">'COUNT'</span>, sequelize.<span class="function">col</span>(<span class="string">'hats'</span>)), <span class="string">'no_hats'</span>]]</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//等于</span></span><br><span class="line"><span class="tag">Model</span><span class="class">.findAll</span>(&#123;</span><br><span class="line">  <span class="tag">attributes</span>: &#123; <span class="attribute">include</span>: [[sequelize.<span class="function">fn</span>(<span class="string">'COUNT'</span>, sequelize.<span class="function">col</span>(<span class="string">'hats'</span>)), <span class="string">'no_hats'</span>]] &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="tag">SELECT</span> <span class="tag">id</span>, <span class="tag">foo</span>, <span class="tag">bar</span>, <span class="tag">baz</span>, <span class="tag">quz</span>, <span class="tag">COUNT</span>(hats) <span class="tag">AS</span> <span class="tag">no_hats</span> ...</span><br></pre></td></tr></table></figure>
-<h4 id="WHERE"><a href="#WHERE" class="headerlink" title="WHERE"></a>WHERE</h4><table>
-<thead>
-<tr>
-<th>sql</th>
-<th>orm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> SELECT * FROM post WHERE authorId = 12 AND status = ‘active’</td>
-<td>Post.findAll({where: { authorId: 2,status: ‘active’}});</td>
-</tr>
-</tbody>
-</table>
-<h4 id="Operators"><a href="#Operators" class="headerlink" title="Operators"></a>Operators</h4><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">Post.<span class="keyword">update</span>(&#123;</span><br><span class="line">  updatedAt: null,</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    deletedAt: &#123;</span><br><span class="line">      <span class="variable">$ne</span>: null</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line">// UPDATE post SET updatedAt = null WHERE deletedAt NOT NULL;</span><br><span class="line"></span><br><span class="line">Post.findAll(&#123;</span><br><span class="line">  where: sequelize.where(sequelize.fn(<span class="string">'char_length'</span>, sequelize.col(<span class="string">'status'</span>)), <span class="number">6</span>)</span><br><span class="line">&#125;);</span><br><span class="line">// SELECT * FROM post WHERE char_length(status) = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  rank: &#123;</span><br><span class="line">    <span class="variable">$or</span>: &#123;</span><br><span class="line">      <span class="variable">$lt</span>: <span class="number">1000</span>,</span><br><span class="line">      <span class="variable">$eq</span>: null</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">// rank &lt; <span class="number">1000</span> OR rank IS NULL</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  createdAt: &#123;</span><br><span class="line">    <span class="variable">$lt</span>: new Date(),</span><br><span class="line">    <span class="variable">$gt</span>: new Date(new Date() - <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">// createdAt &lt; [timestamp] AND createdAt &gt; [timestamp]</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="variable">$or</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      title: &#123;</span><br><span class="line">        <span class="variable">$like</span>: <span class="string">'Boat%'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      description: &#123;</span><br><span class="line">        <span class="variable">$like</span>: <span class="string">'%boat%'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">// title LIKE <span class="string">'Boat%'</span> OR description LIKE <span class="string">'%boat%'</span></span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>op</th>
-<th>define</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$and: {a: 5}</td>
-<td>AND (a = 5)</td>
-</tr>
-<tr>
-<td>$or: [{a: 5}, {a: 6}]</td>
-<td>(a = 5 OR a = 6)</td>
-</tr>
-<tr>
-<td>$gt: 6,</td>
-<td>&gt; 6</td>
-</tr>
-<tr>
-<td>$gte: 6,</td>
-<td>&gt;= 6</td>
-</tr>
-<tr>
-<td>$lt: 10,</td>
-<td>&lt; 10</td>
-</tr>
-<tr>
-<td>$lte: 10,</td>
-<td>&lt;= 10</td>
-</tr>
-<tr>
-<td>$ne: 20,</td>
-<td>!= 20</td>
-</tr>
-<tr>
-<td>$between: [6, 10],</td>
-<td>BETWEEN 6 AND 10</td>
-</tr>
-<tr>
-<td>$notBetween: [11, 15],</td>
-<td>NOT BETWEEN 11 AND 15</td>
-</tr>
-<tr>
-<td>$in: [1, 2],</td>
-<td>IN [1, 2]</td>
-</tr>
-<tr>
-<td>$notIn: [1, 2],</td>
-<td>NOT IN [1, 2]</td>
-</tr>
-<tr>
-<td>$like: ‘%hat’,</td>
-<td>LIKE ‘%hat’</td>
-</tr>
-<tr>
-<td>$notLike: ‘%hat’</td>
-<td>NOT LIKE ‘%hat’</td>
-</tr>
-<tr>
-<td>$iLike: ‘%hat’</td>
-<td>ILIKE ‘%hat’ (case insensitive) (PG only)</td>
-</tr>
-<tr>
-<td>$notILike: ‘%hat’</td>
-<td>NOT ILIKE ‘%hat’  (PG only)</td>
-</tr>
-<tr>
-<td>$like: { $any: [‘cat’, ‘hat’]}</td>
-<td>LIKE ANY ARRAY[‘cat’, ‘hat’] - also works for iLike and notLike</td>
-</tr>
-<tr>
-<td>$overlap: [1, 2]</td>
-<td>&amp;&amp; [1, 2] (PG array overlap operator)</td>
-</tr>
-<tr>
-<td>$contains: [1, 2]</td>
-<td>@&gt; [1, 2] (PG array contains operator)</td>
-</tr>
-<tr>
-<td>$contained: [1, 2]</td>
-<td>&lt;@ [1, 2] (PG array contained by operator)</td>
-</tr>
-<tr>
-<td>$any: [2,3]</td>
-<td>ANY ARRAY[2, 3]::INTEGER (PG only)</td>
-</tr>
-<tr>
-<td>$col: ‘user.organization_id’</td>
-<td>“user”.”organization_id”, with dialect specific column identifiers, PG in this example  –$col取表的字段</td>
-</tr>
-</tbody>
-</table>
-<h4 id="WARNING"><a href="#WARNING" class="headerlink" title="WARNING"></a>WARNING</h4><p><code>tabel need primarykey</code>:如果没有，Sequlize会自己加个自增主键，可能引起错误</p>
-<h4 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h4><p><code>findOrCreate</code>: 查到一个，查不到就新建</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">models</span><span class="class">.BrandReview</span><span class="class">.findOrCreate</span>(&#123;</span><br><span class="line">     <span class="tag">where</span>: &#123;</span><br><span class="line">         <span class="tag">mem_id</span>: <span class="tag">mem_id</span>,</span><br><span class="line">         <span class="tag">brand_id</span>: <span class="tag">brand_id</span></span><br><span class="line">     &#125;,</span><br><span class="line">     <span class="tag">defaults</span>: &#123;</span><br><span class="line">         <span class="attribute">score</span>: score <span class="comment">//新建的数据</span></span><br><span class="line">     &#125;</span><br><span class="line"> &#125;)</span><br><span class="line"><span class="comment">//返回值为数组，[json,created] 第一位是查询或创建的数据，第二位标识是否新建</span></span><br></pre></td></tr></table></figure>
-<p><code>update</code>:返回值为数据，[2],数字代码改动记录数</p>
-<p><code>destroy</code>:返回数字，代表删除记录数</p>
+        <span itemprop="articleBody"><p>### </p>
 </span>
       
     </div>
@@ -576,9 +302,7 @@ Model.findAll({attr">
       
         <div class="post-tags">
           
-            <a href="/tags/ORM/" rel="tag">#ORM</a>
-          
-            <a href="/tags/Sequelize/" rel="tag">#Sequelize</a>
+            <a href="/tags/mysql/" rel="tag">#mysql</a>
           
         </div>
       
@@ -587,17 +311,13 @@ Model.findAll({attr">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/12/14/es6-Promise/" rel="next" title="es6 Promise">
-                <i class="fa fa-chevron-left"></i> es6 Promise
+              <a href="/2016/06/08/redux-学习笔记（1）/" rel="next" title="redux 学习笔记（1）">
+                <i class="fa fa-chevron-left"></i> redux 学习笔记（1）
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/12/22/Sequelize事务实现/" rel="prev" title="Sequelize事务实现">
-                Sequelize事务实现 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -624,8 +344,8 @@ Model.findAll({attr">
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/12/18/Sequelize-基本sql语句/"
-           data-title="Sequelize 基本sql语句" data-url="http://www.wmtcore.com/2015/12/18/Sequelize-基本sql语句/">
+      <div class="ds-thread" data-thread-key="2016/06/28/mysql存储引擎介绍/"
+           data-title="mysql存储引擎介绍" data-url="http://www.wmtcore.com/2016/06/28/mysql存储引擎介绍/">
       </div>
     
   </div>
@@ -725,7 +445,7 @@ Model.findAll({attr">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#SELECT_u3001DELETE_u3001UPDATE"><span class="nav-number">1.</span> <span class="nav-text">SELECT、DELETE、UPDATE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WHERE"><span class="nav-number">2.</span> <span class="nav-text">WHERE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Operators"><span class="nav-number">3.</span> <span class="nav-text">Operators</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WARNING"><span class="nav-number">4.</span> <span class="nav-text">WARNING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Node"><span class="nav-number">5.</span> <span class="nav-text">Node</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

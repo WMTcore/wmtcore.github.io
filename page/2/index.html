@@ -223,11 +223,152 @@
 
     
     
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/29/Node异步I-O/" itemprop="url">
+                  Node异步I/O
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-03-29T15:27:32+08:00" content="2016-03-29">
+              2016-03-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/29/Node异步I-O/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/29/Node异步I-O/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+              <p><code>让I/O与CPU计算并行</code></p>
+<p>Node 在*nix平台，通过线程池实现(主线程和I/O线程)，在windows下使用IOCP(调用异步方法，等待I/O完成后通知，执行回调，内部也依靠线程池，但由系统内核管理)，通过libuv层来兼容。</p>
+<p>Node本身是多线程的，但其中的JavaScript是单线程、因为v8的限制，但计算之类的都是在此线程，多线程只是I/O（磁盘，网络等），I/O有另外的线程池</p>
+<h3 id="u4E8B_u4EF6_u5FAA_u73AF"><a href="#u4E8B_u4EF6_u5FAA_u73AF" class="headerlink" title="事件循环"></a>事件循环</h3><ul>
+<li><p>Node自身的执行模型,在libuv中</p>
+</li>
+<li><p>在Node启动时，创建一个类似while(true)的循环，每循环一次成一个Tick,每次Tick查看是否有事件要处理，若有就处理事件和它的相关回调函数。在windows中基于IOCP,在*nix中基于多线程</p>
+</li>
+<li><p>在Tick过程中通过<strong>观察者</strong>判断是否有事件要处理  </p>
+</li>
+<li><p>异步过程中最重要的就是请求对象，所有状态、传入参数、当前方法和回调函数都封装在此，javascript将对象组装好，送入I/O线程池后就结束了，I/O操作在线程池中等待请求对象被执行</p>
+</li>
+<li><p>Tick在执行过程中检查线程池中是否有执行完的请求，并加入<strong>I/O观察者队列</strong>中，然后再从观察者取到可用的请求对象当做事件处理，取出对象中的回调函数执行,若有业务层callback再给js执行</p>
+</li>
+</ul>
+<p><img src="/../IO异步.png" alt="Smaller icon"></p>
+<h4 id="u4E8B_u4EF6_u9A71_u52A8_u7684_u9AD8_u6027_u80FD_u670D_u52A1_u5668"><a href="#u4E8B_u4EF6_u9A71_u52A8_u7684_u9AD8_u6027_u80FD_u670D_u52A1_u5668" class="headerlink" title="事件驱动的高性能服务器"></a>事件驱动的高性能服务器</h4><p>基于事件驱动的非阻塞I/O模型<br><code>通过主循环加载事件触发的方式来运行程序处理请求，无需为每一个请求创建额外的对应线程</code>：操作系统因为线程少，所以在上下文切换时代价很小，有助系统稳定处理大量请求（但不适合密集运算),但用户代码不能并行执行，I/O可以</p>
+<ul>
+<li>单线程保证运行安全，避免重入</li>
+</ul>
+<p><img src="/../高性能服务器.png" alt="Smaller icon"></p>
+<h3 id="u53E6_u5916_u4E00_u4E9B_u5F02_u6B65api"><a href="#u53E6_u5916_u4E00_u4E9B_u5F02_u6B65api" class="headerlink" title="另外一些异步api"></a>另外一些异步api</h3><h4 id="u5B9A_u65F6_u5668"><a href="#u5B9A_u65F6_u5668" class="headerlink" title="定时器"></a>定时器</h4><ul>
+<li>setTimeout()单次定时执行 setInterval()多次定时执行</li>
+</ul>
+<p>原理和异步I/O类似，将创建的定时器放到定时器观察者内部的红黑树，tick执行时，从红黑树中迭代取出定时器对象，检查是否超过定时时间，超过就形成事件并且立刻执行回调函数。</p>
+<p><code>问题</code>：定时不精确，如果某个循环占用时间过多，当再轮到定时器执行时就已经超时了</p>
+<h4 id="process-nextTick_28_29"><a href="#process-nextTick_28_29" class="headerlink" title="process.nextTick()"></a>process.nextTick()</h4><ul>
+<li>若想立即异步执行一个任务，用这个更高效</li>
+</ul>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123; <span class="comment">// TODO</span>&#125;, <span class="number">0</span>);<span class="comment">// 比较浪费性能</span></span><br><span class="line"></span><br><span class="line">process.nextTick=<span class="function"><span class="keyword">function</span><span class="params">(callback)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(process._exiting) <span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">if</span>(tickDepth &gt;=process.maxTickDepth)</span><br><span class="line">	   maxTickWarn();</span><br><span class="line">	<span class="keyword">var</span> tock=&#123;<span class="keyword">callback</span>:<span class="keyword">callback</span>&#125;;</span><br><span class="line">	<span class="keyword">if</span>(process.domain) tock.domain=process.domain;</span><br><span class="line">	 nextTickQueue.push(tock);</span><br><span class="line">	<span class="keyword">if</span>(nextTickQueue.length)&#123;</span><br><span class="line">	  process._needTickCallback();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>调用process.nextTick(),只会将回调函数放入队列中，在下个Tick取出</code></p>
+<h4 id="setImmediate_28_29"><a href="#setImmediate_28_29" class="headerlink" title="setImmediate()"></a>setImmediate()</h4><ul>
+<li>类process.nextTick() 将回调函数延时执行，建议使用这个（v0.9.1以后）</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'nextTick延时执行1'</span>)</span><br><span class="line">&#125;);</span><br><span class="line">process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'nextTick延时执行2'</span>);</span><br><span class="line">&#125;);</span><br><span class="line">setImmdiate(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'setImmdiate延时执行1'</span>);</span><br><span class="line">	process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'强势插入'</span>);</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;);  </span><br><span class="line">setImmediate(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'setImmediate延时执行2'</span>); </span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'正常执行'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//正常执行 </span></span><br><span class="line"><span class="comment">//nextTick  延时执行1 </span></span><br><span class="line"><span class="comment">//nextTick  延时执行2 </span></span><br><span class="line"><span class="comment">//setImmediate  延时执行1  </span></span><br><span class="line"><span class="comment">//强势插入 </span></span><br><span class="line"><span class="comment">//setImmediate  延时执行2</span></span><br></pre></td></tr></table></figure>
+<p><code>process.nextTick()属于idle观察者，setImmediate()属于check观察者，在每轮循环中，idle观察者先于I/O观察者先与check</code></p>
+<p>process.nextTick()的回调函数保存在<strong>数组</strong>中,在每轮循环中会将数组中的回调函数<strong>全部执行</strong>完。setImmediate()保存在<strong>链表</strong>中,在每轮循环中<strong>执行链表的一个</strong>回调函数</p>
+<h3 id="u5F02_u6B65_u5E76_u53D1_u63A7_u5236"><a href="#u5F02_u6B65_u5E76_u53D1_u63A7_u5236" class="headerlink" title="异步并发控制"></a>异步并发控制</h3><p>并发量过大,下层服务器会吃不消</p>
+<h5 id="bagpipe"><a href="#bagpipe" class="headerlink" title="bagpipe"></a>bagpipe</h5><ol>
+<li>通过队列控制并发量</li>
+<li>在当前活跃的异步调用量小于限定值，从队列中取出执行</li>
+<li>活跃调用达到限定值后，调用暂存在队列中</li>
+<li>每个调用结束时，从队列中取出新的异步调用执行</li>
+</ol>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1461,117 +1602,6 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/01/22/mac-导入iso文件到u盘/" itemprop="url">
-                  mac 导入iso文件到u盘
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-01-22T13:21:33+08:00" content="2016-01-22">
-              2016-01-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Mac/" itemprop="url" rel="index">
-                    <span itemprop="name">Mac</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/22/mac-导入iso文件到u盘/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/22/mac-导入iso文件到u盘/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="diskutil_list"><a href="#diskutil_list" class="headerlink" title="diskutil list"></a>diskutil list</h3><ul>
-<li>查看U盘位置 如：/dev/disk1</li>
-</ul>
-<h3 id="diskutil_unmountDisk_/dev/disk2"><a href="#diskutil_unmountDisk_/dev/disk2" class="headerlink" title="diskutil unmountDisk /dev/disk2"></a>diskutil unmountDisk /dev/disk2</h3><ul>
-<li>取消挂载</li>
-</ul>
-<h3 id="sudo_dd_if_3D**-iso_of_3D/dev/rdisk1_bs_3D1m_3Bsync"><a href="#sudo_dd_if_3D**-iso_of_3D/dev/rdisk1_bs_3D1m_3Bsync" class="headerlink" title="sudo dd if=**.iso of=/dev/rdisk1 bs=1m;sync"></a>sudo dd if=**.iso of=/dev/rdisk1 bs=1m;sync</h3><ul>
-<li>写入文件</li>
-</ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1618,7 +1648,7 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-count">38</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
