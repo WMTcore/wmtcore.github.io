@@ -246,6 +246,133 @@
             
               
                 
+                <a class="post-title-link" href="/2016/01/23/Samba服务器的简单配置和快速搭建/" itemprop="url">
+                  最方便的Samba服务器的配置和搭建
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-23T15:40:26+08:00" content="2016-01-23">
+              2016-01-23
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/23/Samba服务器的简单配置和快速搭建/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/23/Samba服务器的简单配置和快速搭建/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="u9009_u62E9_u7CFB_u7EDF_u7248_u672C"><a href="#u9009_u62E9_u7CFB_u7EDF_u7248_u672C" class="headerlink" title="选择系统版本"></a>选择系统版本</h3><ul>
+<li>Ubuntu server </li>
+</ul>
+<h3 id="u7CFB_u7EDF_u5B89_u88C5_u6B65_u9AA4"><a href="#u7CFB_u7EDF_u5B89_u88C5_u6B65_u9AA4" class="headerlink" title="系统安装步骤"></a>系统安装步骤</h3><ul>
+<li>其他不变，注意在安装软件时选中Samba Server</li>
+</ul>
+<h3 id="u914D_u7F6E"><a href="#u914D_u7F6E" class="headerlink" title="配置"></a>配置</h3><ul>
+<li>配置文件在 /etc/samba/samba.conf<ul>
+<li>如需要权限编辑：chmod 777 .</li>
+</ul>
+</li>
+<li>修改[profiles],它在最后几行<ul>
+<li>取消注释</li>
+<li>guest ok =yes//允许匿名登录</li>
+<li>browseable=yes//允许浏览</li>
+<li>readonly=no // 可写 </li>
+<li>path//共享文件存放路径，可能还不存在，创建（mkdir,记得开放权限）</li>
+</ul>
+</li>
+</ul>
+<h3 id="u542F_u52A8_u670D_u52A1"><a href="#u542F_u52A8_u670D_u52A1" class="headerlink" title="启动服务"></a>启动服务</h3><ul>
+<li>sudo smbd</li>
+</ul>
+<h3 id="u8FDE_u63A5"><a href="#u8FDE_u63A5" class="headerlink" title="连接"></a>连接</h3><p><code>mac :</code>命令 open smb://ip address</p>
+<p><code>windows :</code>运行 //ip address</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/01/22/mac-导入iso文件到u盘/" itemprop="url">
                   mac 导入iso文件到u盘
                 </a>
@@ -1252,128 +1379,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/22/Sequelize事务实现/" itemprop="url">
-                  Sequelize事务实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-12-22T16:08:37+08:00" content="2015-12-22">
-              2015-12-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/22/Sequelize事务实现/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/22/Sequelize事务实现/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="Managed_transaction__28auto-callback_29"><a href="#Managed_transaction__28auto-callback_29" class="headerlink" title="Managed transaction (auto-callback)"></a>Managed transaction (auto-callback)</h3><ul>
-<li>事务将自动提交</li>
-<li>sequelize.transaction</li>
-</ul>
-<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> models.sequelize.transaction(function(t) &#123;</span><br><span class="line">  // chain all your queries here. make sure you <span class="keyword">return</span> them.</span><br><span class="line">  <span class="keyword">return</span> <span class="type">User</span>.create(&#123;</span><br><span class="line">    firstName: '<span class="type">Abraham</span>',</span><br><span class="line">    lastName: '<span class="type">Lincoln</span>'</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    transaction: t</span><br><span class="line">  &#125;).then(function(user) &#123;</span><br><span class="line">    <span class="keyword">return</span> user.setShooter(&#123;</span><br><span class="line">      firstName: '<span class="type">John</span>',</span><br><span class="line">      lastName: '<span class="type">Boothe</span>'</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      transaction: t</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;).then(function(<span class="literal">result</span>) &#123;</span><br><span class="line">  // <span class="type">Transaction</span> has been committed</span><br><span class="line">  // <span class="literal">result</span> <span class="keyword">is</span> whatever the <span class="literal">result</span> <span class="keyword">of</span> the promise chain returned to the transaction callback</span><br><span class="line">&#125;).catch(function(err) &#123;</span><br><span class="line">  // <span class="type">Transaction</span> has been rolled back</span><br><span class="line">  // err <span class="keyword">is</span> whatever rejected the promise chain returned to the transaction callback</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="Unmanaged_transaction__28then-callback_29"><a href="#Unmanaged_transaction__28then-callback_29" class="headerlink" title="Unmanaged transaction (then-callback)"></a>Unmanaged transaction (then-callback)</h3><ul>
-<li>非自动提交事务</li>
-<li>sequelize.transaction()</li>
-</ul>
-<figure class="highlight scilab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="transposed_variable">sequelize.</span>transaction().<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span> <span class="params">(t)</span> &#123;</span></span><br><span class="line">  <span class="keyword">return</span> <span class="transposed_variable">User.</span>create(&#123;</span><br><span class="line">    firstName: <span class="string">'Homer'</span>,</span><br><span class="line">    lastName: <span class="string">'Simpson'</span></span><br><span class="line">  &#125;, &#123;transaction: t&#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span> <span class="params">(user)</span> &#123;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="transposed_variable">user.</span>addSibling(&#123;</span><br><span class="line">      firstName: <span class="string">'Lisa'</span>,</span><br><span class="line">      lastName: <span class="string">'Simpson'</span></span><br><span class="line">    &#125;, &#123;transaction: t&#125;);</span><br><span class="line">  &#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span> <span class="params">()</span> &#123;</span></span><br><span class="line">    <span class="transposed_variable">t.</span>commit();</span><br><span class="line">  &#125;).<span class="keyword">catch</span>(<span class="function"><span class="keyword">function</span> <span class="params">(err)</span> &#123;</span></span><br><span class="line">    <span class="transposed_variable">t.</span>rollback();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="Automatically_pass_transactions_to_all_queries"><a href="#Automatically_pass_transactions_to_all_queries" class="headerlink" title="Automatically pass transactions to all queries"></a>Automatically pass transactions to all queries</h3><ul>
-<li>自动添加事务</li>
-<li>无需{ transaction: t }</li>
-<li>require(‘continuation-local-storage’)</li>
-</ul>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cls = require(<span class="string">'continuation-local-storage'</span>),</span><br><span class="line">    <span class="keyword">namespace</span> = cls.createNamespace(<span class="string">'my-very-own-namespace'</span>);</span><br><span class="line"></span><br><span class="line">sequelize.transaction(<span class="function"><span class="keyword">function</span> <span class="params">(t1)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">namespace</span>.<span class="keyword">get</span>(<span class="string">'transaction'</span>) === t1; <span class="comment">// true</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">sequelize.transaction(<span class="function"><span class="keyword">function</span> <span class="params">(t2)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">namespace</span>.<span class="keyword">get</span>(<span class="string">'transaction'</span>) === t2; <span class="comment">// true</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="Array_transaction"><a href="#Array_transaction" class="headerlink" title="Array transaction"></a>Array transaction</h3><ul>
-<li>事务并行</li>
-</ul>
-<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">models.sequelize.transaction(<span class="function"><span class="keyword">function</span><span class="params">(t)</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> models.Products.create(args, &#123;</span><br><span class="line">        transaction: t</span><br><span class="line">    &#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(result)</span></span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Promise.<span class="built_in">all</span>([models.user.create(&#123;</span><br><span class="line">            <span class="keyword">name</span>: <span class="string">'test'</span></span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            transaction: t</span><br><span class="line">        &#125;), models.address.create(&#123;</span><br><span class="line">            id: <span class="string">'1'</span></span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            transaction: t</span><br><span class="line">        &#125;)]).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">()</span></span> &#123;&#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h3 id="push_+_promise-all__u5B9E_u73B0_u5FAA_u73AF_u8BFB_u53D6_u3001_u5199_u5165"><a href="#push_+_promise-all__u5B9E_u73B0_u5FAA_u73AF_u8BFB_u53D6_u3001_u5199_u5165" class="headerlink" title="push + promise.all 实现循环读取、写入"></a>push + promise.all 实现循环读取、写入</h3><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">models.sequelize.transaction(<span class="keyword">function</span>(t) &#123;</span><br><span class="line">    var tranArray = [];</span><br><span class="line">    if (!<span class="number">_</span>.isUndefined(args.categories_id)) &#123;</span><br><span class="line">        var categories_idArray = args.categories_id.split(<span class="string">','</span>);</span><br><span class="line">        tranArray.push(models.Categories_product.destroy(&#123;</span><br><span class="line">            where: &#123;</span><br><span class="line">                product_id: product_id</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            transaction: t</span><br><span class="line">        &#125;));</span><br><span class="line">        categories_idArray.forEach(function(categories_id) &#123;</span><br><span class="line">            tranArray.push(models.Categories_product.create(&#123;</span><br><span class="line">                product_id: product_id,</span><br><span class="line">                categories_id: categories_id</span><br><span class="line">            &#125;, &#123;</span><br><span class="line">                transaction: t</span><br><span class="line">            &#125;));</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    if (<span class="number">_</span>.isUndefined(areacode)) &#123;</span><br><span class="line">        tranArray.push(models.Products.update(args, &#123;</span><br><span class="line">            where: &#123;</span><br><span class="line">                id: product_id</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;));</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        tranArray.push(models.Product_lang_details.update(args,</span><br><span class="line">            where: &#123;</span><br><span class="line">                product_id: product_id,</span><br><span class="line">                areacode: areacode</span><br><span class="line">            &#125;));</span><br><span class="line">        tranArray.push(models.Product_shipping_to.update(&#123;</span><br><span class="line">                freezeTableName: args.freezeTableName</span><br><span class="line">            &#125;,</span><br><span class="line">            where: &#123;</span><br><span class="line">                product_id: product_id,</span><br><span class="line">                areacode: areacode</span><br><span class="line">            &#125;));</span><br><span class="line">    &#125;</span><br><span class="line">    return Promise.all(tranArray);</span><br><span class="line">&#125;).<span class="keyword">then</span>(<span class="keyword">function</span>() &#123;</span><br><span class="line">    return utils.response(res, <span class="number">200</span>, &#123;</span><br><span class="line">        <span class="string">'message'</span>: <span class="string">'update product successful!'</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;).<span class="keyword">catch</span>(<span class="keyword">function</span>(error) &#123;</span><br><span class="line">    logger.error(<span class="string">'product update fall'</span>, error);</span><br><span class="line">    return utils.responseError(res, <span class="number">500</span>, &#123;</span><br><span class="line">        <span class="string">'message'</span>: <span class="string">'format error'</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1420,7 +1425,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-count">39</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

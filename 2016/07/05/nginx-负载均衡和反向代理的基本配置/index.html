@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="shell," />
+  <meta name="keywords" content="WMTcore" />
 
 
 
@@ -51,22 +51,16 @@
 
 
 
-<meta name="description" content="生成key123openssl genrsa -des3 -out prvtkey.pem 2048 或者无密码保护的openssl genrsa -out prvtkey.pem 2048
-生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)1openssl req -new -key prvtkey.pem -out cert.csr
-然后填写信息，注意Common Name (">
+<meta name="description" content="不扯犊子 -NOT ALONE">
 <meta property="og:type" content="article">
-<meta property="og:title" content="openssl生成ssl证书及向申请CA流程">
-<meta property="og:url" content="http://www.wmtcore.com/2016/05/13/openssl生成ssl证书及向申请CA流程/index.html">
+<meta property="og:title" content="nginx 负载均衡和反向代理的基本配置">
+<meta property="og:url" content="http://www.wmtcore.com/2016/07/05/nginx-负载均衡和反向代理的基本配置/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="生成key123openssl genrsa -des3 -out prvtkey.pem 2048 或者无密码保护的openssl genrsa -out prvtkey.pem 2048
-生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)1openssl req -new -key prvtkey.pem -out cert.csr
-然后填写信息，注意Common Name (">
-<meta property="og:updated_time" content="2016-05-13T07:35:46.000Z">
+<meta property="og:description" content="不扯犊子 -NOT ALONE">
+<meta property="og:updated_time" content="2016-07-05T09:47:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="openssl生成ssl证书及向申请CA流程">
-<meta name="twitter:description" content="生成key123openssl genrsa -des3 -out prvtkey.pem 2048 或者无密码保护的openssl genrsa -out prvtkey.pem 2048
-生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)1openssl req -new -key prvtkey.pem -out cert.csr
-然后填写信息，注意Common Name (">
+<meta name="twitter:title" content="nginx 负载均衡和反向代理的基本配置">
+<meta name="twitter:description" content="不扯犊子 -NOT ALONE">
 
 
 
@@ -78,7 +72,7 @@
   };
 </script>
 
-  <title> openssl生成ssl证书及向申请CA流程 | 大碗拉面 </title>
+  <title> nginx 负载均衡和反向代理的基本配置 | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -244,7 +238,7 @@
             
             
               
-                openssl生成ssl证书及向申请CA流程
+                nginx 负载均衡和反向代理的基本配置
               
             
           </h1>
@@ -253,34 +247,19 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-05-13T10:57:49+08:00" content="2016-05-13">
-              2016-05-13
+            <time itemprop="dateCreated" datetime="2016-07-05T17:47:22+08:00" content="2016-07-05">
+              2016-07-05
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/05/13/openssl生成ssl证书及向申请CA流程/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/13/openssl生成ssl证书及向申请CA流程/" itemprop="commentsCount"></span>
+                <a href="/2016/07/05/nginx-负载均衡和反向代理的基本配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/nginx-负载均衡和反向代理的基本配置/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -299,40 +278,24 @@
       
 
       
-        <span itemprop="articleBody"><h3 id="u751F_u6210key"><a href="#u751F_u6210key" class="headerlink" title="生成key"></a>生成key</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -des3 -out prvtkey<span class="class">.pem</span> <span class="number">2048</span> </span><br><span class="line">或者无密码保护的</span><br><span class="line">openssl genrsa -out prvtkey<span class="class">.pem</span> <span class="number">2048</span></span><br></pre></td></tr></table></figure>
-<h3 id="u751F_u6210-csr_28_u7528_u8FD9_u4E2A_u5411_u6570_u5B57_u8BC1_u4E66_u9881_u53D1_u673A_u6784_uFF08_u5373CA_uFF09_u7533_u8BF7_u4E00_u4E2A_u6570_u5B57_u8BC1_u4E66_29"><a href="#u751F_u6210-csr_28_u7528_u8FD9_u4E2A_u5411_u6570_u5B57_u8BC1_u4E66_u9881_u53D1_u673A_u6784_uFF08_u5373CA_uFF09_u7533_u8BF7_u4E00_u4E2A_u6570_u5B57_u8BC1_u4E66_29" class="headerlink" title="生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)"></a>生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)</h3><figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -<span class="keyword">new</span> -key prvtkey.pem -<span class="keyword">out</span> cert.csr</span><br></pre></td></tr></table></figure>
-<p>然后填写信息，注意<strong>Common Name (eg, your websites domain name)</strong>，要填写网站域名,如:pay.abc.com</p>
-<p>生成的.csr文件是否规范可以在这检测：<br><a href="https://cryptoreport.websecurity.symantec.com/checker/views/csrCheck.jsp" target="_blank" rel="external">https://cryptoreport.websecurity.symantec.com/checker/views/csrCheck.jsp</a></p>
-<p>然后向CA申请数字证书，再用CA给的cacert.pem替换原来的prvtkey.pem</p>
-<h3 id="u81EA_u5EFACA"><a href="#u81EA_u5EFACA" class="headerlink" title="自建CA"></a>自建CA</h3><p><a href="http://www.cnblogs.com/AloneSword/p/3809002.html" target="_blank" rel="external">http://www.cnblogs.com/AloneSword/p/3809002.html</a></p>
-</span>
+        <span itemprop="articleBody"></span>
       
     </div>
 
     <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/shell/" rel="tag">#shell</a>
-          
-        </div>
       
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/12/js中一堆凌乱的小知识/" rel="next" title="js中一堆凌乱的小知识">
-                <i class="fa fa-chevron-left"></i> js中一堆凌乱的小知识
+              <a href="/2016/07/01/pm2介绍/" rel="next" title="pm2">
+                <i class="fa fa-chevron-left"></i> pm2
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/05/13/支付宝notify-异步通知与https的问题/" rel="prev" title="支付宝notify 异步通知与https的问题">
-                支付宝notify 异步通知与https的问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -359,8 +322,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/13/openssl生成ssl证书及向申请CA流程/"
-           data-title="openssl生成ssl证书及向申请CA流程" data-url="http://www.wmtcore.com/2016/05/13/openssl生成ssl证书及向申请CA流程/">
+      <div class="ds-thread" data-thread-key="2016/07/05/nginx-负载均衡和反向代理的基本配置/"
+           data-title="nginx 负载均衡和反向代理的基本配置" data-url="http://www.wmtcore.com/2016/07/05/nginx-负载均衡和反向代理的基本配置/">
       </div>
     
   </div>
@@ -460,7 +423,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u751F_u6210key"><span class="nav-number">1.</span> <span class="nav-text">生成key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u751F_u6210-csr_28_u7528_u8FD9_u4E2A_u5411_u6570_u5B57_u8BC1_u4E66_u9881_u53D1_u673A_u6784_uFF08_u5373CA_uFF09_u7533_u8BF7_u4E00_u4E2A_u6570_u5B57_u8BC1_u4E66_29"><span class="nav-number">2.</span> <span class="nav-text">生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u81EA_u5EFACA"><span class="nav-number">3.</span> <span class="nav-text">自建CA</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
