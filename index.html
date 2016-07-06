@@ -263,6 +263,21 @@
           </span>
 
           
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
 
           
             
@@ -291,7 +306,110 @@
         
           <span itemprop="articleBody">
             
-              
+              <h3 id="u8D1F_u8F7D_u5747_u8861"><a href="#u8D1F_u8F7D_u5747_u8861" class="headerlink" title="负载均衡"></a>负载均衡</h3><ul>
+<li>此处指的是选择一种策略，尽量把请求均匀的分布到每一个上游服务器</li>
+</ul>
+<h4 id="upstream"><a href="#upstream" class="headerlink" title="upstream"></a>upstream</h4><ul>
+<li>配置块 http</li>
+<li>语法 upstream name{}</li>
+<li>定义一个上游服务器的集群，便于反向代理的proxy_pass使用</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">upstream backend &#123;</span><br><span class="line">    server <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5566</span> weight=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">30</span>s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http:<span class="comment">//backend; #backend指上游服务器</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="server"><a href="#server" class="headerlink" title="server"></a>server</h5><ul>
+<li>配置块 upstream</li>
+<li>语法 server names[parameters]</li>
+<li>指定一台上游服务器的名字 可以是域名，ip，UNIX句柄</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>parameters</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>weight=number</td>
+<td>上游服务器转发的权重 默认1</td>
+</tr>
+<tr>
+<td>max_fails=number</td>
+<td>在fail_timeout时间内，如果向上游服务器转发失败次数超过number,就认为该服务器在此时间段里不可用，默认1 设为0就不检查失败次数</td>
+</tr>
+<tr>
+<td>fail_timeout=time</td>
+<td>用于优化反向代理功能，与连接、读取、响应超时无关，默认10秒</td>
+</tr>
+<tr>
+<td>down</td>
+<td>永久下线服务器，只在使用ip_hash有效</td>
+</tr>
+<tr>
+<td>backup</td>
+<td>在使用ip_hash时无效 表示上游服务器只是备份服务器，只有在所有非备份上游服务器失效后，才会指向备份</td>
+</tr>
+</tbody>
+</table>
+<h5 id="ip_hash"><a href="#ip_hash" class="headerlink" title="ip_hash"></a>ip_hash</h5><ul>
+<li>配置块 upstream</li>
+<li>语法 ip_hash;</li>
+<li>将单个用户的请求固定到某个上游服务器</li>
+</ul>
+<p>先根据客户端的ip地址计算一个key,将可以按照upstream集群的上游服务器数量进行取模，再根据取模的结果把请求地址转发到相应的上游服务器,不能与weight同时使用，<strong>在标识上游服务器不可用时，要用down不能直接删除，确保转发策略一贯性</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backend &#123;</span><br><span class="line"> 	ip_hash;</span><br><span class="line">    server <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5566</span> weight=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">30</span>s;</span><br><span class="line">    server backend down;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="u8BB0_u5F55_u65E5_u5FD7_u65F6_u652F_u6301_u7684_u53D8_u91CF"><a href="#u8BB0_u5F55_u65E5_u5FD7_u65F6_u652F_u6301_u7684_u53D8_u91CF" class="headerlink" title="记录日志时支持的变量"></a>记录日志时支持的变量</h4><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$upstream_addr</td>
+<td>处理请求的上游服务器地址</td>
+</tr>
+<tr>
+<td>$upstream_cache_status</td>
+<td>表示是否命中缓存，取值范围：MISS、EXPIRED、UPDATING、SATLE、HIT</td>
+</tr>
+<tr>
+<td>$upstream_status</td>
+<td>上游服务器返回的响应中HTTP响应码</td>
+</tr>
+<tr>
+<td>$upstream_response_time</td>
+<td>上游服务器响应时间，精度毫秒</td>
+</tr>
+<tr>
+<td>$upstream<em>http</em>$HEADER</td>
+<td>http头部，如upstream_http_host</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">log_format</span> timing <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] <span class="variable">$request</span> '</span></span><br><span class="line">	<span class="string">'upstream_response_time <span class="variable">$upstream_response_time</span> '</span></span><br><span class="line">	<span class="string">'msec <span class="variable">$msec</span> request_time <span class="variable">$request_time</span>'</span>;</span><br><span class="line"></span><br><span class="line"><span class="title">log_format</span> up_head <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] <span class="variable">$request</span> '</span></span><br><span class="line">	<span class="string">'upstream_http_content_type <span class="variable">$upstream_http_content_type</span>'</span></span><br></pre></td></tr></table></figure>
+<h3 id="u53CD_u5411_u4EE3_u7406_u914D_u7F6E"><a href="#u53CD_u5411_u4EE3_u7406_u914D_u7F6E" class="headerlink" title="反向代理配置"></a>反向代理配置</h3><h4 id="proxy_pass"><a href="#proxy_pass" class="headerlink" title="proxy_pass"></a>proxy_pass</h4><ul>
+<li>语法：proxy_pass URL;</li>
+<li>配置块 location、if</li>
+</ul>
+<p>将当前请求反向代理到URL参数指定的服务器上，URL可以是主机名或ip地址</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">proxy_pass http://localhost:<span class="number">3000</span>/uri/;</span><br><span class="line"></span><br><span class="line">可以加上负载均衡 使用upstream</span><br><span class="line">    upstream backend &#123;</span><br><span class="line">     ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        <span class="keyword">location</span> <span class="title">/ &#123;</span><br><span class="line">            proxy_pass</span> http://backend; <span class="comment">#backend指上游服务器</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">可以把httpz转换成https</span><br><span class="line">proxy_pass https://<span class="number">192.168</span>.<span class="number">0.1</span>/;</span><br><span class="line"></span><br><span class="line">若需要转发host头部</span><br><span class="line">proxy_set_header Host $host;</span><br><span class="line"></span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line"><span class="comment">#### proxy_method</span></span><br><span class="line">- 语法：proxy_method method;</span><br><span class="line">- 配置块 http、server、<span class="keyword">location</span></span><br><span class="line"></span><br><span class="line"><span class="title">转发时的协议方法名 </span><br><span class="line">proxy_method</span> POST; 客户端的GET请求也会被转发成POST</span><br><span class="line"></span><br><span class="line"><span class="comment">#### proxy_hide_header</span></span><br><span class="line">- 语法：proxy_hide_header the_header;</span><br><span class="line">- 配置块 http、server、<span class="keyword">location</span></span><br><span class="line"></span><br><span class="line"><span class="title">Nginx</span>会将上游服务器的响应转发给客户端，但默认不会转发以下HTTP头部字段：<span class="operator">Date</span>、Server、X-Pad和X-Accel-*.使用proxy_hide_header可以指定哪些不能转发</span><br></pre></td></tr></table></figure>
+<p>proxy_hide_header Cache-Control;</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### proxy_pass_header</span><br><span class="line">-<span class="ruby"> 语法：proxy_pass_header the_header;</span><br><span class="line"></span>-<span class="ruby"> 配置块 http、server、location</span><br><span class="line"></span></span><br><span class="line">将原来禁止转发的header设为转发</span><br><span class="line"></span><br><span class="line">#### proxy_pass_request_body</span><br><span class="line">-<span class="ruby"> 语法：proxy_pass_request_body on|off;</span><br><span class="line"></span>-<span class="ruby"> 默认 on;</span><br><span class="line"></span>-<span class="ruby"> 配置块 http、server、location</span><br><span class="line"></span>是否向上游转发http body</span><br><span class="line"></span><br><span class="line">#### proxy_pass_request_headers</span><br><span class="line">-<span class="ruby"> 语法：proxy_pass_request_headers on|off;</span><br><span class="line"></span>-<span class="ruby"> 默认 on;</span><br><span class="line"></span>-<span class="ruby"> 配置块 http、server、location</span><br><span class="line"></span>是否向上游转发http header</span><br><span class="line"></span><br><span class="line">#### prxoy_redirect</span><br><span class="line">-<span class="ruby"> 语法：prxoy_redirect [default|off|redirect rep|replacement]];</span><br><span class="line"></span>-<span class="ruby"> 默认 default;</span><br><span class="line"></span>-<span class="ruby"> 配置块 http、server、location</span><br><span class="line"></span>当上游返回响应是重定向或刷新请求（301，302),proxy_redirect 可以重设HTTP头部的location或refresh字段。</span><br></pre></td></tr></table></figure>
+<p>proxy_redirect <a href="http://localhost:8000/two/" target="_blank" rel="external">http://localhost:8000/two/</a> <a href="http://frontend/one/" target="_blank" rel="external">http://frontend/one/</a>;</p>
+<p>对location字段的URI是<a href="http://localhost:8000/two/some/uri.实际转发给客户端的是http://frontend/one/" target="_blank" rel="external">http://localhost:8000/two/some/uri.实际转发给客户端的是http://frontend/one/</a>;</p>
+<p>可以使用ngx-http-core-module提供的变量来设置</p>
+<p>proxy_redirect <a href="http://localhost:8000/" target="_blank" rel="external">http://localhost:8000/</a> <a href="http://$host:$server_port/" target="_blank" rel="external">http://$host:$server_port/</a>;</p>
+<p>可以省略replacement参数的主机名部分，这时会用虚拟主机名称填充<br>proxy_redirect <a href="http://localhost:8000/two/" target="_blank" rel="external">http://localhost:8000/two/</a> /one/;</p>
+<p>使用default参数时，会按照proxy_pass配置项和所属的location配置项重组</p>
+<p>location /one/ {<br>  proxy_pass <a href="http://upstream:port/two/" target="_blank" rel="external">http://upstream:port/two/</a>;<br>  proxy_redirect default;<br>}<br>等于<br>location /one/ {<br>    proxy_pass <a href="http://upstream:port/two/" target="_blank" rel="external">http://upstream:port/two/</a>;<br>    proxy_redirect <a href="http://upstream:port/two/" target="_blank" rel="external">http://upstream:port/two/</a> /one/;<br>}<br>```</p>
+<h4 id="proxy_next_upstream"><a href="#proxy_next_upstream" class="headerlink" title="proxy_next_upstream"></a>proxy_next_upstream</h4><ul>
+<li>语法：proxy_next_upstream [error|timeout|invalid_header|http_500|http_502|http_503|http_504|http_404|off];</li>
+<li>默认 error timeout;</li>
+<li>配置块 http、server、location</li>
+</ul>
+<p>当向一台上游转发请求出错时，继续换一台处理<br>（invaild_header 上游响应不合法）</p>
+
             
           </span>
         
@@ -1789,14 +1907,14 @@ Step(
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
