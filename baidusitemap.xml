@@ -4,8 +4,28 @@
 
     
   <url>
+    <loc>http://www.wmtcore.com/2016/07/08/nginx-http%E6%A8%A1%E5%9D%97%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/</loc>
+    <lastmod>2016-07-08T09:06:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>nginx http模块基本配置</title>
+        <pubTime>2016-07-08T02:20:26.000Z</pubTime>
+        
+        <tag>nginx</tag>
+         
+         
+           
+             
+              <breadCrumb title="nginx" url="http://www.wmtcore.com/categories/nginx/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.wmtcore.com/2016/07/05/nginx-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%92%8C%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E7%9A%84%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/</loc>
-    <lastmod>2016-07-06T09:49:52.000Z</lastmod>
+    <lastmod>2016-07-06T09:55:38.000Z</lastmod>
     <data>
         <display>
         <title>nginx 负载均衡和反向代理的基本配置</title>
