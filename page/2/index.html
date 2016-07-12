@@ -223,11 +223,117 @@
 
     
     
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/04/19/node中一堆凌乱的小知识/" itemprop="url">
+                  node中一堆凌乱的小知识
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-04-19T14:17:56+08:00" content="2016-04-19">
+              2016-04-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/19/node中一堆凌乱的小知识/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/19/node中一堆凌乱的小知识/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+              <h4 id="xml_u76F8_u5173"><a href="#xml_u76F8_u5173" class="headerlink" title="xml相关"></a>xml相关</h4><p><code>xml转json</code>: npm包 xml2js</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//explicitArray:<span class="literal">false</span> 返回json的value不为数组，explicitRoot:<span class="literal">false</span>，去掉头部</span><br><span class="line"><span class="keyword">var</span> xml='&lt;xml&gt;&lt;a&gt;<span class="number">1</span>&lt;/a&gt;&lt;b&gt;<span class="number">2</span>&lt;/b&gt;&lt;/xml&gt;';</span><br><span class="line">blue.promisify(new xml2js.<span class="type">Parser</span>(&#123;explicitArray:<span class="literal">false</span>,explicitRoot:<span class="literal">false</span>&#125;).parseString)(xml).then(function(<span class="literal">result</span>)&#123;</span><br><span class="line">	console.dir(<span class="literal">result</span>);</span><br><span class="line">&#125;,function(error)&#123;</span><br><span class="line">//&#123; a: '<span class="number">1</span>', b: '<span class="number">2</span>' &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><code>json转xml</code>:npm包 xmlbuilder</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//‘xml’ root名称，headless: true 去掉 xml 头部，pretty: true 格式化</span></span><br><span class="line">var json = &#123;</span><br><span class="line">	a: 1,</span><br><span class="line">	b: 2</span><br><span class="line">&#125;;</span><br><span class="line">console.<span class="keyword">error</span>(xmlbuilder.create(<span class="string">'xml'</span>,&#123;headless: <span class="keyword">true</span>&#125;).ele(json).end(&#123; pretty: <span class="keyword">true</span>&#125;))</span><br><span class="line"></span><br><span class="line">&lt;xml&gt;</span><br><span class="line">  &lt;a&gt;1&lt;/a&gt;</span><br><span class="line">  &lt;b&gt;2&lt;/b&gt;</span><br><span class="line">&lt;/xml&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="bluebird"><a href="#bluebird" class="headerlink" title="bluebird"></a>bluebird</h4><p><code>promise.promisify 将api promise 化</code></p>
+<h4 id="prcess"><a href="#prcess" class="headerlink" title="prcess"></a>prcess</h4><p><code>To set an environment variable in Windows</code>:</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> NODE_ENV=development</span><br></pre></td></tr></table></figure>
+<p><code>on OS X or Linux</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> NODE_ENV=development</span><br></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1750,99 +1856,12 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/01/25/js-call和apply/" itemprop="url">
-                  js call和apply
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-01-25T16:06:14+08:00" content="2016-01-25">
-              2016-01-25
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/25/js-call和apply/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/js-call和apply/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1883,7 +1902,7 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-count">41</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

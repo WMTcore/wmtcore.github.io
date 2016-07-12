@@ -223,11 +223,93 @@
 
     
     
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/01/25/js-call和apply/" itemprop="url">
+                  js call和apply
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-25T16:06:14+08:00" content="2016-01-25">
+              2016-01-25
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/25/js-call和apply/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/js-call和apply/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+              
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1231,132 +1313,12 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/26/React-组件生命周期/" itemprop="url">
-                  React 组件生命周期
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-12-26T10:19:25+08:00" content="2015-12-26">
-              2015-12-26
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/React/" itemprop="url" rel="index">
-                    <span itemprop="name">React</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/26/React-组件生命周期/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/26/React-组件生命周期/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="u5B9E_u4F8B_u5316"><a href="#u5B9E_u4F8B_u5316" class="headerlink" title="实例化"></a>实例化</h3><ul>
-<li>一个实例初次创建</li>
-</ul>
-<p><code>getDefaultProps</code> 只会被调用一次</p>
-<p><code>getInitalState</code> 每个实例调用一次</p>
-<p><code>componentWillMount</code> 首次渲染之前被调用，可以修改state</p>
-<p><code>render</code> 创建虚拟DOM，表示组件输出，必须要有的方法。只能通过this.props和this.state访问数据。返回null、false、任何React组件。只能有一个顶级组件，不能改变组件的状态或者修改DOM的输出。</p>
-<p><code>componentDidMount</code> 在真实的DOM渲染之后，可以通过this.getDOMNode()访问原生DOM,测量渲染的DOM元素高度，运行jQuery</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> datasource=[];</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> MyComponent=React.creatClass(&#123;</span><br><span class="line">	render:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="title">input</span> /&gt;</span>;</span></span><br><span class="line">	&#125;,</span><br><span class="line">	componentDidMount: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		$(<span class="keyword">this</span>.getDOMNOde()).autocomplete(&#123;</span><br><span class="line">			sources: datasource</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h3 id="u5B58_u5728_u671F"><a href="#u5B58_u5728_u671F" class="headerlink" title="存在期"></a>存在期</h3><ul>
-<li>组件已渲染好，可以和它交互</li>
-</ul>
-<p><code>componentWillReceiveprops</code> 通过父辈组件修改props、state</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">componentWillReceiveProps</span>: <span class="tag">function</span>(nextProps) &#123;</span><br><span class="line">	<span class="tag">if</span> (nextProps.checked !== undefined) &#123;</span><br><span class="line">		<span class="tag">this</span><span class="class">.setState</span>(&#123;</span><br><span class="line">			<span class="attribute">checked</span>: nextProps.checked</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>shouldComponentUpdate</code> 优化组件渲染，确实组件是否要渲染新的props、state</p>
-<p><code>componentWillUpdate</code> 在组件接收到新的props或者state渲染之前调用，不可在此更新state、props,要借助<strong>componentWillReceiveprops</strong>更新state</p>
-<p><code>componentDidUpdate</code> 类似<strong>componentDidMount</strong>,在此更新已渲染的DOM</p>
-<h3 id="u9500_u6BC1_26amp_3B_u6E05_u7406_u671F"><a href="#u9500_u6BC1_26amp_3B_u6E05_u7406_u671F" class="headerlink" title="销毁&amp;清理期"></a>销毁&amp;清理期</h3><p><code>componentWillUnmount</code> 在<strong>componentDidMount</strong>中添加的任务都要在此撤销，如定时器、事件监听</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1397,7 +1359,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-count">41</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
