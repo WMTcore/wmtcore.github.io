@@ -63,7 +63,7 @@ Promise 对象，用来传递异步操作的消息。代表了某个未来才会
 Promise 对象，用来传递异步操作的消息。代表了某个未来才会知道结果的事件（通常是一个异步操作）。这个事件提供统一的API，可供进一步处理
 可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。此外，Promise对象提供统一的接口，使得控制异步操作更加容易
 无法取消Promise。如果不设置回调函数，Promise内部抛出的错误，不会反应到外部。当处于Pend">
-<meta property="og:updated_time" content="2016-04-11T08:57:29.000Z">
+<meta property="og:updated_time" content="2016-07-15T02:30:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="es6 Promise">
 <meta name="twitter:description" content="Promise含义
@@ -328,6 +328,10 @@ Promise 对象，用来传递异步操作的消息。代表了某个未来才会
 <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成一个Promise对象的数组</span></span><br><span class="line"><span class="keyword">var</span> promises = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>].map(<span class="function"><span class="keyword">function</span><span class="params">(id)</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> getJSON(<span class="string">"/post/"</span> + id + <span class="string">".json"</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">Promise.all(promises).then(<span class="function"><span class="keyword">function</span><span class="params">(posts)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;).<span class="keyword">catch</span>(<span class="function"><span class="keyword">function</span><span class="params">(reason)</span></span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <h4 id="Promise-race_28_29"><a href="#Promise-race_28_29" class="headerlink" title="Promise.race()"></a>Promise.race()</h4><p>同样是将多个Promise实例，包装成一个新的Promise实例。可用于超时判断 setTimeout<br>只要p1、p2、p3之中有一个实例率先改变状态，p的状态就跟着改变。那个率先改变的Promise实例的返回值，就传递给p的回调函数</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> p = <span class="built_in">Promise</span>.race([</span><br><span class="line">  fetch(<span class="string">'/resource-that-may-take-a-while'</span>),</span><br><span class="line">  <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    setTimeout(() =&gt; reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'request timeout'</span>)), <span class="number">5000</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">])</span><br><span class="line">p.then(response =&gt; <span class="built_in">console</span>.log(response))</span><br><span class="line">p.catch(error =&gt; <span class="built_in">console</span>.log(error))</span><br></pre></td></tr></table></figure>
+<ul>
+<li>bluebird  Promise.some 可以传入count，来确定返回几个，promise.any则返回一个</li>
+</ul>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Promise.<span class="keyword">some</span>([</span><br><span class="line">    ping(<span class="string">"ns1.example.com"</span>),</span><br><span class="line">    ping(<span class="string">"ns2.example.com"</span>),</span><br><span class="line">    ping(<span class="string">"ns3.example.com"</span>),</span><br><span class="line">    ping(<span class="string">"ns4.example.com"</span>)</span><br><span class="line">], <span class="number">2</span>).spread(function(<span class="keyword">first</span>, <span class="keyword">second</span>) &#123;</span><br><span class="line">    console.<span class="command">log</span>(<span class="keyword">first</span>, <span class="keyword">second</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <h4 id="Promise-resolve_28_29"><a href="#Promise-resolve_28_29" class="headerlink" title="Promise.resolve()"></a>Promise.resolve()</h4><p>将现有对象转为Promise对象</p>
 </span>
       
@@ -428,7 +432,7 @@ Promise 对象，用来传递异步操作的消息。代表了某个未来才会
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">41</span>
+              <span class="site-state-item-count">42</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

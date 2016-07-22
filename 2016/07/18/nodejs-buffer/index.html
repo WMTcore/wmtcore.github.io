@@ -51,61 +51,35 @@
 
 
 
-<meta name="description" content="pm2 是一个带有负载均衡功能的Node应用的进程管理器
-内建负载均衡（使用Node cluster 集群模块）
-后台运行
-0秒停机重载，热升级
-具有Ubuntu和CentOS 的启动脚本
-停止不稳定的进程（避免无限循环）
-控制台检测
-提供 HTTP API
-远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )
-github
+<meta name="description" content="Buffer结构
+类似Array，为16进制的两位数，即占一个字节
+js与c++结合的模块，内存由c++申请，js分配。因为v8垃圾回收影响性能
+node启动时就加载，放在全局对象global
 
-
-
-
-command
-explain">
+12var buf = new Buffer(100);console.log(buf.length); // =&amp;gt; 100
+如给buffer赋值数字，则范围在0-255,否则负数就加256,过大就">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pm2">
-<meta property="og:url" content="http://www.wmtcore.com/2016/07/01/pm2介绍/index.html">
+<meta property="og:title" content="nodejs buffer">
+<meta property="og:url" content="http://www.wmtcore.com/2016/07/18/nodejs-buffer/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="pm2 是一个带有负载均衡功能的Node应用的进程管理器
-内建负载均衡（使用Node cluster 集群模块）
-后台运行
-0秒停机重载，热升级
-具有Ubuntu和CentOS 的启动脚本
-停止不稳定的进程（避免无限循环）
-控制台检测
-提供 HTTP API
-远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )
-github
+<meta property="og:description" content="Buffer结构
+类似Array，为16进制的两位数，即占一个字节
+js与c++结合的模块，内存由c++申请，js分配。因为v8垃圾回收影响性能
+node启动时就加载，放在全局对象global
 
-
-
-
-command
-explain">
-<meta property="og:updated_time" content="2016-07-01T09:30:15.000Z">
+12var buf = new Buffer(100);console.log(buf.length); // =&amp;gt; 100
+如给buffer赋值数字，则范围在0-255,否则负数就加256,过大就">
+<meta property="og:image" content="http://www.wmtcore.com/../picture/node-buffer">
+<meta property="og:updated_time" content="2016-07-22T05:27:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pm2">
-<meta name="twitter:description" content="pm2 是一个带有负载均衡功能的Node应用的进程管理器
-内建负载均衡（使用Node cluster 集群模块）
-后台运行
-0秒停机重载，热升级
-具有Ubuntu和CentOS 的启动脚本
-停止不稳定的进程（避免无限循环）
-控制台检测
-提供 HTTP API
-远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )
-github
+<meta name="twitter:title" content="nodejs buffer">
+<meta name="twitter:description" content="Buffer结构
+类似Array，为16进制的两位数，即占一个字节
+js与c++结合的模块，内存由c++申请，js分配。因为v8垃圾回收影响性能
+node启动时就加载，放在全局对象global
 
-
-
-
-command
-explain">
+12var buf = new Buffer(100);console.log(buf.length); // =&amp;gt; 100
+如给buffer赋值数字，则范围在0-255,否则负数就加256,过大就">
 
 
 
@@ -117,7 +91,7 @@ explain">
   };
 </script>
 
-  <title> pm2 | 大碗拉面 </title>
+  <title> nodejs buffer | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -283,7 +257,7 @@ explain">
             
             
               
-                pm2
+                nodejs buffer
               
             
           </h1>
@@ -292,8 +266,8 @@ explain">
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-07-01T15:15:27+08:00" content="2016-07-01">
-              2016-07-01
+            <time itemprop="dateCreated" datetime="2016-07-18T09:55:23+08:00" content="2016-07-18">
+              2016-07-18
             </time>
           </span>
 
@@ -318,8 +292,8 @@ explain">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/01/pm2介绍/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/01/pm2介绍/" itemprop="commentsCount"></span>
+                <a href="/2016/07/18/nodejs-buffer/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/18/nodejs-buffer/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -338,160 +312,137 @@ explain">
       
 
       
-        <span itemprop="articleBody"><ul>
-<li>pm2 是一个带有负载均衡功能的Node应用的进程管理器</li>
-<li>内建负载均衡（使用Node cluster 集群模块）</li>
-<li>后台运行</li>
-<li>0秒停机重载，热升级</li>
-<li>具有Ubuntu和CentOS 的启动脚本</li>
-<li>停止不稳定的进程（避免无限循环）</li>
-<li>控制台检测</li>
-<li>提供 HTTP API</li>
-<li>远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )</li>
-<li><a href="https://github.com/Unitech/pm2" target="_blank">github</a></li>
+        <span itemprop="articleBody"><h3 id="Buffer_u7ED3_u6784"><a href="#Buffer_u7ED3_u6784" class="headerlink" title="Buffer结构"></a>Buffer结构</h3><ul>
+<li>类似Array，为16进制的两位数，即占一个字节</li>
+<li>js与c++结合的模块，内存由c++申请，js分配。因为v8垃圾回收影响性能</li>
+<li>node启动时就加载，放在全局对象global</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>command</th>
-<th>explain</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$ npm install pm2 -g</td>
-<td># Install PM2</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js</td>
-<td># Start, Daemonize and auto restart application</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js -i 4</td>
-<td># Start 4 instances of application in cluster mode it will load balance network queries to each app</td>
-</tr>
-<tr>
-<td><strong>$ pm2 start app.js –name=”api”</strong></td>
-<td># Start application and name it “api”</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js –watch</td>
-<td># Restart application on file change</td>
-</tr>
-<tr>
-<td>$ pm2 start script.sh</td>
-<td># Start bash script</td>
-</tr>
-<tr>
-<td>$ pm2 list</td>
-<td># List all processes started with PM2</td>
-</tr>
-<tr>
-<td><strong>$ pm2 monit</strong></td>
-<td># Display memory and cpu usage of each app</td>
-</tr>
-<tr>
-<td>$ pm2 show [app-name]</td>
-<td># Show all informations about application</td>
-</tr>
-<tr>
-<td><strong>$ pm2 logs</strong></td>
-<td># Display logs of all apps</td>
-</tr>
-<tr>
-<td>$ pm2 logs [app-name]</td>
-<td># Display logs for a specific app</td>
-</tr>
-<tr>
-<td>$ pm2 flush</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>$ pm2 stop all</strong></td>
-<td># Stop all apps</td>
-</tr>
-<tr>
-<td>$ pm2 stop 0</td>
-<td># Stop process with id 0</td>
-</tr>
-<tr>
-<td><strong>$ pm2 restart all</strong></td>
-<td># Restart all apps</td>
-</tr>
-<tr>
-<td><strong>$ pm2 reload all</strong></td>
-<td># Reload all apps in cluster mode</td>
-</tr>
-<tr>
-<td>$ pm2 gracefulReload all</td>
-<td># Graceful reload all apps in cluster mode</td>
-</tr>
-<tr>
-<td>$ pm2 delete all</td>
-<td># Kill and delete all apps</td>
-</tr>
-<tr>
-<td>$ pm2 delete 0</td>
-<td># Delete app with id 0</td>
-</tr>
-<tr>
-<td>$ pm2 scale api 10</td>
-<td># Scale app with name api to 10 instances</td>
-</tr>
-<tr>
-<td>$ pm2 reset [app-name]</td>
-<td># Reset number of restart for [app-name]</td>
-</tr>
-<tr>
-<td>$ pm2 startup</td>
-<td># Generate a startup script to respawn PM2 on boot</td>
-</tr>
-<tr>
-<td>$ pm2 save</td>
-<td># Save current process list</td>
-</tr>
-<tr>
-<td>$ pm2 resurrect</td>
-<td># Restore previously save processes</td>
-</tr>
-<tr>
-<td>$ pm2 update</td>
-<td># Save processes, kill PM2 and restore processes</td>
-</tr>
-<tr>
-<td>$ pm2 generate</td>
-<td># Generate a sample json configuration file</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod setup</td>
-<td># Setup “prod” remote server</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod</td>
-<td># Update “prod” remote server</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod revert 2</td>
-<td># Revert “prod” remote server by 2</td>
-</tr>
-<tr>
-<td>$ pm2 module:generate [name]</td>
-<td># Generate sample module with name [name]</td>
-</tr>
-<tr>
-<td>$ pm2 install pm2-logrotate</td>
-<td># Install module (here a log rotation system)</td>
-</tr>
-<tr>
-<td>$ pm2 uninstall pm2-logrotate</td>
-<td># Uninstall module</td>
-</tr>
-<tr>
-<td>$ pm2 publish</td>
-<td># Increment version, git push and npm publish</td>
-</tr>
-</tbody>
-</table>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var buf = <span class="keyword">new</span> Buffer(<span class="number">100</span>);</span><br><span class="line">console.<span class="built_in">log</span>(buf.length); <span class="comment">// =&gt; 100</span></span><br></pre></td></tr></table></figure>
+<p><code>如给buffer赋值数字，则范围在0-255,否则负数就加256,过大就减256</code></p>
+<p>内存使用slab分配机制，动态内存管理，包含三种状态（full,partial,empty）。Node以8KB为界限区分Buffer是大对象还是小对象（Buffer.poolSize=8*1024），即8kb为slab单元大小，js以它为单元分配内存</p>
+<h4 id="u5206_u914D_u5C0FBuffer_u5BF9_u8C61"><a href="#u5206_u914D_u5C0FBuffer_u5BF9_u8C61" class="headerlink" title="分配小Buffer对象"></a>分配小Buffer对象</h4><ul>
+<li>小于8kb</li>
+</ul>
+<p>使用局部变量pool,让处于分配状态的slab单元指向它</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pool;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">allocPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	pool = <span class="keyword">new</span> SlowBuffer(Buffer.poolSize);</span><br><span class="line">	pool.used = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>新建小buffer时，如果还没pool,就创建一个slab指向它，当前的buffer对象的parent指向slab</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.parent = pool; <span class="comment">//当前的buffer对象的parent指向slab</span></span><br><span class="line"><span class="keyword">this</span>.offset = pool.used;<span class="comment">//slab开始使用的位置</span></span><br><span class="line">pool.used += <span class="keyword">this</span>.length;<span class="comment">//slab已使用量</span></span><br><span class="line"><span class="keyword">if</span> (pool.used &amp; <span class="number">7</span>) pool.used = (pool.used + <span class="number">8</span>) &amp; ~<span class="number">7</span>;</span><br></pre></td></tr></table></figure>
+<p>此时slab状态为partial,在创建buffer时会判断次slab是否够用，如果不够，就构建新的slab,原来的slab剩余的空间浪费，如果不释放就占据8kb</p>
+<h4 id="u5206_u914D_u5927Buffer"><a href="#u5206_u914D_u5927Buffer" class="headerlink" title="分配大Buffer"></a>分配大Buffer</h4><p>直接分配一个SlowBuffer对象作为slab单元，并且独占</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Big buffer, just alloc one</span><span class="keyword">this</span>.parent = <span class="keyword">new</span> SlowBuffer(<span class="keyword">this</span>.length);<span class="comment">//SlowBuffer由c++定义,勿直接操作它</span><span class="keyword">this</span>.offset = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>Buffer对象是js层面的，能被v8标记回收</strong>，但其内部parent指向SlowBuffer,由c++提供的Buffer,所以内存由c++提供，js只是使用它，对于小buffer的频繁操作，使用<strong>slab机制来先申请后分配</strong>，减少内存申请的系统调用，对于<strong>大buffe就直接用C++提供内存</strong></p>
+<h3 id="Buffer_u8F6C_u6362"><a href="#Buffer_u8F6C_u6362" class="headerlink" title="Buffer转换"></a>Buffer转换</h3><ul>
+<li>支持的字符串编码 ASCII,UTF-8,UTF-16LE/UCS-2,Base64,Binary,Hex</li>
+</ul>
+<h4 id="u5B57_u7B26_u4E32_u4E0EBuffer_u7684_u8F6C_u6362"><a href="#u5B57_u7B26_u4E32_u4E0EBuffer_u7684_u8F6C_u6362" class="headerlink" title="字符串与Buffer的转换"></a>字符串与Buffer的转换</h4><p>字符串转buffer,使用构造函数new Buffer(str,[encoding]);默认UTF-8</p>
+<p><strong>一个Buffer对象可以存多种编码类型的字符串转码的值</strong></p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buf.<span class="command">write</span>(<span class="type">string</span>, [<span class="command">offset</span>], [<span class="property">length</span>], [encoding])</span><br></pre></td></tr></table></figure>
+<p>buffer转字符串</p>
+<pre><code>buf.toString([encoding], [start], [end]) //encoding默认UTF-8,配合start\end实现局部转换
+
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="header">#### Buffer不支持的编码类型</span></span><br><span class="line"><span class="bullet">- </span>使用Buffer.isEncoding(encoding)判断</span><br><span class="line"></span><br><span class="line"><span class="code">`iconv 通过c++调用libiconv`</span></span><br><span class="line"><span class="code">`iconv-lite使用纯js实现，但基于v8高性能，少了c++到js的转换，所以比C++实现好`</span></span><br></pre></td></tr></table></figure>
+
+var iconv = require(&apos;iconv-lite&apos;);
+
+var str = iconv.decode(buf, &apos;win1251&apos;);
+var buf = iconv.encode(&quot;Sample input string&quot;, &apos;win1251&apos;);`
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="escape">`对</span>无法转换的内容会降级处理，输出部分或者？<span class="escape">`</span><br><span class="line"></span></span><br><span class="line">### Buffer拼接</span><br></pre></td></tr></table></figure>
+
+var fs = require(&apos;fs&apos;);
+var rs = fs.createReadStream(&apos;test.md&apos;);
+var data = &apos;&apos;;
+rs.on(&quot;data&quot;, function(chunk) {
+    data += chunk; //等价于data = data.toString() + chunk.toString();此处对宽字节的中文可能造成乱码，即字节没读全就转码
+});
+rs.on(&quot;end&quot;, function() {
+    console.log(data);
+});
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#### 解决乱码问题</span></span><br><span class="line">- 在调用<span class="built_in">set</span>Encoding()时，可读流对象在内部设置一个decoder对象</span><br></pre></td></tr></table></figure>
+
+var StringDecoder = require(&apos;string_decoder&apos;).StringDecoder;
+var decoder = new StringDecoder(&apos;utf8&apos;);
+var buf1 = new Buffer([0xE5, 0xBA, 0x8A, 0xE5, 0x89, 0x8D, 0xE6, 0x98, 0x8E, 0xE6, 0x9C]);
+console.log(decoder.write(buf1));
+// =&gt; 床前明
+var buf2 = new Buffer([0x88, 0xE5, 0x85, 0x89, 0xEF, 0xBC, 0x8C, 0xE7, 0x96, 0x91, 0xE6]);
+console.log(decoder.write(buf2));
+// =&gt;月光，凝
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">StringDecoder在得到编码后，知道宽字节在utf-<span class="number">8</span>下占<span class="number">3</span>个字节，所以在处理末尾不全的字节时，会保留到第二次write().目前只能处理UTF-<span class="number">8</span>、Base64和UCS-<span class="number">2</span>/UTF-<span class="number">16L</span>E</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#### 正确拼接Buffer</span></span><br></pre></td></tr></table></figure>
+
+var chunks = [];
+var size = 0;
+res.on(&apos;data&apos;, function(chunk) {
+    chunks.push(chunk);
+    size += chunk.length;
+});
+res.on(&apos;end&apos;, function() {
+    var buf = Buffer.concat(chunks, size);
+    var str = iconv.decode(buf, &apos;utf8&apos;);
+    console.log(str);
+});
+
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用数组来储存接收的所有Buffer片段并记录总长度，然后调用Buffer.concat<span class="function"><span class="params">()</span>--&gt;</span></span><br></pre></td></tr></table></figure>
+
+Buffer.concat = function(list, length) {
+    if (!Array.isArray(list)) {
+        throw new Error(&apos;Usage: Buffer.concat(list, [length])&apos;);
+    }
+    if (list.length === 0) {
+        return new Buffer(0);
+    } else if (list.length === 1) {
+        return list[0];
+    }
+    if (typeof length !== &apos;number&apos;) {
+        length = 0;
+        for (var i = 0; i &lt; list.length; i++) {
+            var buf = list[i];
+            length += buf.length;
+        }
+    }
+    var buffer = new Buffer(length);
+    var pos = 0;
+    for (var i = 0; i &lt; list.length; i++) {
+        var buf = list[i];
+        buf.copy(buffer, pos);
+        pos += buf.length;
+    }
+    return buffer;
+};
+
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### <span class="keyword">Buffer</span>与性能</span><br><span class="line"></span><br><span class="line"><span class="keyword">Buffer</span>广泛应用于文件I/O和网络I/O,尤其在网络传输，**使用<span class="keyword">Buffer</span>比直接使用字符串要性能要高很多。在web开发中对于静态内容可以预先转成<span class="keyword">buffer</span>**,在不需要改变内容时，只读取<span class="keyword">buffer</span>,不做转换</span><br><span class="line"></span><br><span class="line">#### 文件读取</span><br><span class="line"></span><br><span class="line">fs.createReadStream()先在内存中准备一段<span class="keyword">buffer</span>,然后在fs.read()读取时逐步将磁盘中的字节复制到<span class="keyword">buffer</span>,读完一次就用slice()从<span class="keyword">buffer</span>取出部分作为小<span class="keyword">buffer</span>通过data事件传给调用方。<span class="keyword">Buffer</span>用完会重新分配</span><br></pre></td></tr></table></figure>
+
+fs.createReadStream(path, opts)
+//参数
+{
+    flags: &apos;r&apos;,
+    encoding: null,
+    fd: null,
+    mode: 0666,
+    highWaterMark: 64 * 1024 // 每次读取的长度
+}
+
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">重新分配</span><br></pre></td></tr></table></figure>
+
+var pool;//常驻内存
+
+function allocNewPool(poolSize) {
+    pool = new Buffer(poolSize);
+    pool.used = 0;
+}
+//当pool剩余数量小于128(kMinPoolSpace)字节时，会重新分配
+if (!pool || pool.length - pool.used &lt; kMinPoolSpace) { 
+// discard the old pool
+    pool = null;
+    allocNewPool(this._readableState.highWaterMark);
+}
+</code></pre><p>highWaterMark的大小对性能的影响有：<strong>buffer内存的分配和使用、系统调用次数</strong>;</p>
+<ul>
+<li>文件流读取基于buffer,buffer基于slowbuffer，文件小于8kb可能造成slab浪费</li>
+<li>fs.createReadStream()内部使用fs.read()，会引起系统对磁盘的调用，highWaterMark的大小决定调用次数和data事件次数</li>
+</ul>
+<p><img src="/../picture/node-buffer" alt="Smaller icon"></p>
 </span>
       
     </div>
@@ -509,17 +460,13 @@ explain">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/06/08/redux-学习笔记（1）/" rel="next" title="redux 学习笔记（1）">
-                <i class="fa fa-chevron-left"></i> redux 学习笔记（1）
+              <a href="/2016/07/12/node内存控制/" rel="next" title="node内存控制">
+                <i class="fa fa-chevron-left"></i> node内存控制
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/05/nginx-负载均衡和反向代理的基本配置/" rel="prev" title="nginx 负载均衡和反向代理的基本配置">
-                nginx 负载均衡和反向代理的基本配置 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -546,8 +493,8 @@ explain">
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/01/pm2介绍/"
-           data-title="pm2" data-url="http://www.wmtcore.com/2016/07/01/pm2介绍/">
+      <div class="ds-thread" data-thread-key="2016/07/18/nodejs-buffer/"
+           data-title="nodejs buffer" data-url="http://www.wmtcore.com/2016/07/18/nodejs-buffer/">
       </div>
     
   </div>
@@ -647,7 +594,7 @@ explain">
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Buffer_u7ED3_u6784"><span class="nav-number">1.</span> <span class="nav-text">Buffer结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u5206_u914D_u5C0FBuffer_u5BF9_u8C61"><span class="nav-number">1.1.</span> <span class="nav-text">分配小Buffer对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u5206_u914D_u5927Buffer"><span class="nav-number">1.2.</span> <span class="nav-text">分配大Buffer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Buffer_u8F6C_u6362"><span class="nav-number">2.</span> <span class="nav-text">Buffer转换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u5B57_u7B26_u4E32_u4E0EBuffer_u7684_u8F6C_u6362"><span class="nav-number">2.1.</span> <span class="nav-text">字符串与Buffer的转换</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

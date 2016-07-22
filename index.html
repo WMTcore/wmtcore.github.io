@@ -246,6 +246,239 @@
             
               
                 
+                <a class="post-title-link" href="/2016/07/18/nodejs-buffer/" itemprop="url">
+                  nodejs buffer
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-07-18T09:55:23+08:00" content="2016-07-18">
+              2016-07-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/18/nodejs-buffer/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/18/nodejs-buffer/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="Buffer_u7ED3_u6784"><a href="#Buffer_u7ED3_u6784" class="headerlink" title="Buffer结构"></a>Buffer结构</h3><ul>
+<li>类似Array，为16进制的两位数，即占一个字节</li>
+<li>js与c++结合的模块，内存由c++申请，js分配。因为v8垃圾回收影响性能</li>
+<li>node启动时就加载，放在全局对象global</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var buf = <span class="keyword">new</span> Buffer(<span class="number">100</span>);</span><br><span class="line">console.<span class="built_in">log</span>(buf.length); <span class="comment">// =&gt; 100</span></span><br></pre></td></tr></table></figure>
+<p><code>如给buffer赋值数字，则范围在0-255,否则负数就加256,过大就减256</code></p>
+<p>内存使用slab分配机制，动态内存管理，包含三种状态（full,partial,empty）。Node以8KB为界限区分Buffer是大对象还是小对象（Buffer.poolSize=8*1024），即8kb为slab单元大小，js以它为单元分配内存</p>
+<h4 id="u5206_u914D_u5C0FBuffer_u5BF9_u8C61"><a href="#u5206_u914D_u5C0FBuffer_u5BF9_u8C61" class="headerlink" title="分配小Buffer对象"></a>分配小Buffer对象</h4><ul>
+<li>小于8kb</li>
+</ul>
+<p>使用局部变量pool,让处于分配状态的slab单元指向它</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pool;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">allocPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	pool = <span class="keyword">new</span> SlowBuffer(Buffer.poolSize);</span><br><span class="line">	pool.used = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>新建小buffer时，如果还没pool,就创建一个slab指向它，当前的buffer对象的parent指向slab</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.parent = pool; <span class="comment">//当前的buffer对象的parent指向slab</span></span><br><span class="line"><span class="keyword">this</span>.offset = pool.used;<span class="comment">//slab开始使用的位置</span></span><br><span class="line">pool.used += <span class="keyword">this</span>.length;<span class="comment">//slab已使用量</span></span><br><span class="line"><span class="keyword">if</span> (pool.used &amp; <span class="number">7</span>) pool.used = (pool.used + <span class="number">8</span>) &amp; ~<span class="number">7</span>;</span><br></pre></td></tr></table></figure>
+<p>此时slab状态为partial,在创建buffer时会判断次slab是否够用，如果不够，就构建新的slab,原来的slab剩余的空间浪费，如果不释放就占据8kb</p>
+<h4 id="u5206_u914D_u5927Buffer"><a href="#u5206_u914D_u5927Buffer" class="headerlink" title="分配大Buffer"></a>分配大Buffer</h4><p>直接分配一个SlowBuffer对象作为slab单元，并且独占</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Big buffer, just alloc one</span><span class="keyword">this</span>.parent = <span class="keyword">new</span> SlowBuffer(<span class="keyword">this</span>.length);<span class="comment">//SlowBuffer由c++定义,勿直接操作它</span><span class="keyword">this</span>.offset = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>Buffer对象是js层面的，能被v8标记回收</strong>，但其内部parent指向SlowBuffer,由c++提供的Buffer,所以内存由c++提供，js只是使用它，对于小buffer的频繁操作，使用<strong>slab机制来先申请后分配</strong>，减少内存申请的系统调用，对于<strong>大buffe就直接用C++提供内存</strong></p>
+<h3 id="Buffer_u8F6C_u6362"><a href="#Buffer_u8F6C_u6362" class="headerlink" title="Buffer转换"></a>Buffer转换</h3><ul>
+<li>支持的字符串编码 ASCII,UTF-8,UTF-16LE/UCS-2,Base64,Binary,Hex</li>
+</ul>
+<h4 id="u5B57_u7B26_u4E32_u4E0EBuffer_u7684_u8F6C_u6362"><a href="#u5B57_u7B26_u4E32_u4E0EBuffer_u7684_u8F6C_u6362" class="headerlink" title="字符串与Buffer的转换"></a>字符串与Buffer的转换</h4><p>字符串转buffer,使用构造函数new Buffer(str,[encoding]);默认UTF-8</p>
+<p><strong>一个Buffer对象可以存多种编码类型的字符串转码的值</strong></p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buf.<span class="command">write</span>(<span class="type">string</span>, [<span class="command">offset</span>], [<span class="property">length</span>], [encoding])</span><br></pre></td></tr></table></figure>
+<p>buffer转字符串</p>
+<pre><code>buf.toString([encoding], [start], [end]) //encoding默认UTF-8,配合start\end实现局部转换
+
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="header">#### Buffer不支持的编码类型</span></span><br><span class="line"><span class="bullet">- </span>使用Buffer.isEncoding(encoding)判断</span><br><span class="line"></span><br><span class="line"><span class="code">`iconv 通过c++调用libiconv`</span></span><br><span class="line"><span class="code">`iconv-lite使用纯js实现，但基于v8高性能，少了c++到js的转换，所以比C++实现好`</span></span><br></pre></td></tr></table></figure>
+
+var iconv = require(&apos;iconv-lite&apos;);
+
+var str = iconv.decode(buf, &apos;win1251&apos;);
+var buf = iconv.encode(&quot;Sample input string&quot;, &apos;win1251&apos;);`
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="escape">`对</span>无法转换的内容会降级处理，输出部分或者？<span class="escape">`</span><br><span class="line"></span></span><br><span class="line">### Buffer拼接</span><br></pre></td></tr></table></figure>
+
+var fs = require(&apos;fs&apos;);
+var rs = fs.createReadStream(&apos;test.md&apos;);
+var data = &apos;&apos;;
+rs.on(&quot;data&quot;, function(chunk) {
+    data += chunk; //等价于data = data.toString() + chunk.toString();此处对宽字节的中文可能造成乱码，即字节没读全就转码
+});
+rs.on(&quot;end&quot;, function() {
+    console.log(data);
+});
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#### 解决乱码问题</span></span><br><span class="line">- 在调用<span class="built_in">set</span>Encoding()时，可读流对象在内部设置一个decoder对象</span><br></pre></td></tr></table></figure>
+
+var StringDecoder = require(&apos;string_decoder&apos;).StringDecoder;
+var decoder = new StringDecoder(&apos;utf8&apos;);
+var buf1 = new Buffer([0xE5, 0xBA, 0x8A, 0xE5, 0x89, 0x8D, 0xE6, 0x98, 0x8E, 0xE6, 0x9C]);
+console.log(decoder.write(buf1));
+// =&gt; 床前明
+var buf2 = new Buffer([0x88, 0xE5, 0x85, 0x89, 0xEF, 0xBC, 0x8C, 0xE7, 0x96, 0x91, 0xE6]);
+console.log(decoder.write(buf2));
+// =&gt;月光，凝
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">StringDecoder在得到编码后，知道宽字节在utf-<span class="number">8</span>下占<span class="number">3</span>个字节，所以在处理末尾不全的字节时，会保留到第二次write().目前只能处理UTF-<span class="number">8</span>、Base64和UCS-<span class="number">2</span>/UTF-<span class="number">16L</span>E</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#### 正确拼接Buffer</span></span><br></pre></td></tr></table></figure>
+
+var chunks = [];
+var size = 0;
+res.on(&apos;data&apos;, function(chunk) {
+    chunks.push(chunk);
+    size += chunk.length;
+});
+res.on(&apos;end&apos;, function() {
+    var buf = Buffer.concat(chunks, size);
+    var str = iconv.decode(buf, &apos;utf8&apos;);
+    console.log(str);
+});
+
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用数组来储存接收的所有Buffer片段并记录总长度，然后调用Buffer.concat<span class="function"><span class="params">()</span>--&gt;</span></span><br></pre></td></tr></table></figure>
+
+Buffer.concat = function(list, length) {
+    if (!Array.isArray(list)) {
+        throw new Error(&apos;Usage: Buffer.concat(list, [length])&apos;);
+    }
+    if (list.length === 0) {
+        return new Buffer(0);
+    } else if (list.length === 1) {
+        return list[0];
+    }
+    if (typeof length !== &apos;number&apos;) {
+        length = 0;
+        for (var i = 0; i &lt; list.length; i++) {
+            var buf = list[i];
+            length += buf.length;
+        }
+    }
+    var buffer = new Buffer(length);
+    var pos = 0;
+    for (var i = 0; i &lt; list.length; i++) {
+        var buf = list[i];
+        buf.copy(buffer, pos);
+        pos += buf.length;
+    }
+    return buffer;
+};
+
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### <span class="keyword">Buffer</span>与性能</span><br><span class="line"></span><br><span class="line"><span class="keyword">Buffer</span>广泛应用于文件I/O和网络I/O,尤其在网络传输，**使用<span class="keyword">Buffer</span>比直接使用字符串要性能要高很多。在web开发中对于静态内容可以预先转成<span class="keyword">buffer</span>**,在不需要改变内容时，只读取<span class="keyword">buffer</span>,不做转换</span><br><span class="line"></span><br><span class="line">#### 文件读取</span><br><span class="line"></span><br><span class="line">fs.createReadStream()先在内存中准备一段<span class="keyword">buffer</span>,然后在fs.read()读取时逐步将磁盘中的字节复制到<span class="keyword">buffer</span>,读完一次就用slice()从<span class="keyword">buffer</span>取出部分作为小<span class="keyword">buffer</span>通过data事件传给调用方。<span class="keyword">Buffer</span>用完会重新分配</span><br></pre></td></tr></table></figure>
+
+fs.createReadStream(path, opts)
+//参数
+{
+    flags: &apos;r&apos;,
+    encoding: null,
+    fd: null,
+    mode: 0666,
+    highWaterMark: 64 * 1024 // 每次读取的长度
+}
+
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">重新分配</span><br></pre></td></tr></table></figure>
+
+var pool;//常驻内存
+
+function allocNewPool(poolSize) {
+    pool = new Buffer(poolSize);
+    pool.used = 0;
+}
+//当pool剩余数量小于128(kMinPoolSpace)字节时，会重新分配
+if (!pool || pool.length - pool.used &lt; kMinPoolSpace) { 
+// discard the old pool
+    pool = null;
+    allocNewPool(this._readableState.highWaterMark);
+}
+</code></pre><p>highWaterMark的大小对性能的影响有：<strong>buffer内存的分配和使用、系统调用次数</strong>;</p>
+<ul>
+<li>文件流读取基于buffer,buffer基于slowbuffer，文件小于8kb可能造成slab浪费</li>
+<li>fs.createReadStream()内部使用fs.read()，会引起系统对磁盘的调用，highWaterMark的大小决定调用次数和data事件次数</li>
+</ul>
+<p><img src="/../picture/node-buffer" alt="Smaller icon"></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/07/12/node内存控制/" itemprop="url">
                   node内存控制
                 </a>
@@ -1655,139 +1888,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/22/hate-css-1/" itemprop="url">
-                  hate css of 选择器
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-04-22T08:58:18+08:00" content="2016-04-22">
-              2016-04-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/hate/" itemprop="url" rel="index">
-                    <span itemprop="name">hate</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/22/hate-css-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/22/hate-css-1/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="u9009_u62E9_u5668"><a href="#u9009_u62E9_u5668" class="headerlink" title="选择器"></a>选择器</h3><h4 id="u7EE7_u627F"><a href="#u7EE7_u627F" class="headerlink" title="继承"></a>继承</h4><ul>
-<li>子元素从父元素继承属性，<code>IE/Windows 直到 IE6 还存在相关的问题，在表格内的字体样式会被忽略。</code></li>
-<li>针对子元素创建规则，则可摆脱继承</li>
-</ul>
-<h4 id="u5143_u7D20_u9009_u62E9_u5668"><a href="#u5143_u7D20_u9009_u62E9_u5668" class="headerlink" title="元素选择器"></a>元素选择器</h4><ul>
-<li>文档的元素就是最基本的选择器 比如 p、h1、em、a，甚至可以是 html 本身</li>
-</ul>
-<h4 id="u9009_u62E9_u5668_u5206_u7EC4"><a href="#u9009_u62E9_u5668_u5206_u7EC4" class="headerlink" title="选择器分组"></a>选择器分组</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">h2</span>, <span class="tag">p</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">gray</span></span>;&#125;</span></span><br></pre></td></tr></table></figure>
-<p>将 h2 和 p 选择器放在规则左边，然后用逗号分隔，就定义了一个规则。其右边的样式（color:gray;）将应用到这两个选择器所引用的元素。逗号告诉浏览器，规则中包含两个不同的选择器</p>
-<ul>
-<li>通配符选择器 *,与任何元素匹配</li>
-</ul>
-<h4 id="u7C7B_u9009_u62E9_u5668"><a href="#u7C7B_u9009_u62E9_u5668" class="headerlink" title="类选择器"></a>类选择器</h4><ul>
-<li>class </li>
-</ul>
-<p><code>结合元素选择器</code> </p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">p</span><span class="class">.important</span> &#123;<span class="attribute">color</span>:red;&#125; <span class="comment">//匹配 class 属性包含 important 的所有 p 元素</span></span><br></pre></td></tr></table></figure>
-<p><code>class 值中可能包含一个词列表，各个词之间用空格分隔</code></p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt; p <span class="class"><span class="keyword">class</span></span>=<span class="string">"important warning"</span>&gt;</span><br><span class="line">This paragraph is a very important <span class="keyword">warning</span>.</span><br><span class="line">&lt; /p&gt;</span><br><span class="line"></span><br><span class="line">.important.<span class="keyword">warning</span> &#123;background:silver;&#125;<span class="comment">//class 中同时包含 important 和 warning</span></span><br></pre></td></tr></table></figure>
-<p><code>在 IE7 之前的版本中，不同平台的 Internet Explorer 都不能正确地处理多类选择器</code></p>
-<h4 id="ID_u9009_u62E9_u5668"><a href="#ID_u9009_u62E9_u5668" class="headerlink" title="ID选择器"></a>ID选择器</h4><ul>
-<li>ID 选择器前面有一个 # 号</li>
-<li>不能使用 ID 词列表</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#intro</span> <span class="rules">&#123;<span class="rule"><span class="attribute">font-weight</span>:<span class="value">bold</span></span>;&#125;</span></span><br></pre></td></tr></table></figure>
-<h4 id="u5C5E_u6027_u9009_u62E9_u5668"><a href="#u5C5E_u6027_u9009_u62E9_u5668" class="headerlink" title="属性选择器"></a>属性选择器</h4><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*<span class="attr_selector">[title]</span> &#123;<span class="attribute">color</span>:red;&#125;<span class="comment">// 把包含标题（title）的所有元素变为红色</span></span><br><span class="line"><span class="tag">a</span><span class="attr_selector">[href]</span> &#123;<span class="attribute">color</span>:red;&#125; <span class="comment">// 对有 href 属性的锚（a 元素）应用样式</span></span><br><span class="line"><span class="tag">a</span><span class="attr_selector">[href]</span><span class="attr_selector">[title]</span> &#123;<span class="attribute">color</span>:red;&#125; <span class="comment">//将同时有 href 和 title 属性的 HTML 超链接的文本设置为红色</span></span><br></pre></td></tr></table></figure>
-<p><code>根据具体属性值选择</code></p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//将指向 Web 服务器上某个指定文档的超链接变成红色</span><br><span class="line">a[href="http://www.w3school.com.cn/about_us.asp"] &#123;color: red;&#125;</span><br><span class="line">//可以把多个属性-值选择器链接在一起来选择一个文档</span><br><span class="line">a[<span class="link_label">href="http://www.w3school.com.cn/"</span>][<span class="link_reference">title="W3School"</span>] &#123;color: red;&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="u540E_u4EE3_u9009_u62E9_u5668"><a href="#u540E_u4EE3_u9009_u62E9_u5668" class="headerlink" title="后代选择器"></a>后代选择器</h4><ul>
-<li>依赖于上下文关系来应用或者避免某项规则</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//列表中的 strong 元素变为斜体字</span><br><span class="line"></span><br><span class="line">li strong &#123;</span><br><span class="line">    font-style: italic;</span><br><span class="line">    font-weight: normal;</span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line"> <span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;<span class="title">strong</span>&gt;</span>我是粗体字，不是斜体字，因为我不在列表当中，所以这个规则对我不起作用<span class="tag">&lt;/<span class="title">strong</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="title">ol</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">strong</span>&gt;</span>我是斜体字。这是因为 strong 元素位于 li 元素内。<span class="tag">&lt;/<span class="title">strong</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">li</span>&gt;</span>我是正常的字体。<span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">ol</span>&gt;</span></span><br></pre></td></tr></table></figure>
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1834,7 +1934,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">41</span>
+              <span class="site-state-item-count">42</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
