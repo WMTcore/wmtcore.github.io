@@ -223,6 +223,15 @@
 
     
     
+      
+      
+        
+        
+        
+      
+
+      
+    
 
     
       
@@ -336,47 +345,38 @@
 <li>可能丢包，应用在低丢包不影响的的场景，视频、DNS</li>
 </ul>
 <h4 id="u521B_u5EFAUDP_u5957_u63A5_u5B57"><a href="#u521B_u5EFAUDP_u5957_u63A5_u5B57" class="headerlink" title="创建UDP套接字"></a>创建UDP套接字</h4><p>UDP套接字可以做客户端也可做服务端</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> dgram = <span class="built_in">require</span>(<span class="string">'dgram'</span>);<span class="keyword">var</span> socket = dgram.createSocket(<span class="string">"udp4"</span>);</span><br></pre></td></tr></table></figure>
-<p><code>作为服务器端</code>:调用dgram.bind(port,[address])方法对网卡和端口绑定</p>
-<pre><code>var dgram = require(&quot;dgram&quot;);
-var server = dgram.createSocket(&quot;udp4&quot;);
-server.on(&quot;message&quot;, function(msg, rinfo) {
-    console.log(&quot;server got: &quot; + msg + &quot; from &quot; +
-        rinfo.address + &quot;:&quot; + rinfo.port);
-});
-server.on(&quot;listening&quot;, function() {
-    var address = server.address();
-    console.log(&quot;server listening &quot; + address.address + &quot;:&quot; + address.port);
-});
-server.bind(41234);//绑定完成后触发listening事件
-
-<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">`作为客户端`：使用dgram.send(buf, offset, length, <span class="keyword">port</span>, address, [callback])发送消息到网络；参数对应含义,<span class="keyword">buffer</span>,<span class="keyword">buffer</span>偏移,<span class="keyword">buffer</span>长度，目标端口，目标地址，发送完成后的回调。它可以随意发送数据到网络，tcp需要重新通过套接字构建新连接</span><br></pre></td></tr></table></figure>
-
-var dgram = require(&apos;dgram&apos;);
-var message = new Buffer(&quot;Node.js&quot;);
-var client = dgram.createSocket(&quot;udp4&quot;);
-client.send(message, 0, message.length, 41234, &quot;localhost&quot;, function(err, bytes) {
-    client.close();
-});
-
-<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#### UPD套接字事件</span></span><br><span class="line">- UDP是个EventEmitter实例使用更简单，TCP是个Stream实例</span><br><span class="line"></span><br><span class="line"><span class="number">1.</span> message UDP套接字帧听网卡端口后，接受数据时触发，触发携带的数据为Buffer对象和远程地址</span><br><span class="line"><span class="number">2.</span> listening UDP开始帧听时触发</span><br><span class="line"><span class="number">3.</span> <span class="keyword">close</span> 调用<span class="keyword">close</span>()时触发，并不再触发message事件</span><br><span class="line"><span class="number">4.</span> <span class="keyword">error</span> 异常时触发，不帧听则直接抛出，进程退出</span><br><span class="line"></span><br><span class="line"><span class="comment">### 构建HTTP服务</span></span><br><span class="line">- 超文本传输协议 HyperText Transfer Protocol</span><br><span class="line">- 构建在TCP之上 属于应用层协议 B/S模式，目前最知名的标准RFC <span class="number">2616</span></span><br><span class="line"></span><br><span class="line">通常的<span class="keyword">http</span>通信的信息分三部分，第一部分为TCP的<span class="number">3</span>次握手，第二部分是客户端向服务器发送请求报文，第三部分是服务器完成处理后向客户端发送响应内容。浏览器其实是<span class="keyword">http</span>的代理，将用户的行为转化为<span class="keyword">http</span>请求发送给服务端，服务端处理请求然后发送响应报文给代理，代理解析报文再展示给用户。<span class="keyword">http</span>服务只做两件事处理<span class="keyword">http</span>请求和发送<span class="keyword">http</span>响应，报文内容包含报文头和报文体</span><br><span class="line"></span><br><span class="line"><span class="comment">#### http模块</span></span><br><span class="line">- 继承自TCP服务（net模块）</span><br><span class="line">- 能够与多个客户端保持连接，因为采用事件驱动，不用给每个连接创建额外的线程、进程，内存占用低，能高并发</span><br><span class="line">- tcp以connection为单位服务，<span class="keyword">http</span>以request为单位服务</span><br><span class="line"></span><br><span class="line"><span class="keyword">http</span>模块将tcp连接的读操作封装为ServerRequest对象，报文头部使用http_parser解析然后放在req.headers上传递给业务逻辑。报文体部分为只读流对象,需要在数据流结束后转字符串</span><br></pre></td></tr></table></figure>
-
-function(req, res) {
-    // console.log(req.headers);
-    var buffers = [];
-    req.on(&apos;data&apos;, function(trunk) {
-        buffers.push(trunk);
-    }).on(&apos;end&apos;, function() {
-        var buffer = Buffer.concat(buffers); // TODO
-        res.end(&apos;Hello world&apos;);
-    });
-}
-//express中使用bodyParse，会自动解析，但要求请求头添加Content-Type=application/json
-
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">封装对底层连接的写操作为ServerResponse对象</span><br><span class="line">影响响应报文头api为**res.<span class="function"><span class="title">setHeader</span><span class="params">()</span></span>**和**res.<span class="function"><span class="title">writeHead</span><span class="params">()</span></span>**，可以调用res.<span class="function"><span class="title">setHeader</span><span class="params">()</span></span>进行多次设置，只要调用writeHead后，报头才会写入连接</span><br></pre></td></tr></table></figure>
-
-res.writeHead(200, {&apos;Content-Type&apos;: &apos;text/plain&apos;});
-</code></pre><p>设置报文体API为write(),end();end()会先调用write()发送数据，再发信号告知响应结束。</p>
+<ul>
+<li>作为服务端 调用dgram.bind(port,[address])方法对网卡和端口绑定</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> dgram = <span class="built_in">require</span>(<span class="string">'dgram'</span>);</span><br><span class="line"><span class="keyword">var</span> server = dgram.createSocket(<span class="string">'udp4'</span>);</span><br><span class="line">server.on(<span class="string">"message"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">msg, rinfo</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">"server got: "</span> + msg + <span class="string">" from "</span> +</span><br><span class="line">		rinfo.address + <span class="string">":"</span> + rinfo.port);</span><br><span class="line">&#125;);</span><br><span class="line">server.on(<span class="string">"listening"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> address = server.address();</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">"server listening "</span> + address.address + <span class="string">":"</span> + address.port);</span><br><span class="line">&#125;);</span><br><span class="line">server.bind(<span class="number">41234</span>);<span class="comment">//绑定完成后触发listening事件</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>作为客户端：使用dgram.send(buf, offset, length, port, address, [callback])发送消息到网络；参数对应含义,buffer,buffer偏移,buffer长度，目标端口，目标地址，发送完成后的回调。它可以随意发送数据到网络，tcp需要重新通过套接字构建新连接</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> dgram = <span class="built_in">require</span>(<span class="string">'dgram'</span>);</span><br><span class="line"><span class="keyword">var</span> message = <span class="keyword">new</span> Buffer(<span class="string">"Node.js"</span>);</span><br><span class="line"><span class="keyword">var</span> client = dgram.createSocket(<span class="string">"udp4"</span>);</span><br><span class="line">client.send(message, <span class="number">0</span>, message.length, <span class="number">41234</span>, <span class="string">"localhost"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, bytes</span>) </span>&#123;</span><br><span class="line">	client.close();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="UPD_u5957_u63A5_u5B57_u4E8B_u4EF6"><a href="#UPD_u5957_u63A5_u5B57_u4E8B_u4EF6" class="headerlink" title="UPD套接字事件"></a>UPD套接字事件</h4><ul>
+<li>UDP是个EventEmitter实例使用更简单，TCP是个Stream实例</li>
+</ul>
+<ol>
+<li>message UDP套接字帧听网卡端口后，接受数据时触发，触发携带的数据为Buffer对象和远程地址</li>
+<li>listening UDP开始帧听时触发</li>
+<li>close 调用close()时触发，并不再触发message事件</li>
+<li>error 异常时触发，不帧听则直接抛出，进程退出</li>
+</ol>
+<h3 id="u6784_u5EFAHTTP_u670D_u52A1"><a href="#u6784_u5EFAHTTP_u670D_u52A1" class="headerlink" title="构建HTTP服务"></a>构建HTTP服务</h3><ul>
+<li>超文本传输协议 HyperText Transfer Protocol</li>
+<li>构建在TCP之上 属于应用层协议 B/S模式，目前最知名的标准RFC 2616</li>
+</ul>
+<p>通常的http通信的信息分三部分，第一部分为TCP的3次握手，第二部分是客户端向服务器发送请求报文，第三部分是服务器完成处理后向客户端发送响应内容。浏览器其实是http的代理，将用户的行为转化为http请求发送给服务端，服务端处理请求然后发送响应报文给代理，代理解析报文再展示给用户。http服务只做两件事处理http请求和发送http响应，报文内容包含报文头和报文体</p>
+<h4 id="http_u6A21_u5757"><a href="#http_u6A21_u5757" class="headerlink" title="http模块"></a>http模块</h4><ul>
+<li>继承自TCP服务（net模块）</li>
+<li>能够与多个客户端保持连接，因为采用事件驱动，不用给每个连接创建额外的线程、进程，内存占用低，能高并发</li>
+<li>tcp以connection为单位服务，http以request为单位服务</li>
+</ul>
+<p>http模块将tcp连接的读操作封装为ServerRequest对象，报文头部使用http_parser解析然后放在req.headers上传递给业务逻辑。报文体部分为只读流对象,需要在数据流结束后转字符串</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// console.log(req.headers);</span></span><br><span class="line">	<span class="keyword">var</span> buffers = [];</span><br><span class="line">	req.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span><span class="params">(trunk)</span> </span>&#123;</span><br><span class="line">		buffers.push(trunk);</span><br><span class="line">	&#125;).on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> buffer = Buffer.concat(buffers); <span class="comment">// TODO</span></span><br><span class="line">		res.end(<span class="string">'Hello world'</span>);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//express中使用bodyParse，会自动解析，但要求请求头添加Content-Type=application/json</span></span><br></pre></td></tr></table></figure>
+<p>封装对底层连接的写操作为ServerResponse对象<br>影响响应报文头api为<strong>res.setHeader()</strong>和<strong>res.writeHead()</strong>，可以调用res.setHeader()进行多次设置，只要调用writeHead后，报头才会写入连接</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">res.writeHead(<span class="number">200</span>, &#123;<span class="symbol">'Content</span>-<span class="type">Type'</span>: <span class="symbol">'text</span>/plain'&#125;);</span><br></pre></td></tr></table></figure>
+<p>设置报文体API为write(),end();end()会先调用write()发送数据，再发信号告知响应结束。</p>
 <p><strong>一旦开始了数据发送，writeHead()和setHeader()将不再生效</strong><br><strong>结束时要调用res.end(),否则客户端将一直处于等待状态，无论异常与否</strong></p>
 <h5 id="http_u670D_u52A1_u7AEF_u4E8B_u4EF6"><a href="#http_u670D_u52A1_u7AEF_u4E8B_u4EF6" class="headerlink" title="http服务端事件"></a>http服务端事件</h5><p>http服务器是个EventEmitter实例</p>
 <ul>
@@ -510,7 +510,7 @@ res.writeHead(200, {&apos;Content-Type&apos;: &apos;text/plain&apos;});
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.parent = pool; <span class="comment">//当前的buffer对象的parent指向slab</span></span><br><span class="line"><span class="keyword">this</span>.offset = pool.used;<span class="comment">//slab开始使用的位置</span></span><br><span class="line">pool.used += <span class="keyword">this</span>.length;<span class="comment">//slab已使用量</span></span><br><span class="line"><span class="keyword">if</span> (pool.used &amp; <span class="number">7</span>) pool.used = (pool.used + <span class="number">8</span>) &amp; ~<span class="number">7</span>;</span><br></pre></td></tr></table></figure>
 <p>此时slab状态为partial,在创建buffer时会判断次slab是否够用，如果不够，就构建新的slab,原来的slab剩余的空间浪费，如果不释放就占据8kb</p>
 <h4 id="u5206_u914D_u5927Buffer"><a href="#u5206_u914D_u5927Buffer" class="headerlink" title="分配大Buffer"></a>分配大Buffer</h4><p>直接分配一个SlowBuffer对象作为slab单元，并且独占</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Big buffer, just alloc one</span><span class="keyword">this</span>.parent = <span class="keyword">new</span> SlowBuffer(<span class="keyword">this</span>.length);<span class="comment">//SlowBuffer由c++定义,勿直接操作它</span><span class="keyword">this</span>.offset = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Big buffer,just alloc one  SlowBuffer由c++定义,勿直接操作它</span></span><br><span class="line"><span class="keyword">this</span>.parent=<span class="keyword">new</span> SlowBuffer(<span class="keyword">this</span>.length);<span class="keyword">this</span>.offset=<span class="number">0</span>;</span><br></pre></td></tr></table></figure>
 <p><strong>Buffer对象是js层面的，能被v8标记回收</strong>，但其内部parent指向SlowBuffer,由c++提供的Buffer,所以内存由c++提供，js只是使用它，对于小buffer的频繁操作，使用<strong>slab机制来先申请后分配</strong>，减少内存申请的系统调用，对于<strong>大buffe就直接用C++提供内存</strong></p>
 <h3 id="Buffer_u8F6C_u6362"><a href="#Buffer_u8F6C_u6362" class="headerlink" title="Buffer转换"></a>Buffer转换</h3><ul>
 <li>支持的字符串编码 ASCII,UTF-8,UTF-16LE/UCS-2,Base64,Binary,Hex</li>
@@ -519,106 +519,28 @@ res.writeHead(200, {&apos;Content-Type&apos;: &apos;text/plain&apos;});
 <p><strong>一个Buffer对象可以存多种编码类型的字符串转码的值</strong></p>
 <figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buf.<span class="command">write</span>(<span class="type">string</span>, [<span class="command">offset</span>], [<span class="property">length</span>], [encoding])</span><br></pre></td></tr></table></figure>
 <p>buffer转字符串</p>
-<pre><code>buf.toString([encoding], [start], [end]) //encoding默认UTF-8,配合start\end实现局部转换
-
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="header">#### Buffer不支持的编码类型</span></span><br><span class="line"><span class="bullet">- </span>使用Buffer.isEncoding(encoding)判断</span><br><span class="line"></span><br><span class="line"><span class="code">`iconv 通过c++调用libiconv`</span></span><br><span class="line"><span class="code">`iconv-lite使用纯js实现，但基于v8高性能，少了c++到js的转换，所以比C++实现好`</span></span><br></pre></td></tr></table></figure>
-
-var iconv = require(&apos;iconv-lite&apos;);
-
-var str = iconv.decode(buf, &apos;win1251&apos;);
-var buf = iconv.encode(&quot;Sample input string&quot;, &apos;win1251&apos;);`
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="escape">`对</span>无法转换的内容会降级处理，输出部分或者？<span class="escape">`</span><br><span class="line"></span></span><br><span class="line">### Buffer拼接</span><br></pre></td></tr></table></figure>
-
-var fs = require(&apos;fs&apos;);
-var rs = fs.createReadStream(&apos;test.md&apos;);
-var data = &apos;&apos;;
-rs.on(&quot;data&quot;, function(chunk) {
-    data += chunk; //等价于data = data.toString() + chunk.toString();此处对宽字节的中文可能造成乱码，即字节没读全就转码
-});
-rs.on(&quot;end&quot;, function() {
-    console.log(data);
-});
-
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#### 解决乱码问题</span></span><br><span class="line">- 在调用<span class="built_in">set</span>Encoding()时，可读流对象在内部设置一个decoder对象</span><br></pre></td></tr></table></figure>
-
-var StringDecoder = require(&apos;string_decoder&apos;).StringDecoder;
-var decoder = new StringDecoder(&apos;utf8&apos;);
-var buf1 = new Buffer([0xE5, 0xBA, 0x8A, 0xE5, 0x89, 0x8D, 0xE6, 0x98, 0x8E, 0xE6, 0x9C]);
-console.log(decoder.write(buf1));
-// =&gt; 床前明
-var buf2 = new Buffer([0x88, 0xE5, 0x85, 0x89, 0xEF, 0xBC, 0x8C, 0xE7, 0x96, 0x91, 0xE6]);
-console.log(decoder.write(buf2));
-// =&gt;月光，凝
-
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">StringDecoder在得到编码后，知道宽字节在utf-<span class="number">8</span>下占<span class="number">3</span>个字节，所以在处理末尾不全的字节时，会保留到第二次write().目前只能处理UTF-<span class="number">8</span>、Base64和UCS-<span class="number">2</span>/UTF-<span class="number">16L</span>E</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#### 正确拼接Buffer</span></span><br></pre></td></tr></table></figure>
-
-var chunks = [];
-var size = 0;
-res.on(&apos;data&apos;, function(chunk) {
-    chunks.push(chunk);
-    size += chunk.length;
-});
-res.on(&apos;end&apos;, function() {
-    var buf = Buffer.concat(chunks, size);
-    var str = iconv.decode(buf, &apos;utf8&apos;);
-    console.log(str);
-});
-
-<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用数组来储存接收的所有Buffer片段并记录总长度，然后调用Buffer.concat<span class="function"><span class="params">()</span>--&gt;</span></span><br></pre></td></tr></table></figure>
-
-Buffer.concat = function(list, length) {
-    if (!Array.isArray(list)) {
-        throw new Error(&apos;Usage: Buffer.concat(list, [length])&apos;);
-    }
-    if (list.length === 0) {
-        return new Buffer(0);
-    } else if (list.length === 1) {
-        return list[0];
-    }
-    if (typeof length !== &apos;number&apos;) {
-        length = 0;
-        for (var i = 0; i &lt; list.length; i++) {
-            var buf = list[i];
-            length += buf.length;
-        }
-    }
-    var buffer = new Buffer(length);
-    var pos = 0;
-    for (var i = 0; i &lt; list.length; i++) {
-        var buf = list[i];
-        buf.copy(buffer, pos);
-        pos += buf.length;
-    }
-    return buffer;
-};
-
-<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### <span class="keyword">Buffer</span>与性能</span><br><span class="line"></span><br><span class="line"><span class="keyword">Buffer</span>广泛应用于文件I/O和网络I/O,尤其在网络传输，**使用<span class="keyword">Buffer</span>比直接使用字符串要性能要高很多。在web开发中对于静态内容可以预先转成<span class="keyword">buffer</span>**,在不需要改变内容时，只读取<span class="keyword">buffer</span>,不做转换</span><br><span class="line"></span><br><span class="line">#### 文件读取</span><br><span class="line"></span><br><span class="line">fs.createReadStream()先在内存中准备一段<span class="keyword">buffer</span>,然后在fs.read()读取时逐步将磁盘中的字节复制到<span class="keyword">buffer</span>,读完一次就用slice()从<span class="keyword">buffer</span>取出部分作为小<span class="keyword">buffer</span>通过data事件传给调用方。<span class="keyword">Buffer</span>用完会重新分配</span><br></pre></td></tr></table></figure>
-
-fs.createReadStream(path, opts)
-//参数
-{
-    flags: &apos;r&apos;,
-    encoding: null,
-    fd: null,
-    mode: 0666,
-    highWaterMark: 64 * 1024 // 每次读取的长度
-}
-
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">重新分配</span><br></pre></td></tr></table></figure>
-
-var pool;//常驻内存
-
-function allocNewPool(poolSize) {
-    pool = new Buffer(poolSize);
-    pool.used = 0;
-}
-//当pool剩余数量小于128(kMinPoolSpace)字节时，会重新分配
-if (!pool || pool.length - pool.used &lt; kMinPoolSpace) { 
-// discard the old pool
-    pool = null;
-    allocNewPool(this._readableState.highWaterMark);
-}
-</code></pre><p>highWaterMark的大小对性能的影响有：<strong>buffer内存的分配和使用、系统调用次数</strong>;</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buf.toString([<span class="keyword">encoding</span>], [<span class="keyword">start</span>], [<span class="keyword">end</span>]) //<span class="keyword">encoding</span>默认UTF-<span class="number">8</span>,配合<span class="keyword">start</span>和<span class="keyword">end</span>实现局部转换</span><br></pre></td></tr></table></figure>
+<h4 id="Buffer_u4E0D_u652F_u6301_u7684_u7F16_u7801_u7C7B_u578B"><a href="#Buffer_u4E0D_u652F_u6301_u7684_u7F16_u7801_u7C7B_u578B" class="headerlink" title="Buffer不支持的编码类型"></a>Buffer不支持的编码类型</h4><ul>
+<li>使用Buffer.isEncoding(encoding)判断</li>
+</ul>
+<p>iconv 通过c++调用libiconv<br>iconv-lite使用纯js实现，但基于v8高性能，少了c++到js的转换，所以比C++实现好</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> iconv = require(<span class="string">"iconv-lite"</span>);<span class="keyword">var</span> str = iconv.<span class="keyword">decode</span>(buf,<span class="string">"win1251"</span>);</span><br><span class="line"><span class="keyword">var</span> buf = iconv.<span class="keyword">encode</span>('<span class="keyword">Sample</span> <span class="keyword">input</span> string', 'win1251');</span><br></pre></td></tr></table></figure>
+<p><code>对无法转换的内容会降级处理，输出部分或者？</code></p>
+<h3 id="Buffer_u62FC_u63A5"><a href="#Buffer_u62FC_u63A5" class="headerlink" title="Buffer拼接"></a>Buffer拼接</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"><span class="keyword">var</span> rs = fs.createReadStream(<span class="string">'test.md'</span>);</span><br><span class="line"><span class="keyword">var</span> data = <span class="string">''</span>;</span><br><span class="line">rs.on(<span class="string">"data"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>) </span>&#123;</span><br><span class="line">	data += chunk; <span class="comment">//等价于data = data.toString() + chunk.toString();此处对宽字节的中文可能造成乱码，即字节没读全就转码</span></span><br><span class="line">&#125;);</span><br><span class="line">rs.on(<span class="string">"end"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="u89E3_u51B3_u4E71_u7801_u95EE_u9898"><a href="#u89E3_u51B3_u4E71_u7801_u95EE_u9898" class="headerlink" title="解决乱码问题"></a>解决乱码问题</h4><ul>
+<li>在调用setEncoding()时，可读流对象在内部设置一个decoder对象</li>
+</ul>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var StringDecoder = require(<span class="string">'string_decoder'</span>)<span class="string">.StringDecoder</span><span class="comment">;</span></span><br><span class="line">var decoder = new StringDecoder(<span class="string">'utf8'</span>)<span class="comment">;</span></span><br><span class="line">var buf1 = new Buffer([<span class="number">0xE5</span>, <span class="number">0xBA</span>, <span class="number">0x8A</span>, <span class="number">0xE5</span>, <span class="number">0x89</span>, <span class="number">0x8D</span>, <span class="number">0xE6</span>, <span class="number">0x98</span>, <span class="number">0x8E</span>, <span class="number">0xE6</span>, <span class="number">0x9C</span>])<span class="comment">;</span></span><br><span class="line">console.log(decoder.write(buf1))<span class="comment">;</span></span><br><span class="line">// =&gt; 床前明</span><br><span class="line">var buf2 = new Buffer([<span class="number">0x88</span>, <span class="number">0xE5</span>, <span class="number">0x85</span>, <span class="number">0x89</span>, <span class="number">0xEF</span>, <span class="number">0xBC</span>, <span class="number">0x8C</span>, <span class="number">0xE7</span>, <span class="number">0x96</span>, <span class="number">0x91</span>, <span class="number">0xE6</span>])<span class="comment">;</span></span><br><span class="line">console.log(decoder.write(buf2))<span class="comment">;</span></span><br><span class="line">// =&gt;月光，凝</span><br></pre></td></tr></table></figure>
+<p>StringDecoder在得到编码后，知道宽字节在utf-8下占3个字节，所以在处理末尾不全的字节时，会保留到第二次write().目前只能处理UTF-8、Base64和UCS-2/UTF-16LE</p>
+<h4 id="u6B63_u786E_u62FC_u63A5Buffer"><a href="#u6B63_u786E_u62FC_u63A5Buffer" class="headerlink" title="正确拼接Buffer"></a>正确拼接Buffer</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> chunks = [];</span><br><span class="line"><span class="keyword">var</span> size = <span class="number">0</span>;</span><br><span class="line">res.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>) </span>&#123;</span><br><span class="line">	chunks.push(chunk);</span><br><span class="line">	size += chunk.length;</span><br><span class="line">&#125;);</span><br><span class="line">res.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> buf = Buffer.concat(chunks, size);</span><br><span class="line">	<span class="keyword">var</span> str = iconv.decode(buf, <span class="string">'utf8'</span>);</span><br><span class="line">	<span class="built_in">console</span>.log(str);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>用数组来储存接收的所有Buffer片段并记录总长度，然后调用Buffer.concat()–&gt;</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Buffer.concat = function(<span class="type">list</span>, <span class="property">length</span>) &#123;</span><br><span class="line">	<span class="keyword">if</span> (!Array.isArray(<span class="type">list</span>)) &#123;</span><br><span class="line">		throw new Error('Usage: Buffer.concat(<span class="type">list</span>, [<span class="property">length</span>])');</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (<span class="type">list</span>.<span class="property">length</span> === <span class="number">0</span>) &#123;</span><br><span class="line"><span class="command">		return</span> new Buffer(<span class="number">0</span>);</span><br><span class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="type">list</span>.<span class="property">length</span> === <span class="number">1</span>) &#123;</span><br><span class="line"><span class="command">		return</span> <span class="type">list</span>[<span class="number">0</span>];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (typeof <span class="property">length</span> !== '<span class="type">number</span>') &#123;</span><br><span class="line">		<span class="property">length</span> = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (var i = <span class="number">0</span>; i &lt; <span class="type">list</span>.<span class="property">length</span>; i++) &#123;</span><br><span class="line">			var buf = <span class="type">list</span>[i];</span><br><span class="line">			<span class="property">length</span> += buf.<span class="property">length</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	var buffer = new Buffer(<span class="property">length</span>);</span><br><span class="line">	var pos = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (var i = <span class="number">0</span>; i &lt; <span class="type">list</span>.<span class="property">length</span>; i++) &#123;</span><br><span class="line">		var buf = <span class="type">list</span>[i];</span><br><span class="line">		buf.<span class="keyword">copy</span>(buffer, pos);</span><br><span class="line">		pos += buf.<span class="property">length</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="command">	return</span> buffer;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="Buffer_u4E0E_u6027_u80FD"><a href="#Buffer_u4E0E_u6027_u80FD" class="headerlink" title="Buffer与性能"></a>Buffer与性能</h3><p>Buffer广泛应用于文件I/O和网络I/O,尤其在网络传输，<strong>使用Buffer比直接使用字符串要性能要高很多。在web开发中对于静态内容可以预先转成buffer</strong>,在不需要改变内容时，只读取buffer,不做转换</p>
+<h4 id="u6587_u4EF6_u8BFB_u53D6"><a href="#u6587_u4EF6_u8BFB_u53D6" class="headerlink" title="文件读取"></a>文件读取</h4><p>fs.createReadStream()先在内存中准备一段buffer,然后在fs.read()读取时逐步将磁盘中的字节复制到buffer,读完一次就用slice()从buffer取出部分作为小buffer通过data事件传给调用方。Buffer用完会重新分配</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">fs</span><span class="class">.createReadStream</span>(path, opts)</span><br><span class="line"><span class="comment">//参数</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="attribute">flags</span>: <span class="string">'r'</span>,</span><br><span class="line">	<span class="attribute">encoding</span>: null,</span><br><span class="line">	<span class="attribute">fd</span>: null,</span><br><span class="line">	<span class="attribute">mode</span>: <span class="number">0666</span>,</span><br><span class="line">	<span class="attribute">highWaterMark</span>: <span class="number">64</span> * <span class="number">1024</span> <span class="comment">// 每次读取的长度</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重新分配</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pool;<span class="comment">//常驻内存</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">allocNewPool</span><span class="params">(poolSize)</span> </span>&#123;</span><br><span class="line">	pool = <span class="keyword">new</span> Buffer(poolSize);</span><br><span class="line">	pool.used = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//当pool剩余数量小于128(kMinPoolSpace)字节时，会重新分配</span></span><br><span class="line"><span class="keyword">if</span> (!pool || pool.length - pool.used &lt; kMinPoolSpace) &#123; </span><br><span class="line"><span class="comment">// discard the old pool</span></span><br><span class="line">	pool = <span class="literal">null</span>;</span><br><span class="line">	allocNewPool(<span class="keyword">this</span>._readableState.highWaterMark);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>highWaterMark的大小对性能的影响有：<strong>buffer内存的分配和使用、系统调用次数</strong>;</p>
 <ul>
 <li>文件流读取基于buffer,buffer基于slowbuffer，文件小于8kb可能造成slab浪费</li>
 <li>fs.createReadStream()内部使用fs.read()，会引起系统对磁盘的调用，highWaterMark的大小决定调用次数和data事件次数</li>
@@ -730,9 +652,14 @@ if (!pool || pool.length - pool.used &lt; kMinPoolSpace) {
 <li>nodejs在执行JavaScript时，内存受到v8限制,64位约为1.4g,32位0.7g</li>
 <li>所有js对象是通过堆分配，查看process.memoryUsage()</li>
 <li>限制内存原因：垃圾回收时，js线程会暂停执行（避免JS应用逻辑与垃圾回收器看到的不一样），大量的堆内存回收严重影响性能</li>
-<li>v8内存整体包含新生代和老生代</li>
+<li><p>v8内存整体包含新生代和老生代</p>
+<pre><code>// 调整内存限制的大小
+node --max-old-space-size=1700 test.js // 单位为MB 
+node --max-new-space-size=1024 test.js // 单位为KB
+
+在V8初始化时生效,一旦生效不能动态变化  
+</code></pre></li>
 </ul>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 调整内存限制的大小</span><br><span class="line"><span class="keyword">node</span><span class="identifier"> </span><span class="title">--max-old-space-size</span>=<span class="number">1700</span> test.js // 单位为MB <span class="keyword">node</span><span class="identifier"> </span><span class="title">--max-new-space-size</span>=<span class="number">1024</span> test.js // 单位为KB</span><br><span class="line">在V8初始化时生效,一旦生效不能动态变化</span><br></pre></td></tr></table></figure>
 <h4 id="u65B0_u751F_u4EE3"><a href="#u65B0_u751F_u4EE3" class="headerlink" title="新生代"></a>新生代</h4><ul>
 <li>由两个reserved_semispace<em>size</em>（32位16mb,62位32mb）构成</li>
 <li>通过Scavenge算法进行回收，具体实现采用Cheney算法</li>

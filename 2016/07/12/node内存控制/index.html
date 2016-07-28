@@ -56,8 +56,8 @@ nodejs在执行JavaScript时，内存受到v8限制,64位约为1.4g,32位0.7g
 所有js对象是通过堆分配，查看process.memoryUsage()
 限制内存原因：垃圾回收时，js线程会暂停执行（避免JS应用逻辑与垃圾回收器看到的不一样），大量的堆内存回收严重影响性能
 v8内存整体包含新生代和老生代
-
-123// 调整内存限制的大小node --max-old-s">
+// 调整内存限制的大小
+node --max-old-spac">
 <meta property="og:type" content="article">
 <meta property="og:title" content="node内存控制">
 <meta property="og:url" content="http://www.wmtcore.com/2016/07/12/node内存控制/index.html">
@@ -67,10 +67,10 @@ nodejs在执行JavaScript时，内存受到v8限制,64位约为1.4g,32位0.7g
 所有js对象是通过堆分配，查看process.memoryUsage()
 限制内存原因：垃圾回收时，js线程会暂停执行（避免JS应用逻辑与垃圾回收器看到的不一样），大量的堆内存回收严重影响性能
 v8内存整体包含新生代和老生代
-
-123// 调整内存限制的大小node --max-old-s">
+// 调整内存限制的大小
+node --max-old-spac">
 <meta property="og:image" content="http://www.wmtcore.com/../picture/nodejs内存">
-<meta property="og:updated_time" content="2016-07-14T06:06:33.000Z">
+<meta property="og:updated_time" content="2016-07-28T09:44:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="node内存控制">
 <meta name="twitter:description" content="垃圾回收机制
@@ -78,8 +78,8 @@ nodejs在执行JavaScript时，内存受到v8限制,64位约为1.4g,32位0.7g
 所有js对象是通过堆分配，查看process.memoryUsage()
 限制内存原因：垃圾回收时，js线程会暂停执行（避免JS应用逻辑与垃圾回收器看到的不一样），大量的堆内存回收严重影响性能
 v8内存整体包含新生代和老生代
-
-123// 调整内存限制的大小node --max-old-s">
+// 调整内存限制的大小
+node --max-old-spac">
 
 
 
@@ -316,9 +316,14 @@ v8内存整体包含新生代和老生代
 <li>nodejs在执行JavaScript时，内存受到v8限制,64位约为1.4g,32位0.7g</li>
 <li>所有js对象是通过堆分配，查看process.memoryUsage()</li>
 <li>限制内存原因：垃圾回收时，js线程会暂停执行（避免JS应用逻辑与垃圾回收器看到的不一样），大量的堆内存回收严重影响性能</li>
-<li>v8内存整体包含新生代和老生代</li>
+<li><p>v8内存整体包含新生代和老生代</p>
+<pre><code>// 调整内存限制的大小
+node --max-old-space-size=1700 test.js // 单位为MB 
+node --max-new-space-size=1024 test.js // 单位为KB
+
+在V8初始化时生效,一旦生效不能动态变化  
+</code></pre></li>
 </ul>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 调整内存限制的大小</span><br><span class="line"><span class="keyword">node</span><span class="identifier"> </span><span class="title">--max-old-space-size</span>=<span class="number">1700</span> test.js // 单位为MB <span class="keyword">node</span><span class="identifier"> </span><span class="title">--max-new-space-size</span>=<span class="number">1024</span> test.js // 单位为KB</span><br><span class="line">在V8初始化时生效,一旦生效不能动态变化</span><br></pre></td></tr></table></figure>
 <h4 id="u65B0_u751F_u4EE3"><a href="#u65B0_u751F_u4EE3" class="headerlink" title="新生代"></a>新生代</h4><ul>
 <li>由两个reserved_semispace<em>size</em>（32位16mb,62位32mb）构成</li>
 <li>通过Scavenge算法进行回收，具体实现采用Cheney算法</li>
