@@ -246,6 +246,152 @@
             
               
                 
+                <a class="post-title-link" href="/2016/02/18/angularjs初步-二/" itemprop="url">
+                  angularjs初步(二)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-02-18T11:22:32+08:00" content="2016-02-18">
+              2016-02-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/18/angularjs初步-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/18/angularjs初步-二/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="u8FC7_u6EE4_u5668"><a href="#u8FC7_u6EE4_u5668" class="headerlink" title="过滤器"></a>过滤器</h3><ul>
+<li><p>使用一个管道字符（|）添加到表达式和指令中</p>
+<p><code>currency</code>    格式化数字为货币格式</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">  <span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">"myApp"</span> <span class="attribute">ng-controller</span>=<span class="value">"costCtrl"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">input</span> <span class="attribute">type</span>=<span class="value">"number"</span> <span class="attribute">ng-model</span>=<span class="value">"quantity"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; <span class="attribute">input</span> <span class="attribute">type</span>=<span class="value">"number"</span> <span class="attribute">ng-model</span>=<span class="value">"price"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span>总价 = </span><span class="expression">&#123;&#123; (<span class="variable">quantity</span> * <span class="variable">price</span>) | <span class="variable">currency</span> &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; /<span class="attribute">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p> <code>filter</code>     从数组项中选择一个子集</p>
+ <figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">  <span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">"myApp"</span> <span class="attribute">ng-controller</span>=<span class="value">"namesCtrl"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span><span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">ng-model</span>=<span class="value">"test"</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;<span class="title">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"x in names | filter:test | orderBy:'country'"</span>&gt;</span></span><br><span class="line">    </span><span class="expression">&#123;&#123; (<span class="variable">x.name</span> | <span class="variable">uppercase</span>) + ', ' + <span class="variable">x.country</span> &#125;&#125;</span><span class="xml"></span><br><span class="line">  <span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p> <code>lowercase</code>     格式化字符串为小写</p>
+ <figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  &lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"personCtrl"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt; p&gt;姓名为 <span class="expansion">&#123;&#123; lastName | lowercase &#125;&#125;</span>&lt;<span class="regexp">/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;/div</span>&gt;</span><br></pre></td></tr></table></figure>
+<p> <code>orderBy</code>      根据某个表达式排列数组</p>
+ <figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"> </span><br><span class="line"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">"myApp"</span> <span class="attribute">ng-controller</span>=<span class="value">"namesCtrl"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">li</span> <span class="attribute">ng-repeat</span>=<span class="value">"x in names | orderBy:'country'"</span>&gt;</span></span><br><span class="line">    </span><span class="expression">&#123;&#123; <span class="variable">x.name</span> + ', ' + <span class="variable">x.country</span> &#125;&#125;</span><span class="xml"></span><br><span class="line">  <span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p> <code>uppercase</code>     格式化字符串为大写</p>
+ <figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  &lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"personCtrl"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt; p&gt;姓名为 <span class="expansion">&#123;&#123; lastName | uppercase &#125;&#125;</span>&lt;<span class="regexp">/p&gt;</span><br><span class="line"></span><br><span class="line">&lt; /div</span>&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="u670D_u52A1_28Service_29"><a href="#u670D_u52A1_28Service_29" class="headerlink" title="服务(Service)"></a>服务(Service)</h3><ul>
+<li>服务是一个函数或对象</li>
+<li>会一直监控应用，处理事件变化</li>
+</ul>
+<p><code>$location</code> 返回当前页面的 URL 地址， $location服务是作为一个参数传递到controller中，使用时需要在 controller中定义，使用 $location 服务比使用 window.location 对象更好</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">app.controller(<span class="string">'customersCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>, <span class="variable">$location</span>) &#123;</span><br><span class="line">    myUrl = <span class="variable">$location</span>.absUrl();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><code>$http</code> 向服务器发送请求，应用响应服务器传送过来的数据</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">//使用 <span class="variable">$http</span> 服务向服务器请求数据</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">app.controller(<span class="string">'myCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>, <span class="variable">$http</span>) &#123;</span><br><span class="line">//<span class="variable">$http</span>.get() 从web服务器上读取静态 JSON 数据</span><br><span class="line">    <span class="variable">$http</span>.get(<span class="string">"welcome.htm"</span>).then(function (response) &#123;</span><br><span class="line">        <span class="variable">$scope</span>.myWelcome = response.data;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">//json</span><br><span class="line"> &lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"customersCtrl"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt; ul&gt;</span><br><span class="line">  &lt; li ng-repeat=<span class="string">"x in names"</span>&gt;</span><br><span class="line">    &#123;&#123; x.Name + <span class="string">', '</span> + x.Country &#125;&#125;</span><br><span class="line">  &lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line"></span><br><span class="line">&lt; /div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">app.controller(<span class="string">'customersCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>, <span class="variable">$http</span>) &#123;</span><br><span class="line">    <span class="variable">$http</span>.get(<span class="string">"http://www.runoob.com/try/angularjs/data/Customers_JSON.php"</span>)</span><br><span class="line">    .success(function(response) &#123;<span class="variable">$scope</span>.names = response.records;&#125;);</span><br><span class="line">    //当从服务端载入 JSON 数据时，<span class="variable">$scope</span>.names 变为一个数组</span><br><span class="line">&#125;);</span><br><span class="line">&lt; /script&gt;</span><br></pre></td></tr></table></figure>
+<p><code>$timeout</code> 对应了 JS window.setTimeout 函数</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 两秒后显示信息</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">app.controller(<span class="string">'myCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>, <span class="variable">$timeout</span>) &#123;</span><br><span class="line">    <span class="variable">$scope</span>.myHeader = <span class="string">"Hello World!"</span>;</span><br><span class="line">    <span class="variable">$timeout</span>(function () &#123;</span><br><span class="line">        <span class="variable">$scope</span>.myHeader = <span class="string">"How are you today?"</span>;</span><br><span class="line">    &#125;, <span class="number">2000</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><code>$interval</code> 对应了 JS window.setInterval 函数</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//每两秒显示信息:</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">app.controller(<span class="string">'myCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>, <span class="variable">$interval</span>) &#123;</span><br><span class="line">    <span class="variable">$scope</span>.theTime = new Date().toLocaleTimeString();</span><br><span class="line">    <span class="variable">$interval</span>(function () &#123;</span><br><span class="line">        <span class="variable">$scope</span>.theTime = new Date().toLocaleTimeString();</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><code>创建自定义服务</code> </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">创建名为hexafy 的访问:</span><br><span class="line">app.service(<span class="string">'hexafy'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    this.myFunc = <span class="function"><span class="keyword">function</span> <span class="params">(x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x.toString(<span class="number">16</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">使用自定义的的服务 hexafy 将一个数字转换为<span class="number">16</span>进制数:</span><br><span class="line">app.controller(<span class="string">'myCtrl'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$scope</span>, hexafy)</span> </span>&#123;</span><br><span class="line">    <span class="variable">$scope</span>.hex = hexafy.myFunc(<span class="number">255</span>);</span><br><span class="line">&#125;);</span><br><span class="line">在过滤器 myFormat 中使用服务 hexafy:</span><br><span class="line">app.filter(<span class="string">'myFormat'</span>,[<span class="string">'hexify'</span>, <span class="function"><span class="keyword">function</span><span class="params">(hexify)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">(x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> hexify.myFunc(x);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;]);</span><br><span class="line">创建服务 hexafy:</span><br><span class="line">&lt; ul&gt;</span><br><span class="line">&lt;li ng-repeat=<span class="string">"x in counts"</span>&gt;&#123;&#123;x | myFormat&#125;&#125;&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Select_28_u9009_u62E9_u6846_29_ng-options"><a href="#Select_28_u9009_u62E9_u6846_29_ng-options" class="headerlink" title="Select(选择框) ng-options"></a>Select(选择框) ng-options</h3><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"myCtrl"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt; select ng-model=<span class="string">"selectedName"</span> ng-options=<span class="string">"x for x in names"</span>&gt;</span><br><span class="line">&lt;/select&gt;</span><br><span class="line"></span><br><span class="line">&lt; /div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">app.controller(<span class="string">'myCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>) &#123;</span><br><span class="line">    <span class="variable">$scope</span>.names = [<span class="string">"Google"</span>, <span class="string">"Runoob"</span>, <span class="string">"Taobao"</span>];</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt; </span><br><span class="line"></span><br><span class="line">//也可以用 ng-repeat，通过数组来循环 HTML 代码来创建下拉列表</span><br><span class="line">&lt;select&gt;</span><br><span class="line">&lt;<span class="keyword">option</span> ng-repeat=<span class="string">"x in names"</span>&gt;&#123;&#123;x&#125;&#125;&lt;/<span class="keyword">option</span>&gt;</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
+<p>ng-options 指令更适合创建下拉列表，使用 ng-options 的选项是一个对象， ng-repeat 是一个字符串</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">使用 ng-<span class="symbol">repeat:</span></span><br><span class="line">&lt; select ng-model=<span class="string">"selectedSite"</span>&gt;</span><br><span class="line">&lt; option ng-repeat=<span class="string">"x in sites"</span> value=<span class="string">"&#123;&#123;x.site&#125;&#125;"</span>&gt;<span class="expansion">&#123;&#123;x.site&#125;&#125;</span>&lt;<span class="regexp">/option&gt;</span><br><span class="line">&lt;/select</span>&gt;</span><br><span class="line">&lt; h1&gt;你选择的是: <span class="expansion">&#123;&#123;selectedSite&#125;&#125;</span>&lt;<span class="regexp">/h1&gt;</span><br><span class="line"></span><br><span class="line">使用 ng-options:</span><br><span class="line">&lt; select ng-model="selectedSite" ng-options="x.site for x in sites"&gt;</span><br><span class="line">&lt;/select</span>&gt;</span><br><span class="line">&lt; h1&gt;你选择的是: <span class="expansion">&#123;&#123;selectedSite.site&#125;&#125;</span>&lt;<span class="regexp">/h1&gt;</span><br><span class="line">&lt; p&gt;网址为: &#123;&#123;selectedSite.url&#125;&#125;&lt;/p</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>ng-options 操作对象</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"myCtrl"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt; p&gt;选择一辆车:&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt; select ng-model=<span class="string">"selectedCar"</span> ng-options=<span class="string">"x for (x, y) in cars"</span>&gt;</span><br><span class="line">&lt;/select&gt;</span><br><span class="line"></span><br><span class="line">直接使用对象的属性</span><br><span class="line">//&lt;select ng-model=<span class="string">"selectedCar"</span> ng-options=<span class="string">"y.brand for (x, y) in cars"</span>&gt;</span><br><span class="line">//&lt;/select&gt;</span><br><span class="line">&lt; h1&gt;你选择的是: &#123;&#123;selectedCar.brand&#125;&#125;&lt;/h1&gt;</span><br><span class="line">&lt; h2&gt;模型: &#123;&#123;selectedCar.model&#125;&#125;&lt;/h2&gt;</span><br><span class="line">&lt; h3&gt;颜色: &#123;&#123;selectedCar.color&#125;&#125;&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">&lt; p&gt;注意选中的值是一个对象。&lt;/p&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">app.controller(<span class="string">'myCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>) &#123;</span><br><span class="line">    <span class="variable">$scope</span>.cars = &#123;</span><br><span class="line">        car01 : &#123;brand : <span class="string">"Ford"</span>, model : <span class="string">"Mustang"</span>, color : <span class="string">"red"</span>&#125;,</span><br><span class="line">        car02 : &#123;brand : <span class="string">"Fiat"</span>, model : <span class="string">"500"</span>, color : <span class="string">"white"</span>&#125;,</span><br><span class="line">        car03 : &#123;brand : <span class="string">"Volvo"</span>, model : <span class="string">"XC90"</span>, color : <span class="string">"black"</span>&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="u8868_u683C"><a href="#u8868_u683C" class="headerlink" title="表格"></a>表格</h3><ul>
+<li>表格显示序号可以在 <td> 中添加 $index: </td></li>
+</ul>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"customersCtrl"</span>&gt; </span><br><span class="line"></span><br><span class="line">&lt; table&gt;</span><br><span class="line">  &lt;tr ng-repeat=<span class="string">"x in names"</span>&gt;</span><br><span class="line">    &lt;td&gt;&#123;&#123; x.Name &#125;&#125;&lt;/td&gt;</span><br><span class="line">    &lt;td&gt;&#123;&#123; x.Country &#125;&#125;&lt;/td&gt;</span><br><span class="line">  &lt;/tr&gt;</span><br><span class="line">&lt;/table&gt;</span><br><span class="line"></span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt; script&gt;</span><br><span class="line">var app = angular.module(<span class="string">'myApp'</span>, []);</span><br><span class="line">app.controller(<span class="string">'customersCtrl'</span>, <span class="keyword">function</span>(<span class="variable">$scope</span>, <span class="variable">$http</span>) &#123;</span><br><span class="line">    <span class="variable">$http</span>.get(<span class="string">"http://www.runoob.com/try/angularjs/data/Customers_JSON.php"</span>)</span><br><span class="line">    .success(function (response) &#123;<span class="variable">$scope</span>.names = response.records;&#125;);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p><code>使用 $even 和 $odd</code></p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt; <span class="attribute">table</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">tr</span> <span class="attribute">ng-repeat</span>=<span class="value">"x in names"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">td</span> <span class="attribute">ng-if</span>=<span class="value">"$odd"</span> <span class="attribute">style</span>=<span class="value">"background-color:#f1f1f1"</span>&gt;</span></span><span class="expression">&#123;&#123; <span class="variable">x.Name</span> &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="title">td</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">td</span> <span class="attribute">ng-if</span>=<span class="value">"$even"</span>&gt;</span></span><span class="expression">&#123;&#123; <span class="variable">x.Name</span> &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="title">td</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">td</span> <span class="attribute">ng-if</span>=<span class="value">"$odd"</span> <span class="attribute">style</span>=<span class="value">"background-color:#f1f1f1"</span>&gt;</span></span><span class="expression">&#123;&#123; <span class="variable">x.Country</span> &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="title">td</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">td</span> <span class="attribute">ng-if</span>=<span class="value">"$even"</span>&gt;</span></span><span class="expression">&#123;&#123; <span class="variable">x.Country</span> &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="title">td</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">table</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="HTML_DOM"><a href="#HTML_DOM" class="headerlink" title="HTML DOM"></a>HTML DOM</h3><p><code>ng-disabled</code> 指令直接绑定应用程序数据到 HTML 的 disabled 属性</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">""</span> <span class="attribute">ng-init</span>=<span class="value">"mySwitch=true"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; <span class="attribute">button</span> <span class="attribute">ng-disabled</span>=<span class="value">"mySwitch"</span>&gt;</span>点我!<span class="tag">&lt;/<span class="title">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; <span class="attribute">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">ng-model</span>=<span class="value">"mySwitch"</span>&gt;</span>按钮</span><br><span class="line"><span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span>&gt;</span></span><br><span class="line"></span><span class="expression">&#123;&#123; <span class="variable">mySwitch</span> &#125;&#125;</span><span class="xml"></span><br><span class="line"><span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; /<span class="attribute">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p><code>ng-show</code> 指令隐藏或显示一个 HTML 元素</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">""</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span> <span class="attribute">ng-show</span>=<span class="value">"true"</span>&gt;</span>我是可见的。<span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span> <span class="attribute">ng-show</span>=<span class="value">"false"</span>&gt;</span>我是不可见的。<span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">使用表达式来计算布尔值（ true 或 false）</span><br><span class="line"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-app</span>=<span class="value">""</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; <span class="attribute">p</span> <span class="attribute">ng-show</span>=<span class="value">"hour &gt; 12"</span>&gt;</span>我是可见的。<span class="tag">&lt;/<span class="title">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt; /<span class="attribute">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>ng-hide</code> 指令用于隐藏或显示 HTML 元素</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/02/17/angularjs初步(一)/" itemprop="url">
                   angularjs初步(一)
                 </a>
@@ -1257,109 +1403,6 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/28/git-常用命令/" itemprop="url">
-                  git 常用命令
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-12-28T12:42:09+08:00" content="2015-12-28">
-              2015-12-28
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/git/" itemprop="url" rel="index">
-                    <span itemprop="name">git</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/28/git-常用命令/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/28/git-常用命令/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p><img src="/../git.jpg" alt="Resize icon"></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1406,7 +1449,7 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">42</span>
+              <span class="site-state-item-count">43</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

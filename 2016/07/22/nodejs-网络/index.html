@@ -1,0 +1,809 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nodejs," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="TCP服务
+传输控制协议，网络传输层
+OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 应用层
+
+创建TCP服务12345678910111213141516171819202122232425262728293031323334353637 var net = require(&apos;net&apos;); //使用net.createServer(listener)创建，**listener是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs 网络(一)">
+<meta property="og:url" content="http://www.wmtcore.com/2016/07/22/nodejs-网络/index.html">
+<meta property="og:site_name" content="大碗拉面">
+<meta property="og:description" content="TCP服务
+传输控制协议，网络传输层
+OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 应用层
+
+创建TCP服务12345678910111213141516171819202122232425262728293031323334353637 var net = require(&apos;net&apos;); //使用net.createServer(listener)创建，**listener是">
+<meta property="og:updated_time" content="2016-07-28T06:50:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nodejs 网络(一)">
+<meta name="twitter:description" content="TCP服务
+传输控制协议，网络传输层
+OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 应用层
+
+创建TCP服务12345678910111213141516171819202122232425262728293031323334353637 var net = require(&apos;net&apos;); //使用net.createServer(listener)创建，**listener是">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> nodejs 网络(一) | 大碗拉面 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?8fc1dcdaa63dc57073d1f217ba27dc7d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大碗拉面</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '1zo1-KPbS2sqsk4pXnSQ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                nodejs 网络(一)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-07-22T16:43:53+08:00" content="2016-07-22">
+              2016-07-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/22/nodejs-网络/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/22/nodejs-网络/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h3 id="TCP_u670D_u52A1"><a href="#TCP_u670D_u52A1" class="headerlink" title="TCP服务"></a>TCP服务</h3><ul>
+<li>传输控制协议，网络传输层</li>
+<li><code>OSI模型</code>： 物理层 数据链路层 网络层 传输层 会话层 表示层 应用层</li>
+</ul>
+<h4 id="u521B_u5EFATCP_u670D_u52A1"><a href="#u521B_u5EFATCP_u670D_u52A1" class="headerlink" title="创建TCP服务"></a>创建TCP服务</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">var</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">//使用net.createServer(listener)创建，**listener是连接事件connection的侦听器**</span></span><br><span class="line"><span class="keyword">var</span> server = net.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</span><br><span class="line">	socket.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">		socket.write(<span class="string">"hello"</span>);</span><br><span class="line">	&#125;);</span><br><span class="line">	socket.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'断开'</span>);</span><br><span class="line">	&#125;);</span><br><span class="line">	socket.write(<span class="string">"hello111:\n"</span>);</span><br><span class="line">&#125;);</span><br><span class="line">server.listen(<span class="number">8124</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'server bound'</span>);</span><br><span class="line">&#125;); </span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line"><span class="keyword">var</span> server = net.createServer();</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123; <span class="comment">//新的连接</span></span><br><span class="line">&#125;);</span><br><span class="line">server.listen(<span class="number">8124</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//可以使用$ telnet 127.0.0.1 8124，或者使用net模块构建客户端</span></span><br><span class="line"><span class="keyword">var</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</span><br><span class="line"><span class="keyword">var</span> client = net.connect(&#123;</span><br><span class="line">	port: <span class="number">8124</span></span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">//'connect' listener</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'client connected'</span>);</span><br><span class="line">	client.write(<span class="string">'world!\r\n'</span>);</span><br><span class="line">&#125;);</span><br><span class="line">client.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(data.toString());</span><br><span class="line">	client.end();</span><br><span class="line">&#125;);</span><br><span class="line">client.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'client disconnected'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>也可以对Domain Socket监听 server.listen(‘/tmp/echo.sock’);<br>使用 $ nc -U /tmp/echo.sock 测试</p>
+<h4 id="u670D_u52A1_u5668_u4E8B_u4EF6"><a href="#u670D_u52A1_u5668_u4E8B_u4EF6" class="headerlink" title="服务器事件"></a>服务器事件</h4><p>使用net.createServer()创建的服务器是个EventEmitter实例</p>
+<ol>
+<li>listening 在调用server.lisren()绑定端口或者Domain Socket后触发server.listen(port,listeningListener)</li>
+<li>connection 每个客户端套接字连接到服务端时触发 net.createServer(),最后一个参数传递</li>
+<li>close 当服务器关闭时触发 在调用server.close()后，服务器会停止接受新的套接字，但当前的连接不会断，直到所有连接都断后触发</li>
+<li>error 服务器发生异常时触发，如果不帧听error事件，会抛出异常</li>
+</ol>
+<h4 id="u8FDE_u63A5_u4E8B_u4EF6"><a href="#u8FDE_u63A5_u4E8B_u4EF6" class="headerlink" title="连接事件"></a>连接事件</h4><p>服务器可以同时与多个客户端保持连接，每个连接都是可读写的stream对象，用于服务器和客户端通信</p>
+<ol>
+<li>data 当一端调用write()发送数据时，另一端触发data事件</li>
+<li>end 任意一端发送了FIN数据时触发</li>
+<li>connect 用于客户端，当套接字与服务端连接成功时触发</li>
+<li>error 发生异常</li>
+<li>close 套接字完全关闭时触发</li>
+<li>timeout 连接在一定时间内部活跃，触发</li>
+</ol>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//使用<span class="keyword">pipe</span>管道 管道提供了一个输出流到输入流的机制。通常我们用于从一个流中获取数据并将数据传递到另外一个流中。</span><br><span class="line"></span><br><span class="line">var net = <span class="keyword">require</span>(<span class="string">'net'</span>);</span><br><span class="line">var server = net.createServer(function(<span class="keyword">socket</span>) &#123;</span><br><span class="line">	<span class="keyword">socket</span>.<span class="keyword">write</span>(<span class="string">'Echo server\r\n'</span>);</span><br><span class="line">	<span class="keyword">socket</span>.<span class="keyword">pipe</span>(<span class="keyword">socket</span>);<span class="regexp">//</span></span><br><span class="line">&#125;);</span><br><span class="line">server.<span class="keyword">listen</span>(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>);</span><br></pre></td></tr></table></figure>
+<p><code>Nagle算法</code> 将tcp中的小数据包缓存合并到一定数量或时间后发出，避免浪费网络资源，但数据可能被延迟。tcp默认启动Nagle算法，可以调用socket.setNoDelay(true)关闭，关闭后一端调用write(),另一端可能将多个小数据包合并后触发一次data</p>
+<h3 id="UDP_u670D_u52A1"><a href="#UDP_u670D_u52A1" class="headerlink" title="UDP服务"></a>UDP服务</h3><ul>
+<li>用户数据包协议，网络传输层</li>
+<li>一个套接字可以和多个UDP服务通信，无须连接，资源消耗低，处理快速灵活</li>
+<li>可能丢包，应用在低丢包不影响的的场景，视频、DNS</li>
+</ul>
+<h4 id="u521B_u5EFAUDP_u5957_u63A5_u5B57"><a href="#u521B_u5EFAUDP_u5957_u63A5_u5B57" class="headerlink" title="创建UDP套接字"></a>创建UDP套接字</h4><p>UDP套接字可以做客户端也可做服务端</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> dgram = <span class="built_in">require</span>(<span class="string">'dgram'</span>);<span class="keyword">var</span> socket = dgram.createSocket(<span class="string">"udp4"</span>);</span><br></pre></td></tr></table></figure>
+<p><code>作为服务器端</code>:调用dgram.bind(port,[address])方法对网卡和端口绑定</p>
+<pre><code>var dgram = require(&quot;dgram&quot;);
+var server = dgram.createSocket(&quot;udp4&quot;);
+server.on(&quot;message&quot;, function(msg, rinfo) {
+    console.log(&quot;server got: &quot; + msg + &quot; from &quot; +
+        rinfo.address + &quot;:&quot; + rinfo.port);
+});
+server.on(&quot;listening&quot;, function() {
+    var address = server.address();
+    console.log(&quot;server listening &quot; + address.address + &quot;:&quot; + address.port);
+});
+server.bind(41234);//绑定完成后触发listening事件
+
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">`作为客户端`：使用dgram.send(buf, offset, length, <span class="keyword">port</span>, address, [callback])发送消息到网络；参数对应含义,<span class="keyword">buffer</span>,<span class="keyword">buffer</span>偏移,<span class="keyword">buffer</span>长度，目标端口，目标地址，发送完成后的回调。它可以随意发送数据到网络，tcp需要重新通过套接字构建新连接</span><br></pre></td></tr></table></figure>
+
+var dgram = require(&apos;dgram&apos;);
+var message = new Buffer(&quot;Node.js&quot;);
+var client = dgram.createSocket(&quot;udp4&quot;);
+client.send(message, 0, message.length, 41234, &quot;localhost&quot;, function(err, bytes) {
+    client.close();
+});
+
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#### UPD套接字事件</span></span><br><span class="line">- UDP是个EventEmitter实例使用更简单，TCP是个Stream实例</span><br><span class="line"></span><br><span class="line"><span class="number">1.</span> message UDP套接字帧听网卡端口后，接受数据时触发，触发携带的数据为Buffer对象和远程地址</span><br><span class="line"><span class="number">2.</span> listening UDP开始帧听时触发</span><br><span class="line"><span class="number">3.</span> <span class="keyword">close</span> 调用<span class="keyword">close</span>()时触发，并不再触发message事件</span><br><span class="line"><span class="number">4.</span> <span class="keyword">error</span> 异常时触发，不帧听则直接抛出，进程退出</span><br><span class="line"></span><br><span class="line"><span class="comment">### 构建HTTP服务</span></span><br><span class="line">- 超文本传输协议 HyperText Transfer Protocol</span><br><span class="line">- 构建在TCP之上 属于应用层协议 B/S模式，目前最知名的标准RFC <span class="number">2616</span></span><br><span class="line"></span><br><span class="line">通常的<span class="keyword">http</span>通信的信息分三部分，第一部分为TCP的<span class="number">3</span>次握手，第二部分是客户端向服务器发送请求报文，第三部分是服务器完成处理后向客户端发送响应内容。浏览器其实是<span class="keyword">http</span>的代理，将用户的行为转化为<span class="keyword">http</span>请求发送给服务端，服务端处理请求然后发送响应报文给代理，代理解析报文再展示给用户。<span class="keyword">http</span>服务只做两件事处理<span class="keyword">http</span>请求和发送<span class="keyword">http</span>响应，报文内容包含报文头和报文体</span><br><span class="line"></span><br><span class="line"><span class="comment">#### http模块</span></span><br><span class="line">- 继承自TCP服务（net模块）</span><br><span class="line">- 能够与多个客户端保持连接，因为采用事件驱动，不用给每个连接创建额外的线程、进程，内存占用低，能高并发</span><br><span class="line">- tcp以connection为单位服务，<span class="keyword">http</span>以request为单位服务</span><br><span class="line"></span><br><span class="line"><span class="keyword">http</span>模块将tcp连接的读操作封装为ServerRequest对象，报文头部使用http_parser解析然后放在req.headers上传递给业务逻辑。报文体部分为只读流对象,需要在数据流结束后转字符串</span><br></pre></td></tr></table></figure>
+
+function(req, res) {
+    // console.log(req.headers);
+    var buffers = [];
+    req.on(&apos;data&apos;, function(trunk) {
+        buffers.push(trunk);
+    }).on(&apos;end&apos;, function() {
+        var buffer = Buffer.concat(buffers); // TODO
+        res.end(&apos;Hello world&apos;);
+    });
+}
+//express中使用bodyParse，会自动解析，但要求请求头添加Content-Type=application/json
+
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">封装对底层连接的写操作为ServerResponse对象</span><br><span class="line">影响响应报文头api为**res.<span class="function"><span class="title">setHeader</span><span class="params">()</span></span>**和**res.<span class="function"><span class="title">writeHead</span><span class="params">()</span></span>**，可以调用res.<span class="function"><span class="title">setHeader</span><span class="params">()</span></span>进行多次设置，只要调用writeHead后，报头才会写入连接</span><br></pre></td></tr></table></figure>
+
+res.writeHead(200, {&apos;Content-Type&apos;: &apos;text/plain&apos;});
+</code></pre><p>设置报文体API为write(),end();end()会先调用write()发送数据，再发信号告知响应结束。</p>
+<p><strong>一旦开始了数据发送，writeHead()和setHeader()将不再生效</strong><br><strong>结束时要调用res.end(),否则客户端将一直处于等待状态，无论异常与否</strong></p>
+<h5 id="http_u670D_u52A1_u7AEF_u4E8B_u4EF6"><a href="#http_u670D_u52A1_u7AEF_u4E8B_u4EF6" class="headerlink" title="http服务端事件"></a>http服务端事件</h5><p>http服务器是个EventEmitter实例</p>
+<ul>
+<li>connection 客户端与服务器建立底层的tcp连接时触发。连接开启keep-alive,可以在多次请求响应之间使用</li>
+<li>request 当请求数据发送到服务端，在解析出http请求头后触发该事件</li>
+<li>close 调用server.close()方法停止接受新连接，当已有的连接也都断开后触发，可以给server.close()传个回调来快速注册该事件</li>
+<li>checkContinue ，某些客户端在发送大数据时，会先发一个头部带Expect: 100-continue的请求，服务器接收后出发checkContinue。如果不监听，就自动回复100 Continue。如果不接收就响应400 Bad Request。注意，<strong>在客户端收到100 Continue后重新发起请求才会触发request</strong></li>
+<li>connect 客户端发起connect请求时触发，通常在http代理时才会发起connect,如果不监听，发起该请求的连接会关闭</li>
+<li>upgrade 客户端要升级连接协议时需要和服务器协商，会在请求头部带上upgrade服务端接受后触发，如果不监听，发起该请求的连接会关闭</li>
+<li>clientError 连接的客户端触发error事件，会传递到服务器端并触发</li>
+</ul>
+<h4 id="http_u5BA2_u6237_u7AEF"><a href="#http_u5BA2_u6237_u7AEF" class="headerlink" title="http客户端"></a>http客户端</h4><ul>
+<li>http.request(options, connect) 构建http客户端</li>
+</ul>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag">#nodejs</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/18/nodejs-buffer/" rel="next" title="nodejs buffer">
+                <i class="fa fa-chevron-left"></i> nodejs buffer
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/22/nodejs-网络/"
+           data-title="nodejs 网络(一)" data-url="http://www.wmtcore.com/2016/07/22/nodejs-网络/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="http://www.wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">WMT</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">不扯犊子 -NOT ALONE</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">43</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/WMTcore" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP_u670D_u52A1"><span class="nav-number">1.</span> <span class="nav-text">TCP服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u521B_u5EFATCP_u670D_u52A1"><span class="nav-number">1.1.</span> <span class="nav-text">创建TCP服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u670D_u52A1_u5668_u4E8B_u4EF6"><span class="nav-number">1.2.</span> <span class="nav-text">服务器事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u8FDE_u63A5_u4E8B_u4EF6"><span class="nav-number">1.3.</span> <span class="nav-text">连接事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP_u670D_u52A1"><span class="nav-number">2.</span> <span class="nav-text">UDP服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u521B_u5EFAUDP_u5957_u63A5_u5B57"><span class="nav-number">2.1.</span> <span class="nav-text">创建UDP套接字</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#http_u670D_u52A1_u7AEF_u4E8B_u4EF6"><span class="nav-number">2.1.1.</span> <span class="nav-text">http服务端事件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#http_u5BA2_u6237_u7AEF"><span class="nav-number">2.2.</span> <span class="nav-text">http客户端</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015-12 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMT</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wmtcore"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>
