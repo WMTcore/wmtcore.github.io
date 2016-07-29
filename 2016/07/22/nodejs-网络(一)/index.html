@@ -58,14 +58,14 @@ OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 �
 创建TCP服务12345678910111213141516171819202122232425262728293031323334353637 var net = require(&apos;net&apos;); //使用net.createServer(listener)创建，**listener是">
 <meta property="og:type" content="article">
 <meta property="og:title" content="nodejs 网络(一)">
-<meta property="og:url" content="http://www.wmtcore.com/2016/07/22/nodejs-网络/index.html">
+<meta property="og:url" content="http://www.wmtcore.com/2016/07/22/nodejs-网络(一)/index.html">
 <meta property="og:site_name" content="大碗拉面">
 <meta property="og:description" content="TCP服务
 传输控制协议，网络传输层
 OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 应用层
 
 创建TCP服务12345678910111213141516171819202122232425262728293031323334353637 var net = require(&apos;net&apos;); //使用net.createServer(listener)创建，**listener是">
-<meta property="og:updated_time" content="2016-07-28T09:30:34.000Z">
+<meta property="og:updated_time" content="2016-07-29T05:31:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nodejs 网络(一)">
 <meta name="twitter:description" content="TCP服务
@@ -285,8 +285,8 @@ OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 �
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/22/nodejs-网络/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/22/nodejs-网络/" itemprop="commentsCount"></span>
+                <a href="/2016/07/22/nodejs-网络(一)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/22/nodejs-网络(一)/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -328,7 +328,7 @@ OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 �
 <li>timeout 连接在一定时间内部活跃，触发</li>
 </ol>
 <figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//使用<span class="keyword">pipe</span>管道 管道提供了一个输出流到输入流的机制。通常我们用于从一个流中获取数据并将数据传递到另外一个流中。</span><br><span class="line"></span><br><span class="line">var net = <span class="keyword">require</span>(<span class="string">'net'</span>);</span><br><span class="line">var server = net.createServer(function(<span class="keyword">socket</span>) &#123;</span><br><span class="line">	<span class="keyword">socket</span>.<span class="keyword">write</span>(<span class="string">'Echo server\r\n'</span>);</span><br><span class="line">	<span class="keyword">socket</span>.<span class="keyword">pipe</span>(<span class="keyword">socket</span>);<span class="regexp">//</span></span><br><span class="line">&#125;);</span><br><span class="line">server.<span class="keyword">listen</span>(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>);</span><br></pre></td></tr></table></figure>
-<p><code>Nagle算法</code> 将tcp中的小数据包缓存合并到一定数量或时间后发出，避免浪费网络资源，但数据可能被延迟。tcp默认启动Nagle算法，可以调用socket.setNoDelay(true)关闭，关闭后一端调用write(),另一端可能将多个小数据包合并后触发一次data</p>
+<p><code>Nagle算法</code>：将tcp中的小数据包缓存合并到一定数量或时间后发出，避免浪费网络资源，但数据可能被延迟。tcp默认启动Nagle算法，可以调用socket.setNoDelay(true)关闭，关闭后一端调用write(),另一端可能将多个小数据包合并后触发一次data</p>
 <h3 id="UDP_u670D_u52A1"><a href="#UDP_u670D_u52A1" class="headerlink" title="UDP服务"></a>UDP服务</h3><ul>
 <li>用户数据包协议，网络传输层</li>
 <li>一个套接字可以和多个UDP服务通信，无须连接，资源消耗低，处理快速灵活</li>
@@ -356,7 +356,7 @@ OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 �
 <li>超文本传输协议 HyperText Transfer Protocol</li>
 <li>构建在TCP之上 属于应用层协议 B/S模式，目前最知名的标准RFC 2616</li>
 </ul>
-<p>通常的http通信的信息分三部分，第一部分为TCP的3次握手，第二部分是客户端向服务器发送请求报文，第三部分是服务器完成处理后向客户端发送响应内容。浏览器其实是http的代理，将用户的行为转化为http请求发送给服务端，服务端处理请求然后发送响应报文给代理，代理解析报文再展示给用户。http服务只做两件事处理http请求和发送http响应，报文内容包含报文头和报文体</p>
+<p>通常的http通信的信息分三部分，TCP的3次握手，客户端向服务器发送请求报文，服务器完成处理后向客户端发送响应内容。<br>浏览器其实是http的代理，将用户的行为转化为http请求发送给服务端，服务端处理请求然后发送响应报文给代理，代理解析报文再展示给用户。http服务只做处理http请求和发送http响应</p>
 <h4 id="http_u6A21_u5757"><a href="#http_u6A21_u5757" class="headerlink" title="http模块"></a>http模块</h4><ul>
 <li>继承自TCP服务（net模块）</li>
 <li>能够与多个客户端保持连接，因为采用事件驱动，不用给每个连接创建额外的线程、进程，内存占用低，能高并发</li>
@@ -373,13 +373,27 @@ OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 �
 <li>connection 客户端与服务器建立底层的tcp连接时触发。连接开启keep-alive,可以在多次请求响应之间使用</li>
 <li>request 当请求数据发送到服务端，在解析出http请求头后触发该事件</li>
 <li>close 调用server.close()方法停止接受新连接，当已有的连接也都断开后触发，可以给server.close()传个回调来快速注册该事件</li>
-<li>checkContinue ，某些客户端在发送大数据时，会先发一个头部带Expect: 100-continue的请求，服务器接收后出发checkContinue。如果不监听，就自动回复100 Continue。如果不接收就响应400 Bad Request。注意，<strong>在客户端收到100 Continue后重新发起请求才会触发request</strong></li>
+<li>checkContinue 某些客户端在发送大数据时，会先发一个头部带Expect: 100-continue的请求，服务器接收后触发checkContinue。如果不监听，就自动回复100 Continue。如果不接收就响应400 Bad Request。注意，<strong>在客户端收到100 Continue后重新发起请求才会触发request</strong></li>
 <li>connect 客户端发起connect请求时触发，通常在http代理时才会发起connect,如果不监听，发起该请求的连接会关闭</li>
-<li>upgrade 客户端要升级连接协议时需要和服务器协商，会在请求头部带上upgrade服务端接受后触发，如果不监听，发起该请求的连接会关闭</li>
+<li>upgrade 客户端要升级连接协议时会在请求头部带上upgrade，服务端接收后触发，如果不监听，发起该请求的连接会关闭</li>
 <li>clientError 连接的客户端触发error事件，会传递到服务器端并触发</li>
 </ul>
 <h4 id="http_u5BA2_u6237_u7AEF"><a href="#http_u5BA2_u6237_u7AEF" class="headerlink" title="http客户端"></a>http客户端</h4><ul>
 <li>http.request(options, connect) 构建http客户端</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> options = &#123;</span><br><span class="line">	hostname: <span class="string">'127.0.0.1'</span>,</span><br><span class="line">	port: <span class="number">1334</span>,</span><br><span class="line">	path: <span class="string">'/'</span>,</span><br><span class="line">	method: <span class="string">'GET'</span>,</span><br><span class="line">	localAddress <span class="comment">//建立连接的本地网卡</span></span><br><span class="line">	socketPath <span class="comment">//Domain套接字路径</span></span><br><span class="line">	headers <span class="comment">//请求头对象</span></span><br><span class="line">	auth <span class="comment">//Basic认证 将被计算成请求头的Authorization部分</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> req = http.request(options, <span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'STATUS: '</span> + res.statusCode);</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'HEADERS: '</span> + <span class="built_in">JSON</span>.stringify(res.headers));</span><br><span class="line">	res.setEncoding(<span class="string">'utf8'</span>);</span><br><span class="line">	res.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>) </span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(chunk);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">req.end();</span><br></pre></td></tr></table></figure>
+<p>报文体的内容通过请求对象的write()写入，end()告知报文结束<br>客户端clientRequest(req)解析完响应头就触发response，并传递ClientResponse以供操作，之后报文体以<strong>只读流</strong>提供）</p>
+<h5 id="http_u4EE3_u7406"><a href="#http_u4EE3_u7406" class="headerlink" title="http代理"></a>http代理</h5><ul>
+<li>为了重用tcp连接(在keeplive时，一个tcp连接可以多次用于请求)</li>
+<li>http里包含一个客户端代理对象http.globalAgent，它管理每个服务端(host+port)创建的连接并创建一个连接池，默认每个服务器端5个连接</li>
+</ul>
+<p>在通过ClientRequest调用http请求时会走代理。可以在options中传递agentX修改连接限制</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> agent = new http.<span class="type">Agent</span>(&#123;</span><br><span class="line">	maxSockets: <span class="number">10</span> </span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> options = &#123;</span><br><span class="line">	hostname: '<span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>',</span><br><span class="line">	port: <span class="number">1334</span>,</span><br><span class="line">	path: '/',</span><br><span class="line">	<span class="keyword">method</span>: '<span class="type">GET</span>',</span><br><span class="line">	agent: agent //设置为<span class="literal">false</span>就不受连接池限制</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h5 id="http_u5BA2_u6237_u7AEF_u4E8B_u4EF6"><a href="#http_u5BA2_u6237_u7AEF_u4E8B_u4EF6" class="headerlink" title="http客户端事件"></a>http客户端事件</h5><ul>
+<li>response 客户端得到响应后触发</li>
+<li>socket 当连接池中建立的连接分配给当前的对象时触发</li>
+<li>upgrade 客户端向服务端发起upgrade 服务端响应101 Switching Protocols时触发</li>
+<li>continue 客户端想发大数据，头部带Expect: 100-continue，服务端同意并响应100 continue时触发</li>
 </ul>
 </span>
       
@@ -406,6 +420,10 @@ OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 �
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2016/07/29/nodejs-网络-二/" rel="prev" title="nodejs 网络(二)">
+                nodejs 网络(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -431,8 +449,8 @@ OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 �
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/22/nodejs-网络/"
-           data-title="nodejs 网络(一)" data-url="http://www.wmtcore.com/2016/07/22/nodejs-网络/">
+      <div class="ds-thread" data-thread-key="2016/07/22/nodejs-网络(一)/"
+           data-title="nodejs 网络(一)" data-url="http://www.wmtcore.com/2016/07/22/nodejs-网络(一)/">
       </div>
     
   </div>
@@ -476,7 +494,7 @@ OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 �
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">43</span>
+              <span class="site-state-item-count">44</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -532,7 +550,7 @@ OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 �
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP_u670D_u52A1"><span class="nav-number">1.</span> <span class="nav-text">TCP服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u521B_u5EFATCP_u670D_u52A1"><span class="nav-number">1.1.</span> <span class="nav-text">创建TCP服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u670D_u52A1_u5668_u4E8B_u4EF6"><span class="nav-number">1.2.</span> <span class="nav-text">服务器事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u8FDE_u63A5_u4E8B_u4EF6"><span class="nav-number">1.3.</span> <span class="nav-text">连接事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP_u670D_u52A1"><span class="nav-number">2.</span> <span class="nav-text">UDP服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u521B_u5EFAUDP_u5957_u63A5_u5B57"><span class="nav-number">2.1.</span> <span class="nav-text">创建UDP套接字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UPD_u5957_u63A5_u5B57_u4E8B_u4EF6"><span class="nav-number">2.2.</span> <span class="nav-text">UPD套接字事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6784_u5EFAHTTP_u670D_u52A1"><span class="nav-number">3.</span> <span class="nav-text">构建HTTP服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#http_u6A21_u5757"><span class="nav-number">3.1.</span> <span class="nav-text">http模块</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#http_u670D_u52A1_u7AEF_u4E8B_u4EF6"><span class="nav-number">3.1.1.</span> <span class="nav-text">http服务端事件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#http_u5BA2_u6237_u7AEF"><span class="nav-number">3.2.</span> <span class="nav-text">http客户端</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP_u670D_u52A1"><span class="nav-number">1.</span> <span class="nav-text">TCP服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u521B_u5EFATCP_u670D_u52A1"><span class="nav-number">1.1.</span> <span class="nav-text">创建TCP服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u670D_u52A1_u5668_u4E8B_u4EF6"><span class="nav-number">1.2.</span> <span class="nav-text">服务器事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u8FDE_u63A5_u4E8B_u4EF6"><span class="nav-number">1.3.</span> <span class="nav-text">连接事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP_u670D_u52A1"><span class="nav-number">2.</span> <span class="nav-text">UDP服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u521B_u5EFAUDP_u5957_u63A5_u5B57"><span class="nav-number">2.1.</span> <span class="nav-text">创建UDP套接字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UPD_u5957_u63A5_u5B57_u4E8B_u4EF6"><span class="nav-number">2.2.</span> <span class="nav-text">UPD套接字事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6784_u5EFAHTTP_u670D_u52A1"><span class="nav-number">3.</span> <span class="nav-text">构建HTTP服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#http_u6A21_u5757"><span class="nav-number">3.1.</span> <span class="nav-text">http模块</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#http_u670D_u52A1_u7AEF_u4E8B_u4EF6"><span class="nav-number">3.1.1.</span> <span class="nav-text">http服务端事件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#http_u5BA2_u6237_u7AEF"><span class="nav-number">3.2.</span> <span class="nav-text">http客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#http_u4EE3_u7406"><span class="nav-number">3.2.1.</span> <span class="nav-text">http代理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#http_u5BA2_u6237_u7AEF_u4E8B_u4EF6"><span class="nav-number">3.2.2.</span> <span class="nav-text">http客户端事件</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

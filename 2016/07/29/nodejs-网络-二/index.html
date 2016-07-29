@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="fibjs,nodejs," />
+  <meta name="keywords" content="nodejs," />
 
 
 
@@ -51,16 +51,49 @@
 
 
 
-<meta name="description" content="123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263&quot;use strict&quot;;var net = require(&apos;net&apos;);var fs = require(&apos;fs&apos;);var name = &quot;&quot;,//send-e">
+<meta name="description" content="构建websocket服务websocket的优势：
+
+客户端与服务器只需要一个tcp连接
+服务器可以推送到客户端
+轻量化的协议头，提高传输效率
+
+node使用websocket的优势：
+
+WebSocket客户端基于事件的编程模式和node的自定义事件类似
+websocket需要客户端与服务器之间的长连接，node事件驱动的方式擅长与量大的客户端保持高并发连接
+
+WebSocket握手客户端发起">
 <meta property="og:type" content="article">
-<meta property="og:title" content="smtp fibjs nodejs">
-<meta property="og:url" content="http://www.wmtcore.com/2015/12/04/smtp-fibjs-nodejs/index.html">
+<meta property="og:title" content="nodejs 网络(二)">
+<meta property="og:url" content="http://www.wmtcore.com/2016/07/29/nodejs-网络-二/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263&quot;use strict&quot;;var net = require(&apos;net&apos;);var fs = require(&apos;fs&apos;);var name = &quot;&quot;,//send-e">
-<meta property="og:updated_time" content="2015-12-24T08:23:48.000Z">
+<meta property="og:description" content="构建websocket服务websocket的优势：
+
+客户端与服务器只需要一个tcp连接
+服务器可以推送到客户端
+轻量化的协议头，提高传输效率
+
+node使用websocket的优势：
+
+WebSocket客户端基于事件的编程模式和node的自定义事件类似
+websocket需要客户端与服务器之间的长连接，node事件驱动的方式擅长与量大的客户端保持高并发连接
+
+WebSocket握手客户端发起">
+<meta property="og:updated_time" content="2016-07-29T09:50:57.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="smtp fibjs nodejs">
-<meta name="twitter:description" content="123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263&quot;use strict&quot;;var net = require(&apos;net&apos;);var fs = require(&apos;fs&apos;);var name = &quot;&quot;,//send-e">
+<meta name="twitter:title" content="nodejs 网络(二)">
+<meta name="twitter:description" content="构建websocket服务websocket的优势：
+
+客户端与服务器只需要一个tcp连接
+服务器可以推送到客户端
+轻量化的协议头，提高传输效率
+
+node使用websocket的优势：
+
+WebSocket客户端基于事件的编程模式和node的自定义事件类似
+websocket需要客户端与服务器之间的长连接，node事件驱动的方式擅长与量大的客户端保持高并发连接
+
+WebSocket握手客户端发起">
 
 
 
@@ -72,7 +105,7 @@
   };
 </script>
 
-  <title> smtp fibjs nodejs | 大碗拉面 </title>
+  <title> nodejs 网络(二) | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -238,7 +271,7 @@
             
             
               
-                smtp fibjs nodejs
+                nodejs 网络(二)
               
             
           </h1>
@@ -247,8 +280,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2015-12-04T17:30:35+08:00" content="2015-12-04">
-              2015-12-04
+            <time itemprop="dateCreated" datetime="2016-07-29T13:33:12+08:00" content="2016-07-29">
+              2016-07-29
             </time>
           </span>
 
@@ -257,8 +290,8 @@
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/snippets/" itemprop="url" rel="index">
-                    <span itemprop="name">snippets</span>
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
                   </a>
                 </span>
 
@@ -273,8 +306,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/12/04/smtp-fibjs-nodejs/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/04/smtp-fibjs-nodejs/" itemprop="commentsCount"></span>
+                <a href="/2016/07/29/nodejs-网络-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/29/nodejs-网络-二/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -293,15 +326,32 @@
       
 
       
-        <span itemprop="articleBody"><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">"use strict"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> name = <span class="string">""</span>,<span class="comment">//send-email-address</span></span><br><span class="line">    pwd = <span class="string">""</span>,<span class="comment">//email-password</span></span><br><span class="line">    host = <span class="string">"smtp.exmail.qq.com"</span>,</span><br><span class="line">    port = <span class="number">25</span>,</span><br><span class="line">    to = <span class="string">""</span>;to-email-address</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> argx = &#123;</span><br><span class="line">    title: <span class="string">"test"</span>,</span><br><span class="line">    attachment: [&#123;</span><br><span class="line">        name: <span class="string">"1.png"</span>,</span><br><span class="line">        path: <span class="string">"1.png"</span></span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        name: <span class="string">"2.txt"</span>,</span><br><span class="line">        path: <span class="string">"2.txt"</span></span><br><span class="line">    &#125;],</span><br><span class="line">    content: <span class="string">'内容'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">send(argx)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params">arg</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> title = <span class="string">"test"</span>;</span><br><span class="line">    <span class="keyword">var</span> f = fs.open(<span class="string">"1.png"</span>);</span><br><span class="line">    <span class="keyword">var</span> buffer = f.readAll();</span><br><span class="line">    <span class="keyword">var</span> content = buffer.base64();</span><br><span class="line">    <span class="keyword">var</span> f1 = fs.open(<span class="string">"2.txt"</span>);</span><br><span class="line">    <span class="keyword">var</span> content1 = f1.readAll().base64();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> _smtp = <span class="keyword">new</span> net.Smtp();</span><br><span class="line">    _smtp.connect(host, port);</span><br><span class="line">    _smtp.hello();</span><br><span class="line">    _smtp.login(name, pwd);</span><br><span class="line">    _smtp.from(name);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> data = <span class="string">"from:"</span> + name + <span class="string">"\r\n"</span>;</span><br><span class="line">    data += <span class="string">"to:"</span> + to + <span class="string">"\r\n"</span>;</span><br><span class="line">    data += <span class="string">"subject:"</span> + arg.title + <span class="string">"\r\n"</span>;</span><br><span class="line">    data += <span class="string">"MIME-Version: 1.0 \r\nContent-Type: multipart/mixed;\r\n "</span></span><br><span class="line">    data += <span class="string">"boundary=#qwertyuiop#;\r\n"</span></span><br><span class="line"></span><br><span class="line">    data += <span class="string">"\r\n--#qwertyuiop#\r\n"</span></span><br><span class="line">    data += <span class="string">"Content-Type: text/plain;charset=utf8\r\nContend˙t-Transfer-Encoding:7bit\r\n"</span></span><br><span class="line">    data += <span class="string">"\r\n"</span> + arg.content + <span class="string">"\r\n"</span></span><br><span class="line"></span><br><span class="line">    arg.attachment.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">o</span>) </span>&#123;</span><br><span class="line">        data += <span class="string">"\r\n--#qwertyuiop#\r\n"</span></span><br><span class="line">        data += <span class="string">"Content-Type: application/octet-stream;"</span></span><br><span class="line">        data += <span class="string">"name="</span> + o.name + <span class="string">"\r\n"</span></span><br><span class="line">        data += <span class="string">"Content-Transfer-Encoding: base64\r\n"</span></span><br><span class="line">        data += <span class="string">"\r\n"</span> + fs.open(o.path).readAll().base64()</span><br><span class="line">    &#125;)</span><br><span class="line">    data += <span class="string">"\r\n--#qwertyuiop#\r\n"</span></span><br><span class="line"></span><br><span class="line">    f.dispose();</span><br><span class="line">    _smtp.to(to);</span><br><span class="line">    _smtp.data(data);</span><br><span class="line">    _smtp.quit();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
+        <span itemprop="articleBody"><h3 id="u6784_u5EFAwebsocket_u670D_u52A1"><a href="#u6784_u5EFAwebsocket_u670D_u52A1" class="headerlink" title="构建websocket服务"></a>构建websocket服务</h3><p>websocket的优势：</p>
+<ul>
+<li>客户端与服务器只需要一个tcp连接</li>
+<li>服务器可以推送到客户端</li>
+<li>轻量化的协议头，提高传输效率</li>
+</ul>
+<p>node使用websocket的优势：</p>
+<ul>
+<li>WebSocket客户端基于事件的编程模式和node的自定义事件类似</li>
+<li>websocket需要客户端与服务器之间的长连接，node事件驱动的方式擅长与量大的客户端保持高并发连接</li>
+</ul>
+<h4 id="WebSocket_u63E1_u624B"><a href="#WebSocket_u63E1_u624B" class="headerlink" title="WebSocket握手"></a>WebSocket握手</h4><p>客户端发起升级协议请求：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">GET <span class="regexp">/ chat HTTP /</span> <span class="number">1.1</span></span><br><span class="line"><span class="string">Host:</span> server.example.com</span><br><span class="line"><span class="string">Upgrade:</span> websocket <span class="comment">//升级协议为websocket</span></span><br><span class="line"><span class="string">Connection:</span> Upgrade</span><br><span class="line">Sec - WebSocket - <span class="string">Key:</span> dGhlIHNhbXBsZSBub25jZQ == </span><br><span class="line">Sec - WebSocket - <span class="string">Protocol:</span> chat, superchat <span class="comment">//子协议</span></span><br><span class="line">Sec - WebSocket - <span class="string">Version:</span> <span class="number">13</span> <span class="comment">//版本号</span></span><br></pre></td></tr></table></figure>
+<p>Sec-WebSocket-Key用于安全校验，值是随机生成的Base64编码的字符串。服务端将其与字符串258EAFA5-E914-47DA-95CA-C5AB0DC85B11拼接，然后再用sha1计算再Base64编码</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var crypto = require(<span class="string">'crypto'</span>);</span><br><span class="line">var val = crypto.createHash(<span class="string">'sha1'</span>).update(key).digest(<span class="string">'base64'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//服务端响应b报文</span></span><br><span class="line">HTTP / <span class="number">1.1</span> <span class="number">101</span> Switching Protocols</span><br><span class="line"><span class="string">Upgrade:</span> websocket</span><br><span class="line"><span class="string">Connection:</span> Upgrade </span><br><span class="line">Sec - WebSocket - <span class="string">Accept:</span> s3pPLMBiTxaQ9kYGzzhZRbK + xOo =</span><br><span class="line">Sec - WebSocket - <span class="string">Protocol:</span> chat</span><br></pre></td></tr></table></figure>
+<p>客户端校验Sec-WebSocket-Accept，正确的话就开始数据传输</p>
+<h4 id="WebSocket_u6570_u636E_u4F20_u8F93"><a href="#WebSocket_u6570_u636E_u4F20_u8F93" class="headerlink" title="WebSocket数据传输"></a>WebSocket数据传输</h4><p> 在握手后就开始websocket数据帧协议， 握手完成客户端onopen()被触发</p>
+ <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">socket.onopen = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </span><br><span class="line">   <span class="comment">// <span class="doctag">TODO:</span> opened()</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p> 服务端想完成tcp套接字事件到websocket事件的封装，需要在接收数据时处理，</p>
+</span>
       
     </div>
 
     <footer class="post-footer">
       
         <div class="post-tags">
-          
-            <a href="/tags/fibjs/" rel="tag">#fibjs</a>
           
             <a href="/tags/nodejs/" rel="tag">#nodejs</a>
           
@@ -312,17 +362,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/12/04/shell编程总结1-0/" rel="next" title="shell编程总结1.0">
-                <i class="fa fa-chevron-left"></i> shell编程总结1.0
+              <a href="/2016/07/22/nodejs-网络(一)/" rel="next" title="nodejs 网络(一)">
+                <i class="fa fa-chevron-left"></i> nodejs 网络(一)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/12/08/Nova体系结构/" rel="prev" title="Nova体系结构">
-                Nova体系结构 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -349,8 +395,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/12/04/smtp-fibjs-nodejs/"
-           data-title="smtp fibjs nodejs" data-url="http://www.wmtcore.com/2015/12/04/smtp-fibjs-nodejs/">
+      <div class="ds-thread" data-thread-key="2016/07/29/nodejs-网络-二/"
+           data-title="nodejs 网络(二)" data-url="http://www.wmtcore.com/2016/07/29/nodejs-网络-二/">
       </div>
     
   </div>
@@ -450,7 +496,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6784_u5EFAwebsocket_u670D_u52A1"><span class="nav-number">1.</span> <span class="nav-text">构建websocket服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#WebSocket_u63E1_u624B"><span class="nav-number">1.1.</span> <span class="nav-text">WebSocket握手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WebSocket_u6570_u636E_u4F20_u8F93"><span class="nav-number">1.2.</span> <span class="nav-text">WebSocket数据传输</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

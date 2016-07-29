@@ -246,7 +246,128 @@
             
               
                 
-                <a class="post-title-link" href="/2016/07/22/nodejs-网络/" itemprop="url">
+                <a class="post-title-link" href="/2016/07/29/nodejs-网络-二/" itemprop="url">
+                  nodejs 网络(二)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-07-29T13:33:12+08:00" content="2016-07-29">
+              2016-07-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/29/nodejs-网络-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/29/nodejs-网络-二/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="u6784_u5EFAwebsocket_u670D_u52A1"><a href="#u6784_u5EFAwebsocket_u670D_u52A1" class="headerlink" title="构建websocket服务"></a>构建websocket服务</h3><p>websocket的优势：</p>
+<ul>
+<li>客户端与服务器只需要一个tcp连接</li>
+<li>服务器可以推送到客户端</li>
+<li>轻量化的协议头，提高传输效率</li>
+</ul>
+<p>node使用websocket的优势：</p>
+<ul>
+<li>WebSocket客户端基于事件的编程模式和node的自定义事件类似</li>
+<li>websocket需要客户端与服务器之间的长连接，node事件驱动的方式擅长与量大的客户端保持高并发连接</li>
+</ul>
+<h4 id="WebSocket_u63E1_u624B"><a href="#WebSocket_u63E1_u624B" class="headerlink" title="WebSocket握手"></a>WebSocket握手</h4><p>客户端发起升级协议请求：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">GET <span class="regexp">/ chat HTTP /</span> <span class="number">1.1</span></span><br><span class="line"><span class="string">Host:</span> server.example.com</span><br><span class="line"><span class="string">Upgrade:</span> websocket <span class="comment">//升级协议为websocket</span></span><br><span class="line"><span class="string">Connection:</span> Upgrade</span><br><span class="line">Sec - WebSocket - <span class="string">Key:</span> dGhlIHNhbXBsZSBub25jZQ == </span><br><span class="line">Sec - WebSocket - <span class="string">Protocol:</span> chat, superchat <span class="comment">//子协议</span></span><br><span class="line">Sec - WebSocket - <span class="string">Version:</span> <span class="number">13</span> <span class="comment">//版本号</span></span><br></pre></td></tr></table></figure>
+<p>Sec-WebSocket-Key用于安全校验，值是随机生成的Base64编码的字符串。服务端将其与字符串258EAFA5-E914-47DA-95CA-C5AB0DC85B11拼接，然后再用sha1计算再Base64编码</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var crypto = require(<span class="string">'crypto'</span>);</span><br><span class="line">var val = crypto.createHash(<span class="string">'sha1'</span>).update(key).digest(<span class="string">'base64'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//服务端响应b报文</span></span><br><span class="line">HTTP / <span class="number">1.1</span> <span class="number">101</span> Switching Protocols</span><br><span class="line"><span class="string">Upgrade:</span> websocket</span><br><span class="line"><span class="string">Connection:</span> Upgrade </span><br><span class="line">Sec - WebSocket - <span class="string">Accept:</span> s3pPLMBiTxaQ9kYGzzhZRbK + xOo =</span><br><span class="line">Sec - WebSocket - <span class="string">Protocol:</span> chat</span><br></pre></td></tr></table></figure>
+<p>客户端校验Sec-WebSocket-Accept，正确的话就开始数据传输</p>
+<h4 id="WebSocket_u6570_u636E_u4F20_u8F93"><a href="#WebSocket_u6570_u636E_u4F20_u8F93" class="headerlink" title="WebSocket数据传输"></a>WebSocket数据传输</h4><p> 在握手后就开始websocket数据帧协议， 握手完成客户端onopen()被触发</p>
+ <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">socket.onopen = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </span><br><span class="line">   <span class="comment">// <span class="doctag">TODO:</span> opened()</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p> 服务端想完成tcp套接字事件到websocket事件的封装，需要在接收数据时处理，</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/22/nodejs-网络(一)/" itemprop="url">
                   nodejs 网络(一)
                 </a>
               
@@ -283,8 +404,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/22/nodejs-网络/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/22/nodejs-网络/" itemprop="commentsCount"></span>
+                <a href="/2016/07/22/nodejs-网络(一)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/22/nodejs-网络(一)/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -329,7 +450,7 @@
 <li>timeout 连接在一定时间内部活跃，触发</li>
 </ol>
 <figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//使用<span class="keyword">pipe</span>管道 管道提供了一个输出流到输入流的机制。通常我们用于从一个流中获取数据并将数据传递到另外一个流中。</span><br><span class="line"></span><br><span class="line">var net = <span class="keyword">require</span>(<span class="string">'net'</span>);</span><br><span class="line">var server = net.createServer(function(<span class="keyword">socket</span>) &#123;</span><br><span class="line">	<span class="keyword">socket</span>.<span class="keyword">write</span>(<span class="string">'Echo server\r\n'</span>);</span><br><span class="line">	<span class="keyword">socket</span>.<span class="keyword">pipe</span>(<span class="keyword">socket</span>);<span class="regexp">//</span></span><br><span class="line">&#125;);</span><br><span class="line">server.<span class="keyword">listen</span>(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>);</span><br></pre></td></tr></table></figure>
-<p><code>Nagle算法</code> 将tcp中的小数据包缓存合并到一定数量或时间后发出，避免浪费网络资源，但数据可能被延迟。tcp默认启动Nagle算法，可以调用socket.setNoDelay(true)关闭，关闭后一端调用write(),另一端可能将多个小数据包合并后触发一次data</p>
+<p><code>Nagle算法</code>：将tcp中的小数据包缓存合并到一定数量或时间后发出，避免浪费网络资源，但数据可能被延迟。tcp默认启动Nagle算法，可以调用socket.setNoDelay(true)关闭，关闭后一端调用write(),另一端可能将多个小数据包合并后触发一次data</p>
 <h3 id="UDP_u670D_u52A1"><a href="#UDP_u670D_u52A1" class="headerlink" title="UDP服务"></a>UDP服务</h3><ul>
 <li>用户数据包协议，网络传输层</li>
 <li>一个套接字可以和多个UDP服务通信，无须连接，资源消耗低，处理快速灵活</li>
@@ -357,7 +478,7 @@
 <li>超文本传输协议 HyperText Transfer Protocol</li>
 <li>构建在TCP之上 属于应用层协议 B/S模式，目前最知名的标准RFC 2616</li>
 </ul>
-<p>通常的http通信的信息分三部分，第一部分为TCP的3次握手，第二部分是客户端向服务器发送请求报文，第三部分是服务器完成处理后向客户端发送响应内容。浏览器其实是http的代理，将用户的行为转化为http请求发送给服务端，服务端处理请求然后发送响应报文给代理，代理解析报文再展示给用户。http服务只做两件事处理http请求和发送http响应，报文内容包含报文头和报文体</p>
+<p>通常的http通信的信息分三部分，TCP的3次握手，客户端向服务器发送请求报文，服务器完成处理后向客户端发送响应内容。<br>浏览器其实是http的代理，将用户的行为转化为http请求发送给服务端，服务端处理请求然后发送响应报文给代理，代理解析报文再展示给用户。http服务只做处理http请求和发送http响应</p>
 <h4 id="http_u6A21_u5757"><a href="#http_u6A21_u5757" class="headerlink" title="http模块"></a>http模块</h4><ul>
 <li>继承自TCP服务（net模块）</li>
 <li>能够与多个客户端保持连接，因为采用事件驱动，不用给每个连接创建额外的线程、进程，内存占用低，能高并发</li>
@@ -374,13 +495,27 @@
 <li>connection 客户端与服务器建立底层的tcp连接时触发。连接开启keep-alive,可以在多次请求响应之间使用</li>
 <li>request 当请求数据发送到服务端，在解析出http请求头后触发该事件</li>
 <li>close 调用server.close()方法停止接受新连接，当已有的连接也都断开后触发，可以给server.close()传个回调来快速注册该事件</li>
-<li>checkContinue ，某些客户端在发送大数据时，会先发一个头部带Expect: 100-continue的请求，服务器接收后出发checkContinue。如果不监听，就自动回复100 Continue。如果不接收就响应400 Bad Request。注意，<strong>在客户端收到100 Continue后重新发起请求才会触发request</strong></li>
+<li>checkContinue 某些客户端在发送大数据时，会先发一个头部带Expect: 100-continue的请求，服务器接收后触发checkContinue。如果不监听，就自动回复100 Continue。如果不接收就响应400 Bad Request。注意，<strong>在客户端收到100 Continue后重新发起请求才会触发request</strong></li>
 <li>connect 客户端发起connect请求时触发，通常在http代理时才会发起connect,如果不监听，发起该请求的连接会关闭</li>
-<li>upgrade 客户端要升级连接协议时需要和服务器协商，会在请求头部带上upgrade服务端接受后触发，如果不监听，发起该请求的连接会关闭</li>
+<li>upgrade 客户端要升级连接协议时会在请求头部带上upgrade，服务端接收后触发，如果不监听，发起该请求的连接会关闭</li>
 <li>clientError 连接的客户端触发error事件，会传递到服务器端并触发</li>
 </ul>
 <h4 id="http_u5BA2_u6237_u7AEF"><a href="#http_u5BA2_u6237_u7AEF" class="headerlink" title="http客户端"></a>http客户端</h4><ul>
 <li>http.request(options, connect) 构建http客户端</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> options = &#123;</span><br><span class="line">	hostname: <span class="string">'127.0.0.1'</span>,</span><br><span class="line">	port: <span class="number">1334</span>,</span><br><span class="line">	path: <span class="string">'/'</span>,</span><br><span class="line">	method: <span class="string">'GET'</span>,</span><br><span class="line">	localAddress <span class="comment">//建立连接的本地网卡</span></span><br><span class="line">	socketPath <span class="comment">//Domain套接字路径</span></span><br><span class="line">	headers <span class="comment">//请求头对象</span></span><br><span class="line">	auth <span class="comment">//Basic认证 将被计算成请求头的Authorization部分</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> req = http.request(options, <span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'STATUS: '</span> + res.statusCode);</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'HEADERS: '</span> + <span class="built_in">JSON</span>.stringify(res.headers));</span><br><span class="line">	res.setEncoding(<span class="string">'utf8'</span>);</span><br><span class="line">	res.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>) </span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(chunk);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">req.end();</span><br></pre></td></tr></table></figure>
+<p>报文体的内容通过请求对象的write()写入，end()告知报文结束<br>客户端clientRequest(req)解析完响应头就触发response，并传递ClientResponse以供操作，之后报文体以<strong>只读流</strong>提供）</p>
+<h5 id="http_u4EE3_u7406"><a href="#http_u4EE3_u7406" class="headerlink" title="http代理"></a>http代理</h5><ul>
+<li>为了重用tcp连接(在keeplive时，一个tcp连接可以多次用于请求)</li>
+<li>http里包含一个客户端代理对象http.globalAgent，它管理每个服务端(host+port)创建的连接并创建一个连接池，默认每个服务器端5个连接</li>
+</ul>
+<p>在通过ClientRequest调用http请求时会走代理。可以在options中传递agentX修改连接限制</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> agent = new http.<span class="type">Agent</span>(&#123;</span><br><span class="line">	maxSockets: <span class="number">10</span> </span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> options = &#123;</span><br><span class="line">	hostname: '<span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>',</span><br><span class="line">	port: <span class="number">1334</span>,</span><br><span class="line">	path: '/',</span><br><span class="line">	<span class="keyword">method</span>: '<span class="type">GET</span>',</span><br><span class="line">	agent: agent //设置为<span class="literal">false</span>就不受连接池限制</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h5 id="http_u5BA2_u6237_u7AEF_u4E8B_u4EF6"><a href="#http_u5BA2_u6237_u7AEF_u4E8B_u4EF6" class="headerlink" title="http客户端事件"></a>http客户端事件</h5><ul>
+<li>response 客户端得到响应后触发</li>
+<li>socket 当连接池中建立的连接分配给当前的对象时触发</li>
+<li>upgrade 客户端向服务端发起upgrade 服务端响应101 Switching Protocols时触发</li>
+<li>continue 客户端想发大数据，头部带Expect: 100-continue，服务端同意并响应100 continue时触发</li>
 </ul>
 
             
@@ -1782,114 +1917,6 @@ node --max-new-space-size=1024 test.js // 单位为KB
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/13/openssl生成ssl证书及向申请CA流程/" itemprop="url">
-                  openssl生成ssl证书及向申请CA流程
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-05-13T10:57:49+08:00" content="2016-05-13">
-              2016-05-13
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/13/openssl生成ssl证书及向申请CA流程/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/13/openssl生成ssl证书及向申请CA流程/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="u751F_u6210key"><a href="#u751F_u6210key" class="headerlink" title="生成key"></a>生成key</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -des3 -out prvtkey<span class="class">.pem</span> <span class="number">2048</span> </span><br><span class="line">或者无密码保护的</span><br><span class="line">openssl genrsa -out prvtkey<span class="class">.pem</span> <span class="number">2048</span></span><br></pre></td></tr></table></figure>
-<h3 id="u751F_u6210-csr_28_u7528_u8FD9_u4E2A_u5411_u6570_u5B57_u8BC1_u4E66_u9881_u53D1_u673A_u6784_uFF08_u5373CA_uFF09_u7533_u8BF7_u4E00_u4E2A_u6570_u5B57_u8BC1_u4E66_29"><a href="#u751F_u6210-csr_28_u7528_u8FD9_u4E2A_u5411_u6570_u5B57_u8BC1_u4E66_u9881_u53D1_u673A_u6784_uFF08_u5373CA_uFF09_u7533_u8BF7_u4E00_u4E2A_u6570_u5B57_u8BC1_u4E66_29" class="headerlink" title="生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)"></a>生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)</h3><figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -<span class="keyword">new</span> -key prvtkey.pem -<span class="keyword">out</span> cert.csr</span><br></pre></td></tr></table></figure>
-<p>然后填写信息，注意<strong>Common Name (eg, your websites domain name)</strong>，要填写网站域名,如:pay.abc.com</p>
-<p>生成的.csr文件是否规范可以在这检测：<br><a href="https://cryptoreport.websecurity.symantec.com/checker/views/csrCheck.jsp" target="_blank" rel="external">https://cryptoreport.websecurity.symantec.com/checker/views/csrCheck.jsp</a></p>
-<p>然后向CA申请数字证书，再用CA给的cacert.pem替换原来的prvtkey.pem</p>
-<h3 id="u81EA_u5EFACA"><a href="#u81EA_u5EFACA" class="headerlink" title="自建CA"></a>自建CA</h3><p><a href="http://www.cnblogs.com/AloneSword/p/3809002.html" target="_blank" rel="external">http://www.cnblogs.com/AloneSword/p/3809002.html</a></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1936,7 +1963,7 @@ node --max-new-space-size=1024 test.js // 单位为KB
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">43</span>
+              <span class="site-state-item-count">44</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
