@@ -79,7 +79,9 @@ WebSocket客户端基于事件的编程模式和node的自定义事件类似
 websocket需要客户端与服务器之间的长连接，node事件驱动的方式擅长与量大的客户端保持高并发连接
 
 WebSocket握手客户端发起">
-<meta property="og:updated_time" content="2016-07-29T09:50:57.000Z">
+<meta property="og:image" content="http://www.wmtcore.com/../picture/websocket数据帧定义.png">
+<meta property="og:image" content="http://www.wmtcore.com/../picture/ssl交换秘钥.png">
+<meta property="og:updated_time" content="2016-08-02T08:43:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nodejs 网络(二)">
 <meta name="twitter:description" content="构建websocket服务websocket的优势：
@@ -344,7 +346,33 @@ WebSocket握手客户端发起">
 <p>客户端校验Sec-WebSocket-Accept，正确的话就开始数据传输</p>
 <h4 id="WebSocket_u6570_u636E_u4F20_u8F93"><a href="#WebSocket_u6570_u636E_u4F20_u8F93" class="headerlink" title="WebSocket数据传输"></a>WebSocket数据传输</h4><p> 在握手后就开始websocket数据帧协议， 握手完成客户端onopen()被触发</p>
  <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">socket.onopen = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </span><br><span class="line">   <span class="comment">// <span class="doctag">TODO:</span> opened()</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p> 服务端想完成tcp套接字事件到websocket事件的封装，需要在接收数据时处理，</p>
+<p> 服务端没有onopen()方法，想完成tcp套接字事件到websocket事件的封装，需要在收发数据时处理，Websocket的数据帧是在底层data事件上封装的</p>
+ <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//接收</span></span><br><span class="line"> WebSocket.prototype.setSocket = <span class="function"><span class="keyword">function</span><span class="params">(socket)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.socket = socket;</span><br><span class="line">	<span class="keyword">this</span>.socket.on(<span class="string">'data'</span>, <span class="keyword">this</span>.receiver);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//发送</span></span><br><span class="line">WebSocket.prototype.send = <span class="function"><span class="keyword">function</span><span class="params">(data)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">this</span>._send(data);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p> 当一端调用send()发送时，另一端会触发onmessage,协议可能将数据封装为多帧发送。客户端需要对发送的数据帧做掩码处理，服务端收到无掩码帧会断开连接，而服务端发送时不需要</p>
+<p> <code>websocket数据帧定义</code><br> <img src="/../picture/websocket数据帧定义.png" alt="Smaller icon"></p>
+<ul>
+<li>fin 如果这数据帧是最后一帧时为1(如果数据就一帧，它也是1)，其余为0  <ul>
+<li>rsv1、rsv2、rsv3：1位长 用于标识拓展，当有拓展时为1</li>
+<li>opcode: 4位（0~15） 0：附加数据帧 ,1：文本数据帧  ,2：二进制数据帧,8：发送一个连接关闭帧,9：ping数据帧  ,10：pong数据帧 ping,pong用于心跳检测，一端发ping、一端发pong</li>
+<li>masked 是否进行掩码处理  客户端发送时是1 服务端是0 </li>
+<li>payload 标识数据长度</li>
+<li>masking key 当masked为1时存在 长度32位 用于解密</li>
+<li>payload data 目标数据 位数为8的倍数 </li>
+</ul>
+</li>
+</ul>
+<h3 id="u7F51_u7EDC_u670D_u52A1_u548C_u5B89_u5168"><a href="#u7F51_u7EDC_u670D_u52A1_u548C_u5B89_u5168" class="headerlink" title="网络服务和安全"></a>网络服务和安全</h3><ul>
+<li>ssl(Secure Sockets Layer,安全套接层)，应用在传输层</li>
+<li>TLS(Transport Layer Security,安全传输层协议)，由IETF标准化</li>
+</ul>
+<p>node提供crypto，tls,https。crypto用于加解密，tls与net功能类似，区别是它建立在TLS/SSL加密的tcp.https和http接口也一致，也是区别在建立于安全的连接</p>
+<h4 id="TLS/SSL"><a href="#TLS/SSL" class="headerlink" title="TLS/SSL"></a>TLS/SSL</h4><ul>
+<li><p>非对称加密，公钥用于加密传输数据，私钥解密</p>
+<p><img src="/../picture/ssl交换秘钥.png" alt="Smaller icon"></p>
+<p>node的tls/ssl是用openssl实现的，公、私钥生成参照：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成服务器端私 </span>$ openssl genrsa -out server<span class="class">.key</span> <span class="number">1024</span> <span class="comment">// 生成客户端私 </span>$ openssl genrsa -out client<span class="class">.key</span> <span class="number">1024</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//利用上面的1024位长的RSA私钥生成公钥</span>$ openssl rsa -<span class="keyword">in</span> server<span class="class">.key</span> -pubout -out server<span class="class">.pem</span>$ openssl rsa -<span class="keyword">in</span> client<span class="class">.key</span> -pubout -out client.pem</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 </span>
       
     </div>
@@ -496,7 +524,7 @@ WebSocket握手客户端发起">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6784_u5EFAwebsocket_u670D_u52A1"><span class="nav-number">1.</span> <span class="nav-text">构建websocket服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#WebSocket_u63E1_u624B"><span class="nav-number">1.1.</span> <span class="nav-text">WebSocket握手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WebSocket_u6570_u636E_u4F20_u8F93"><span class="nav-number">1.2.</span> <span class="nav-text">WebSocket数据传输</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6784_u5EFAwebsocket_u670D_u52A1"><span class="nav-number">1.</span> <span class="nav-text">构建websocket服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#WebSocket_u63E1_u624B"><span class="nav-number">1.1.</span> <span class="nav-text">WebSocket握手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WebSocket_u6570_u636E_u4F20_u8F93"><span class="nav-number">1.2.</span> <span class="nav-text">WebSocket数据传输</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7F51_u7EDC_u670D_u52A1_u548C_u5B89_u5168"><span class="nav-number">2.</span> <span class="nav-text">网络服务和安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TLS/SSL"><span class="nav-number">2.1.</span> <span class="nav-text">TLS/SSL</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
