@@ -223,11 +223,145 @@
 
     
     
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/02/24/angularjs-布局模板和路由/" itemprop="url">
+                  angularjs 布局模板和路由
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-02-24T14:54:28+08:00" content="2016-02-24">
+              2016-02-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/24/angularjs-布局模板和路由/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/24/angularjs-布局模板和路由/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+              <p><strong>将视图（页面）分解成布局和模板视图，再根据当前URL展示对应视图</strong></p>
+<h3 id="u5E03_u5C40_u6A21_u677F"><a href="#u5E03_u5C40_u6A21_u677F" class="headerlink" title="布局模板"></a>布局模板</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt; <span class="attribute">header</span>&gt;</span><span class="tag">&lt; <span class="attribute">h1</span>&gt;</span>Header<span class="tag">&lt;/<span class="title">h1</span>&gt;</span><span class="tag">&lt;/<span class="title">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">class</span>=<span class="value">"content"</span> &gt;</span></span><br><span class="line">   <span class="tag">&lt; <span class="attribute">div</span> <span class="attribute">ng-view</span>&gt;</span><span class="tag">&lt; /<span class="attribute">div</span>&gt;</span><span class="tag">&lt; /<span class="attribute">div</span> &gt;</span></span><br></pre></td></tr></table></figure>
+<p>ng-view 由ngRoute模块提供的一个特殊指令, 在HTML中给$route对应的视图内容占位。优先级1000</p>
+<ul>
+<li>每次触发$routeChangeSuccess事件, 视图会更新 </li>
+<li>如果某个模板同当前的路由关联<ul>
+<li>创建新作用域</li>
+<li>移除上一视图和作用域</li>
+<li>将新作用域与当前模板关联</li>
+<li>如果路由中控制器定义，则与当前作用域关联</li>
+<li>触发$viewContentLoaded </li>
+<li>如果提供onload属性,调用所指定的函数     </li>
+</ul>
+</li>
+</ul>
+<h3 id="u8DEF_u7531"><a href="#u8DEF_u7531" class="headerlink" title="路由"></a>路由</h3><ul>
+<li>使用$routeProvider的when和otherwise</li>
+</ul>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">'myApp'</span>, []).config(<span class="keyword">function</span>(<span class="variable">$routeProvider</span>) &#123;</span><br><span class="line">   <span class="variable">$routeProvider</span></span><br><span class="line">       .when(<span class="string">'/'</span>,&#123;</span><br><span class="line">          //  controller、template、templateURL、resolve、redirectTo、reloadOnSearch和css</span><br><span class="line">       &#125;)</span><br><span class="line">   &#125;）</span><br></pre></td></tr></table></figure>
+<p><code>controller</code> 字符串或函数</p>
+<p><code>template</code> html模板,<code>templateURL</code>模板链接</p>
+<p><code>resolve</code> 将resolve对象里的值注入到控制器中</p>
+<p><code>redirectTo</code> 路由替换，字符串或者函数，在调用函数时会传入：从当前路径中提取的路由参数，当前路径，当前URL中的查询串</p>
+<p><code>reloadOnSearch</code> true时， $location.search()变化时会重新加载路由</p>
+<h4 id="u8DEF_u7531_u6A21_u5F0F"><a href="#u8DEF_u7531_u6A21_u5F0F" class="headerlink" title="路由模式"></a>路由模式</h4><ul>
+<li>标签模式</li>
+</ul>
+<h3 id="24location_u670D_u52A1"><a href="#24location_u670D_u52A1" class="headerlink" title="$location服务"></a>$location服务</h3><p>类window.location,能修改路径和内部跳转，不能刷新整个页面</p>
+<ul>
+<li>$location.path() 获取或修改路径，并且与HTML5的历史api交互，提供用户后退的功能,加replace()，就不能后退</li>
+<li>absUrl() 获取编码后完整的URL</li>
+<li>hash() 获取URL中的hash片段  </li>
+<li>host() 获取URL中的主机，port()端口号，</li>
+<li>protocol() 获取URL中的协议</li>
+<li>search() 获取URL中的查询串，也可以用对象、字符串设置查询</li>
+<li>url() 获取或修改当前的URL</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1281,126 +1415,6 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/01/05/webpack热加载React-webpack-dev-server/" itemprop="url">
-                  webpack热加载React webpack-dev-server
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-01-05T09:25:22+08:00" content="2016-01-05">
-              2016-01-05
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/05/webpack热加载React-webpack-dev-server/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/05/webpack热加载React-webpack-dev-server/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="Webpack_u5F00_u53D1_u670D_u52A1_u5668_uFF08webpack-dev-server_uFF09"><a href="#Webpack_u5F00_u53D1_u670D_u52A1_u5668_uFF08webpack-dev-server_uFF09" class="headerlink" title="Webpack开发服务器（webpack-dev-server）"></a>Webpack开发服务器（webpack-dev-server）</h3><ul>
-<li>npm install -g webpack-dev-server</li>
-<li>静态资源Web服务器</li>
-<li>基于Node.js Express</li>
-<li>内容实时打包和推送</li>
-</ul>
-<h3 id="react-hot-loader"><a href="#react-hot-loader" class="headerlink" title="react-hot-loader"></a>react-hot-loader</h3><ul>
-<li>npm install —save-dev react-hot-loader</li>
-<li>React组件的热替换</li>
-</ul>
-<p><code>创建一个server.js文件,用于启动webpack-dev-server</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"><span class="keyword">var</span> WebpackDevServer = <span class="built_in">require</span>(<span class="string">'webpack-dev-server'</span>);</span><br><span class="line"><span class="keyword">var</span> config = <span class="built_in">require</span>(<span class="string">'../webpack.config'</span>);</span><br><span class="line"><span class="keyword">new</span> WebpackDevServer(webpack(config), &#123;</span><br><span class="line">  publicPath: config.output.publicPath,</span><br><span class="line">  hot: <span class="literal">true</span>,<span class="comment">//开启Hot Module Replacement (HMR)</span></span><br><span class="line">  noInfo: <span class="literal">false</span>,</span><br><span class="line">  historyApiFallback: <span class="literal">true</span></span><br><span class="line">&#125;).listen(<span class="number">3000</span>, <span class="string">'127.0.0.1'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, result</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(err);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'Listening at localhost:3000'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p><code>修改webpack.config.js</code></p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">entry: [</span><br><span class="line">  <span class="string">'webpack-dev-server/client?http://127.0.0.1:3000'</span>, <span class="comment">// WebpackDevServer host and port,资源服务器地址,打包生成的文件从client?http://127.0.0.1:3000去获取动态的代码更新</span></span><br><span class="line">  <span class="string">'webpack/hot/only-dev-server'</span>,</span><br><span class="line">  <span class="string">'./scripts/index.js'</span> <span class="comment">// Your appʼs entry point</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">loaders: [&#123;</span><br><span class="line">    test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">    <span class="keyword">exclude</span>: <span class="regexp">/node_modules/</span>,</span><br><span class="line">    loader: <span class="string">'react-hot!jsx-loader?harmony'</span><span class="comment">//让Webpack用react-hot-loader去加载React组件,harmony启动es6</span></span><br><span class="line">  &#125;]</span><br></pre></td></tr></table></figure>
-<p>之后启动node server.js</p>
-<h3 id="u524D_u7AEF_u670D_u52A1_u5668_u8C03_u7528"><a href="#u524D_u7AEF_u670D_u52A1_u5668_u8C03_u7528" class="headerlink" title="前端服务器调用"></a>前端服务器调用</h3><p><code>载入打包文件时指定完整的URL地址</code></p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"http://127.0.0.1:3000/assets/bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>建立Socket IO来动态加载模块</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1447,7 +1461,7 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">44</span>
+              <span class="site-state-item-count">45</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
