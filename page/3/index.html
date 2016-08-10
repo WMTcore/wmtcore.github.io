@@ -895,6 +895,124 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
             
               
                 
+                <a class="post-title-link" href="/2016/01/25/js-编码相关问题持续总结/" itemprop="url">
+                  js 编码相关问题持续总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-25T09:25:23+08:00" content="2016-01-25">
+              2016-01-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/25/js-编码相关问题持续总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/js-编码相关问题持续总结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="u5173_u4E8EURL_u7F16_u7801_u7684_u95EE_u9898"><a href="#u5173_u4E8EURL_u7F16_u7801_u7684_u95EE_u9898" class="headerlink" title="关于URL编码的问题"></a>关于URL编码的问题</h3><p><code>encodeURI，decodeURI</code> :不会对下列字符编码 ASCII字母 数字 ~!@#$&amp;*()=:/,;?+’，适合对整个url</p>
+<p><code>encodeURIComponent decodeURIComponent</code> : 不会对下列字符编码 ASCII字母 数字 ~!*()’,适合对url参数</p>
+<h3 id="u5B57_u7B26_u4E32_u7F16_u7801"><a href="#u5B57_u7B26_u4E32_u7F16_u7801" class="headerlink" title="字符串编码"></a>字符串编码</h3><p><code>escape unescape</code> :不会对 ASCII 字母、数字和@/*+进行编码,但<code>已不建议使用</code></p>
+<p><strong>escape和encodeURI区别</strong> :<br><code>escape</code>在处理 0xff 之外字符的时候，是直接使用字符的 unicode 在前面加上一个 「%u」<br><code>encodeURI</code> 先进行 UTF-8，再在 UTF-8 的每个字节码前加上一个 「%」</p>
+<h4 id="nodejs__u5904_u7406_u7F16_u7801_u6587_u4EF6"><a href="#nodejs__u5904_u7406_u7F16_u7801_u6587_u4EF6" class="headerlink" title="nodejs 处理编码文件"></a>nodejs 处理编码文件</h4><p><code>iconv-lite</code>: 纯js实现，少了c++到js的转换 比node-iconv快 </p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var <span class="built_in">iconv</span> = require(<span class="string">'iconv-lite'</span>);</span><br><span class="line"> </span><br><span class="line">// Convert from <span class="keyword">an</span> encoded <span class="keyword">buffer</span> <span class="keyword">to</span> js <span class="built_in">string</span>.</span><br><span class="line">str = <span class="built_in">iconv</span>.decode(buf, <span class="string">'win1251'</span>);</span><br><span class="line"> </span><br><span class="line">// Convert from js <span class="built_in">string</span> <span class="keyword">to</span> <span class="keyword">an</span> encoded <span class="keyword">buffer</span>.</span><br><span class="line">buf = <span class="built_in">iconv</span>.encode(<span class="string">"Sample input string"</span>, <span class="string">'win1251'</span>);</span><br><span class="line"> </span><br><span class="line">// Check <span class="keyword">if</span> encoding <span class="keyword">is</span> supported</span><br><span class="line"><span class="built_in">iconv</span>.encodingExists(<span class="string">"us-ascii"</span>)</span><br></pre></td></tr></table></figure>
+<p><code>encoding</code>: 对node-iconv和iconv-lite的再次封装，encoding首先调用node-iconv，如果node-iconv无法解析，则调用iconv-lite作为替代方案.<br>encoding模块就一个方法convert()，使用方法为：encoding.convert(text, toCharset, fromCharset)。</p>
+<ul>
+<li>text: 需要转换的对象，可以为Buffer或者String对象。</li>
+<li>toCharset: 转换后的编码。</li>
+<li>fromCharset: 转换前的编码，缺省为uft8。</li>
+</ul>
+<p>转换后的输入结果为Buffer对象。</p>
+<h3 id="URL_u3001URI_u3001URN"><a href="#URL_u3001URI_u3001URN" class="headerlink" title="URL、URI、URN"></a>URL、URI、URN</h3><p><code>URI</code>:统一资源标识符</p>
+<p><code>URL</code>:统一资源定位器,具体的URI</p>
+<p><code>URN</code>:统一资源命名,如mailto:java-net@java.sun.com</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/01/23/Samba服务器的简单配置和快速搭建/" itemprop="url">
                   最方便的Samba服务器的配置和搭建
                 </a>
