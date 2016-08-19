@@ -67,7 +67,7 @@
 &amp;gt; Host: 127.0.0.1:1337 
 &amp;gt; Accept: */*
 &amp;gt;">
-<meta property="og:updated_time" content="2016-08-05T07:23:19.000Z">
+<meta property="og:updated_time" content="2016-08-19T08:24:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nodejs web应用(一)">
 <meta name="twitter:description" content="请求解析请求方法在报文的第一行，路径在其后
@@ -403,7 +403,137 @@ res.writeHead = function() {
     res.setHeader(&apos;Set-Cookie&apos;, cookies);
     return writeHead.apply(this, arguments);
 };
-</code></pre></span>
+
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>通过查询字符串来让客户端和服务端对应(链接带key)</span><br></pre></td></tr></table></figure>
+
+//生成带key的url
+var getURL = function(_url, key, value) {
+    var obj = url.parse(_url, true);
+    obj.query[key] = value;
+    return url.format(obj);
+};
+
+
+function(req, res) {
+    var redirect = function(url) {
+        res.setHeader(&apos;Location&apos;, url);
+        res.writeHead(302);//让浏览器重定向
+        res.end();
+    };
+    var id = req.query[key];
+    if (!id) {
+        var session = generate();
+        redirect(getURL(req.url, key, session.id));
+    } else {
+        var session = sessions[id];
+        if (session) {
+            if (session.cookie.expire &gt; (new Date()).getTime()) {
+                //更新超时时间
+                session.cookie.expire = (new Date()).getTime() + EXPIRES;
+                req.session = session;
+                handle(req, res);
+            } else {
+                //超时删除旧数据，重新生成
+                delete sessions[id];
+                var session = generate();
+                redirect(getURL(req.url, key, session.id));
+            }
+        } else {
+            //如果session过期或者口令不对，重新生成session 
+            var session = generate(); redirect(getURL(req.url, key, session.id));
+        }
+    }
+}
+
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#### session与安全</span></span><br><span class="line"><span class="preprocessor">#####对session用私钥加密</span></span><br><span class="line">- 随机产生口令值可能被命中，并用此套用服务端数据</span><br><span class="line"></span><br><span class="line">在服务端设定私钥，用私钥对口令加密</span><br></pre></td></tr></table></figure>
+
+// 将值通过私钥签名，由.分割原值和签名 
+var sign = function (val, secret) {
+return val + &apos;.&apos; + crypto.createHmac(&apos;sha256&apos;, secret).update(val).digest(&apos;base64&apos;).replace(/\=+$/, &apos;&apos;);
+};
+
+//在响应时，设置session值到cookie或跳转url
+var val = sign(req.sessionID, secret); 
+res.setHeader(&apos;Set-Cookie&apos;, cookie.serialize(key, val));
+
+//接受请求时取出口令再签名，经行对比
+var unsign = function(val, secret) {
+    var str = val.slice(0, val.lastIndexOf(&apos;.&apos;));
+    return sign(str, secret) == val ? str : false;
+};
+
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="header">##### xxs漏洞</span></span><br><span class="line"><span class="bullet">- </span>跨站脚本攻击 Access-Control-Allow-Origin</span><br><span class="line"></span><br><span class="line">这个前端脚本会获取页面的url,$('#box').html(location.hash.replace('#', ''));攻击者可以把脚本藏在链接后http://a.com/pathname#<span class="xml"><span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"http://b.com/c.js"</span>&gt;</span><span class="undefined"></span></span><span class="xml"><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span>，再对url压缩。用户打开后脚本会执行，攻击者可以用此获取cookie来伪装用户甚至管理员</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="header">### 缓存</span></span><br><span class="line"><span class="bullet">- </span>让浏览器缓存静态资源</span><br><span class="line"><span class="bullet">- </span>通常只适应于get请求</span><br><span class="line"></span><br><span class="line">![<span class="link_label">Smaller icon</span>](<span class="link_url">../picture/get缓存流程.png</span>)</span><br><span class="line"></span><br><span class="line">一开始本地没有文件，浏览器直接请求服务端并将文件缓存，二次请求时若不能确定是否可用，会发起条件请求，在get中附带If-Modified-Since字段</span><br><span class="line"></span><br><span class="line"><span class="header">#### 使用时间戳</span></span><br></pre></td></tr></table></figure>
+
+//get报文附带If-Modified-Since/Last-Modified字段
+If-Modified-Since: Sun, 03 Feb 2013 06:01:12 GMT
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">服务端如果没有新版本就只需要响应<span class="keyword">*</span><span class="keyword">*</span>304<span class="keyword">*</span><span class="keyword">*</span>，浏览器就会使用本地文件；若更新就发送新文件，让浏览器更新缓存</span><br></pre></td></tr></table></figure>
+
+var handle = function(req, res) {
+    fs.stat(filename, function(err, stat) {
+        var lastModified = stat.mtime.toUTCString();
+        if (lastModified === req.headers[&apos;if-modified-since&apos;]) {
+            res.writeHead(304, &quot;Not Modified&quot;);
+            res.end();
+        } else {
+            fs.readFile(filename, function(err, file) {
+                var lastModified = stat.mtime.toUTCString();
+                res.setHeader(&quot;Last-Modified&quot;, lastModified);
+                res.writeHead(200, &quot;Ok&quot;);
+                res.end(file);
+            });
+        }
+    });
+};
+
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">缺点：时间戳改动内容不一定改，只能精确到秒，更新频繁的内容可能不生效</span><br><span class="line"></span><br><span class="line"><span class="header">#### ETag（Entity Tag）</span></span><br><span class="line"><span class="bullet">- </span>服务端确定生成规则生成</span><br><span class="line"><span class="bullet">- </span>请求字段为If-None-Match/ETag</span><br></pre></td></tr></table></figure>
+
+//生成文件hash
+var getHash = function(str) {
+    var shasum = crypto.createHash(&apos;sha1&apos;);
+    return shasum.update(str).digest(&apos;base64&apos;);
+};
+//请求
+var handle = function(req, res) {
+    fs.readFile(filename, function(err, file) {
+        var hash = getHash(file);
+        var noneMatch = req.headers[&apos;if-none-match&apos;];
+        if (hash === noneMatch) {
+            res.writeHead(304, &quot;Not Modified&quot;);
+            res.end();
+        } else {
+            res.setHeader(&quot;ETag&quot;, hash);
+            res.writeHead(200, &quot;Ok&quot;);
+            res.end(file);
+        }
+    });
+};
+
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="header">#### Expires，Cache-Control</span></span><br><span class="line"><span class="bullet">- </span>让浏览器明确缓存</span><br></pre></td></tr></table></figure>
+
+//Expires 设置一个过期时间，可能出现时间不同步，文件提前更新等问题
+var handle = function(req, res) {
+    fs.readFile(filename, function(err, file) {
+        var expires = new Date();
+        expires.setTime(expires.getTime() + 10 * 365 * 24 * 60 * 60 * 1000);
+        res.setHeader(&quot;Expires&quot;, expires.toUTCString());
+        res.writeHead(200, &quot;Ok&quot;);
+        res.end(file);
+    });
+};
+//Cache-Control 可设置更多选项，使用max-age倒计时
+ var handle = function(req, res) {
+     fs.readFile(filename, function(err, file) {
+         res.setHeader(&quot;Cache-Control&quot;, &quot;max-age=&quot; + 10 * 365 * 24 * 60 * 60 * 1000);
+         res.writeHead(200, &quot;Ok&quot;);
+         res.end(file);
+     });
+ };
+</code></pre><p>http1.0不支持max-age，所以要同时设置Expires，Cache-Control，在浏览器中max-age优先级高于Expires</p>
+<h4 id="u6E05_u9664_u7F13_u5B58"><a href="#u6E05_u9664_u7F13_u5B58" class="headerlink" title="清除缓存"></a>清除缓存</h4><ul>
+<li>浏览器是根据url进行缓存的，内容更新时可以让浏览器发起新的url缓存</li>
+</ul>
+<p>每次发布在路径中跟随文件内容的hash,<a href="http://url.com/?hash=afadfadwe.这样能避免无意义的更新" target="_blank" rel="external">http://url.com/?hash=afadfadwe.这样能避免无意义的更新</a></p>
+</span>
       
     </div>
 
@@ -554,7 +684,7 @@ res.writeHead = function() {
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u8BF7_u6C42_u89E3_u6790"><span class="nav-number">1.</span> <span class="nav-text">请求解析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u8BF7_u6C42_u89E3_u6790"><span class="nav-number">1.</span> <span class="nav-text">请求解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u6E05_u9664_u7F13_u5B58"><span class="nav-number">1.1.</span> <span class="nav-text">清除缓存</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
