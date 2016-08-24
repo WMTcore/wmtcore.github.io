@@ -223,11 +223,259 @@
 
     
     
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/08/redux-学习笔记（1）/" itemprop="url">
+                  redux 学习笔记（1）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-06-08T10:24:46+08:00" content="2016-06-08">
+              2016-06-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/08/redux-学习笔记（1）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/08/redux-学习笔记（1）/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
       
 
       
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="redux_u7684_u4F5C_u7528"><a href="#redux_u7684_u4F5C_u7528" class="headerlink" title="redux的作用"></a>redux的作用</h3><p><img src="/../picture/redux流程.png" alt="Smaller icon"></p>
+<p>Redux 主要分为三个部分 Action、Reducer、及 Store</p>
+<h4 id="action"><a href="#action" class="headerlink" title="action"></a>action</h4><ul>
+<li>action用来传递操作 State 的信息,以 Javascript Plain Object 的形式存在，形如</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="rules">&#123;</span><br><span class="line">  <span class="rule"><span class="attribute">type</span>:<span class="value"> <span class="string">'ADD_FILM'</span>,</span><br><span class="line">  name: <span class="string">'Mission: Impossible'</span></span><br><span class="line"></span></span></span>&#125;</span><br></pre></td></tr></table></figure>
+<p>type 属性是必要的，用来表达处理 state 数据的方式，其他属性任意，建议简单</p>
+<p>但为了方便组织，可以创建函数来生产 action，即Action Creator</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span></span> addFilm(<span class="keyword">name</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="keyword">type</span>: <span class="string">'ADD_FILM'</span>, <span class="keyword">name</span>: <span class="keyword">name</span> &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Reducer"><a href="#Reducer" class="headerlink" title="Reducer"></a>Reducer</h4><ul>
+<li>处理action传达需要操作的信息</li>
+<li>通过传入旧的 state 和指示操作的 action 来更新 state</li>
+</ul>
+<p>Reducer 根据传入的<strong> action.type</strong> 来匹配 case 进行不同的 state 更新</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">function films(<span class="keyword">state</span> = initialState, action) &#123;</span><br><span class="line">  switch (action.type) &#123;</span><br><span class="line"> </span><br><span class="line">  case 'ADD_FILM':</span><br><span class="line">    // 更新 <span class="keyword">state</span> 中的 films 字段</span><br><span class="line">    return [&#123;</span><br><span class="line">      id: <span class="keyword">state</span>.films.reduce((<span class="keyword">max</span>Id, film) =&gt; Math.<span class="keyword">max</span>(film.id, <span class="keyword">max</span>Id), -<span class="number">1</span>) + <span class="number">1</span>,</span><br><span class="line">      name: action.name</span><br><span class="line">    &#125;, ...<span class="keyword">state</span>];</span><br><span class="line"> </span><br><span class="line">  case 'DELETE_FILM':</span><br><span class="line">    return <span class="keyword">state</span>.films.filter(film =&gt;</span><br><span class="line">        film.id !== action.id</span><br><span class="line">    );</span><br><span class="line"> </span><br><span class="line">  case 'SHOW_ALL_FILM':</span><br><span class="line">    return Object.assign(&#123;&#125;, <span class="keyword">state</span>, &#123;</span><br><span class="line">        visibilityFilter: action.filter</span><br><span class="line">      &#125;);</span><br><span class="line"> //不要修改 <span class="keyword">state</span>。 使用 Object.assign() 新建了一个副本</span><br><span class="line">  <span class="keyword">default</span>:</span><br><span class="line">    return <span class="keyword">state</span>;</span><br><span class="line">    //在 <span class="keyword">default</span> 情况下返回旧的 <span class="keyword">state</span>。遇到未知的 action 时，一定要返回旧的 <span class="keyword">state</span>。</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>当 action.type变多时，可以按照功能拆分，在通过组合函数合并</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function rootReducer(<span class="keyword">state</span> = &#123;&#125;, action) &#123;</span><br><span class="line">  return &#123;</span><br><span class="line">    films: filmReducer(<span class="keyword">state</span>.films, action),</span><br><span class="line">    filter: filterReducer(<span class="keyword">state</span>.filter, action)</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"> // rootReducer 将不同部分的 <span class="keyword">state</span> 传给对应的 reducer 处理，最终合并所有 reducer 的返回值，组成整个<span class="keyword">state</span>。</span><br><span class="line"> </span><br><span class="line"> //使用Redux 提供的 combineReducers() 方法</span><br><span class="line">import &#123; combineReducers &#125; <span class="keyword">from</span> 'redux'</span><br><span class="line"></span><br><span class="line">var rootReducer = combineReducers(&#123;</span><br><span class="line">    films: filmReducer,</span><br><span class="line">    filter: filterReducer</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line"> //combineReducers() 将调用一系列 reducer，并根据对应的 key 来筛选出 <span class="keyword">state</span> 中的一部分数据给相应的 reducer，这样也意味着每一个小的 reducer 将只能处理 <span class="keyword">state</span> 的一部分数据</span><br></pre></td></tr></table></figure>
+<h4 id="Store"><a href="#Store" class="headerlink" title="Store"></a>Store</h4><ul>
+<li>衔接action和reducer</li>
+</ul>
+<p>Store 是单一的,维护着一个全局的 State，并且根<strong>据 Action 来进行事件分发处理 State</strong>,Store 是一个把 Action 和 Reducer 结合起来的对象。</p>
+<p>生成store</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"></span><br><span class="line">var store = createStore(rootReducer);</span><br></pre></td></tr></table></figure>
+<p>store 对象可以简单的理解为如下形式</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createStore</span><span class="params">(reducer, initialState)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//闭包私有变量 </span></span><br><span class="line">    <span class="keyword">var</span> currentReducer = reducer;</span><br><span class="line">    <span class="keyword">var</span> currentState = initialState;</span><br><span class="line">    <span class="keyword">var</span> listeners = [];</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> currentState;</span><br><span class="line">    &#125;    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">subscribe</span><span class="params">(listener)</span> </span>&#123;</span><br><span class="line">      listeners.push(listener);</span><br><span class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">unsubscribe</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> index = listeners.indexOf(listener);</span><br><span class="line">        listeners.splice(index, <span class="number">1</span>);</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span><span class="params">(action)</span> </span>&#123;</span><br><span class="line">        currentState = currentReducer(currentState, action);</span><br><span class="line">        listeners.slice().<span class="keyword">forEach</span>(listener =&gt; listener());</span><br><span class="line">        <span class="keyword">return</span> action;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//返回一个包含可访问闭包变量的公有方法</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      dispatch,</span><br><span class="line">      subscribe,</span><br><span class="line">      getState</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>store.getState() 用来获取 state 数据。<br>store.subscribe(listener) 用于注册监听函数。每当 state 数据更新时，将会触发监听函数。<br>store.dispatch(action) 是用于将一个 action 对象发送给 reducer 进行处理</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">store</span><span class="class">.dispatch</span>(<span class="rules">&#123;</span><br><span class="line">  <span class="rule"><span class="attribute">type</span>:<span class="value"> <span class="string">'ADD_FILM'</span>,</span><br><span class="line">  name: <span class="string">'Mission: Impossible'</span></span><br><span class="line"></span></span></span>&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h4><ul>
+<li>Connect 组件主要为 React 组件提供 store 中的部分 state 数据 及 dispatch 方法</li>
+</ul>
+<p>通过<strong>import { connect } from ‘react-redux’</strong>将state的值和action绑定到组件的props上</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import &#123; connect &#125; <span class="keyword">from</span> 'react-redux'</span><br><span class="line">import Counter <span class="keyword">from</span> '../components/Counter' //一个组件</span><br><span class="line">import * as CounterActions <span class="keyword">from</span> '../actions/counter'</span><br><span class="line"></span><br><span class="line">//将<span class="keyword">state</span>.counter绑定到props的counter</span><br><span class="line">// <span class="keyword">state</span> 将由 store 提供</span><br><span class="line">function mapStateToProps(<span class="keyword">state</span>) &#123;</span><br><span class="line">  return &#123;</span><br><span class="line">    counter: <span class="keyword">state</span>.counter</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//将action的所有方法绑定到props上</span><br><span class="line">function mapDispatchToProps(dispatch) &#123;</span><br><span class="line">  return bindActionCreators(CounterActions, dispatch)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//通过react-redux提供的connect方法将我们需要的<span class="keyword">state</span>中的数据和actions中的方法绑定到props上</span><br><span class="line">export <span class="keyword">default</span> connect(mapStateToProps, CounterActions)(Counter)</span><br></pre></td></tr></table></figure>
+<h4 id="saga"><a href="#saga" class="headerlink" title="saga"></a>saga</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  takeEvery</span><br><span class="line">&#125; from <span class="string">'redux-saga'</span></span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  call,</span><br><span class="line">  put,</span><br><span class="line">  fork,</span><br><span class="line">  take,</span><br><span class="line">  cancel</span><br><span class="line">&#125; from <span class="string">'redux-saga/effects'</span></span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  GET_LOGINED_REQUEST,</span><br><span class="line">  LOGIN_REQUEST</span><br><span class="line">&#125; from <span class="string">'./login.js'</span></span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  loginAPI,</span><br><span class="line">  loginedAPI</span><br><span class="line">&#125; from <span class="string">'../../../api'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">watchRequestLogined</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> takeEvery(GET_LOGINED_REQUEST, queryFlow)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">queryFlow</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> task = <span class="keyword">yield</span> fork(logined)</span><br><span class="line">  <span class="keyword">yield</span> take(LOGIN_CANCEL)</span><br><span class="line">  <span class="keyword">yield</span> cancel(task)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">logined</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">yield</span> call(loginedAPI)</span><br><span class="line">    <span class="keyword">yield</span> put(&#123;</span><br><span class="line">      <span class="keyword">type</span>: LOGIN_SUCCESS,</span><br><span class="line">      response</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">yield</span> put(&#123;</span><br><span class="line">      <span class="keyword">type</span>: LOGIN_CANCEL,</span><br><span class="line">      error</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">watchRequestLogin</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> takeEvery(LOGIN_REQUEST, loginFlow)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">authorize</span>(<span class="params">&#123;account, password&#125;</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">yield</span> call(loginAPI, &#123;</span><br><span class="line">      account,</span><br><span class="line">      password</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">yield</span> put(&#123;</span><br><span class="line">      <span class="keyword">type</span>: LOGIN_SUCCESS,</span><br><span class="line">      response</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">yield</span> put(&#123;</span><br><span class="line">      <span class="keyword">type</span>: LOGIN_ERROR,</span><br><span class="line">      error</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">loginFlow</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; account, password &#125; = action.payload</span><br><span class="line">  <span class="keyword">const</span> task = <span class="keyword">yield</span> fork(authorize, &#123; account, password &#125;)</span><br><span class="line">  <span class="keyword">yield</span> take(LOGIN_CANCEL)</span><br><span class="line">  <span class="keyword">yield</span> cancel(task)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/01/Flux/" itemprop="url">
+                  Flux
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-06-01T16:03:51+08:00" content="2016-06-01">
+              2016-06-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/01/Flux/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/01/Flux/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="u7B80_u4ECB"><a href="#u7B80_u4ECB" class="headerlink" title="简介"></a>简介</h3><ul>
+<li>单向的数据流动</li>
+<li>Flux应用主要包括三部分：dispatcher、store和views（React components）</li>
+</ul>
+<p><img src="/../picture/flux-flow.png" alt="Resize icon"></p>
+<h3 id="dispatcher_uFF08_u8C03_u5EA6_u8005_uFF09"><a href="#dispatcher_uFF08_u8C03_u5EA6_u8005_uFF09" class="headerlink" title="dispatcher（调度者）"></a>dispatcher（调度者）</h3><ul>
+<li>管理所有的数据流</li>
+<li>本质store callback 的注册表，用来向stores分发action，可以指定注册的callback的执行顺序来管理store之间的依赖</li>
+</ul>
+<h3 id="store_28_u4ED3_u5E93_29"><a href="#store_28_u4ED3_u5E93_29" class="headerlink" title="store(仓库)"></a>store(仓库)</h3><ul>
+<li>包含应用的状态和逻辑，管理多个对象状态</li>
+<li>在dispatcher注册，并提供相应的回调</li>
+<li>更新后向应用广播change事件，view响应并重新获取数据</li>
+</ul>
+<h3 id="action"><a href="#action" class="headerlink" title="action"></a>action</h3><ul>
+<li>dispatcher提供了一个可以允许我们向store中触发分发的方法</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1433,348 +1681,6 @@ Step(
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/15/node的模块加载/" itemprop="url">
-                  node的模块加载
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-03-15T10:53:32+08:00" content="2016-03-15">
-              2016-03-15
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/15/node的模块加载/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/15/node的模块加载/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="u6A21_u5757_u5B9E_u73B0"><a href="#u6A21_u5757_u5B9E_u73B0" class="headerlink" title="模块实现"></a>模块实现</h3><p>依照CommonJS的模块规范，使用require()引入模块的api,使用exports导出模块的方法、变量；其中module对象代表模块本身，exports是它的属性</p>
-<p><code>优点： 每个模块有独立的空间、不必考虑变量污染</code></p>
-<p>Node引入模块通过<strong>路径分析、文件定位、编译执行</strong>，会对引入的模块缓存其编译和执行后的对象，加载时缓存优先其后只核心模块。加载自定义模块（第三方包）最慢，要向上逐级递归查找node_modules目录</p>
-<p>因为允许require()中不含文件拓展名，Node会按照<code>.js、.node、.json的次序补足，依次尝试</code>,并且需要调用fs模块同步阻塞判断文件是否存在，会因为Node单线程引起性能问题，<code>对于.node、.json文件带上拓展名能快些</code></p>
-<h4 id="u5206_u6790_u76EE_u5F55_u548C_u5305"><a href="#u5206_u6790_u76EE_u5F55_u548C_u5305" class="headerlink" title="分析目录和包"></a>分析目录和包</h4><p>require()通过分析文件拓展名后仍然没有查到文件、但取到一个目录，此时Node会将目录当做包来处理。</p>
-<ol>
-<li>在当前目录下查找package.json(CommonJS规定的包描述文件)</li>
-<li>通过JSON.parse()解析，取出main属性指定的文件名，若无拓展名就遍历拓展名</li>
-</ol>
-<p>如果mian属性指定文件名错误、没有package.json文件，Node会把index.当做默认文件名，依次查找、遍历拓展名。</p>
-<p>如果分析目录后没有定位成功，就进入下一个模块路径查找，模块路径都都遍历完了还没找到就抛错。</p>
-<h3 id="u6A21_u5757_u7F16_u8BD1"><a href="#u6A21_u5757_u7F16_u8BD1" class="headerlink" title="模块编译"></a>模块编译</h3><p><code>.js 通过fs同步读取文件后编译执行</code> ,Node对获取的js文件内容进行了头尾包装</p>
-<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="list">(<span class="keyword">function</span><span class="list">(<span class="keyword">exports</span>,require,module,__filename,__dirname)</span><span class="collection">&#123;//头尾包装</span><br><span class="line">  var math=require<span class="list">(<span class="keyword">'math'</span>)</span><span class="comment">;</span></span><br><span class="line">&#125;</span>)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<p>如此每个模块都有作作用域隔离，包装后的代码通过vm原生模块runInThisContext()执行，返回一个function对象，再将当前模块对象的exports属性、require()、module、文件的完整路径和文件目录作为参数传给function()。最后调用方拿到了exports属性</p>
-<p><strong>exports和module.exports 的区别 </strong>exports对象是以形参形式传入的，直接赋值不会改变作用域外的值。所以需要对module.exports对象赋值，对exports属性赋值则无碍</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> change = <span class="function"><span class="keyword">function</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">	a = <span class="number">100</span>;</span><br><span class="line">	<span class="built_in">console</span>.log(a); <span class="comment">// =&gt; 100</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>;</span><br><span class="line">change(a);</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// =&gt; 10</span></span><br></pre></td></tr></table></figure>
-<p><code>.node 这是用c/c++编写的拓展文件，通过dlopen()加载再编译</code> 在windows、*nix有不同的实现，通过libuv兼容层封装,实际不用编译，它是c/c++编译生成的，只要加载、执行，exports对象直接和.node联系，执行效率高</p>
-<p><code>.json 通过fs读取，使用JSON.parse()解析，再赋值给exports</code> ,对于JSON文件直接用require()比fs高效</p>
-<p>将编译后的模块，以文件路径为索引缓存在Module.cache对象上</p>
-<h3 id="u6838_u5FC3_u6A21_u5757"><a href="#u6838_u5FC3_u6A21_u5757" class="headerlink" title="核心模块"></a>核心模块</h3><ul>
-<li>将核心模块中纯用c/c++写的称为建内模块，因为通常不被用户调用</li>
-<li>部分模块通过c/c++编写核心部分，js实现包装、导出来提高性能</li>
-</ul>
-<p>Node使用v8的js2c.py将所有内置js转成c++里的数组，生成node_natives.sh头文件，在Node启动时加入内存，然后再根据require()加载、执行;也要经历头尾包装，缓存在NativeModule._cache对象上</p>
-<h3 id="NPM"><a href="#NPM" class="headerlink" title="NPM"></a>NPM</h3><p><code>package.json 包描述文件</code>  dependencies npm根据这个自动加载依赖的包,scripts 用于包管理器来安装、编译、测试和卸载包(钩子命令，preinstall之类的) devDependencies 开发时的依赖包，bin 命令行工具</p>
-<p><code>全局安装 -g</code> 将包变成全局可用的执行命令，不是require()到</p>
-<p><code>其他方式安装包</code> npm install 指定package.json的位置，npm install [pg] –registry=<a href="http://registry.url" target="_blank" rel="external">http://registry.url</a> 或者直接采用镜像源 npm config set registry <a href="http://registry.url" target="_blank" rel="external">http://registry.url</a></p>
-<p><code>局域NPM</code></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/06/mysql事务与锁/" itemprop="url">
-                  mysql事务与锁
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-03-06T14:56:20+08:00" content="2016-03-06">
-              2016-03-06
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/06/mysql事务与锁/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/06/mysql事务与锁/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="u4E8B_u52A1_u5B9A_u4E49"><a href="#u4E8B_u52A1_u5B9A_u4E49" class="headerlink" title="事务定义"></a>事务定义</h3><p><code>一组原子性SQL查询，独立的工作单元</code></p>
-<p>ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-持久性)</p>
-<ul>
-<li>事务不可分割</li>
-<li>从一个一致性状态转到另一个一致性状态</li>
-<li>事务修改提交之前对其他事务不可见</li>
-<li>一旦提交，永远保存</li>
-</ul>
-<p><code>根据业务是否需要事务，选择合适的储存引擎，提升性能</code><br>若存储引擎不支持事务也可以使用<strong>locktable</strong>提供一定保护</p>
-<h4 id="u9694_u79BB_u7EA7_u522B"><a href="#u9694_u79BB_u7EA7_u522B" class="headerlink" title="隔离级别"></a>隔离级别</h4><ul>
-<li>脏读（dirty read）：事务读取了未提交的数据</li>
-<li>不可重复读（nonrepeatable read）：事务T1读取一行记录，紧接着事务T2修改了T1刚才读取的那一行记录，然后T1又再次读取这行记录，发现与刚才读取的结果不同</li>
-<li>幻像读（phantom read）：当某个事务在读某个范围内的记录时，另一个事务又在该范围内加入了新的记录，当之前的事务再读取该范围的记录时，会产生幻行。InnoDB和XtraDB存储引擎通过MVCC解决了幻像读的问题</li>
-</ul>
-<p><code>READ UNCOMMITTED(未提交读)</code>: 事务的修改即使未提交，对其他事务也可见，性能略好，但有很多问题，不建议使用</p>
-<p><code>READ COMMITTED(提交读)</code>: 事务所做的修改在提交前对其他事务不可见，大多数数据库默认隔离级别</p>
-<p><code>REPEATABLE READ(可重复读)</code>: 同一事务多次读取的记录结果是一致的,Mysql默认级别</p>
-<p><code>SERIALIZABLE(序列化)</code> : 强制事务串行执行，会对读取的每一行数据加锁，会导致大量的超时和锁争用，用在非常需要确保数据的一致性并且可以接受没有并发的情况下</p>
-<table>
-<thead>
-<tr>
-<th>事务的隔离级别</th>
-<th>脏读可能性</th>
-<th>不可重复读可能性</th>
-<th>幻像读可能性</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>READ UNCOMMITTED未提交读</td>
-<td>YES</td>
-<td>YES</td>
-<td>YES</td>
-</tr>
-<tr>
-<td>READ COMMITTED提交读</td>
-<td>No</td>
-<td>YES</td>
-<td>YES</td>
-</tr>
-<tr>
-<td>REPEATABLE READ可重复读</td>
-<td>No</td>
-<td>No</td>
-<td>YES</td>
-<td>Mysql默认级别</td>
-</tr>
-<tr>
-<td>SERIALIZABLE序列化</td>
-<td>No</td>
-<td>No</td>
-<td>No</td>
-<td>会在读取的每一行数据上都加锁</td>
-</tr>
-</tbody>
-</table>
-<h4 id="u6B7B_u9501"><a href="#u6B7B_u9501" class="headerlink" title="死锁"></a>死锁</h4><p>多个事务在同一资源上互相占用，并请求锁定对方占用的资源，从而导致恶性循环</p>
-<ul>
-<li>多个事务以不同的顺序锁定资源</li>
-<li>多个事务同时锁定同一资源</li>
-</ul>
-<p>解决方式：1. 检测到死锁时，立刻返回错误 2. 当查询的时间达到锁等待超时的设定后放弃锁请求</p>
-<p><code>InnoDB处理方式</code>： 将持有最少行级排他锁的事务进行回滚</p>
-<p>发生死锁后，只有部分或者完全回滚其中一个事务，才能打破死锁。发生死锁无法避免，程序设计时需要考虑如何处理死锁，通常<strong>重新执行因死锁回滚的事务</strong>即可</p>
-<h4 id="u4E8B_u52A1_u65E5_u5FD7"><a href="#u4E8B_u52A1_u65E5_u5FD7" class="headerlink" title="事务日志"></a>事务日志</h4><p><code>提高事务的效率</code>：</p>
-<ol>
-<li>存储引擎在修改表的数据时只需要修改其内存拷贝，再把该修改行为记录到持久在硬盘上的事务日志中，而不用将修改的数据本身持久到磁盘。</li>
-<li>事务日志采用的是追加的方式，写日志的操作是在磁盘上的一小块顺序I/O，不像随机I/O需要在多次移动磁头。</li>
-</ol>
-<p>事务日志持久后，内存被修改的数据在后台慢慢刷回到磁盘。称为预写式日志（Write-Ahead Logging），<strong>修改数据需要写两次磁盘</strong>.</p>
-<p>若数据的修改已经记录到日志并持久化，即使内存的修改没及时写到磁盘，也可以在存储引擎重启时自动恢复</p>
-<h3 id="MySQL_u4E8B_u52A1"><a href="#MySQL_u4E8B_u52A1" class="headerlink" title="MySQL事务"></a>MySQL事务</h3><p>官方提供的事务存储引擎：InnoDB和NDB Cluster<br>             第三方：XtraDB和PBXT</p>
-<h4 id="u81EA_u52A8_u63D0_u4EA4"><a href="#u81EA_u52A8_u63D0_u4EA4" class="headerlink" title="自动提交"></a>自动提交</h4><p>mysql默认会启用自动提交，每个查询都会被当作一个事务执行提交操作，在当前连接中可以设置AUTOCOMMIT 1/ON或0/OFF。</p>
-<p><strong>导致大量数据改变的操作ALTER TABLE,还有LOCK TABLES等也会导致自动提交</strong></p>
-<h4 id="u4E8B_u52A1_u4E2D_u6DF7_u5408_u4F7F_u7528_u5B58_u50A8_u5F15_u64CE"><a href="#u4E8B_u52A1_u4E2D_u6DF7_u5408_u4F7F_u7528_u5B58_u50A8_u5F15_u64CE" class="headerlink" title="事务中混合使用存储引擎"></a>事务中混合使用存储引擎</h4><ul>
-<li>在非事务型的表上，回滚操作无效，且不会报错，只会有警告信息</li>
-</ul>
-<p>为每张表选择合适的存储引擎</p>
-<h4 id="u9690_u5F0F_u3001_u663E_u5F0F_u9501_u5B9A"><a href="#u9690_u5F0F_u3001_u663E_u5F0F_u9501_u5B9A" class="headerlink" title="隐式、显式锁定"></a>隐式、显式锁定</h4><ul>
-<li>InnoDB使用两段锁定协议，事务执行时，可随时执行锁定，只要到COMMIT或ROLLBACK时才会同时释放所有锁，InnoDB会根据隔离级别自动加锁（隐式）</li>
-<li>SELECT … LOCK IN SHARE MODE和 SELECT … FOR UPDATE 显式锁定，但不建议使用</li>
-</ul>
-<p><code>LOCK TABLES、UNLOCK TABLES</code>服务器层实现，不能代替事务，且影响性能</p>
-<h4 id="MVCC_u591A_u7248_u672C_u5E76_u53D1_u63A7_u5236"><a href="#MVCC_u591A_u7248_u672C_u5E76_u53D1_u63A7_u5236" class="headerlink" title="MVCC多版本并发控制"></a>MVCC多版本并发控制</h4><ul>
-<li>行级锁变种 能尽量避免加锁 开销低</li>
-<li></li>
-</ul>
-<p>此处介绍InnoDB对MVVC的实现</p>
-<p><code>实现原理</code>： 在每行记录后保存两个隐藏的列，一个保存行创建时间，一个保存过期（删除）时间，此处的时间指的是系统版本号，它会在创建事务时递增，</p>
-<p><code>具体操作</code>：</p>
-<ul>
-<li>SElECT<ul>
-<li>只查找版本号小号或等于当前事务的版本号，确保读取的行，或是在事务开始之前，或是事务自己插入的</li>
-<li>行的删除版本要么未定义，要么大于当前事务版本号，确保事务读到行在事务开始之前未被删除</li>
-</ul>
-</li>
-<li>INSERT<ul>
-<li>插入的每一行保存当前系统版本号作为行版本号</li>
-</ul>
-</li>
-<li>DELETE<ul>
-<li>插入的每一行保存当前系统版本号作为行版本号   </li>
-</ul>
-</li>
-<li>UPDATE<ul>
-<li>为插入的新记录保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为行删除标识</li>
-</ul>
-</li>
-</ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1821,7 +1727,7 @@ Step(
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">45</span>
+              <span class="site-state-item-count">47</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

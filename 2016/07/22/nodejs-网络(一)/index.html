@@ -67,7 +67,7 @@ OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 �
 
 传输之前先要三次握手形成会话，一个套接字socket只用于一个服务
 创建TCP服务12345678910111213141516171819202122232425262728293031323334353637 var net = require(&apos;net&apos;); //使用net.cr">
-<meta property="og:updated_time" content="2016-08-05T05:21:55.000Z">
+<meta property="og:updated_time" content="2016-08-23T03:06:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nodejs 网络(一)">
 <meta name="twitter:description" content="TCP服务
@@ -361,8 +361,9 @@ OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 �
 <li>构建在TCP之上 属于应用层协议 B/S模式，目前最知名的标准RFC 2616</li>
 </ul>
 <p>通常的http通信的信息分三部分，TCP的3次握手，客户端向服务器发送请求报文，服务器完成处理后向客户端发送响应内容。<br>浏览器其实是http的代理，将用户的行为转化为http请求发送给服务端，服务端处理请求然后发送响应报文给代理，代理解析报文再展示给用户。http服务只做处理http请求和发送http响应</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建http服务</span></span><br><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	res.writeHead(<span class="number">200</span>, &#123;</span><br><span class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></span><br><span class="line">	&#125;);</span><br><span class="line">	res.end(<span class="string">'Hello World\n'</span>);</span><br><span class="line">&#125;).listen(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'Server running at http://127.0.0.1:1337/'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用net模块创建</span></span><br><span class="line"><span class="keyword">var</span> tcp = <span class="built_in">require</span>(<span class="string">'net'</span>).createServer();</span><br><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	res.writeHead(<span class="number">200</span>, &#123;</span><br><span class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></span><br><span class="line">	&#125;);</span><br><span class="line">	res.end(<span class="string">'handled by child, pid is '</span> + process.pid + <span class="string">'\n'</span>);</span><br><span class="line">&#125;);</span><br><span class="line">tcp.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</span><br><span class="line">	server.emit(<span class="string">'connection'</span>, socket);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <h4 id="http_u6A21_u5757"><a href="#http_u6A21_u5757" class="headerlink" title="http模块"></a>http模块</h4><ul>
-<li>继承自TCP服务（net模块）</li>
+<li>继承自TCP服务（net模块)，通信方法都是使用net的，包括创建服务、关闭服务等</li>
 <li>能够与多个客户端保持连接，因为采用事件驱动，不用给每个连接创建额外的线程、进程，内存占用低，能高并发</li>
 <li>tcp以connection为单位服务，http以request为单位服务</li>
 </ul>
@@ -498,7 +499,7 @@ OSI模型： 物理层 数据链路层 网络层 传输层 会话层 表示层 �
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">45</span>
+              <span class="site-state-item-count">47</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

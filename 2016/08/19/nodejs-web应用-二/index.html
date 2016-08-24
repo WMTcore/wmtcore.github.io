@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="WMTcore" />
+  <meta name="keywords" content="nodejs," />
 
 
 
@@ -51,24 +51,19 @@
 
 
 
-<meta name="description" content="问题和解决方法在对接支付宝时，发生了这样的问题,使用http链接时，支付宝notify是没有问题的，但换成https后便通知不到了
-最可能的问题便是ssl证书出错了,注意支付宝不支持自签名证书（https://doc.open.alipay.com/doc2/detail?treeId=66&amp;amp;articleId=104422&amp;amp;docType=1）
-12去这个网站检测下你的CSR吧h">
+<meta name="description" content="数据上传node的http模块(HTTP_Parse)只对http头部进行解析，内容部分通过data事件触发，以buffer方式处理
+123456789101112131415161718var hasBody = function(req) &amp;#123;	return &apos;transfer-encoding&apos; in req.headers || &apos;content-length&apos; in req.he">
 <meta property="og:type" content="article">
-<meta property="og:title" content="支付宝notify 异步通知与https的问题">
-<meta property="og:url" content="http://www.wmtcore.com/2016/05/13/支付宝notify-异步通知与https的问题/index.html">
+<meta property="og:title" content="nodejs web应用(二)">
+<meta property="og:url" content="http://www.wmtcore.com/2016/08/19/nodejs-web应用-二/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="问题和解决方法在对接支付宝时，发生了这样的问题,使用http链接时，支付宝notify是没有问题的，但换成https后便通知不到了
-最可能的问题便是ssl证书出错了,注意支付宝不支持自签名证书（https://doc.open.alipay.com/doc2/detail?treeId=66&amp;amp;articleId=104422&amp;amp;docType=1）
-12去这个网站检测下你的CSR吧h">
-<meta property="og:image" content="http://www.wmtcore.com/../picture/懵逼.jpg">
-<meta property="og:image" content="http://www.wmtcore.com/../picture/alipaylog.png">
-<meta property="og:updated_time" content="2016-05-13T09:16:16.000Z">
+<meta property="og:description" content="数据上传node的http模块(HTTP_Parse)只对http头部进行解析，内容部分通过data事件触发，以buffer方式处理
+123456789101112131415161718var hasBody = function(req) &amp;#123;	return &apos;transfer-encoding&apos; in req.headers || &apos;content-length&apos; in req.he">
+<meta property="og:updated_time" content="2016-08-22T05:23:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="支付宝notify 异步通知与https的问题">
-<meta name="twitter:description" content="问题和解决方法在对接支付宝时，发生了这样的问题,使用http链接时，支付宝notify是没有问题的，但换成https后便通知不到了
-最可能的问题便是ssl证书出错了,注意支付宝不支持自签名证书（https://doc.open.alipay.com/doc2/detail?treeId=66&amp;amp;articleId=104422&amp;amp;docType=1）
-12去这个网站检测下你的CSR吧h">
+<meta name="twitter:title" content="nodejs web应用(二)">
+<meta name="twitter:description" content="数据上传node的http模块(HTTP_Parse)只对http头部进行解析，内容部分通过data事件触发，以buffer方式处理
+123456789101112131415161718var hasBody = function(req) &amp;#123;	return &apos;transfer-encoding&apos; in req.headers || &apos;content-length&apos; in req.he">
 
 
 
@@ -80,7 +75,7 @@
   };
 </script>
 
-  <title> 支付宝notify 异步通知与https的问题 | 大碗拉面 </title>
+  <title> nodejs web应用(二) | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -246,7 +241,7 @@
             
             
               
-                支付宝notify 异步通知与https的问题
+                nodejs web应用(二)
               
             
           </h1>
@@ -255,8 +250,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-05-13T15:36:49+08:00" content="2016-05-13">
-              2016-05-13
+            <time itemprop="dateCreated" datetime="2016-08-19T17:13:16+08:00" content="2016-08-19">
+              2016-08-19
             </time>
           </span>
 
@@ -265,8 +260,8 @@
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
                   </a>
                 </span>
 
@@ -281,8 +276,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/05/13/支付宝notify-异步通知与https的问题/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/13/支付宝notify-异步通知与https的问题/" itemprop="commentsCount"></span>
+                <a href="/2016/08/19/nodejs-web应用-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/19/nodejs-web应用-二/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -301,52 +296,115 @@
       
 
       
-        <span itemprop="articleBody"><h3 id="u95EE_u9898_u548C_u89E3_u51B3_u65B9_u6CD5"><a href="#u95EE_u9898_u548C_u89E3_u51B3_u65B9_u6CD5" class="headerlink" title="问题和解决方法"></a>问题和解决方法</h3><p>在对接支付宝时，发生了这样的问题,使用http链接时，支付宝notify是没有问题的，但换成https后便通知不到了</p>
-<p>最可能的问题便是<strong>ssl证书出错</strong>了,注意支付宝不支持自签名证书（<a href="https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1）" target="_blank" rel="external">https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1）</a></p>
-<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">去这个网站检测下你的<span class="constant">CSR</span>吧</span><br><span class="line"><span class="symbol">https:</span>/<span class="regexp">/cryptoreport.websecurity.symantec.com/checker</span><span class="regexp">/views/csr</span>Check.jsp</span><br></pre></td></tr></table></figure>
-<h3 id="u4E8B_u60C5_u7ECF_u8FC7"><a href="#u4E8B_u60C5_u7ECF_u8FC7" class="headerlink" title="事情经过"></a>事情经过</h3><p>某天，同事们偷偷给网站加了安全套接字，把http换成了https,于是我负责的支付模块就出错了。</p>
-<p>一开始，我就简单改了config,提交给支付宝的notify_url改成了https。本以为就没问题了，但在我又付出了￥0.01的巨款后，发现支付宝还是没有通知过来。。然后就懵逼了</p>
-<p><img src="/../picture/懵逼.jpg" alt="Smaller icon"></p>
-<p>懵逼了大概7.8秒后，我就去百度了一下、、、我居然去百度了一下。有人说原因是:</p>
-<blockquote>
-<p>支付宝对ssl证书也有检查，而那种免费的ssl证书通不过检查。后来没办法就只好改成http notify了 </p>
-</blockquote>
-<p>好吧。。。这种解决方法，这尼玛根本就不是个解决方案、</p>
-<p>注：俺们公司用的CA是GeoTrust,不是他们说的免费证书。顺带感叹下做CA真赚钱</p>
-<p>于是又去问支付宝客服，给了他交易号，让他帮我查了下日志,就是这样的<br><img src="/../picture/alipaylog.png" alt="Smaller icon"></p>
-<p>http状态码是0耶。看来支付宝确实没有去访问我们的服务器嘛。看来确实在ssl证书检查这块了，但还不清楚是什么问题，还是问问Google吧~（推荐翻墙工具：<a href="http://www.ishadowsocks.net）" target="_blank" rel="external">http://www.ishadowsocks.net）</a></p>
-<p>Google帮我搜到了支付宝的这个<a href="https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1页面(别问我为什么之前没看到。。支付宝文档太多了，我有点眼花),其中对异步通知是这么说的：" target="_blank" rel="external">https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1页面(别问我为什么之前没看到。。支付宝文档太多了，我有点眼花),其中对异步通知是这么说的：</a></p>
-<blockquote>
-<p>需确认页面是http还是https，如果是https，那么需要安装ssl证书，证书要求有如下：<br>要求“正规的证书机构签发，不支持自签名”，如果不理解请咨询证书供应商。<br>域名证书检测地址参考：<a href="https://cryptoreport.websecurity.symantec.com/checker/" target="_blank" rel="external">https://cryptoreport.websecurity.symantec.com/checker/</a></p>
-</blockquote>
-<p>然后就拿着csr去检测了。。靠，果然有鬼（毕竟不是我写的）~~然后改好重新部署</p>
-<p>再付出巨款做测试，终于等来支付宝敲门啦</p>
-<h3 id="u4E8B_u6545_u603B_u7ED3"><a href="#u4E8B_u6545_u603B_u7ED3" class="headerlink" title="事故总结"></a>事故总结</h3><p>不能说是事故，，因为网站还在测试阶段。。否则，我就该引咎辞职了（宝宝心里苦啊、、）</p>
-<ol>
-<li>仔细看文档 </li>
-<li>不要用百度</li>
-</ol>
-</span>
+        <span itemprop="articleBody"><h3 id="u6570_u636E_u4E0A_u4F20"><a href="#u6570_u636E_u4E0A_u4F20" class="headerlink" title="数据上传"></a>数据上传</h3><p>node的http模块(HTTP_Parse)只对http头部进行解析，内容部分通过data事件触发，以buffer方式处理</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> hasBody = <span class="function"><span class="keyword">function</span><span class="params">(req)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">'transfer-encoding'</span> <span class="keyword">in</span> req.headers || <span class="string">'content-length'</span> <span class="keyword">in</span> req.headers;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (hasBody(req)) &#123;</span><br><span class="line">		<span class="keyword">var</span> buffers = [];</span><br><span class="line">		req.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span><span class="params">(chunk)</span> </span>&#123;</span><br><span class="line">			buffers.push(chunk);</span><br><span class="line">		&#125;);</span><br><span class="line">		req.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			req.rawBody = Buffer.concat(buffers).toString();<span class="comment">//buffer.toString()转换成字符串 默认utf-8</span></span><br><span class="line">			handle(req, res);</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		handle(req, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="u6570_u636E_u5904_u7406"><a href="#u6570_u636E_u5904_u7406" class="headerlink" title="数据处理"></a>数据处理</h4><ul>
+<li>表单数据</li>
+</ul>
+<p>Content-Type: application/x-www-form-urlencoded，内容格式和查询字符串相同：foo=bar&amp;baz=val</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (req.headers[<span class="string">'content-type'</span>] === <span class="string">'application/x-www-form-urlencoded'</span>) &#123;</span><br><span class="line">		req.body = querystring.parse(req.rawBody);</span><br><span class="line">	&#125;</span><br><span class="line">	todo(req, res);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>json数据</li>
+</ul>
+<p>Content-Type: application/json; charset=utf-8 可能附带编码信息</p>
+<pre><code>var mime = function (req) {
+    var str = req.headers[&apos;content-type&apos;] || &apos;&apos;; return str.split(&apos;;&apos;)[0];
+};
+
+var handle = function(req, res) {
+    if (mime(req) === &apos;application/json&apos;) {
+        try {
+            req.body = JSON.parse(req.rawBody);
+        } catch (e) {
+            // 异常内容 响应Bad request 
+            res.writeHead(400); 
+            res.end(&apos;Invalid JSON&apos;); 
+            return;
+        }
+    }
+    todo(req, res);
+};
+
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby"> xml数据</span><br><span class="line"></span></span><br><span class="line">Content-Type：application/xml</span><br></pre></td></tr></table></figure>
+
+var xml2js = require(&apos;xml2js&apos;);
+var handle = function(req, res) {
+    if (mime(req) === &apos;application/xml&apos;) {
+        xml2js.parseString(req.rawBody, function(err, xml) {
+            if (err) {
+                // 异常内容 响应Bad request 
+                res.writeHead(400); 
+                res.end(&apos;Invalid XML&apos;); 
+                return;
+            }
+            req.body = xml;
+            todo(req, res);
+        });
+    }
+};
+
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 附件上传</span><br><span class="line">-<span class="ruby"> 特殊表单，包含file控件</span><br><span class="line"></span>-<span class="ruby"> 指定表单属性enctype=<span class="string">"multipart/form-data"</span></span><br><span class="line"></span></span><br><span class="line">Content-Type: multipart/form-data; boundary=AaB03x Content-Length: 18231</span><br><span class="line">内容可能是由多部分组成，boundary指定每部分内容分界符</span><br></pre></td></tr></table></figure>
+
+function(req, res) {
+    if (hasBody(req)) {
+        var done = function() {
+            handle(req, res);
+        };
+        if (mime(req) === &apos;application/json&apos;) {
+            parseJSON(req, done);
+        } else if (mime(req) === &apos;application/xml&apos;) {
+            parseXML(req, done);
+        } else if (mime(req) === &apos;multipart/form-data&apos;) {
+            parseMultipart(req, done);
+        }
+    } else {
+        handle(req, res);
+    }
+}
+//或者使用模块
+var formidable = require(&apos;formidable&apos;);
+
+function(req, res) {
+    if (hasBody(req)) {
+        if (mime(req) === &apos;multipart/form-data&apos;) {
+            var form = new formidable.IncomingForm();
+            form.parse(req, function(err, fields, files) {
+                req.body = fields;
+                req.files = files;
+                handle(req, res);
+            });
+        }
+    } else {
+        handle(req, res);
+    }
+}
+</code></pre><h4 id="u6570_u636E_u4E0A_u4F20_u4E0E_u5B89_u5168"><a href="#u6570_u636E_u4E0A_u4F20_u4E0E_u5B89_u5168" class="headerlink" title="数据上传与安全"></a>数据上传与安全</h4></span>
       
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag">#nodejs</a>
+          
+        </div>
       
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/13/openssl生成ssl证书及向申请CA流程/" rel="next" title="openssl生成ssl证书及向申请CA流程">
-                <i class="fa fa-chevron-left"></i> openssl生成ssl证书及向申请CA流程
+              <a href="/2016/08/02/nodejs-web应用-一/" rel="next" title="nodejs web应用(一)">
+                <i class="fa fa-chevron-left"></i> nodejs web应用(一)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/06/01/Flux/" rel="prev" title="Flux">
-                Flux <i class="fa fa-chevron-right"></i>
+              <a href="/2016/08/23/nodejs多进程/" rel="prev" title="nodejs多进程">
+                nodejs多进程 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -374,8 +432,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/13/支付宝notify-异步通知与https的问题/"
-           data-title="支付宝notify 异步通知与https的问题" data-url="http://www.wmtcore.com/2016/05/13/支付宝notify-异步通知与https的问题/">
+      <div class="ds-thread" data-thread-key="2016/08/19/nodejs-web应用-二/"
+           data-title="nodejs web应用(二)" data-url="http://www.wmtcore.com/2016/08/19/nodejs-web应用-二/">
       </div>
     
   </div>
@@ -475,7 +533,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u95EE_u9898_u548C_u89E3_u51B3_u65B9_u6CD5"><span class="nav-number">1.</span> <span class="nav-text">问题和解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4E8B_u60C5_u7ECF_u8FC7"><span class="nav-number">2.</span> <span class="nav-text">事情经过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4E8B_u6545_u603B_u7ED3"><span class="nav-number">3.</span> <span class="nav-text">事故总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6570_u636E_u4E0A_u4F20"><span class="nav-number">1.</span> <span class="nav-text">数据上传</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u6570_u636E_u5904_u7406"><span class="nav-number">1.1.</span> <span class="nav-text">数据处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u6570_u636E_u4E0A_u4F20_u4E0E_u5B89_u5168"><span class="nav-number">1.2.</span> <span class="nav-text">数据上传与安全</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

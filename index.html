@@ -223,15 +223,367 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/23/nodejs多进程/" itemprop="url">
+                  nodejs多进程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-08-23T11:38:19+08:00" content="2016-08-23">
+              2016-08-23
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/23/nodejs多进程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/23/nodejs多进程/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="u591A_u8FDB_u7A0B_u67B6_u6784"><a href="#u591A_u8FDB_u7A0B_u67B6_u6784" class="headerlink" title="多进程架构"></a>多进程架构</h3><p>依靠node提供的child_process模块，创建子进程，实现多核cpu的利用</p>
+<ul>
+<li>主从模式</li>
+</ul>
+<p>主进程和工作进程，在分布式架构中用于并行处理业务的模式，主进程负责调度和管理工作进程，工作进程负责业务处理</p>
+<p>创建worker.js：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	res.writeHead(<span class="number">200</span>, &#123;</span><br><span class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></span><br><span class="line">	&#125;);</span><br><span class="line">	res.end(<span class="string">'Hello World\n'</span>);</span><br><span class="line">&#125;).listen(<span class="built_in">Math</span>.round((<span class="number">1</span> + <span class="built_in">Math</span>.random()) * <span class="number">1000</span>), <span class="string">'127.0.0.1'</span>);</span><br></pre></td></tr></table></figure>
+<p>创建master.js</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var <span class="keyword">fork</span> = <span class="keyword">require</span>(<span class="string">'child_process'</span>).<span class="keyword">fork</span>;</span><br><span class="line">var cpus = <span class="keyword">require</span>(<span class="string">'os'</span>).cpus();</span><br><span class="line"><span class="keyword">for</span> (var i = <span class="number">0</span>; i &lt; cpus.<span class="keyword">length</span>; i++) &#123;</span><br><span class="line">	<span class="keyword">fork</span>(<span class="string">'./worker.js'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>fork()复制的进程都是独立的进程，有独立的v8，但fork()过程比较长、内存占用多（至少10mb），多进程目的是充分使用cpu资源</p>
+<h4 id="u521B_u5EFA_u5B50_u8FDB_u7A0B"><a href="#u521B_u5EFA_u5B50_u8FDB_u7A0B" class="headerlink" title="创建子进程"></a>创建子进程</h4><p>child_process模块提供了4个方法创建子进程</p>
+<ol>
+<li>spawn() 启动一个子进程执行命令</li>
+<li>exec() 启动一个子进程并且<strong>包含回调函数</strong> 可以设置超时时间</li>
+<li>execFile() 启动一个子进程来执行可执行文件 可以设置超时时间</li>
+<li>fork() 指定js文件来创建子进程</li>
+</ol>
+<p>后面三个方法都是spawn()的延伸</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cp = <span class="built_in">require</span>(<span class="string">'child_process'</span>);</span><br><span class="line">cp.spawn(<span class="string">'node'</span>, [<span class="string">'worker.js'</span>]);</span><br><span class="line">cp.exec(<span class="string">'node worker.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, stdout, stderr</span>) </span>&#123;</span><br><span class="line">	<span class="comment">// some code </span></span><br><span class="line">&#125;);</span><br><span class="line">cp.execFile(<span class="string">'worker.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, stdout, stderr</span>) </span>&#123;</span><br><span class="line">	<span class="comment">// some code</span></span><br><span class="line">&#125;);</span><br><span class="line">cp.fork(<span class="string">'./worker.js'</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="/../picture/node_child_process.png" alt="Smaller icon"></p>
+<p>通过execFile()执行的js文件，需要在首行加入： #!/usr/bin/env node</p>
+<h4 id="u8FDB_u7A0B_u901A_u4FE1"><a href="#u8FDB_u7A0B_u901A_u4FE1" class="headerlink" title="进程通信"></a>进程通信</h4><ul>
+<li>IPC Inter-Process Communication 进程间通信</li>
+<li>node使用libuv提供的管道(pipe)实现IPC,在window中使用named pipe,*nix使用Unix Domain Socket实现</li>
+<li>文件描述符：内核（kernel）利用文件描述符（file descriptor）来访问文件。文件描述符是非负整数。打开现存文件或新建文件时，内核会返回一个文件描述符，读写文件也需要使用文件描述符来指定待读写的文件。它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表</li>
+</ul>
+<p>在创建子进程之前会<strong>先创建IPC通道并监听</strong>，然后通过环境变量（NODE_CHANNEL_FD）告诉子进程这个IPC通道的文件描述符，子进程会根据它连接IPC通道完成进程连接。</p>
+<p>IPC通道类似socket属于双向通信，直接在系统内核中完成更高效，<strong>IPC被node抽象为stream对象</strong>，在调用send()时(类似write())发送数据，接收到消息会通过message事件(类似data)触发</p>
+<h4 id="u53E5_u67C4_u4F20_u9012"><a href="#u53E5_u67C4_u4F20_u9012" class="headerlink" title="句柄传递"></a>句柄传递</h4><ul>
+<li>句柄是一种可以用来标识资源的引用，包含了指向对象的文件描述符，可以表示一个服务端socket对象，客户端socket对象等</li>
+</ul>
+<p>主进程接受到socket请求后，将socket直接发送给工作进程，不用重新与工作进程建立新的socket连接</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// parent.js</span><span class="keyword">var</span> cp = <span class="built_in">require</span>(<span class="string">'child_process'</span>);</span><br><span class="line"><span class="keyword">var</span> child1 = cp.fork(<span class="string">'child.js'</span>);</span><br><span class="line"><span class="keyword">var</span> child2 = cp.fork(<span class="string">'child.js'</span>);</span><br><span class="line"><span class="comment">// Open up the server object and send the handle </span></span><br><span class="line"><span class="keyword">var</span> server = <span class="built_in">require</span>(<span class="string">'net'</span>).createServer();</span><br><span class="line">server.listen(<span class="number">1337</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">//主进程发送完句柄后关闭了监听</span></span><br><span class="line">	child1.send(<span class="string">'server'</span>, server);</span><br><span class="line">	child2.send(<span class="string">'server'</span>, server); </span><br><span class="line">	server.close();</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// child.js</span></span><br><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	res.writeHead(<span class="number">200</span>, &#123;</span><br><span class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></span><br><span class="line">	&#125;);</span><br><span class="line">	res.end(<span class="string">'handled by child, pid is '</span> + process.pid + <span class="string">'\n'</span>);</span><br><span class="line">&#125;);</span><br><span class="line">process.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">m, tcp</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (m === <span class="string">'server'</span>) &#123;</span><br><span class="line">		tcp.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</span><br><span class="line">			server.emit(<span class="string">'connection'</span>, socket);</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//多个子进程同时监听相同端口</span></span><br></pre></td></tr></table></figure>
+<p>child_process().fork.send()可以发送的句柄有：</p>
+<ol>
+<li>net.Socket tcp套接字</li>
+<li>net.Server tcp服务器 建立在tcp服务上的应用层服务都可以</li>
+<li>net.Native C++层面的tcp套接字或IPC管道</li>
+<li>dgarm.Socket UDP套接字</li>
+<li>dgram.Native c++层面的UDP套接字</li>
+</ol>
+<p>send()方法在将消息发送到IPC前，会组装成两个对象 一个是handle 一个是message：<br>{<br>    cmd: ‘NODE_HANDLE’,<br>    type: ‘net.Server’,<br>    msg: message<br>}</p>
+<p><img src="/../picture/child_process_message.png" alt="Smaller icon"></p>
+<p>message会先JSON.stringify()序列化再写入IPC管道，子进程再解析还原，然后出发message事件，如果message.cmd的值以NODE_为前缀，就会响应internalMessage事件，如果为NODE_HANDLE，就会取出message.type和得到的文件描述符一起还原</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//此处为接受到tcp服务器句柄后子进程的还原过程</span></span><br><span class="line"><span class="function"><span class="keyword">function</span><span class="params">(message, handle, emit)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> self = <span class="keyword">this</span>;</span><br><span class="line">	<span class="keyword">var</span> server = <span class="keyword">new</span> net.Server();</span><br><span class="line">	server.listen(handle, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		emit(server);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>node进程之间只有消息传递，没有实例对象传递</p>
+<h5 id="u7AEF_u53E3_u5171_u540C_u76D1_u542C"><a href="#u7AEF_u53E3_u5171_u540C_u76D1_u542C" class="headerlink" title="端口共同监听"></a>端口共同监听</h5><ul>
+<li>多进程使用相同的文件描述符</li>
+</ul>
+<p>node底层对每个端口监听都设置了SO_REUSEADDR，可以让不同进程对相同的网卡和端口监听，即服务端套接字可以被多进程服用：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setsockopt<span class="list">(<span class="keyword">tcp-&gt;io_watcher</span>.fd, SOL_SOCKET, SO_REUSEADDR, <span class="keyword">&amp;on</span>, sizeof<span class="list">(<span class="keyword">on</span>)</span>)</span></span><br></pre></td></tr></table></figure>
+<p>当独立启动进程时，多个tcp服务器socket套接字的文件描述符互不相同，所以在监听相同端口时会报错。但send()发送句柄再启动的服务，它们引用了相同的文件描述符，并且<strong>文件描述符同一时间只能被一个进程使用，所以当网络请求来时，会出现抢占式服务</strong></p>
+<h3 id="u96C6_u7FA4_u7A33_u5B9A"><a href="#u96C6_u7FA4_u7A33_u5B9A" class="headerlink" title="集群稳定"></a>集群稳定</h3><h4 id="u8FDB_u7A0B_u4E8B_u4EF6"><a href="#u8FDB_u7A0B_u4E8B_u4EF6" class="headerlink" title="进程事件"></a>进程事件</h4><ul>
+<li>error 当子进程无法被复制创建、杀死、无法发送消息时触发</li>
+<li>exit 子进程退出时触发 ，若正常退出，则第一个参数为退出码，若是kill()的，则第二个参数为杀死进程信号（第一个为null）</li>
+<li>close 子进程的标准输入输出流中止时触发 参数与exit相同</li>
+<li>disconnect 父进程、子进程调用disconnect()方法时触发 将关闭监听IPC</li>
+</ul>
+<p>父进程也可以用kill()发送信号 Node提供了kill -l列出的信号对应的事件</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">process.<span class="keyword">on</span>(<span class="string">'SIGTERM'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> &#123;</span></span><br><span class="line">	console.<span class="built_in">log</span>(<span class="string">'Got a SIGTERM, exiting...'</span>);</span><br><span class="line">	process.<span class="keyword">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">console.<span class="built_in">log</span>(<span class="string">'sever running with PID:'</span>,process.pid);</span><br><span class="line">process.kill(process.pid,<span class="string">'SIGTERM'</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="u81EA_u52A8_u91CD_u542F"><a href="#u81EA_u52A8_u91CD_u542F" class="headerlink" title="自动重启"></a>自动重启</h4><ul>
+<li>当子进程退出时 启动新的工作进程来服务</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// master.js</span></span><br><span class="line"><span class="keyword">var</span> fork = <span class="built_in">require</span>(<span class="string">'child_process'</span>).fork;</span><br><span class="line"><span class="keyword">var</span> cpus = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> server = <span class="built_in">require</span>(<span class="string">'net'</span>).createServer();</span><br><span class="line">server.listen(<span class="number">1337</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> workers = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> createWorker = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> worker = fork(__dirname + <span class="string">'/worker.js'</span>);</span><br><span class="line">	<span class="comment">// 退出时重新启动新的进程</span></span><br><span class="line">	worker.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'Worker '</span> + worker.pid + <span class="string">' exited.'</span>);</span><br><span class="line">		<span class="keyword">delete</span> workers[worker.pid];</span><br><span class="line">		createWorker();</span><br><span class="line">	&#125;);</span><br><span class="line">	<span class="comment">// 句柄转发</span></span><br><span class="line">	worker.send(<span class="string">'server'</span>, server);</span><br><span class="line">	workers[worker.pid] = worker;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'Create worker. pid: '</span> + worker.pid);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; cpus.length; i++) &#123;</span><br><span class="line">	createWorker();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//主进程自己退出时，让所有工作进程退出 </span></span><br><span class="line">process.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">var</span> pid <span class="keyword">in</span> workers) &#123;</span><br><span class="line">		workers[pid].kill();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>当子进程出现未捕获的异常，就立刻停止接受新的连接，在所有连接断开后退出，主进程帧听到exit后启动新的进程服务</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// worker.js</span></span><br><span class="line"><span class="keyword">var</span> http = <span class="keyword">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</span><br><span class="line">	res.writeHead(<span class="number">200</span>, &#123;</span><br><span class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></span><br><span class="line">	&#125;);</span><br><span class="line">	res.end(<span class="string">'handled by child, pid is '</span> + process.pid + <span class="string">'\n'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> worker;</span><br><span class="line">process.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span><span class="params">(m, tcp)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (m === <span class="string">'server'</span>) &#123;</span><br><span class="line">		worker = tcp;</span><br><span class="line">		worker.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span><span class="params">(socket)</span> </span>&#123;</span><br><span class="line">			server.emit(<span class="string">'connection'</span>, socket);</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line">process.on(<span class="string">'uncaughtException'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">//停止接收新的连接 </span></span><br><span class="line">	worker.close(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// 所有已有的连接断开后，退出进程</span></span><br><span class="line">		process.<span class="keyword">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h5 id="u81EA_u6740_u4FE1_u53F7"><a href="#u81EA_u6740_u4FE1_u53F7" class="headerlink" title="自杀信号"></a>自杀信号</h5><ul>
+<li>当子子进程因为意外要退出时 先发送自杀信号 再开始退出</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// worker.js</span></span><br><span class="line">process.on(<span class="string">'uncaughtException'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">	<span class="comment">//记录日志</span></span><br><span class="line">	logger.error(err);</span><br><span class="line">	<span class="comment">// 发送自杀信号</span></span><br><span class="line">	process.send(&#123;</span><br><span class="line">		act: <span class="string">'suicide'</span></span><br><span class="line">	&#125;);</span><br><span class="line">	<span class="comment">// 停止接收新的连接 </span></span><br><span class="line">	worker.close(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="comment">// 所有已有连接断开后，退出进程</span></span><br><span class="line">		process.exit(<span class="number">1</span>);</span><br><span class="line">	&#125;);</span><br><span class="line">	<span class="comment">// 5秒后退出进程 此处不graceful</span></span><br><span class="line">	setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		process.exit(<span class="number">1</span>);</span><br><span class="line">	&#125;, <span class="number">5000</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//原本在exit重启新进程的，改为在message事件中</span></span><br><span class="line"><span class="keyword">var</span> createWorker = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> worker = fork(__dirname + <span class="string">'/worker.js'</span>); </span><br><span class="line">	<span class="comment">// 启动新的进程</span></span><br><span class="line">	worker.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (message.act === <span class="string">'suicide'</span>) &#123;</span><br><span class="line">			createWorker();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	worker.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'Worker '</span> + worker.pid + <span class="string">' exited.'</span>);</span><br><span class="line">		<span class="keyword">delete</span> workers[worker.pid];</span><br><span class="line">	&#125;);</span><br><span class="line">	worker.send(<span class="string">'server'</span>, server);</span><br><span class="line">	workers[worker.pid] = worker;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'Create worker. pid: '</span> + worker.pid);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h5 id="u9650_u91CF_u91CD_u542F"><a href="#u9650_u91CF_u91CD_u542F" class="headerlink" title="限量重启"></a>限量重启</h5><ul>
+<li>避免因为在启动过程就出现错误 导致进程一直被重启</li>
+</ul>
+<p>限制单位时间内重启次数，超过限制就触发giveup事件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 重启次数 </span></span><br><span class="line"><span class="keyword">var</span> limit = <span class="number">10</span>;</span><br><span class="line"><span class="comment">// 时间单位</span></span><br><span class="line"><span class="keyword">var</span> during = <span class="number">60000</span>;</span><br><span class="line"><span class="keyword">var</span> restart = [];</span><br><span class="line"><span class="keyword">var</span> isTooFrequently = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="comment">// 记录重启时间</span></span><br><span class="line">	<span class="keyword">var</span> time = <span class="built_in">Date</span>.now();</span><br><span class="line">	<span class="keyword">var</span> length = restart.push(time);</span><br><span class="line">	<span class="keyword">if</span> (length &gt; limit) &#123;</span><br><span class="line">		<span class="comment">// 取出最后10次记录</span></span><br><span class="line">		restart = restart.slice(limit * -<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 最后一次重启到前10次重启之间的时间间隔 </span></span><br><span class="line">	<span class="keyword">return</span> restart.length &gt;= limit &amp;&amp; restart[restart.length - <span class="number">1</span>] - restart[<span class="number">0</span>] &lt; during;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> workers = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> createWorker = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="comment">// 检查是否太过频繁 </span></span><br><span class="line">	<span class="keyword">if</span> (isTooFrequently()) &#123;</span><br><span class="line">		<span class="comment">// 触发giveup事件后，不再重启 </span></span><br><span class="line">		process.emit(<span class="string">'giveup'</span>, length, during);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> worker = fork(__dirname + <span class="string">'/worker.js'</span>);</span><br><span class="line">	worker.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'Worker '</span> + worker.pid + <span class="string">' exited.'</span>);</span><br><span class="line">		<span class="keyword">delete</span> workers[worker.pid];</span><br><span class="line">	&#125;);</span><br><span class="line">	<span class="comment">// 重新启动新的进程</span></span><br><span class="line">	worker.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (message.act === <span class="string">'suicide'</span>) &#123;</span><br><span class="line">			createWorker();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	<span class="comment">// 句柄转发</span></span><br><span class="line">	worker.send(<span class="string">'server'</span>, server);</span><br><span class="line">	workers[worker.pid] = worker;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'Create worker. pid: '</span> + worker.pid);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/19/nodejs-web应用-二/" itemprop="url">
+                  nodejs web应用(二)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-08-19T17:13:16+08:00" content="2016-08-19">
+              2016-08-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/19/nodejs-web应用-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/19/nodejs-web应用-二/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="u6570_u636E_u4E0A_u4F20"><a href="#u6570_u636E_u4E0A_u4F20" class="headerlink" title="数据上传"></a>数据上传</h3><p>node的http模块(HTTP_Parse)只对http头部进行解析，内容部分通过data事件触发，以buffer方式处理</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> hasBody = <span class="function"><span class="keyword">function</span><span class="params">(req)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">'transfer-encoding'</span> <span class="keyword">in</span> req.headers || <span class="string">'content-length'</span> <span class="keyword">in</span> req.headers;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (hasBody(req)) &#123;</span><br><span class="line">		<span class="keyword">var</span> buffers = [];</span><br><span class="line">		req.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span><span class="params">(chunk)</span> </span>&#123;</span><br><span class="line">			buffers.push(chunk);</span><br><span class="line">		&#125;);</span><br><span class="line">		req.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			req.rawBody = Buffer.concat(buffers).toString();<span class="comment">//buffer.toString()转换成字符串 默认utf-8</span></span><br><span class="line">			handle(req, res);</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		handle(req, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="u6570_u636E_u5904_u7406"><a href="#u6570_u636E_u5904_u7406" class="headerlink" title="数据处理"></a>数据处理</h4><ul>
+<li>表单数据</li>
+</ul>
+<p>Content-Type: application/x-www-form-urlencoded，内容格式和查询字符串相同：foo=bar&amp;baz=val</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (req.headers[<span class="string">'content-type'</span>] === <span class="string">'application/x-www-form-urlencoded'</span>) &#123;</span><br><span class="line">		req.body = querystring.parse(req.rawBody);</span><br><span class="line">	&#125;</span><br><span class="line">	todo(req, res);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>json数据</li>
+</ul>
+<p>Content-Type: application/json; charset=utf-8 可能附带编码信息</p>
+<pre><code>var mime = function (req) {
+    var str = req.headers[&apos;content-type&apos;] || &apos;&apos;; return str.split(&apos;;&apos;)[0];
+};
+
+var handle = function(req, res) {
+    if (mime(req) === &apos;application/json&apos;) {
+        try {
+            req.body = JSON.parse(req.rawBody);
+        } catch (e) {
+            // 异常内容 响应Bad request 
+            res.writeHead(400); 
+            res.end(&apos;Invalid JSON&apos;); 
+            return;
+        }
+    }
+    todo(req, res);
+};
+
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby"> xml数据</span><br><span class="line"></span></span><br><span class="line">Content-Type：application/xml</span><br></pre></td></tr></table></figure>
+
+var xml2js = require(&apos;xml2js&apos;);
+var handle = function(req, res) {
+    if (mime(req) === &apos;application/xml&apos;) {
+        xml2js.parseString(req.rawBody, function(err, xml) {
+            if (err) {
+                // 异常内容 响应Bad request 
+                res.writeHead(400); 
+                res.end(&apos;Invalid XML&apos;); 
+                return;
+            }
+            req.body = xml;
+            todo(req, res);
+        });
+    }
+};
+
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 附件上传</span><br><span class="line">-<span class="ruby"> 特殊表单，包含file控件</span><br><span class="line"></span>-<span class="ruby"> 指定表单属性enctype=<span class="string">"multipart/form-data"</span></span><br><span class="line"></span></span><br><span class="line">Content-Type: multipart/form-data; boundary=AaB03x Content-Length: 18231</span><br><span class="line">内容可能是由多部分组成，boundary指定每部分内容分界符</span><br></pre></td></tr></table></figure>
+
+function(req, res) {
+    if (hasBody(req)) {
+        var done = function() {
+            handle(req, res);
+        };
+        if (mime(req) === &apos;application/json&apos;) {
+            parseJSON(req, done);
+        } else if (mime(req) === &apos;application/xml&apos;) {
+            parseXML(req, done);
+        } else if (mime(req) === &apos;multipart/form-data&apos;) {
+            parseMultipart(req, done);
+        }
+    } else {
+        handle(req, res);
+    }
+}
+//或者使用模块
+var formidable = require(&apos;formidable&apos;);
+
+function(req, res) {
+    if (hasBody(req)) {
+        if (mime(req) === &apos;multipart/form-data&apos;) {
+            var form = new formidable.IncomingForm();
+            form.parse(req, function(err, fields, files) {
+                req.body = fields;
+                req.files = files;
+                handle(req, res);
+            });
+        }
+    } else {
+        handle(req, res);
+    }
+}
+</code></pre><h4 id="u6570_u636E_u4E0A_u4F20_u4E0E_u5B89_u5168"><a href="#u6570_u636E_u4E0A_u4F20_u4E0E_u5B89_u5168" class="headerlink" title="数据上传与安全"></a>数据上传与安全</h4>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -390,6 +742,19 @@
 <li>浏览器是根据url进行缓存的，内容更新时可以让浏览器发起新的url缓存</li>
 </ul>
 <p>每次发布在路径中跟随文件内容的hash,<a href="http://url.com/?hash=afadfadwe.这样能避免无意义的更新" target="_blank" rel="external">http://url.com/?hash=afadfadwe.这样能避免无意义的更新</a></p>
+<h3 id="Basic_u8BA4_u8BC1"><a href="#Basic_u8BA4_u8BC1" class="headerlink" title="Basic认证"></a>Basic认证</h3><ul>
+<li>通过用户名和密码实现的身份认证</li>
+</ul>
+<p>当页面需要Basic认证时，会检查请求头部的Authorization字段，它的值由认证方式和加密值构成</p>
+<pre><code>$ curl -v &quot;http://user:pass@www.baidu.com/&quot;
+&gt; GET / HTTP/1.1
+&gt; Authorization: Basic dXNlcjpwYXNz
+&gt; User-Agent: curl/7.24.0 (x86_64-apple-darwin12.0) libcurl/7.24.0 OpenSSL/0.9.8r zlib/1.2.5 
+&gt; Host: www.baidu.com
+&gt; Accept: */*
+</code></pre><p>它会将用户名和密码组合，再Base64编码</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> encode = <span class="function"><span class="keyword">function</span><span class="params">(username, password)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> Buffer(username + <span class="string">':'</span> + password).toString(<span class="string">'base64'</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//每次请求都要带上Authorization，对于没有带认证的请求会返回401</span></span><br><span class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> auth = req.headers[<span class="string">'authorization'</span>] || <span class="string">''</span>;</span><br><span class="line">	<span class="keyword">var</span> parts = auth.split(<span class="string">' '</span>);</span><br><span class="line">	<span class="keyword">var</span> method = parts[<span class="number">0</span>] || <span class="string">''</span>; <span class="comment">// Basic</span></span><br><span class="line">	<span class="keyword">var</span> encoded = parts[<span class="number">1</span>] || <span class="string">''</span>; <span class="comment">// dXNlcjpwYXNz，密码字段</span></span><br><span class="line">	<span class="keyword">var</span> decoded = <span class="keyword">new</span> Buffer(encoded, <span class="string">'base64'</span>).toString(<span class="string">'utf-8'</span>).split(<span class="string">":"</span>);</span><br><span class="line">	<span class="keyword">var</span> user = decoded[<span class="number">0</span>]; <span class="comment">// user</span></span><br><span class="line">	<span class="keyword">var</span> pass = decoded[<span class="number">1</span>]; <span class="comment">// pass</span></span><br><span class="line">	<span class="keyword">if</span> (!checkUser(user, pass)) &#123;</span><br><span class="line">		res.setHeader(<span class="string">'WWW-Authenticate'</span>, <span class="string">'Basic realm="Secure Area"'</span>);</span><br><span class="line">		res.writeHead(<span class="number">401</span>);</span><br><span class="line">		res.end();</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		handle(req, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>缺点</code>： 对于密码字段没有加密，只能在https下才能用，但几乎所有浏览器都支持。RFC 2069对它做了改进</p>
 
             
           </span>
@@ -709,8 +1074,9 @@
 <li>构建在TCP之上 属于应用层协议 B/S模式，目前最知名的标准RFC 2616</li>
 </ul>
 <p>通常的http通信的信息分三部分，TCP的3次握手，客户端向服务器发送请求报文，服务器完成处理后向客户端发送响应内容。<br>浏览器其实是http的代理，将用户的行为转化为http请求发送给服务端，服务端处理请求然后发送响应报文给代理，代理解析报文再展示给用户。http服务只做处理http请求和发送http响应</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建http服务</span></span><br><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	res.writeHead(<span class="number">200</span>, &#123;</span><br><span class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></span><br><span class="line">	&#125;);</span><br><span class="line">	res.end(<span class="string">'Hello World\n'</span>);</span><br><span class="line">&#125;).listen(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'Server running at http://127.0.0.1:1337/'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用net模块创建</span></span><br><span class="line"><span class="keyword">var</span> tcp = <span class="built_in">require</span>(<span class="string">'net'</span>).createServer();</span><br><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	res.writeHead(<span class="number">200</span>, &#123;</span><br><span class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></span><br><span class="line">	&#125;);</span><br><span class="line">	res.end(<span class="string">'handled by child, pid is '</span> + process.pid + <span class="string">'\n'</span>);</span><br><span class="line">&#125;);</span><br><span class="line">tcp.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</span><br><span class="line">	server.emit(<span class="string">'connection'</span>, socket);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <h4 id="http_u6A21_u5757"><a href="#http_u6A21_u5757" class="headerlink" title="http模块"></a>http模块</h4><ul>
-<li>继承自TCP服务（net模块）</li>
+<li>继承自TCP服务（net模块)，通信方法都是使用net的，包括创建服务、关闭服务等</li>
 <li>能够与多个客户端保持连接，因为采用事件驱动，不用给每个连接创建额外的线程、进程，内存占用低，能高并发</li>
 <li>tcp以connection为单位服务，http以request为单位服务</li>
 </ul>
@@ -1768,259 +2134,6 @@ node --max-new-space-size=1024 test.js // 单位为KB
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/08/redux-学习笔记（1）/" itemprop="url">
-                  redux 学习笔记（1）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-06-08T10:24:46+08:00" content="2016-06-08">
-              2016-06-08
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/08/redux-学习笔记（1）/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/08/redux-学习笔记（1）/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="redux_u7684_u4F5C_u7528"><a href="#redux_u7684_u4F5C_u7528" class="headerlink" title="redux的作用"></a>redux的作用</h3><p><img src="/../picture/redux流程.png" alt="Smaller icon"></p>
-<p>Redux 主要分为三个部分 Action、Reducer、及 Store</p>
-<h4 id="action"><a href="#action" class="headerlink" title="action"></a>action</h4><ul>
-<li>action用来传递操作 State 的信息,以 Javascript Plain Object 的形式存在，形如</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="rules">&#123;</span><br><span class="line">  <span class="rule"><span class="attribute">type</span>:<span class="value"> <span class="string">'ADD_FILM'</span>,</span><br><span class="line">  name: <span class="string">'Mission: Impossible'</span></span><br><span class="line"></span></span></span>&#125;</span><br></pre></td></tr></table></figure>
-<p>type 属性是必要的，用来表达处理 state 数据的方式，其他属性任意，建议简单</p>
-<p>但为了方便组织，可以创建函数来生产 action，即Action Creator</p>
-<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span></span> addFilm(<span class="keyword">name</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="keyword">type</span>: <span class="string">'ADD_FILM'</span>, <span class="keyword">name</span>: <span class="keyword">name</span> &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="Reducer"><a href="#Reducer" class="headerlink" title="Reducer"></a>Reducer</h4><ul>
-<li>处理action传达需要操作的信息</li>
-<li>通过传入旧的 state 和指示操作的 action 来更新 state</li>
-</ul>
-<p>Reducer 根据传入的<strong> action.type</strong> 来匹配 case 进行不同的 state 更新</p>
-<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">function films(<span class="keyword">state</span> = initialState, action) &#123;</span><br><span class="line">  switch (action.type) &#123;</span><br><span class="line"> </span><br><span class="line">  case 'ADD_FILM':</span><br><span class="line">    // 更新 <span class="keyword">state</span> 中的 films 字段</span><br><span class="line">    return [&#123;</span><br><span class="line">      id: <span class="keyword">state</span>.films.reduce((<span class="keyword">max</span>Id, film) =&gt; Math.<span class="keyword">max</span>(film.id, <span class="keyword">max</span>Id), -<span class="number">1</span>) + <span class="number">1</span>,</span><br><span class="line">      name: action.name</span><br><span class="line">    &#125;, ...<span class="keyword">state</span>];</span><br><span class="line"> </span><br><span class="line">  case 'DELETE_FILM':</span><br><span class="line">    return <span class="keyword">state</span>.films.filter(film =&gt;</span><br><span class="line">        film.id !== action.id</span><br><span class="line">    );</span><br><span class="line"> </span><br><span class="line">  case 'SHOW_ALL_FILM':</span><br><span class="line">    return Object.assign(&#123;&#125;, <span class="keyword">state</span>, &#123;</span><br><span class="line">        visibilityFilter: action.filter</span><br><span class="line">      &#125;);</span><br><span class="line"> //不要修改 <span class="keyword">state</span>。 使用 Object.assign() 新建了一个副本</span><br><span class="line">  <span class="keyword">default</span>:</span><br><span class="line">    return <span class="keyword">state</span>;</span><br><span class="line">    //在 <span class="keyword">default</span> 情况下返回旧的 <span class="keyword">state</span>。遇到未知的 action 时，一定要返回旧的 <span class="keyword">state</span>。</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>当 action.type变多时，可以按照功能拆分，在通过组合函数合并</p>
-<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function rootReducer(<span class="keyword">state</span> = &#123;&#125;, action) &#123;</span><br><span class="line">  return &#123;</span><br><span class="line">    films: filmReducer(<span class="keyword">state</span>.films, action),</span><br><span class="line">    filter: filterReducer(<span class="keyword">state</span>.filter, action)</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"> // rootReducer 将不同部分的 <span class="keyword">state</span> 传给对应的 reducer 处理，最终合并所有 reducer 的返回值，组成整个<span class="keyword">state</span>。</span><br><span class="line"> </span><br><span class="line"> //使用Redux 提供的 combineReducers() 方法</span><br><span class="line">import &#123; combineReducers &#125; <span class="keyword">from</span> 'redux'</span><br><span class="line"></span><br><span class="line">var rootReducer = combineReducers(&#123;</span><br><span class="line">    films: filmReducer,</span><br><span class="line">    filter: filterReducer</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line"> //combineReducers() 将调用一系列 reducer，并根据对应的 key 来筛选出 <span class="keyword">state</span> 中的一部分数据给相应的 reducer，这样也意味着每一个小的 reducer 将只能处理 <span class="keyword">state</span> 的一部分数据</span><br></pre></td></tr></table></figure>
-<h4 id="Store"><a href="#Store" class="headerlink" title="Store"></a>Store</h4><ul>
-<li>衔接action和reducer</li>
-</ul>
-<p>Store 是单一的,维护着一个全局的 State，并且根<strong>据 Action 来进行事件分发处理 State</strong>,Store 是一个把 Action 和 Reducer 结合起来的对象。</p>
-<p>生成store</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"></span><br><span class="line">var store = createStore(rootReducer);</span><br></pre></td></tr></table></figure>
-<p>store 对象可以简单的理解为如下形式</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createStore</span><span class="params">(reducer, initialState)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//闭包私有变量 </span></span><br><span class="line">    <span class="keyword">var</span> currentReducer = reducer;</span><br><span class="line">    <span class="keyword">var</span> currentState = initialState;</span><br><span class="line">    <span class="keyword">var</span> listeners = [];</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> currentState;</span><br><span class="line">    &#125;    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">subscribe</span><span class="params">(listener)</span> </span>&#123;</span><br><span class="line">      listeners.push(listener);</span><br><span class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">unsubscribe</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> index = listeners.indexOf(listener);</span><br><span class="line">        listeners.splice(index, <span class="number">1</span>);</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span><span class="params">(action)</span> </span>&#123;</span><br><span class="line">        currentState = currentReducer(currentState, action);</span><br><span class="line">        listeners.slice().<span class="keyword">forEach</span>(listener =&gt; listener());</span><br><span class="line">        <span class="keyword">return</span> action;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//返回一个包含可访问闭包变量的公有方法</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      dispatch,</span><br><span class="line">      subscribe,</span><br><span class="line">      getState</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>store.getState() 用来获取 state 数据。<br>store.subscribe(listener) 用于注册监听函数。每当 state 数据更新时，将会触发监听函数。<br>store.dispatch(action) 是用于将一个 action 对象发送给 reducer 进行处理</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">store</span><span class="class">.dispatch</span>(<span class="rules">&#123;</span><br><span class="line">  <span class="rule"><span class="attribute">type</span>:<span class="value"> <span class="string">'ADD_FILM'</span>,</span><br><span class="line">  name: <span class="string">'Mission: Impossible'</span></span><br><span class="line"></span></span></span>&#125;);</span><br></pre></td></tr></table></figure>
-<h4 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h4><ul>
-<li>Connect 组件主要为 React 组件提供 store 中的部分 state 数据 及 dispatch 方法</li>
-</ul>
-<p>通过<strong>import { connect } from ‘react-redux’</strong>将state的值和action绑定到组件的props上</p>
-<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import &#123; connect &#125; <span class="keyword">from</span> 'react-redux'</span><br><span class="line">import Counter <span class="keyword">from</span> '../components/Counter' //一个组件</span><br><span class="line">import * as CounterActions <span class="keyword">from</span> '../actions/counter'</span><br><span class="line"></span><br><span class="line">//将<span class="keyword">state</span>.counter绑定到props的counter</span><br><span class="line">// <span class="keyword">state</span> 将由 store 提供</span><br><span class="line">function mapStateToProps(<span class="keyword">state</span>) &#123;</span><br><span class="line">  return &#123;</span><br><span class="line">    counter: <span class="keyword">state</span>.counter</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//将action的所有方法绑定到props上</span><br><span class="line">function mapDispatchToProps(dispatch) &#123;</span><br><span class="line">  return bindActionCreators(CounterActions, dispatch)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//通过react-redux提供的connect方法将我们需要的<span class="keyword">state</span>中的数据和actions中的方法绑定到props上</span><br><span class="line">export <span class="keyword">default</span> connect(mapStateToProps, CounterActions)(Counter)</span><br></pre></td></tr></table></figure>
-<h4 id="saga"><a href="#saga" class="headerlink" title="saga"></a>saga</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  takeEvery</span><br><span class="line">&#125; from <span class="string">'redux-saga'</span></span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  call,</span><br><span class="line">  put,</span><br><span class="line">  fork,</span><br><span class="line">  take,</span><br><span class="line">  cancel</span><br><span class="line">&#125; from <span class="string">'redux-saga/effects'</span></span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  GET_LOGINED_REQUEST,</span><br><span class="line">  LOGIN_REQUEST</span><br><span class="line">&#125; from <span class="string">'./login.js'</span></span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  loginAPI,</span><br><span class="line">  loginedAPI</span><br><span class="line">&#125; from <span class="string">'../../../api'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">watchRequestLogined</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> takeEvery(GET_LOGINED_REQUEST, queryFlow)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">queryFlow</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> task = <span class="keyword">yield</span> fork(logined)</span><br><span class="line">  <span class="keyword">yield</span> take(LOGIN_CANCEL)</span><br><span class="line">  <span class="keyword">yield</span> cancel(task)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">logined</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">yield</span> call(loginedAPI)</span><br><span class="line">    <span class="keyword">yield</span> put(&#123;</span><br><span class="line">      <span class="keyword">type</span>: LOGIN_SUCCESS,</span><br><span class="line">      response</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">yield</span> put(&#123;</span><br><span class="line">      <span class="keyword">type</span>: LOGIN_CANCEL,</span><br><span class="line">      error</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">watchRequestLogin</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> takeEvery(LOGIN_REQUEST, loginFlow)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">authorize</span>(<span class="params">&#123;account, password&#125;</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">yield</span> call(loginAPI, &#123;</span><br><span class="line">      account,</span><br><span class="line">      password</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">yield</span> put(&#123;</span><br><span class="line">      <span class="keyword">type</span>: LOGIN_SUCCESS,</span><br><span class="line">      response</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">yield</span> put(&#123;</span><br><span class="line">      <span class="keyword">type</span>: LOGIN_ERROR,</span><br><span class="line">      error</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">loginFlow</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; account, password &#125; = action.payload</span><br><span class="line">  <span class="keyword">const</span> task = <span class="keyword">yield</span> fork(authorize, &#123; account, password &#125;)</span><br><span class="line">  <span class="keyword">yield</span> take(LOGIN_CANCEL)</span><br><span class="line">  <span class="keyword">yield</span> cancel(task)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/01/Flux/" itemprop="url">
-                  Flux
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-06-01T16:03:51+08:00" content="2016-06-01">
-              2016-06-01
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/01/Flux/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/01/Flux/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="u7B80_u4ECB"><a href="#u7B80_u4ECB" class="headerlink" title="简介"></a>简介</h3><ul>
-<li>单向的数据流动</li>
-<li>Flux应用主要包括三部分：dispatcher、store和views（React components）</li>
-</ul>
-<p><img src="/../picture/flux-flow.png" alt="Resize icon"></p>
-<h3 id="dispatcher_uFF08_u8C03_u5EA6_u8005_uFF09"><a href="#dispatcher_uFF08_u8C03_u5EA6_u8005_uFF09" class="headerlink" title="dispatcher（调度者）"></a>dispatcher（调度者）</h3><ul>
-<li>管理所有的数据流</li>
-<li>本质store callback 的注册表，用来向stores分发action，可以指定注册的callback的执行顺序来管理store之间的依赖</li>
-</ul>
-<h3 id="store_28_u4ED3_u5E93_29"><a href="#store_28_u4ED3_u5E93_29" class="headerlink" title="store(仓库)"></a>store(仓库)</h3><ul>
-<li>包含应用的状态和逻辑，管理多个对象状态</li>
-<li>在dispatcher注册，并提供相应的回调</li>
-<li>更新后向应用广播change事件，view响应并重新获取数据</li>
-</ul>
-<h3 id="action"><a href="#action" class="headerlink" title="action"></a>action</h3><ul>
-<li>dispatcher提供了一个可以允许我们向store中触发分发的方法</li>
-</ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -2067,7 +2180,7 @@ node --max-new-space-size=1024 test.js // 单位为KB
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">45</span>
+              <span class="site-state-item-count">47</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

@@ -68,7 +68,7 @@ HTTP_P">
 &amp;gt; Accept: */*
 HTTP_P">
 <meta property="og:image" content="http://www.wmtcore.com/../picture/get缓存流程.png">
-<meta property="og:updated_time" content="2016-08-19T08:31:31.000Z">
+<meta property="og:updated_time" content="2016-08-19T09:46:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nodejs web应用(一)">
 <meta name="twitter:description" content="请求解析请求方法在报文的第一行，路径在其后
@@ -384,6 +384,19 @@ HTTP_P">
 <li>浏览器是根据url进行缓存的，内容更新时可以让浏览器发起新的url缓存</li>
 </ul>
 <p>每次发布在路径中跟随文件内容的hash,<a href="http://url.com/?hash=afadfadwe.这样能避免无意义的更新" target="_blank" rel="external">http://url.com/?hash=afadfadwe.这样能避免无意义的更新</a></p>
+<h3 id="Basic_u8BA4_u8BC1"><a href="#Basic_u8BA4_u8BC1" class="headerlink" title="Basic认证"></a>Basic认证</h3><ul>
+<li>通过用户名和密码实现的身份认证</li>
+</ul>
+<p>当页面需要Basic认证时，会检查请求头部的Authorization字段，它的值由认证方式和加密值构成</p>
+<pre><code>$ curl -v &quot;http://user:pass@www.baidu.com/&quot;
+&gt; GET / HTTP/1.1
+&gt; Authorization: Basic dXNlcjpwYXNz
+&gt; User-Agent: curl/7.24.0 (x86_64-apple-darwin12.0) libcurl/7.24.0 OpenSSL/0.9.8r zlib/1.2.5 
+&gt; Host: www.baidu.com
+&gt; Accept: */*
+</code></pre><p>它会将用户名和密码组合，再Base64编码</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> encode = <span class="function"><span class="keyword">function</span><span class="params">(username, password)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> Buffer(username + <span class="string">':'</span> + password).toString(<span class="string">'base64'</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//每次请求都要带上Authorization，对于没有带认证的请求会返回401</span></span><br><span class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> auth = req.headers[<span class="string">'authorization'</span>] || <span class="string">''</span>;</span><br><span class="line">	<span class="keyword">var</span> parts = auth.split(<span class="string">' '</span>);</span><br><span class="line">	<span class="keyword">var</span> method = parts[<span class="number">0</span>] || <span class="string">''</span>; <span class="comment">// Basic</span></span><br><span class="line">	<span class="keyword">var</span> encoded = parts[<span class="number">1</span>] || <span class="string">''</span>; <span class="comment">// dXNlcjpwYXNz，密码字段</span></span><br><span class="line">	<span class="keyword">var</span> decoded = <span class="keyword">new</span> Buffer(encoded, <span class="string">'base64'</span>).toString(<span class="string">'utf-8'</span>).split(<span class="string">":"</span>);</span><br><span class="line">	<span class="keyword">var</span> user = decoded[<span class="number">0</span>]; <span class="comment">// user</span></span><br><span class="line">	<span class="keyword">var</span> pass = decoded[<span class="number">1</span>]; <span class="comment">// pass</span></span><br><span class="line">	<span class="keyword">if</span> (!checkUser(user, pass)) &#123;</span><br><span class="line">		res.setHeader(<span class="string">'WWW-Authenticate'</span>, <span class="string">'Basic realm="Secure Area"'</span>);</span><br><span class="line">		res.writeHead(<span class="number">401</span>);</span><br><span class="line">		res.end();</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		handle(req, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>缺点</code>： 对于密码字段没有加密，只能在https下才能用，但几乎所有浏览器都支持。RFC 2069对它做了改进</p>
 </span>
       
     </div>
@@ -408,6 +421,10 @@ HTTP_P">
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/19/nodejs-web应用-二/" rel="prev" title="nodejs web应用(二)">
+                nodejs web应用(二) <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -479,7 +496,7 @@ HTTP_P">
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">45</span>
+              <span class="site-state-item-count">47</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -535,7 +552,7 @@ HTTP_P">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u8BF7_u6C42_u89E3_u6790"><span class="nav-number">1.</span> <span class="nav-text">请求解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie"><span class="nav-number">2.</span> <span class="nav-text">Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u6784_u9020cookie"><span class="nav-number">2.1.</span> <span class="nav-text">构造cookie</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cookie_u5BF9_u6027_u80FD_u7684_u5F71_u54CD"><span class="nav-number">2.2.</span> <span class="nav-text">cookie对性能的影响</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#session"><span class="nav-number">3.</span> <span class="nav-text">session</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u57FA_u4E8Ecookie_u5B9E_u73B0_u7528_u6237_u548C_u6570_u636E_u6620_u5C04"><span class="nav-number">3.1.</span> <span class="nav-text">基于cookie实现用户和数据映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#session_u4E0E_u5B89_u5168"><span class="nav-number">3.2.</span> <span class="nav-text">session与安全</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#u5BF9session_u7528_u79C1_u94A5_u52A0_u5BC6"><span class="nav-number">3.2.1.</span> <span class="nav-text">对session用私钥加密</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#xxs_u6F0F_u6D1E"><span class="nav-number">3.2.2.</span> <span class="nav-text">xxs漏洞</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7F13_u5B58"><span class="nav-number">4.</span> <span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u4F7F_u7528_u65F6_u95F4_u6233"><span class="nav-number">4.1.</span> <span class="nav-text">使用时间戳</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ETag_uFF08Entity_Tag_uFF09"><span class="nav-number">4.2.</span> <span class="nav-text">ETag（Entity Tag）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Expires_uFF0CCache-Control"><span class="nav-number">4.3.</span> <span class="nav-text">Expires，Cache-Control</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u6E05_u9664_u7F13_u5B58"><span class="nav-number">4.4.</span> <span class="nav-text">清除缓存</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u8BF7_u6C42_u89E3_u6790"><span class="nav-number">1.</span> <span class="nav-text">请求解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie"><span class="nav-number">2.</span> <span class="nav-text">Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u6784_u9020cookie"><span class="nav-number">2.1.</span> <span class="nav-text">构造cookie</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cookie_u5BF9_u6027_u80FD_u7684_u5F71_u54CD"><span class="nav-number">2.2.</span> <span class="nav-text">cookie对性能的影响</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#session"><span class="nav-number">3.</span> <span class="nav-text">session</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u57FA_u4E8Ecookie_u5B9E_u73B0_u7528_u6237_u548C_u6570_u636E_u6620_u5C04"><span class="nav-number">3.1.</span> <span class="nav-text">基于cookie实现用户和数据映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#session_u4E0E_u5B89_u5168"><span class="nav-number">3.2.</span> <span class="nav-text">session与安全</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#u5BF9session_u7528_u79C1_u94A5_u52A0_u5BC6"><span class="nav-number">3.2.1.</span> <span class="nav-text">对session用私钥加密</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#xxs_u6F0F_u6D1E"><span class="nav-number">3.2.2.</span> <span class="nav-text">xxs漏洞</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7F13_u5B58"><span class="nav-number">4.</span> <span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u4F7F_u7528_u65F6_u95F4_u6233"><span class="nav-number">4.1.</span> <span class="nav-text">使用时间戳</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ETag_uFF08Entity_Tag_uFF09"><span class="nav-number">4.2.</span> <span class="nav-text">ETag（Entity Tag）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Expires_uFF0CCache-Control"><span class="nav-number">4.3.</span> <span class="nav-text">Expires，Cache-Control</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u6E05_u9664_u7F13_u5B58"><span class="nav-number">4.4.</span> <span class="nav-text">清除缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic_u8BA4_u8BC1"><span class="nav-number">5.</span> <span class="nav-text">Basic认证</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
