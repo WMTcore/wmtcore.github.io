@@ -26,7 +26,7 @@
 
 
 
-  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
 
 
 
@@ -59,7 +59,7 @@
 <meta property="og:site_name" content="大碗拉面">
 <meta property="og:description" content="数据上传node的http模块(HTTP_Parse)只对http头部进行解析，内容部分通过data事件触发，以buffer方式处理
 123456789101112131415161718var hasBody = function(req) &amp;#123;	return &apos;transfer-encoding&apos; in req.headers || &apos;content-length&apos; in req.he">
-<meta property="og:updated_time" content="2016-08-22T05:23:37.000Z">
+<meta property="og:updated_time" content="2016-08-30T06:20:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nodejs web应用(二)">
 <meta name="twitter:description" content="数据上传node的http模块(HTTP_Parse)只对http头部进行解析，内容部分通过data事件触发，以buffer方式处理
@@ -378,7 +378,44 @@ function(req, res) {
         handle(req, res);
     }
 }
-</code></pre><h4 id="u6570_u636E_u4E0A_u4F20_u4E0E_u5B89_u5168"><a href="#u6570_u636E_u4E0A_u4F20_u4E0E_u5B89_u5168" class="headerlink" title="数据上传与安全"></a>数据上传与安全</h4></span>
+
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#### 数据上传与安全</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##### 内存限制</span></span><br><span class="line">- 限制上传内容大小，超过限制就不接受并发返回<span class="number">400</span></span><br><span class="line">- 流式处理，将数据流保存在磁盘，<span class="keyword">node</span><span class="identifier"></span><span class="title">只保存文件路径</span><br><span class="line"></span><br><span class="line">通常node</span>会先保存用户提交的数据，但提交数据库过大时，会导致内存占光</span><br><span class="line"></span><br><span class="line">Connect对上传数据量的限制方式</span><br></pre></td></tr></table></figure>
+
+ function(req, res) {
+     var received = 0,
+         var len = req.headers[&apos;content-length&apos;] ? parseInt(req.headers[&apos;content-length&apos;], 10) : null;
+     // 如果内超过长度限制，返回请求实体过长的状态码 
+     if (len &amp;&amp; len &gt; bytes) {
+         res.writeHead(413);
+         res.end();
+         return;
+     }
+     // limit
+     req.on(&apos;data&apos;, function(chunk) {
+         received += chunk.length;
+         if (received &gt; bytes) {
+             //停止接收数据，触发end()
+             req.destroy();
+         }
+     });
+     handle(req, res);
+ };
+
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">##### CSRF</span></span><br><span class="line">- Cross-Site Request Forgery 跨站请求伪造</span><br><span class="line"></span><br><span class="line">虽然用户通过浏览器访问服务器的Session ID不能被第三方知道，但攻击者可<span class="keyword">*</span><span class="keyword">*</span>以在另外的网站上构造请求<span class="keyword">*</span><span class="keyword">*</span>，然后浏览器会路由匹配取出cookie并提交到想攻击的服务器</span><br><span class="line"></span><br><span class="line">`解决方法`：添加随机值</span><br></pre></td></tr></table></figure>
+
+为每个请求的用户在session中赋予随机值，并在页面中告知
+function(req, res) {
+    var token = req.session._csrf || (req.session._csrf = generateRandom(24));
+    var _csrf = req.body._csrf;
+    if (token !== _csrf) {
+        res.writeHead(403);
+        res.end(&quot;禁止访问&quot;);
+    } else {
+        handle(req, res);
+    }
+}
+</code></pre><p><a href="https://www.npmjs.com/package/csurf" target="_blank">express的解决方案<a></a></a></p>
+</span>
       
     </div>
 
@@ -533,7 +570,7 @@ function(req, res) {
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6570_u636E_u4E0A_u4F20"><span class="nav-number">1.</span> <span class="nav-text">数据上传</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u6570_u636E_u5904_u7406"><span class="nav-number">1.1.</span> <span class="nav-text">数据处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u6570_u636E_u4E0A_u4F20_u4E0E_u5B89_u5168"><span class="nav-number">1.2.</span> <span class="nav-text">数据上传与安全</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6570_u636E_u4E0A_u4F20"><span class="nav-number">1.</span> <span class="nav-text">数据上传</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u6570_u636E_u5904_u7406"><span class="nav-number">1.1.</span> <span class="nav-text">数据处理</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
