@@ -5,11 +5,31 @@
     
   <url>
     <loc>http://www.wmtcore.com/2016/08/19/nodejs-web%E5%BA%94%E7%94%A8-%E4%BA%8C/</loc>
-    <lastmod>2016-08-30T07:30:03.000Z</lastmod>
+    <lastmod>2016-08-31T09:04:43.000Z</lastmod>
     <data>
         <display>
         <title>nodejs web应用(二)</title>
         <pubTime>2016-08-19T09:13:16.000Z</pubTime>
+        
+        <tag>nodejs</tag>
+         
+         
+           
+             
+              <breadCrumb title="nodejs" url="http://www.wmtcore.com/categories/nodejs/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.wmtcore.com/2016/03/15/node%E7%9A%84%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD/</loc>
+    <lastmod>2016-08-30T08:44:43.000Z</lastmod>
+    <data>
+        <display>
+        <title>node的模块加载</title>
+        <pubTime>2016-03-15T02:53:32.000Z</pubTime>
         
         <tag>nodejs</tag>
          
@@ -279,26 +299,6 @@
            
              
               <breadCrumb title="前端" url="http://www.wmtcore.com/categories/%E5%89%8D%E7%AB%AF/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.wmtcore.com/2016/03/15/node%E7%9A%84%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD/</loc>
-    <lastmod>2016-05-26T05:58:10.000Z</lastmod>
-    <data>
-        <display>
-        <title>node的模块加载</title>
-        <pubTime>2016-03-15T02:53:32.000Z</pubTime>
-        
-        <tag>nodejs</tag>
-         
-         
-           
-             
-              <breadCrumb title="nodejs" url="http://www.wmtcore.com/categories/nodejs/"/>
           
         </display>
     </data>

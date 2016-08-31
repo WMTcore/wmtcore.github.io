@@ -223,11 +223,6 @@
 
     
     
-      
-      
-
-      
-    
 
     
       
@@ -313,7 +308,7 @@
             
               <h3 id="u6A21_u5757_u5B9E_u73B0"><a href="#u6A21_u5757_u5B9E_u73B0" class="headerlink" title="模块实现"></a>模块实现</h3><p>依照CommonJS的模块规范，使用require()引入模块的api,使用exports导出模块的方法、变量；其中module对象代表模块本身，exports是它的属性</p>
 <p><code>优点： 每个模块有独立的空间、不必考虑变量污染</code></p>
-<p>Node引入模块通过<strong>路径分析、文件定位、编译执行</strong>，会对引入的模块缓存其编译和执行后的对象，加载时缓存优先其后只核心模块。加载自定义模块（第三方包）最慢，要向上逐级递归查找node_modules目录</p>
+<p>Node引入模块通过路径分析、文件定位、编译执行，会对引入的模块缓<strong>存其编译和执行后的对象</strong>，二次加载时缓存<strong>优先核心模块之后文件模块</strong>。加载自定义模块（第三方包）最慢，要向上逐级递归查找node_modules目录</p>
 <p>因为允许require()中不含文件拓展名，Node会按照<code>.js、.node、.json的次序补足，依次尝试</code>,并且需要调用fs模块同步阻塞判断文件是否存在，会因为Node单线程引起性能问题，<code>对于.node、.json文件带上拓展名能快些</code></p>
 <h4 id="u5206_u6790_u76EE_u5F55_u548C_u5305"><a href="#u5206_u6790_u76EE_u5F55_u548C_u5305" class="headerlink" title="分析目录和包"></a>分析目录和包</h4><p>require()通过分析文件拓展名后仍然没有查到文件、但取到一个目录，此时Node会将目录当做包来处理。</p>
 <ol>
