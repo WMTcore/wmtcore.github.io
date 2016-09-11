@@ -223,11 +223,397 @@
 
     
     
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/22/Sequelize事务实现/" itemprop="url">
+                  Sequelize事务实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-22T16:08:37+08:00" content="2015-12-22">
+              2015-12-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/22/Sequelize事务实现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/22/Sequelize事务实现/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
       
 
       
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="Managed_transaction__28auto-callback_29"><a href="#Managed_transaction__28auto-callback_29" class="headerlink" title="Managed transaction (auto-callback)"></a>Managed transaction (auto-callback)</h3><ul>
+<li>事务将自动提交</li>
+<li>sequelize.transaction</li>
+</ul>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> models.sequelize.transaction(function(t) &#123;</span><br><span class="line">  // chain all your queries here. make sure you <span class="keyword">return</span> them.</span><br><span class="line">  <span class="keyword">return</span> <span class="type">User</span>.create(&#123;</span><br><span class="line">    firstName: '<span class="type">Abraham</span>',</span><br><span class="line">    lastName: '<span class="type">Lincoln</span>'</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    transaction: t</span><br><span class="line">  &#125;).then(function(user) &#123;</span><br><span class="line">    <span class="keyword">return</span> user.setShooter(&#123;</span><br><span class="line">      firstName: '<span class="type">John</span>',</span><br><span class="line">      lastName: '<span class="type">Boothe</span>'</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      transaction: t</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;).then(function(<span class="literal">result</span>) &#123;</span><br><span class="line">  // <span class="type">Transaction</span> has been committed</span><br><span class="line">  // <span class="literal">result</span> <span class="keyword">is</span> whatever the <span class="literal">result</span> <span class="keyword">of</span> the promise chain returned to the transaction callback</span><br><span class="line">&#125;).catch(function(err) &#123;</span><br><span class="line">  // <span class="type">Transaction</span> has been rolled back</span><br><span class="line">  // err <span class="keyword">is</span> whatever rejected the promise chain returned to the transaction callback</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Unmanaged_transaction__28then-callback_29"><a href="#Unmanaged_transaction__28then-callback_29" class="headerlink" title="Unmanaged transaction (then-callback)"></a>Unmanaged transaction (then-callback)</h3><ul>
+<li>非自动提交事务</li>
+<li>sequelize.transaction()</li>
+</ul>
+<figure class="highlight scilab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="transposed_variable">sequelize.</span>transaction().<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span> <span class="params">(t)</span> &#123;</span></span><br><span class="line">  <span class="keyword">return</span> <span class="transposed_variable">User.</span>create(&#123;</span><br><span class="line">    firstName: <span class="string">'Homer'</span>,</span><br><span class="line">    lastName: <span class="string">'Simpson'</span></span><br><span class="line">  &#125;, &#123;transaction: t&#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span> <span class="params">(user)</span> &#123;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="transposed_variable">user.</span>addSibling(&#123;</span><br><span class="line">      firstName: <span class="string">'Lisa'</span>,</span><br><span class="line">      lastName: <span class="string">'Simpson'</span></span><br><span class="line">    &#125;, &#123;transaction: t&#125;);</span><br><span class="line">  &#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span> <span class="params">()</span> &#123;</span></span><br><span class="line">    <span class="transposed_variable">t.</span>commit();</span><br><span class="line">  &#125;).<span class="keyword">catch</span>(<span class="function"><span class="keyword">function</span> <span class="params">(err)</span> &#123;</span></span><br><span class="line">    <span class="transposed_variable">t.</span>rollback();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Automatically_pass_transactions_to_all_queries"><a href="#Automatically_pass_transactions_to_all_queries" class="headerlink" title="Automatically pass transactions to all queries"></a>Automatically pass transactions to all queries</h3><ul>
+<li>自动添加事务</li>
+<li>无需{ transaction: t }</li>
+<li>require(‘continuation-local-storage’)</li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cls = require(<span class="string">'continuation-local-storage'</span>),</span><br><span class="line">    <span class="keyword">namespace</span> = cls.createNamespace(<span class="string">'my-very-own-namespace'</span>);</span><br><span class="line"></span><br><span class="line">sequelize.transaction(<span class="function"><span class="keyword">function</span> <span class="params">(t1)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">namespace</span>.<span class="keyword">get</span>(<span class="string">'transaction'</span>) === t1; <span class="comment">// true</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">sequelize.transaction(<span class="function"><span class="keyword">function</span> <span class="params">(t2)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">namespace</span>.<span class="keyword">get</span>(<span class="string">'transaction'</span>) === t2; <span class="comment">// true</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Array_transaction"><a href="#Array_transaction" class="headerlink" title="Array transaction"></a>Array transaction</h3><ul>
+<li>事务并行</li>
+</ul>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">models.sequelize.transaction(<span class="function"><span class="keyword">function</span><span class="params">(t)</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> models.Products.create(args, &#123;</span><br><span class="line">        transaction: t</span><br><span class="line">    &#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(result)</span></span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Promise.<span class="built_in">all</span>([models.user.create(&#123;</span><br><span class="line">            <span class="keyword">name</span>: <span class="string">'test'</span></span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            transaction: t</span><br><span class="line">        &#125;), models.address.create(&#123;</span><br><span class="line">            id: <span class="string">'1'</span></span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            transaction: t</span><br><span class="line">        &#125;)]).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">()</span></span> &#123;&#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="push_+_promise-all__u5B9E_u73B0_u5FAA_u73AF_u8BFB_u53D6_u3001_u5199_u5165"><a href="#push_+_promise-all__u5B9E_u73B0_u5FAA_u73AF_u8BFB_u53D6_u3001_u5199_u5165" class="headerlink" title="push + promise.all 实现循环读取、写入"></a>push + promise.all 实现循环读取、写入</h3><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">models.sequelize.transaction(<span class="keyword">function</span>(t) &#123;</span><br><span class="line">    var tranArray = [];</span><br><span class="line">    if (!<span class="number">_</span>.isUndefined(args.categories_id)) &#123;</span><br><span class="line">        var categories_idArray = args.categories_id.split(<span class="string">','</span>);</span><br><span class="line">        tranArray.push(models.Categories_product.destroy(&#123;</span><br><span class="line">            where: &#123;</span><br><span class="line">                product_id: product_id</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            transaction: t</span><br><span class="line">        &#125;));</span><br><span class="line">        categories_idArray.forEach(function(categories_id) &#123;</span><br><span class="line">            tranArray.push(models.Categories_product.create(&#123;</span><br><span class="line">                product_id: product_id,</span><br><span class="line">                categories_id: categories_id</span><br><span class="line">            &#125;, &#123;</span><br><span class="line">                transaction: t</span><br><span class="line">            &#125;));</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    if (<span class="number">_</span>.isUndefined(areacode)) &#123;</span><br><span class="line">        tranArray.push(models.Products.update(args, &#123;</span><br><span class="line">            where: &#123;</span><br><span class="line">                id: product_id</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;));</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        tranArray.push(models.Product_lang_details.update(args,</span><br><span class="line">            where: &#123;</span><br><span class="line">                product_id: product_id,</span><br><span class="line">                areacode: areacode</span><br><span class="line">            &#125;));</span><br><span class="line">        tranArray.push(models.Product_shipping_to.update(&#123;</span><br><span class="line">                freezeTableName: args.freezeTableName</span><br><span class="line">            &#125;,</span><br><span class="line">            where: &#123;</span><br><span class="line">                product_id: product_id,</span><br><span class="line">                areacode: areacode</span><br><span class="line">            &#125;));</span><br><span class="line">    &#125;</span><br><span class="line">    return Promise.all(tranArray);</span><br><span class="line">&#125;).<span class="keyword">then</span>(<span class="keyword">function</span>() &#123;</span><br><span class="line">    return utils.response(res, <span class="number">200</span>, &#123;</span><br><span class="line">        <span class="string">'message'</span>: <span class="string">'update product successful!'</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;).<span class="keyword">catch</span>(<span class="keyword">function</span>(error) &#123;</span><br><span class="line">    logger.error(<span class="string">'product update fall'</span>, error);</span><br><span class="line">    return utils.responseError(res, <span class="number">500</span>, &#123;</span><br><span class="line">        <span class="string">'message'</span>: <span class="string">'format error'</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/18/Sequelize-基本sql语句/" itemprop="url">
+                  Sequelize 基本sql语句
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-18T10:18:59+08:00" content="2015-12-18">
+              2015-12-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/18/Sequelize-基本sql语句/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/18/Sequelize-基本sql语句/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h4 id="SELECT_u3001DELETE_u3001UPDATE"><a href="#SELECT_u3001DELETE_u3001UPDATE" class="headerlink" title="SELECT、DELETE、UPDATE"></a>SELECT、DELETE、UPDATE</h4><table>
+<thead>
+<tr>
+<th>sql</th>
+<th>orm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>select</td>
+<td>findAll,findOne,findById,findOrCreate,findAndCountAll</td>
+</tr>
+<tr>
+<td>delete</td>
+<td>destroy</td>
+</tr>
+<tr>
+<td>update</td>
+<td>update</td>
+</tr>
+<tr>
+<td>insert</td>
+<td>create</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>sql</th>
+<th>orm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT foo, bar …</td>
+<td>Model.findAll({attributes: [‘foo’, ‘bar’]});</td>
+</tr>
+<tr>
+<td>SELECT foo, bar AS baz …</td>
+<td>Model.findAll({attributes: [‘foo’, <strong>[‘bar’, ‘baz’]</strong>]});</td>
+</tr>
+<tr>
+<td>SELECT COUNT(hats) AS no_hats …</td>
+<td>Model.findAll({attributes: [[<strong>sequelize.fn(‘COUNT’, sequelize.col(‘hats’))</strong>, ‘no_hats’]]});</td>
+</tr>
+<tr>
+<td>SELECT id, foo, bar, quz …</td>
+<td>Model.findAll({attributes: {<strong>exclude</strong>: [‘baz’] }});</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">Model</span><span class="class">.findAll</span>(&#123;</span><br><span class="line">  <span class="attribute">attributes</span>: [<span class="string">'id'</span>, <span class="string">'foo'</span>, <span class="string">'bar'</span>, <span class="string">'baz'</span>, <span class="string">'quz'</span>, [sequelize.<span class="function">fn</span>(<span class="string">'COUNT'</span>, sequelize.<span class="function">col</span>(<span class="string">'hats'</span>)), <span class="string">'no_hats'</span>]]</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//等于</span></span><br><span class="line"><span class="tag">Model</span><span class="class">.findAll</span>(&#123;</span><br><span class="line">  <span class="tag">attributes</span>: &#123; <span class="attribute">include</span>: [[sequelize.<span class="function">fn</span>(<span class="string">'COUNT'</span>, sequelize.<span class="function">col</span>(<span class="string">'hats'</span>)), <span class="string">'no_hats'</span>]] &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="tag">SELECT</span> <span class="tag">id</span>, <span class="tag">foo</span>, <span class="tag">bar</span>, <span class="tag">baz</span>, <span class="tag">quz</span>, <span class="tag">COUNT</span>(hats) <span class="tag">AS</span> <span class="tag">no_hats</span> ...</span><br></pre></td></tr></table></figure>
+<h4 id="WHERE"><a href="#WHERE" class="headerlink" title="WHERE"></a>WHERE</h4><table>
+<thead>
+<tr>
+<th>sql</th>
+<th>orm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> SELECT * FROM post WHERE authorId = 12 AND status = ‘active’</td>
+<td>Post.findAll({where: { authorId: 2,status: ‘active’}});</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Operators"><a href="#Operators" class="headerlink" title="Operators"></a>Operators</h4><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">Post.<span class="keyword">update</span>(&#123;</span><br><span class="line">  updatedAt: null,</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    deletedAt: &#123;</span><br><span class="line">      <span class="variable">$ne</span>: null</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line">// UPDATE post SET updatedAt = null WHERE deletedAt NOT NULL;</span><br><span class="line"></span><br><span class="line">Post.findAll(&#123;</span><br><span class="line">  where: sequelize.where(sequelize.fn(<span class="string">'char_length'</span>, sequelize.col(<span class="string">'status'</span>)), <span class="number">6</span>)</span><br><span class="line">&#125;);</span><br><span class="line">// SELECT * FROM post WHERE char_length(status) = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  rank: &#123;</span><br><span class="line">    <span class="variable">$or</span>: &#123;</span><br><span class="line">      <span class="variable">$lt</span>: <span class="number">1000</span>,</span><br><span class="line">      <span class="variable">$eq</span>: null</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">// rank &lt; <span class="number">1000</span> OR rank IS NULL</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  createdAt: &#123;</span><br><span class="line">    <span class="variable">$lt</span>: new Date(),</span><br><span class="line">    <span class="variable">$gt</span>: new Date(new Date() - <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">// createdAt &lt; [timestamp] AND createdAt &gt; [timestamp]</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="variable">$or</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      title: &#123;</span><br><span class="line">        <span class="variable">$like</span>: <span class="string">'Boat%'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      description: &#123;</span><br><span class="line">        <span class="variable">$like</span>: <span class="string">'%boat%'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">// title LIKE <span class="string">'Boat%'</span> OR description LIKE <span class="string">'%boat%'</span></span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>op</th>
+<th>define</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$and: {a: 5}</td>
+<td>AND (a = 5)</td>
+</tr>
+<tr>
+<td>$or: [{a: 5}, {a: 6}]</td>
+<td>(a = 5 OR a = 6)</td>
+</tr>
+<tr>
+<td>$gt: 6,</td>
+<td>&gt; 6</td>
+</tr>
+<tr>
+<td>$gte: 6,</td>
+<td>&gt;= 6</td>
+</tr>
+<tr>
+<td>$lt: 10,</td>
+<td>&lt; 10</td>
+</tr>
+<tr>
+<td>$lte: 10,</td>
+<td>&lt;= 10</td>
+</tr>
+<tr>
+<td>$ne: 20,</td>
+<td>!= 20</td>
+</tr>
+<tr>
+<td>$between: [6, 10],</td>
+<td>BETWEEN 6 AND 10</td>
+</tr>
+<tr>
+<td>$notBetween: [11, 15],</td>
+<td>NOT BETWEEN 11 AND 15</td>
+</tr>
+<tr>
+<td>$in: [1, 2],</td>
+<td>IN [1, 2]</td>
+</tr>
+<tr>
+<td>$notIn: [1, 2],</td>
+<td>NOT IN [1, 2]</td>
+</tr>
+<tr>
+<td>$like: ‘%hat’,</td>
+<td>LIKE ‘%hat’</td>
+</tr>
+<tr>
+<td>$notLike: ‘%hat’</td>
+<td>NOT LIKE ‘%hat’</td>
+</tr>
+<tr>
+<td>$iLike: ‘%hat’</td>
+<td>ILIKE ‘%hat’ (case insensitive) (PG only)</td>
+</tr>
+<tr>
+<td>$notILike: ‘%hat’</td>
+<td>NOT ILIKE ‘%hat’  (PG only)</td>
+</tr>
+<tr>
+<td>$like: { $any: [‘cat’, ‘hat’]}</td>
+<td>LIKE ANY ARRAY[‘cat’, ‘hat’] - also works for iLike and notLike</td>
+</tr>
+<tr>
+<td>$overlap: [1, 2]</td>
+<td>&amp;&amp; [1, 2] (PG array overlap operator)</td>
+</tr>
+<tr>
+<td>$contains: [1, 2]</td>
+<td>@&gt; [1, 2] (PG array contains operator)</td>
+</tr>
+<tr>
+<td>$contained: [1, 2]</td>
+<td>&lt;@ [1, 2] (PG array contained by operator)</td>
+</tr>
+<tr>
+<td>$any: [2,3]</td>
+<td>ANY ARRAY[2, 3]::INTEGER (PG only)</td>
+</tr>
+<tr>
+<td>$col: ‘user.organization_id’</td>
+<td>“user”.”organization_id”, with dialect specific column identifiers, PG in this example  –$col取表的字段</td>
+</tr>
+</tbody>
+</table>
+<h4 id="WARNING"><a href="#WARNING" class="headerlink" title="WARNING"></a>WARNING</h4><p><code>tabel need primarykey</code>:如果没有，Sequlize会自己加个自增主键，可能引起错误</p>
+<h4 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h4><p><code>findOrCreate</code>: 查到一个，查不到就新建</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">models</span><span class="class">.BrandReview</span><span class="class">.findOrCreate</span>(&#123;</span><br><span class="line">     <span class="tag">where</span>: &#123;</span><br><span class="line">         <span class="tag">mem_id</span>: <span class="tag">mem_id</span>,</span><br><span class="line">         <span class="tag">brand_id</span>: <span class="tag">brand_id</span></span><br><span class="line">     &#125;,</span><br><span class="line">     <span class="tag">defaults</span>: &#123;</span><br><span class="line">         <span class="attribute">score</span>: score <span class="comment">//新建的数据</span></span><br><span class="line">     &#125;</span><br><span class="line"> &#125;)</span><br><span class="line"><span class="comment">//返回值为数组，[json,created] 第一位是查询或创建的数据，第二位标识是否新建</span></span><br></pre></td></tr></table></figure>
+<p><code>update</code>:返回值为数据，[2],数字代码改动记录数</p>
+<p><code>destroy</code>:返回数字，代表删除记录数</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1246,7 +1632,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-count">49</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

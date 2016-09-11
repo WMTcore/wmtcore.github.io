@@ -223,15 +223,222 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/11/koa-csrf/" itemprop="url">
+                  koa-csrf
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-09-11T14:03:00+08:00" content="2016-09-11">
+              2016-09-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/11/koa-csrf/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/11/koa-csrf/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
+        
+          <span itemprop="articleBody">
+            
+              <h1 id="koa-csrf"><a href="#koa-csrf" class="headerlink" title="koa-csrf"></a>koa-csrf</h1><p>Cross-Site Request Forgery 跨站请求伪造</p>
+<p><a href="https://github.com/koajs/csrf" target="_blank" rel="external">koa-csrf</a></p>
+<h2 id="u539F_u7406"><a href="#u539F_u7406" class="headerlink" title="原理"></a>原理</h2><p>它在session中保存一个<code>secret</code>字段，然后使用它生成token，其中salt是随机生成的字符串，长度可自定。每次请求时都会重新生成salt，于是每次token也会不同。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var <span class="built_in">hash</span> = crypto</span><br><span class="line">	.createHash(<span class="string">'sha1'</span>)</span><br><span class="line">	.update(salt + <span class="string">'-'</span> + secret, <span class="string">'ascii'</span>)</span><br><span class="line">	.digest(<span class="string">'base64'</span>);</span><br><span class="line">token = salt + <span class="string">'-'</span> + <span class="built_in">hash</span>;</span><br></pre></td></tr></table></figure>
+<p>验证的时候，只需要取出token头部的salt，再从session中取出<code>secret</code>,再生成expected，与token对比</p>
+<p>默认不检查<strong>GET,HEAD,OPTIONS</strong>请求</p>
+<h2 id="u4F7F_u7528"><a href="#u4F7F_u7528" class="headerlink" title="使用"></a>使用</h2><p>与session配合使用，在请求时附带字段<code>_csrf:token</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> koa = <span class="keyword">require</span>(<span class="string">'koa'</span>)</span><br><span class="line"><span class="keyword">var</span> csrf = <span class="keyword">require</span>(<span class="string">'koa-csrf'</span>)</span><br><span class="line"><span class="keyword">var</span> session = <span class="keyword">require</span>(<span class="string">'koa-session'</span>)</span><br><span class="line"><span class="keyword">var</span> Router = <span class="keyword">require</span>(<span class="string">'koa-router'</span>);</span><br><span class="line"><span class="keyword">var</span> bodyParser = <span class="keyword">require</span>(<span class="string">'koa-bodyparser'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> app = koa();</span><br><span class="line"><span class="keyword">var</span> router = Router();</span><br><span class="line">app.<span class="keyword">use</span>(bodyParser());</span><br><span class="line">app.keys = [<span class="string">'session secret'</span>]</span><br><span class="line">session(app)</span><br><span class="line">app.<span class="keyword">use</span>(csrf());</span><br><span class="line"></span><br><span class="line">router.get(<span class="string">'/'</span>, async ctx =&gt; &#123;</span><br><span class="line">	ctx.body = ctx.csrf;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/'</span>, ctx =&gt; &#123;</span><br><span class="line">	ctx.body = ctx.request.body</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/31/nodejs-web应用-三/" itemprop="url">
+                  nodejs web应用 三
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-08-31T17:32:44+08:00" content="2016-08-31">
+              2016-08-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/31/nodejs-web应用-三/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/31/nodejs-web应用-三/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="u4E2D_u95F4_u4EF6"><a href="#u4E2D_u95F4_u4EF6" class="headerlink" title="中间件"></a>中间件</h3><ul>
+<li>封装底层细节，为上层提供更方便的服务</li>
+</ul>
+<p>node的http模块提供了应用层协议网络的封装，需要中间件来处理http请求的细节。因为node异步，所以需要在当前中间件处理完后通知下一中间件执行，例如Connect的尾触发next()</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -436,6 +643,167 @@
 <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">enableDestroy</span><span class="params">(server)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> connections = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  server.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span><span class="params">(conn)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> key = conn.remoteAddress + <span class="string">':'</span> + conn.remotePort;</span><br><span class="line">    connections[key] = conn;</span><br><span class="line">    conn.on(<span class="string">'close'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">delete</span> connections[key];</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  server.destroy = <span class="function"><span class="keyword">function</span><span class="params">(cb)</span> </span>&#123;</span><br><span class="line">    server.close(cb);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> connections)</span><br><span class="line">      connections[key].destroy();</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>但是太浪费内存了</p>
 <p>req.socket.destroy()</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/19/nodejs-web应用-二/" itemprop="url">
+                  nodejs web应用(二)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-08-19T17:13:16+08:00" content="2016-08-19">
+              2016-08-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/19/nodejs-web应用-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/19/nodejs-web应用-二/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="u6570_u636E_u4E0A_u4F20"><a href="#u6570_u636E_u4E0A_u4F20" class="headerlink" title="数据上传"></a>数据上传</h3><p>node的http模块(HTTP_Parse)只对http头部进行解析，内容部分通过data事件触发，以buffer方式处理</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> hasBody = <span class="function"><span class="keyword">function</span><span class="params">(req)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">'transfer-encoding'</span> <span class="keyword">in</span> req.headers || <span class="string">'content-length'</span> <span class="keyword">in</span> req.headers;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (hasBody(req)) &#123;</span><br><span class="line">		<span class="keyword">var</span> buffers = [];</span><br><span class="line">		req.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span><span class="params">(chunk)</span> </span>&#123;</span><br><span class="line">			buffers.push(chunk);</span><br><span class="line">		&#125;);</span><br><span class="line">		req.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			req.rawBody = Buffer.concat(buffers).toString();<span class="comment">//buffer.toString()转换成字符串 默认utf-8</span></span><br><span class="line">			handle(req, res);</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		handle(req, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="u6570_u636E_u5904_u7406"><a href="#u6570_u636E_u5904_u7406" class="headerlink" title="数据处理"></a>数据处理</h4><p><code>表单数据</code>:Content-Type: application/x-www-form-urlencoded，内容格式和查询字符串相同,foo=bar&amp;baz=val</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (req.headers[<span class="string">'content-type'</span>] === <span class="string">'application/x-www-form-urlencoded'</span>) &#123;</span><br><span class="line">		req.body = querystring.parse(req.rawBody);</span><br><span class="line">	&#125;</span><br><span class="line">	todo(req, res);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>json数据</code>:Content-Type: application/json; charset=utf-8 可能附带编码信息</p>
+<pre><code>var mime = function(req) {
+    var str = req.headers[&apos;content-type&apos;] || &apos;&apos;;
+    return str.split(&apos;;&apos;)[0];
+};
+</code></pre><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (mime(req) === <span class="string">'application/json'</span>) &#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			req.body = <span class="built_in">JSON</span>.parse(req.rawBody);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">			<span class="comment">// 异常内容 响应Bad request </span></span><br><span class="line">			res.writeHead(<span class="number">400</span>);</span><br><span class="line">			res.end(<span class="string">'Invalid JSON'</span>);</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	todo(req, res);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>xml数据</code>:Content-Type：application/xml</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xml2js = <span class="built_in">require</span>(<span class="string">'xml2js'</span>);</span><br><span class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (mime(req) === <span class="string">'application/xml'</span>) &#123;</span><br><span class="line">		xml2js.parseString(req.rawBody, <span class="function"><span class="keyword">function</span>(<span class="params">err, xml</span>) </span>&#123;</span><br><span class="line">			<span class="keyword">if</span> (err) &#123;</span><br><span class="line">				<span class="comment">// 异常内容 响应Bad request </span></span><br><span class="line">				res.writeHead(<span class="number">400</span>); </span><br><span class="line">				res.end(<span class="string">'Invalid XML'</span>); </span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			req.body = xml;</span><br><span class="line">			todo(req, res);</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="u9644_u4EF6_u4E0A_u4F20"><a href="#u9644_u4EF6_u4E0A_u4F20" class="headerlink" title="附件上传"></a>附件上传</h4><ul>
+<li>特殊表单，包含file控件</li>
+<li>指定表单属性enctype=”multipart/form-data”</li>
+</ul>
+<p>Content-Type: multipart/form-data; boundary=AaB03x Content-Length: 18231<br>内容可能是由多部分组成，boundary指定每部分内容分界符</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (hasBody(req)) &#123;</span><br><span class="line">		<span class="keyword">var</span> done = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">			handle(req, res);</span><br><span class="line">		&#125;;</span><br><span class="line">		<span class="keyword">if</span> (mime(req) === <span class="string">'application/json'</span>) &#123;</span><br><span class="line">			parseJSON(req, done);</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (mime(req) === <span class="string">'application/xml'</span>) &#123;</span><br><span class="line">			parseXML(req, done);</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (mime(req) === <span class="string">'multipart/form-data'</span>) &#123;</span><br><span class="line">			parseMultipart(req, done);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		handle(req, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//或者使用模块</span><span class="keyword">var</span> formidable = <span class="built_in">require</span>(<span class="string">'formidable'</span>);<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (hasBody(req)) &#123;</span><br><span class="line">		<span class="keyword">if</span> (mime(req) === <span class="string">'multipart/form-data'</span>) &#123;</span><br><span class="line">			<span class="keyword">var</span> form = <span class="keyword">new</span> formidable.IncomingForm();</span><br><span class="line">			form.parse(req, <span class="function"><span class="keyword">function</span>(<span class="params">err, fields, files</span>) </span>&#123;</span><br><span class="line">				req.body = fields;</span><br><span class="line">				req.files = files;</span><br><span class="line">				handle(req, res);</span><br><span class="line">			&#125;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		handle(req, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="u6570_u636E_u4E0A_u4F20_u4E0E_u5B89_u5168"><a href="#u6570_u636E_u4E0A_u4F20_u4E0E_u5B89_u5168" class="headerlink" title="数据上传与安全"></a>数据上传与安全</h4><h5 id="u5185_u5B58_u9650_u5236"><a href="#u5185_u5B58_u9650_u5236" class="headerlink" title="内存限制"></a>内存限制</h5><ul>
+<li>限制上传内容大小，超过限制就不接受并发返回400</li>
+<li>流式处理，将数据流保存在磁盘，node只保存文件路径</li>
+</ul>
+<p>通常node会先保存用户提交的数据，但提交数据库过大时，会导致内存占光</p>
+<p>Connect对上传数据量的限制方式</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> received = <span class="number">0</span>,</span><br><span class="line">		<span class="keyword">var</span> len = req.headers[<span class="string">'content-length'</span>] ? <span class="built_in">parseInt</span>(req.headers[<span class="string">'content-length'</span>], <span class="number">10</span>) : <span class="literal">null</span>;</span><br><span class="line">	<span class="comment">// 如果内超过长度限制，返回请求实体过长的状态码 </span></span><br><span class="line">	<span class="keyword">if</span> (len &amp;&amp; len &gt; bytes) &#123;</span><br><span class="line">		res.writeHead(<span class="number">413</span>);</span><br><span class="line">		res.end();</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// limit</span></span><br><span class="line">	req.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>) </span>&#123;</span><br><span class="line">		received += chunk.length;</span><br><span class="line">		<span class="keyword">if</span> (received &gt; bytes) &#123;</span><br><span class="line">			<span class="comment">//停止接收数据，触发end()</span></span><br><span class="line">			req.destroy();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	handle(req, res);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h5 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h5><ul>
+<li>Cross-Site Request Forgery 跨站请求伪造</li>
+</ul>
+<p>虽然用户通过浏览器访问服务器的Session ID不能被第三方知道，但攻击者可<strong>以在另外的网站上构造请求</strong>，然后浏览器会根据路由匹配取出cookie并提交到想攻击的服务器</p>
+<p><code>解决方法</code>：添加随机值 在请求时携带</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">为每个请求的用户在session中赋予随机值，并在response中告知,然后在请求时返回</span><br><span class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> token = req.session._csrf || (req.session._csrf = generateRandom(<span class="number">24</span>));</span><br><span class="line">	<span class="keyword">var</span> _csrf = req.body._csrf;</span><br><span class="line">	<span class="keyword">if</span> (token !== _csrf) &#123;</span><br><span class="line">		res.writeHead(<span class="number">403</span>);</span><br><span class="line">		res.end(<span class="string">"禁止访问"</span>);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		handle(req, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.npmjs.com/package/csurf" target="_blank">express的解决方案</a></p>
+<h3 id="u8DEF_u7531_u89E3_u6790"><a href="#u8DEF_u7531_u89E3_u6790" class="headerlink" title="路由解析"></a>路由解析</h3><h4 id="u6587_u4EF6_u8DEF_u5F84_u578B"><a href="#u6587_u4EF6_u8DEF_u5F84_u578B" class="headerlink" title="文件路径型"></a>文件路径型</h4><p><code>静态文件</code>： url的路径和网站目录路径一致</p>
+<p><code>动态文件</code>： 服务器根据url路径找到对应的文件，再根据后缀找到脚步的解释器</p>
+<h4 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h4><ul>
+<li>控制器 Controller 行为集合，根据url找到对应的控制器和行为</li>
+<li>模型 Model 数据操作封装</li>
+<li>视图 View 视图渲染，调用视图和相关数据进行页面渲染，输出到客户端</li>
+</ul>
+<h5 id="u624B_u5DE5_u6620_u5C04"><a href="#u624B_u5DE5_u6620_u5C04" class="headerlink" title="手工映射"></a>手工映射</h5><p>需要手工配置路由，但url格式灵活</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//完全匹配，配置映射</span></span><br><span class="line"><span class="keyword">var</span> routes = [];<span class="keyword">var</span> <span class="keyword">use</span> = <span class="function"><span class="keyword">function</span> <span class="params">(path, action)</span> </span>&#123; routes.push([path, action]);&#125;;</span><br><span class="line"><span class="keyword">use</span>(<span class="string">'/user/setting'</span>, exports.setting); <span class="keyword">use</span>(<span class="string">'/setting/user'</span>, exports.setting);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>正则匹配</li>
+</ul>
+<p>在注册路由时将路径转为一个正则表达式，然后用它来匹配</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pathRegexp = <span class="function"><span class="keyword">function</span>(<span class="params">path</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> keys = [];</span><br><span class="line">	path = path</span><br><span class="line">		.concat(strict ? <span class="string">''</span> : <span class="string">'/?'</span>)</span><br><span class="line">		.replace(<span class="regexp">/\/\(/g</span>, <span class="string">'(?:/'</span>)</span><br><span class="line">		.replace(<span class="regexp">/(\/)?(\.)?:(\w+)(?:(\(.*?\)))?(\?)?(\*)?/g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">_, slash, format, key, capture,</span><br><span class="line">			optional, star</span>) </span>&#123;</span><br><span class="line">			<span class="comment">// 将匹配到的键值保存   </span></span><br><span class="line">			keys.push(key);</span><br><span class="line">			slash = slash || <span class="string">''</span>;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">''</span> + (optional ? <span class="string">''</span> : slash) + <span class="string">'(?:'</span></span><br><span class="line">			+ (optional ? slash : <span class="string">''</span>) + (format || <span class="string">''</span>) </span><br><span class="line">			+ (capture || (format &amp;&amp; <span class="string">'([^/.]+?)'</span> || <span class="string">'([^/]+?)'</span>)) + <span class="string">')'</span> </span><br><span class="line">			+ (optional || <span class="string">''</span>) + (star ? <span class="string">'(/*)?'</span> : <span class="string">''</span>);</span><br><span class="line">		&#125;)</span><br><span class="line">		.replace(<span class="regexp">/([\/.])/g</span>, <span class="string">'\\$1'</span>)</span><br><span class="line">		.replace(<span class="regexp">/\*/g</span>, <span class="string">'(.*)'</span>);</span><br><span class="line">	<span class="keyword">return</span> &#123;</span><br><span class="line">		keys: keys,</span><br><span class="line">		regexp: <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">'^'</span> + path + <span class="string">'$'</span>)</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//修改路由注册</span></span><br><span class="line"><span class="keyword">var</span> use = <span class="function"><span class="keyword">function</span> (<span class="params">path, action</span>) </span>&#123; routes.push([pathRegexp(path), action]);&#125;;</span><br><span class="line"><span class="comment">//匹配</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> pathname = url.parse(req.url).pathname;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; routes.length; i++) &#123;</span><br><span class="line">		<span class="keyword">var</span> route = routes[i];</span><br><span class="line">		<span class="comment">// 正则匹配</span></span><br><span class="line">		<span class="keyword">var</span> reg = route[<span class="number">0</span>].regexp;</span><br><span class="line">		<span class="keyword">var</span> keys = route[<span class="number">0</span>].keys;</span><br><span class="line">		<span class="keyword">var</span> matched = reg.exec(pathname);</span><br><span class="line">		<span class="keyword">if</span> (matched) &#123;</span><br><span class="line">			<span class="comment">// 将参数内容抽取设置到req.params </span></span><br><span class="line">			<span class="keyword">var</span> params = &#123;&#125;;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, l = keys.length; i &lt; l; i++) &#123;</span><br><span class="line">				<span class="keyword">var</span> value = matched[i + <span class="number">1</span>];</span><br><span class="line">				<span class="keyword">if</span> (value) &#123;</span><br><span class="line">					params[keys[i]] = value;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			req.params = params;</span><br><span class="line">			<span class="keyword">var</span> action = route[<span class="number">1</span>];</span><br><span class="line">			action(req, res);</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 处理404请求</span></span><br><span class="line">	handle404(req, res);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="u81EA_u7136_u6620_u5C04"><a href="#u81EA_u7136_u6620_u5C04" class="headerlink" title="自然映射"></a>自然映射</h5><ul>
+<li>按照约定的方式去查找</li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/controller/action/param1/param2/param3</span><br><span class="line"></span><br><span class="line">exports.setting = <span class="function"><span class="keyword">function</span> <span class="params">(req, res, month, year)</span> </span>&#123;</span><br><span class="line"><span class="comment">// 如路径为/user/setting/12/1987  那么month为12 year为1987 </span></span><br><span class="line"><span class="comment">// TODO</span></span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="RESTful"><a href="#RESTful" class="headerlink" title="RESTful"></a>RESTful</h4><ul>
+<li>Representational State Transfer (资源)表现层状态转化</li>
+<li>将服务器提供的内容看做有个资源，每一个URI代表一种资源</li>
+<li>客户端通过四个HTTP动词，对服务器端资源进行操作，实现对资源的操作</li>
+<li>无状态 客户端和服务器交互的过程中是无状态，即服务器不保存用户状态信息（无session）</li>
+</ul>
+<p>对服务器上的资源可以用URI（统一资源定位符）指向它，然后通过URI与资源互动，就是http的四个动作：GET、POST、PUT、DELETE</p>
+<p>RESTful架构的状态包含两个，<strong>一是应用状态，二是资源状态</strong>。应用状态是与某一请求相关的状态信息；资源状态是服务器资源在某一时刻的特定状态，任何请求<strong>在同一时刻</strong>都会获得这一状态。RESTful的无状态是不保存应用状态，需要由请求方在请求时提高</p>
+<p><strong>应用无状态的服务器，可以自由调度请求，更好的实现负载均衡，分布式，并减少宕机带来的风险。</strong></p>
 
             
           </span>
@@ -1520,491 +1888,6 @@ node --max-new-space-size=1024 test.js // 单位为KB
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/05/nginx-负载均衡和反向代理的基本配置/" itemprop="url">
-                  nginx 负载均衡和反向代理的基本配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-07-05T17:47:22+08:00" content="2016-07-05">
-              2016-07-05
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nginx/" itemprop="url" rel="index">
-                    <span itemprop="name">nginx</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/05/nginx-负载均衡和反向代理的基本配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/nginx-负载均衡和反向代理的基本配置/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="u8D1F_u8F7D_u5747_u8861"><a href="#u8D1F_u8F7D_u5747_u8861" class="headerlink" title="负载均衡"></a>负载均衡</h3><ul>
-<li>此处指的是选择一种策略，尽量把请求均匀的分布到每一个上游服务器</li>
-</ul>
-<h4 id="upstream"><a href="#upstream" class="headerlink" title="upstream"></a>upstream</h4><ul>
-<li>配置块 http</li>
-<li>语法 upstream name{}</li>
-<li>定义一个上游服务器的集群，便于反向代理的proxy_pass使用</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">upstream backend &#123;</span><br><span class="line">    server <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5566</span> weight=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">30</span>s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http:<span class="comment">//backend; #backend指上游服务器</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="server"><a href="#server" class="headerlink" title="server"></a>server</h5><ul>
-<li>配置块 upstream</li>
-<li>语法 server names[parameters]</li>
-<li>指定一台上游服务器的名字 可以是域名，ip，UNIX句柄</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>parameters</th>
-<th>定义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>weight=number</td>
-<td>上游服务器转发的权重 默认1</td>
-</tr>
-<tr>
-<td>max_fails=number</td>
-<td>在fail_timeout时间内，如果向上游服务器转发失败次数超过number,就认为该服务器在此时间段里不可用，默认1 设为0就不检查失败次数</td>
-</tr>
-<tr>
-<td>fail_timeout=time</td>
-<td>用于优化反向代理功能，与连接、读取、响应超时无关，默认10秒</td>
-</tr>
-<tr>
-<td>down</td>
-<td>永久下线服务器，只在使用ip_hash有效</td>
-</tr>
-<tr>
-<td>backup</td>
-<td>在使用ip_hash时无效 表示上游服务器只是备份服务器，只有在所有非备份上游服务器失效后，才会指向备份</td>
-</tr>
-</tbody>
-</table>
-<h5 id="ip_hash"><a href="#ip_hash" class="headerlink" title="ip_hash"></a>ip_hash</h5><ul>
-<li>配置块 upstream</li>
-<li>语法 ip_hash;</li>
-<li>将单个用户的请求固定到某个上游服务器</li>
-</ul>
-<p>先根据客户端的ip地址计算一个key,将可以按照upstream集群的上游服务器数量进行取模，再根据取模的结果把请求地址转发到相应的上游服务器,不能与weight同时使用，<strong>在标识上游服务器不可用时，要用down不能直接删除，确保转发策略一贯性</strong></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backend &#123;</span><br><span class="line"> 	ip_hash;</span><br><span class="line">    server <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5566</span> weight=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">30</span>s;</span><br><span class="line">    server backend down;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="u8BB0_u5F55_u65E5_u5FD7_u65F6_u652F_u6301_u7684_u53D8_u91CF"><a href="#u8BB0_u5F55_u65E5_u5FD7_u65F6_u652F_u6301_u7684_u53D8_u91CF" class="headerlink" title="记录日志时支持的变量"></a>记录日志时支持的变量</h4><table>
-<thead>
-<tr>
-<th>变量名</th>
-<th>定义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$upstream_addr</td>
-<td>处理请求的上游服务器地址</td>
-</tr>
-<tr>
-<td>$upstream_cache_status</td>
-<td>表示是否命中缓存，取值范围：MISS、EXPIRED、UPDATING、SATLE、HIT</td>
-</tr>
-<tr>
-<td>$upstream_status</td>
-<td>上游服务器返回的响应中HTTP响应码</td>
-</tr>
-<tr>
-<td>$upstream_response_time</td>
-<td>上游服务器响应时间，精度毫秒</td>
-</tr>
-<tr>
-<td>$upstream<em>http</em>$HEADER</td>
-<td>http头部，如upstream_http_host</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">log_format</span> timing <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] <span class="variable">$request</span> '</span></span><br><span class="line">	<span class="string">'upstream_response_time <span class="variable">$upstream_response_time</span> '</span></span><br><span class="line">	<span class="string">'msec <span class="variable">$msec</span> request_time <span class="variable">$request_time</span>'</span>;</span><br><span class="line"></span><br><span class="line"><span class="title">log_format</span> up_head <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] <span class="variable">$request</span> '</span></span><br><span class="line">	<span class="string">'upstream_http_content_type <span class="variable">$upstream_http_content_type</span>'</span></span><br></pre></td></tr></table></figure>
-<h3 id="u53CD_u5411_u4EE3_u7406_u914D_u7F6E"><a href="#u53CD_u5411_u4EE3_u7406_u914D_u7F6E" class="headerlink" title="反向代理配置"></a>反向代理配置</h3><h4 id="proxy_pass"><a href="#proxy_pass" class="headerlink" title="proxy_pass"></a>proxy_pass</h4><ul>
-<li>语法：proxy_pass URL;</li>
-<li>配置块 location、if</li>
-</ul>
-<p>将当前请求反向代理到URL参数指定的服务器上，URL可以是主机名或ip地址</p>
-<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">proxy_pass http://localhost:<span class="number">3000</span>/uri/;</span><br><span class="line"></span><br><span class="line">可以加上负载均衡 使用upstream</span><br><span class="line">upstream backend <span class="decorator">&#123;...&#125;</span></span><br><span class="line">server &#123;location / &#123;</span><br><span class="line">            proxy_pass http://backend; <span class="comment">#backend指上游服务器</span></span><br><span class="line">        &#125;&#125;</span><br><span class="line"></span><br><span class="line">可以把httpz转换成https</span><br><span class="line">proxy_pass https://<span class="number">192</span>.<span class="number">168</span>.<span class="number">0</span>.<span class="number">1</span>/;</span><br><span class="line"></span><br><span class="line">若需要转发host头部</span><br><span class="line">proxy_set_header <span class="type">Host</span> $host;</span><br></pre></td></tr></table></figure>
-<h4 id="proxy_method"><a href="#proxy_method" class="headerlink" title="proxy_method"></a>proxy_method</h4><ul>
-<li>语法：proxy_method method;</li>
-<li>配置块 http、server、location</li>
-</ul>
-<p>转发时的协议方法名<br>proxy_method POST; 客户端的GET请求也会被转发成POST</p>
-<h4 id="proxy_hide_header"><a href="#proxy_hide_header" class="headerlink" title="proxy_hide_header"></a>proxy_hide_header</h4><ul>
-<li>语法：proxy_hide_header the_header;</li>
-<li>配置块 http、server、location</li>
-</ul>
-<p>Nginx会将上游服务器的响应转发给客户端，但默认不会转发以下HTTP头部字段：Date、Server、X-Pad和X-Accel-*.使用proxy_hide_header可以指定哪些不能转发</p>
-<p>proxy_hide_header Cache-Control;</p>
-<h4 id="proxy_pass_header"><a href="#proxy_pass_header" class="headerlink" title="proxy_pass_header"></a>proxy_pass_header</h4><ul>
-<li>语法：proxy_pass_header the_header;</li>
-<li>配置块 http、server、location</li>
-</ul>
-<p>将原来禁止转发的header设为转发</p>
-<h4 id="proxy_pass_request_body"><a href="#proxy_pass_request_body" class="headerlink" title="proxy_pass_request_body"></a>proxy_pass_request_body</h4><ul>
-<li>语法：proxy_pass_request_body on|off;</li>
-<li>默认 on;</li>
-<li>配置块 http、server、location<br>是否向上游转发http body</li>
-</ul>
-<h4 id="proxy_pass_request_headers"><a href="#proxy_pass_request_headers" class="headerlink" title="proxy_pass_request_headers"></a>proxy_pass_request_headers</h4><ul>
-<li>语法：proxy_pass_request_headers on|off;</li>
-<li>默认 on;</li>
-<li>配置块 http、server、location<br>是否向上游转发http header</li>
-</ul>
-<h4 id="prxoy_redirect"><a href="#prxoy_redirect" class="headerlink" title="prxoy_redirect"></a>prxoy_redirect</h4><ul>
-<li>语法：prxoy_redirect [default|off|redirect rep|replacement]];</li>
-<li>默认 default;</li>
-<li>配置块 http、server、location</li>
-</ul>
-<p>当上游返回响应是重定向或刷新请求（301，302),proxy_redirect 可以重设HTTP头部的location或refresh字段。</p>
-<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">proxy_redirect <span class="symbol">http:</span>/<span class="regexp">/localhost:8000/two</span><span class="regexp">/ http:/</span><span class="regexp">/frontend/one</span><span class="regexp">/;</span><br><span class="line"></span><br><span class="line">对location字段的URI是http:/</span><span class="regexp">/localhost:8000/two</span><span class="regexp">/some/uri</span>.实际转发给客户端的是<span class="symbol">http:</span>/<span class="regexp">/frontend/one</span><span class="regexp">/;</span><br><span class="line"></span><br><span class="line">可以使用ngx-http-core-module提供的变量来设置</span><br><span class="line"></span><br><span class="line">proxy_redirect http:/</span><span class="regexp">/localhost:8000/</span> <span class="symbol">http:</span>/<span class="regexp">/$host:$server_port/</span>;</span><br><span class="line"></span><br><span class="line">可以省略replacement参数的主机名部分，这时会用虚拟主机名称填充</span><br><span class="line">proxy_redirect <span class="symbol">http:</span>/<span class="regexp">/localhost:8000/two</span><span class="regexp">/ /one</span><span class="regexp">/;</span><br><span class="line"></span><br><span class="line">使用default参数时，会按照proxy_pass配置项和所属的location配置项重组</span><br><span class="line"></span><br><span class="line">location /one</span><span class="regexp">/ &#123;</span><br><span class="line">  proxy_pass http:/</span><span class="regexp">/upstream:port/two</span><span class="regexp">/;</span><br><span class="line">  proxy_redirect default;</span><br><span class="line">&#125;</span><br><span class="line">等于</span><br><span class="line">location /one</span><span class="regexp">/ &#123;</span><br><span class="line">	proxy_pass http:/</span><span class="regexp">/upstream:port/two</span><span class="regexp">/;</span><br><span class="line">	proxy_redirect http:/</span><span class="regexp">/upstream:port/two</span><span class="regexp">/ /one</span><span class="regexp">/;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
-<h4 id="proxy_next_upstream"><a href="#proxy_next_upstream" class="headerlink" title="proxy_next_upstream"></a>proxy_next_upstream</h4><ul>
-<li>语法：proxy_next_upstream [error|timeout|invalid_header|http_500|http_502|http_503|http_504|http_404|off];</li>
-<li>默认 error timeout;</li>
-<li>配置块 http、server、location</li>
-</ul>
-<p>当向一台上游转发请求出错时，继续换一台处理<br>（invaild_header 上游响应不合法）</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/01/pm2介绍/" itemprop="url">
-                  pm2
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-07-01T15:15:27+08:00" content="2016-07-01">
-              2016-07-01
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/01/pm2介绍/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/01/pm2介绍/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <ul>
-<li>pm2 是一个带有负载均衡功能的Node应用的进程管理器</li>
-<li>内建负载均衡（使用Node cluster 集群模块）</li>
-<li>后台运行</li>
-<li>0秒停机重载，热升级</li>
-<li>具有Ubuntu和CentOS 的启动脚本</li>
-<li>停止不稳定的进程（避免无限循环）</li>
-<li>控制台检测</li>
-<li>提供 HTTP API</li>
-<li>远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )</li>
-<li><a href="https://github.com/Unitech/pm2" target="_blank">github</a></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>command</th>
-<th>explain</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$ npm install pm2 -g</td>
-<td># Install PM2</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js</td>
-<td># Start, Daemonize and auto restart application</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js -i 4</td>
-<td># Start 4 instances of application in cluster mode it will load balance network queries to each app</td>
-</tr>
-<tr>
-<td><strong>$ pm2 start app.js –name=”api”</strong></td>
-<td># Start application and name it “api”</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js –watch</td>
-<td># Restart application on file change</td>
-</tr>
-<tr>
-<td>$ pm2 start script.sh</td>
-<td># Start bash script</td>
-</tr>
-<tr>
-<td>$ pm2 list</td>
-<td># List all processes started with PM2</td>
-</tr>
-<tr>
-<td><strong>$ pm2 monit</strong></td>
-<td># Display memory and cpu usage of each app</td>
-</tr>
-<tr>
-<td>$ pm2 show [app-name]</td>
-<td># Show all informations about application</td>
-</tr>
-<tr>
-<td><strong>$ pm2 logs</strong></td>
-<td># Display logs of all apps</td>
-</tr>
-<tr>
-<td>$ pm2 logs [app-name]</td>
-<td># Display logs for a specific app</td>
-</tr>
-<tr>
-<td>$ pm2 flush</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>$ pm2 stop all</strong></td>
-<td># Stop all apps</td>
-</tr>
-<tr>
-<td>$ pm2 stop 0</td>
-<td># Stop process with id 0</td>
-</tr>
-<tr>
-<td><strong>$ pm2 restart all</strong></td>
-<td># Restart all apps</td>
-</tr>
-<tr>
-<td><strong>$ pm2 reload all</strong></td>
-<td># Reload all apps in cluster mode</td>
-</tr>
-<tr>
-<td>$ pm2 gracefulReload all</td>
-<td># Graceful reload all apps in cluster mode</td>
-</tr>
-<tr>
-<td>$ pm2 delete all</td>
-<td># Kill and delete all apps</td>
-</tr>
-<tr>
-<td>$ pm2 delete 0</td>
-<td># Delete app with id 0</td>
-</tr>
-<tr>
-<td>$ pm2 scale api 10</td>
-<td># Scale app with name api to 10 instances</td>
-</tr>
-<tr>
-<td>$ pm2 reset [app-name]</td>
-<td># Reset number of restart for [app-name]</td>
-</tr>
-<tr>
-<td>$ pm2 startup</td>
-<td># Generate a startup script to respawn PM2 on boot</td>
-</tr>
-<tr>
-<td>$ pm2 save</td>
-<td># Save current process list</td>
-</tr>
-<tr>
-<td>$ pm2 resurrect</td>
-<td># Restore previously save processes</td>
-</tr>
-<tr>
-<td>$ pm2 update</td>
-<td># Save processes, kill PM2 and restore processes</td>
-</tr>
-<tr>
-<td>$ pm2 generate</td>
-<td># Generate a sample json configuration file</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod setup</td>
-<td># Setup “prod” remote server</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod</td>
-<td># Update “prod” remote server</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod revert 2</td>
-<td># Revert “prod” remote server by 2</td>
-</tr>
-<tr>
-<td>$ pm2 module:generate [name]</td>
-<td># Generate sample module with name [name]</td>
-</tr>
-<tr>
-<td>$ pm2 install pm2-logrotate</td>
-<td># Install module (here a log rotation system)</td>
-</tr>
-<tr>
-<td>$ pm2 uninstall pm2-logrotate</td>
-<td># Uninstall module</td>
-</tr>
-<tr>
-<td>$ pm2 publish</td>
-<td># Increment version, git push and npm publish</td>
-</tr>
-</tbody>
-</table>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -2051,7 +1934,7 @@ node --max-new-space-size=1024 test.js // 单位为KB
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-count">49</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

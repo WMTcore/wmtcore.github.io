@@ -223,11 +223,491 @@
 
     
     
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/nginx-负载均衡和反向代理的基本配置/" itemprop="url">
+                  nginx 负载均衡和反向代理的基本配置
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-07-05T17:47:22+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/nginx-负载均衡和反向代理的基本配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/nginx-负载均衡和反向代理的基本配置/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
       
 
       
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="u8D1F_u8F7D_u5747_u8861"><a href="#u8D1F_u8F7D_u5747_u8861" class="headerlink" title="负载均衡"></a>负载均衡</h3><ul>
+<li>此处指的是选择一种策略，尽量把请求均匀的分布到每一个上游服务器</li>
+</ul>
+<h4 id="upstream"><a href="#upstream" class="headerlink" title="upstream"></a>upstream</h4><ul>
+<li>配置块 http</li>
+<li>语法 upstream name{}</li>
+<li>定义一个上游服务器的集群，便于反向代理的proxy_pass使用</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">upstream backend &#123;</span><br><span class="line">    server <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5566</span> weight=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">30</span>s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http:<span class="comment">//backend; #backend指上游服务器</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="server"><a href="#server" class="headerlink" title="server"></a>server</h5><ul>
+<li>配置块 upstream</li>
+<li>语法 server names[parameters]</li>
+<li>指定一台上游服务器的名字 可以是域名，ip，UNIX句柄</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>parameters</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>weight=number</td>
+<td>上游服务器转发的权重 默认1</td>
+</tr>
+<tr>
+<td>max_fails=number</td>
+<td>在fail_timeout时间内，如果向上游服务器转发失败次数超过number,就认为该服务器在此时间段里不可用，默认1 设为0就不检查失败次数</td>
+</tr>
+<tr>
+<td>fail_timeout=time</td>
+<td>用于优化反向代理功能，与连接、读取、响应超时无关，默认10秒</td>
+</tr>
+<tr>
+<td>down</td>
+<td>永久下线服务器，只在使用ip_hash有效</td>
+</tr>
+<tr>
+<td>backup</td>
+<td>在使用ip_hash时无效 表示上游服务器只是备份服务器，只有在所有非备份上游服务器失效后，才会指向备份</td>
+</tr>
+</tbody>
+</table>
+<h5 id="ip_hash"><a href="#ip_hash" class="headerlink" title="ip_hash"></a>ip_hash</h5><ul>
+<li>配置块 upstream</li>
+<li>语法 ip_hash;</li>
+<li>将单个用户的请求固定到某个上游服务器</li>
+</ul>
+<p>先根据客户端的ip地址计算一个key,将可以按照upstream集群的上游服务器数量进行取模，再根据取模的结果把请求地址转发到相应的上游服务器,不能与weight同时使用，<strong>在标识上游服务器不可用时，要用down不能直接删除，确保转发策略一贯性</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream backend &#123;</span><br><span class="line"> 	ip_hash;</span><br><span class="line">    server <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5566</span> weight=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">30</span>s;</span><br><span class="line">    server backend down;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="u8BB0_u5F55_u65E5_u5FD7_u65F6_u652F_u6301_u7684_u53D8_u91CF"><a href="#u8BB0_u5F55_u65E5_u5FD7_u65F6_u652F_u6301_u7684_u53D8_u91CF" class="headerlink" title="记录日志时支持的变量"></a>记录日志时支持的变量</h4><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$upstream_addr</td>
+<td>处理请求的上游服务器地址</td>
+</tr>
+<tr>
+<td>$upstream_cache_status</td>
+<td>表示是否命中缓存，取值范围：MISS、EXPIRED、UPDATING、SATLE、HIT</td>
+</tr>
+<tr>
+<td>$upstream_status</td>
+<td>上游服务器返回的响应中HTTP响应码</td>
+</tr>
+<tr>
+<td>$upstream_response_time</td>
+<td>上游服务器响应时间，精度毫秒</td>
+</tr>
+<tr>
+<td>$upstream<em>http</em>$HEADER</td>
+<td>http头部，如upstream_http_host</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">log_format</span> timing <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] <span class="variable">$request</span> '</span></span><br><span class="line">	<span class="string">'upstream_response_time <span class="variable">$upstream_response_time</span> '</span></span><br><span class="line">	<span class="string">'msec <span class="variable">$msec</span> request_time <span class="variable">$request_time</span>'</span>;</span><br><span class="line"></span><br><span class="line"><span class="title">log_format</span> up_head <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] <span class="variable">$request</span> '</span></span><br><span class="line">	<span class="string">'upstream_http_content_type <span class="variable">$upstream_http_content_type</span>'</span></span><br></pre></td></tr></table></figure>
+<h3 id="u53CD_u5411_u4EE3_u7406_u914D_u7F6E"><a href="#u53CD_u5411_u4EE3_u7406_u914D_u7F6E" class="headerlink" title="反向代理配置"></a>反向代理配置</h3><h4 id="proxy_pass"><a href="#proxy_pass" class="headerlink" title="proxy_pass"></a>proxy_pass</h4><ul>
+<li>语法：proxy_pass URL;</li>
+<li>配置块 location、if</li>
+</ul>
+<p>将当前请求反向代理到URL参数指定的服务器上，URL可以是主机名或ip地址</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">proxy_pass http://localhost:<span class="number">3000</span>/uri/;</span><br><span class="line"></span><br><span class="line">可以加上负载均衡 使用upstream</span><br><span class="line">upstream backend <span class="decorator">&#123;...&#125;</span></span><br><span class="line">server &#123;location / &#123;</span><br><span class="line">            proxy_pass http://backend; <span class="comment">#backend指上游服务器</span></span><br><span class="line">        &#125;&#125;</span><br><span class="line"></span><br><span class="line">可以把httpz转换成https</span><br><span class="line">proxy_pass https://<span class="number">192</span>.<span class="number">168</span>.<span class="number">0</span>.<span class="number">1</span>/;</span><br><span class="line"></span><br><span class="line">若需要转发host头部</span><br><span class="line">proxy_set_header <span class="type">Host</span> $host;</span><br></pre></td></tr></table></figure>
+<h4 id="proxy_method"><a href="#proxy_method" class="headerlink" title="proxy_method"></a>proxy_method</h4><ul>
+<li>语法：proxy_method method;</li>
+<li>配置块 http、server、location</li>
+</ul>
+<p>转发时的协议方法名<br>proxy_method POST; 客户端的GET请求也会被转发成POST</p>
+<h4 id="proxy_hide_header"><a href="#proxy_hide_header" class="headerlink" title="proxy_hide_header"></a>proxy_hide_header</h4><ul>
+<li>语法：proxy_hide_header the_header;</li>
+<li>配置块 http、server、location</li>
+</ul>
+<p>Nginx会将上游服务器的响应转发给客户端，但默认不会转发以下HTTP头部字段：Date、Server、X-Pad和X-Accel-*.使用proxy_hide_header可以指定哪些不能转发</p>
+<p>proxy_hide_header Cache-Control;</p>
+<h4 id="proxy_pass_header"><a href="#proxy_pass_header" class="headerlink" title="proxy_pass_header"></a>proxy_pass_header</h4><ul>
+<li>语法：proxy_pass_header the_header;</li>
+<li>配置块 http、server、location</li>
+</ul>
+<p>将原来禁止转发的header设为转发</p>
+<h4 id="proxy_pass_request_body"><a href="#proxy_pass_request_body" class="headerlink" title="proxy_pass_request_body"></a>proxy_pass_request_body</h4><ul>
+<li>语法：proxy_pass_request_body on|off;</li>
+<li>默认 on;</li>
+<li>配置块 http、server、location<br>是否向上游转发http body</li>
+</ul>
+<h4 id="proxy_pass_request_headers"><a href="#proxy_pass_request_headers" class="headerlink" title="proxy_pass_request_headers"></a>proxy_pass_request_headers</h4><ul>
+<li>语法：proxy_pass_request_headers on|off;</li>
+<li>默认 on;</li>
+<li>配置块 http、server、location<br>是否向上游转发http header</li>
+</ul>
+<h4 id="prxoy_redirect"><a href="#prxoy_redirect" class="headerlink" title="prxoy_redirect"></a>prxoy_redirect</h4><ul>
+<li>语法：prxoy_redirect [default|off|redirect rep|replacement]];</li>
+<li>默认 default;</li>
+<li>配置块 http、server、location</li>
+</ul>
+<p>当上游返回响应是重定向或刷新请求（301，302),proxy_redirect 可以重设HTTP头部的location或refresh字段。</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">proxy_redirect <span class="symbol">http:</span>/<span class="regexp">/localhost:8000/two</span><span class="regexp">/ http:/</span><span class="regexp">/frontend/one</span><span class="regexp">/;</span><br><span class="line"></span><br><span class="line">对location字段的URI是http:/</span><span class="regexp">/localhost:8000/two</span><span class="regexp">/some/uri</span>.实际转发给客户端的是<span class="symbol">http:</span>/<span class="regexp">/frontend/one</span><span class="regexp">/;</span><br><span class="line"></span><br><span class="line">可以使用ngx-http-core-module提供的变量来设置</span><br><span class="line"></span><br><span class="line">proxy_redirect http:/</span><span class="regexp">/localhost:8000/</span> <span class="symbol">http:</span>/<span class="regexp">/$host:$server_port/</span>;</span><br><span class="line"></span><br><span class="line">可以省略replacement参数的主机名部分，这时会用虚拟主机名称填充</span><br><span class="line">proxy_redirect <span class="symbol">http:</span>/<span class="regexp">/localhost:8000/two</span><span class="regexp">/ /one</span><span class="regexp">/;</span><br><span class="line"></span><br><span class="line">使用default参数时，会按照proxy_pass配置项和所属的location配置项重组</span><br><span class="line"></span><br><span class="line">location /one</span><span class="regexp">/ &#123;</span><br><span class="line">  proxy_pass http:/</span><span class="regexp">/upstream:port/two</span><span class="regexp">/;</span><br><span class="line">  proxy_redirect default;</span><br><span class="line">&#125;</span><br><span class="line">等于</span><br><span class="line">location /one</span><span class="regexp">/ &#123;</span><br><span class="line">	proxy_pass http:/</span><span class="regexp">/upstream:port/two</span><span class="regexp">/;</span><br><span class="line">	proxy_redirect http:/</span><span class="regexp">/upstream:port/two</span><span class="regexp">/ /one</span><span class="regexp">/;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<h4 id="proxy_next_upstream"><a href="#proxy_next_upstream" class="headerlink" title="proxy_next_upstream"></a>proxy_next_upstream</h4><ul>
+<li>语法：proxy_next_upstream [error|timeout|invalid_header|http_500|http_502|http_503|http_504|http_404|off];</li>
+<li>默认 error timeout;</li>
+<li>配置块 http、server、location</li>
+</ul>
+<p>当向一台上游转发请求出错时，继续换一台处理<br>（invaild_header 上游响应不合法）</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/01/pm2介绍/" itemprop="url">
+                  pm2
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-07-01T15:15:27+08:00" content="2016-07-01">
+              2016-07-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/01/pm2介绍/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/01/pm2介绍/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <ul>
+<li>pm2 是一个带有负载均衡功能的Node应用的进程管理器</li>
+<li>内建负载均衡（使用Node cluster 集群模块）</li>
+<li>后台运行</li>
+<li>0秒停机重载，热升级</li>
+<li>具有Ubuntu和CentOS 的启动脚本</li>
+<li>停止不稳定的进程（避免无限循环）</li>
+<li>控制台检测</li>
+<li>提供 HTTP API</li>
+<li>远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )</li>
+<li><a href="https://github.com/Unitech/pm2" target="_blank">github</a></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>explain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$ npm install pm2 -g</td>
+<td># Install PM2</td>
+</tr>
+<tr>
+<td>$ pm2 start app.js</td>
+<td># Start, Daemonize and auto restart application</td>
+</tr>
+<tr>
+<td>$ pm2 start app.js -i 4</td>
+<td># Start 4 instances of application in cluster mode it will load balance network queries to each app</td>
+</tr>
+<tr>
+<td><strong>$ pm2 start app.js –name=”api”</strong></td>
+<td># Start application and name it “api”</td>
+</tr>
+<tr>
+<td>$ pm2 start app.js –watch</td>
+<td># Restart application on file change</td>
+</tr>
+<tr>
+<td>$ pm2 start script.sh</td>
+<td># Start bash script</td>
+</tr>
+<tr>
+<td>$ pm2 list</td>
+<td># List all processes started with PM2</td>
+</tr>
+<tr>
+<td><strong>$ pm2 monit</strong></td>
+<td># Display memory and cpu usage of each app</td>
+</tr>
+<tr>
+<td>$ pm2 show [app-name]</td>
+<td># Show all informations about application</td>
+</tr>
+<tr>
+<td><strong>$ pm2 logs</strong></td>
+<td># Display logs of all apps</td>
+</tr>
+<tr>
+<td>$ pm2 logs [app-name]</td>
+<td># Display logs for a specific app</td>
+</tr>
+<tr>
+<td>$ pm2 flush</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>$ pm2 stop all</strong></td>
+<td># Stop all apps</td>
+</tr>
+<tr>
+<td>$ pm2 stop 0</td>
+<td># Stop process with id 0</td>
+</tr>
+<tr>
+<td><strong>$ pm2 restart all</strong></td>
+<td># Restart all apps</td>
+</tr>
+<tr>
+<td><strong>$ pm2 reload all</strong></td>
+<td># Reload all apps in cluster mode</td>
+</tr>
+<tr>
+<td>$ pm2 gracefulReload all</td>
+<td># Graceful reload all apps in cluster mode</td>
+</tr>
+<tr>
+<td>$ pm2 delete all</td>
+<td># Kill and delete all apps</td>
+</tr>
+<tr>
+<td>$ pm2 delete 0</td>
+<td># Delete app with id 0</td>
+</tr>
+<tr>
+<td>$ pm2 scale api 10</td>
+<td># Scale app with name api to 10 instances</td>
+</tr>
+<tr>
+<td>$ pm2 reset [app-name]</td>
+<td># Reset number of restart for [app-name]</td>
+</tr>
+<tr>
+<td>$ pm2 startup</td>
+<td># Generate a startup script to respawn PM2 on boot</td>
+</tr>
+<tr>
+<td>$ pm2 save</td>
+<td># Save current process list</td>
+</tr>
+<tr>
+<td>$ pm2 resurrect</td>
+<td># Restore previously save processes</td>
+</tr>
+<tr>
+<td>$ pm2 update</td>
+<td># Save processes, kill PM2 and restore processes</td>
+</tr>
+<tr>
+<td>$ pm2 generate</td>
+<td># Generate a sample json configuration file</td>
+</tr>
+<tr>
+<td>$ pm2 deploy app.json prod setup</td>
+<td># Setup “prod” remote server</td>
+</tr>
+<tr>
+<td>$ pm2 deploy app.json prod</td>
+<td># Update “prod” remote server</td>
+</tr>
+<tr>
+<td>$ pm2 deploy app.json prod revert 2</td>
+<td># Revert “prod” remote server by 2</td>
+</tr>
+<tr>
+<td>$ pm2 module:generate [name]</td>
+<td># Generate sample module with name [name]</td>
+</tr>
+<tr>
+<td>$ pm2 install pm2-logrotate</td>
+<td># Install module (here a log rotation system)</td>
+</tr>
+<tr>
+<td>$ pm2 uninstall pm2-logrotate</td>
+<td># Uninstall module</td>
+</tr>
+<tr>
+<td>$ pm2 publish</td>
+<td># Increment version, git push and npm publish</td>
+</tr>
+</tbody>
+</table>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1398,294 +1878,6 @@ Step(
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/31/es6-Generator/" itemprop="url">
-                  es6 Generator
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-03-31T15:06:15+08:00" content="2016-03-31">
-              2016-03-31
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/js/" itemprop="url" rel="index">
-                    <span itemprop="name">js</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/31/es6-Generator/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/31/es6-Generator/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="u7B80_u4ECB"><a href="#u7B80_u4ECB" class="headerlink" title="简介"></a>简介</h3><ul>
-<li>把它理解成一个状态机，封装了多个内部状态，执行Generator函数会返回一个遍历器对象，可以依次遍历Generator函数内部的每一个状态。</li>
-<li>定义时function与函数名之间有一个星号</li>
-<li>内部使用yield（产出）语句，定义不同的内部状态</li>
-<li>调用遍历器对象的next方法，使指针移向下一个状态</li>
-</ul>
-<p>调用Generator函数后，该函数并不执行，而是返回一个指向内部状态的指针对象，每次调用next方法，内部指针就从函数头部或上一次停下来的地方开始执行，直到遇到下一个yield语句（或return语句）为止。<strong>Generator函数是分段执行的，yield语句是暂停执行的标记，而next方法可以恢复执行</strong></p>
-<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">helloWorldGenerator</span><span class="params">()</span></span> &#123;</span><br><span class="line">  yield <span class="string">'hello'</span>;</span><br><span class="line">  yield <span class="string">'world'</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'ending'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var hw = helloWorldGenerator();</span><br><span class="line"></span><br><span class="line">hw.<span class="built_in">next</span>()</span><br><span class="line">// &#123; value: <span class="string">'hello'</span>, done: <span class="keyword">false</span> &#125;</span><br><span class="line"></span><br><span class="line">hw.<span class="built_in">next</span>()</span><br><span class="line">// &#123; value: <span class="string">'world'</span>, done: <span class="keyword">false</span> &#125;</span><br><span class="line"></span><br><span class="line">hw.<span class="built_in">next</span>()</span><br><span class="line">// &#123; value: <span class="string">'ending'</span>, done: <span class="keyword">true</span> &#125;，执行完成done变成<span class="keyword">true</span></span><br><span class="line"></span><br><span class="line">hw.<span class="built_in">next</span>()</span><br><span class="line">// &#123; value: undefined, done: <span class="keyword">true</span> &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="yield_u8BED_u53E5"><a href="#yield_u8BED_u53E5" class="headerlink" title="yield语句"></a>yield语句</h3><ul>
-<li>遍历器对象的next遇到yield语句，就暂停执行后面的操作，并将紧跟在yield后面的那个表达式的值，作为返回的对象的value属性值</li>
-<li>下一次调用next方法时，再继续往下执行，直到遇到下一个yield语句</li>
-<li>如果没有再遇到新的yield语句，就一直运行到函数结束，直到return语句为止，并将return语句后面的表达式的值，作为返回的对象的value属性值,若无则返回undefined</li>
-<li>yield语句如果用在一个表达式之中，必须放在圆括号里面，作函数参数或赋值表达式的右边除外</li>
-</ul>
-<p>yield与return区别在于每次遇到yield，函数暂停执行，下一次再从该位置继续向后执行，而return不具备位置记忆的功能。一个函数里面，只能执行一次（或者说一个）return语句，但是可以执行多次（或者说多个）yield语句,所以Generator函数可以返回一系列的值，即生成器之意</p>
-<p>yield句本身没有返回值，或者说总是返回undefined。<strong>next方法可以带一个参数，该参数就会被当作上一个yield语句的返回值</strong>。第一次使用next方法时，不能带有参数,V8引擎直接忽略第一次使用next方法时的参数，只有从第二次使用next方法开始，参数才是有效的。从语义上讲，第一个next方法用来启动遍历器对象，所以不用带有参数。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; <span class="literal">true</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">var</span> reset = <span class="keyword">yield</span> i;</span><br><span class="line">    <span class="keyword">if</span>(reset) &#123; i = -<span class="number">1</span>; &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> g = f();</span><br><span class="line"></span><br><span class="line">g.next() <span class="comment">// &#123; value: 0, done: false &#125;</span></span><br><span class="line">g.next() <span class="comment">// &#123; value: 1, done: false &#125;</span></span><br><span class="line">g.next(<span class="literal">true</span>) <span class="comment">// &#123; value: 0, done: false &#125;</span></span><br></pre></td></tr></table></figure>
-<p>通过next方法的参数，向Generator函数内部输入值</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">dataConsumer</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'Started'</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`1. <span class="subst">$&#123;yield&#125;</span>`</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`2. <span class="subst">$&#123;yield&#125;</span>`</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'result'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> genObj = dataConsumer();</span><br><span class="line">genObj.next();</span><br><span class="line"><span class="comment">// Started</span></span><br><span class="line">genObj.next(<span class="string">'a'</span>)</span><br><span class="line"><span class="comment">// 1. a</span></span><br><span class="line">genObj.next(<span class="string">'b'</span>)</span><br><span class="line"><span class="comment">// 2. b</span></span><br></pre></td></tr></table></figure>
-<h3 id="u4E0EIterator_u63A5_u53E3_u7684_u5173_u7CFB"><a href="#u4E0EIterator_u63A5_u53E3_u7684_u5173_u7CFB" class="headerlink" title="与Iterator接口的关系"></a>与Iterator接口的关系</h3><ul>
-<li>执行Generator函数后返回Iterator对象</li>
-</ul>
-<p>for…of循环、扩展运算符（…）、解构赋值和Array.from方法内部调用的，都是使用遍历器接口，即可以自动遍历Generator函数</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">扩展运算符（<span class="attribute">...</span>）用于取出参数对象的所有可遍历属性，拷贝到当前对象之中。</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> z = &#123; a: <span class="number">3</span>, b: <span class="number">4</span> &#125;;</span><br><span class="line"><span class="keyword">let</span> n = &#123; <span class="attribute">...</span>z &#125;;</span><br><span class="line">n <span class="comment">// &#123; a: 3, b: 4 &#125;</span></span><br><span class="line"></span><br><span class="line">扩展运算符可以用于合并两个对象。</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> ab = &#123; <span class="attribute">...</span>a, <span class="attribute">...</span>b &#125;;</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="keyword">let</span> ab = Object<span class="built_in">.</span>assign(&#123;&#125;, a, b);</span><br></pre></td></tr></table></figure>
-<h3 id="Generator-prototype-return_28_29"><a href="#Generator-prototype-return_28_29" class="headerlink" title="Generator.prototype.return()"></a>Generator.prototype.return()</h3><ul>
-<li>遍历器对象的return方法，可以返回给定的值，并且终结遍历Generator函数</li>
-</ul>
-<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">gen</span><span class="params">()</span></span> &#123;</span><br><span class="line">  yield <span class="number">1</span>;</span><br><span class="line">  yield <span class="number">2</span>;</span><br><span class="line">  yield <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var g = gen();</span><br><span class="line"></span><br><span class="line">g.<span class="built_in">next</span>()        // &#123; value: <span class="number">1</span>, done: <span class="keyword">false</span> &#125;</span><br><span class="line">g.<span class="keyword">return</span>(<span class="string">"foo"</span>) // &#123; value: <span class="string">"foo"</span>, done: <span class="keyword">true</span> &#125;,<span class="keyword">return</span>不提供参数，则返回值的vaule属性为undefined</span><br><span class="line">g.<span class="built_in">next</span>()        // &#123; value: undefined, done: <span class="keyword">true</span> &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="yield*_u8BED_u53E5"><a href="#yield*_u8BED_u53E5" class="headerlink" title="yield*语句"></a>yield*语句</h3><ul>
-<li>用来在一个Generator函数里面执行另一个Generator函数</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'a'</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'b'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'x'</span>;</span><br><span class="line">  <span class="keyword">yield</span>* foo();</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'y'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'x'</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'a'</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'b'</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'y'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'x'</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> v <span class="keyword">of</span> foo()) &#123;</span><br><span class="line">    <span class="keyword">yield</span> v;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'y'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> v <span class="keyword">of</span> bar())&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(v);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// "x"</span></span><br><span class="line"><span class="comment">// "a"</span></span><br><span class="line"><span class="comment">// "b"</span></span><br><span class="line"><span class="comment">// "y"</span></span><br></pre></td></tr></table></figure>
-<p><code>yield*语句等同于在Generator函数内部，部署一个for...of循环</code> ,如果yield*后面跟着一个数组，由于数组原生支持遍历器，因此就会遍历数组成员,还有字符串之类有Iterator接口的数据结构</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">gen</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">yield</span>* [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">gen().next() <span class="comment">// &#123; value:"a", done:false &#125;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight zephir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 下面是二叉树的构造函数，</span></span><br><span class="line"><span class="comment">// 三个参数分别是左树、当前节点和右树</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Tree</span><span class="params">(left, label, right)</span> </span>&#123;</span><br><span class="line">  this.left = left;</span><br><span class="line">  this.label = label;</span><br><span class="line">  this.right = right;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下面是中序（inorder）遍历函数。</span></span><br><span class="line"><span class="comment">// 由于返回的是一个遍历器，所以要用generator函数。</span></span><br><span class="line"><span class="comment">// 函数体内采用递归算法，所以左树和右树要用yield*遍历</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">inorder</span><span class="params">(t)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (t) &#123;</span><br><span class="line">    <span class="keyword">yield</span>* inorder(t.left);</span><br><span class="line">           <span class="keyword">yield</span> t.label;</span><br><span class="line">    <span class="keyword">yield</span>* inorder(t.right);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下面生成二叉树</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">make</span><span class="params">(array)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 判断是否为叶节点</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">array</span>.length == <span class="number">1</span>) <span class="keyword">return</span> <span class="keyword">new</span> Tree(<span class="keyword">null</span>, <span class="keyword">array</span>[<span class="number">0</span>], <span class="keyword">null</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Tree(make(<span class="keyword">array</span>[<span class="number">0</span>]), <span class="keyword">array</span>[<span class="number">1</span>], make(<span class="keyword">array</span>[<span class="number">2</span>]));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> tree = make([[[<span class="string">'a'</span>], <span class="string">'b'</span>, [<span class="string">'c'</span>]], <span class="string">'d'</span>, [[<span class="string">'e'</span>], <span class="string">'f'</span>, [<span class="string">'g'</span>]]]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 遍历二叉树</span></span><br><span class="line"><span class="keyword">var</span> result = [];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> node of inorder(tree)) &#123;</span><br><span class="line">  result.push(node);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">result</span><br><span class="line"><span class="comment">// ['a', 'b', 'c', 'd', 'e', 'f', 'g']</span></span><br></pre></td></tr></table></figure>
-<h3 id="Generator_u7684_u4E00_u4E9B_u5E94_u7528"><a href="#Generator_u7684_u4E00_u4E9B_u5E94_u7528" class="headerlink" title="Generator的一些应用"></a>Generator的一些应用</h3><h4 id="u5F02_u6B65_u8F6C_u540C_u6B65"><a href="#u5F02_u6B65_u8F6C_u540C_u6B65" class="headerlink" title="异步转同步"></a>异步转同步</h4><p><code>可以把异步操作写在yield语句里面，等到调用next方法时再往后执行</code></p>
-<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function* main() &#123;</span><br><span class="line">	<span class="keyword">var</span> <span class="literal">result</span> = <span class="keyword">yield</span> request(<span class="string">"http://some.url"</span>);</span><br><span class="line">	<span class="keyword">var</span> resp = <span class="type">JSON</span>.parse(<span class="literal">result</span>);</span><br><span class="line">	console.log(resp.value);</span><br><span class="line">&#125;</span><br><span class="line">function request(url) &#123;</span><br><span class="line">	makeAjaxCall(url, function(response) &#123;</span><br><span class="line">		it.next(response);   //因为<span class="keyword">yield</span>语句构成的表达式，本身是没有值的,必须加上response参数</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> it = main();</span><br><span class="line">it.next();</span><br></pre></td></tr></table></figure>
-<h4 id="u6D41_u7A0B_u63A7_u5236"><a href="#u6D41_u7A0B_u63A7_u5236" class="headerlink" title="流程控制"></a>流程控制</h4><p><code>多个任务需要并列执行时,可以采用数组的写法</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">parallelDownloads</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> [text1,text2] = <span class="keyword">yield</span> [</span><br><span class="line">    taskA(),</span><br><span class="line">    taskB()</span><br><span class="line">  ];</span><br><span class="line">  <span class="built_in">console</span>.log(text1, text2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="u90E8_u7F72iterator_u63A5_u53E3"><a href="#u90E8_u7F72iterator_u63A5_u53E3" class="headerlink" title="部署iterator接口"></a>部署iterator接口</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">iterEntries</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> keys = <span class="built_in">Object</span>.keys(obj);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i=<span class="number">0</span>; i &lt; keys.length; i++) &#123;</span><br><span class="line">    <span class="keyword">let</span> key = keys[i];</span><br><span class="line">    <span class="keyword">yield</span> [key, obj[key]];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myObj = &#123; foo: <span class="number">3</span>, bar: <span class="number">7</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> [key, value] <span class="keyword">of</span> iterEntries(myObj)) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key, value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// foo 3</span></span><br><span class="line"><span class="comment">// bar 7</span></span><br></pre></td></tr></table></figure>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/29/Node异步I-O/" itemprop="url">
-                  Node异步I/O
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-03-29T15:27:32+08:00" content="2016-03-29">
-              2016-03-29
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/29/Node异步I-O/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/29/Node异步I-O/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p><code>让I/O与CPU计算并行</code></p>
-<p>Node 在*nix平台，通过线程池实现(主线程和I/O线程)，在windows下使用IOCP(调用异步方法，等待I/O完成后通知，执行回调，内部也依靠线程池，但由系统内核管理)，通过libuv层来兼容。</p>
-<p>Node本身是多线程的，但其中的JavaScript是单线程、因为v8的限制，但计算之类的都是在此线程，多线程只是I/O（磁盘，网络等），I/O有另外的线程池</p>
-<h3 id="u4E8B_u4EF6_u5FAA_u73AF"><a href="#u4E8B_u4EF6_u5FAA_u73AF" class="headerlink" title="事件循环"></a>事件循环</h3><ul>
-<li><p>Node自身的执行模型,在libuv中</p>
-</li>
-<li><p>在Node启动时，创建一个类似while(true)的循环，每循环一次成一个Tick,每次Tick查看是否有事件要处理，若有就处理事件和它的相关回调函数。在windows中基于IOCP,在*nix中基于多线程</p>
-</li>
-<li><p>在Tick过程中通过<strong>观察者</strong>判断是否有事件要处理  </p>
-</li>
-<li><p>异步过程中最重要的就是请求对象，所有状态、传入参数、当前方法和回调函数都封装在此，javascript将对象组装好，送入I/O线程池后就结束了，I/O操作在线程池中等待请求对象被执行</p>
-</li>
-<li><p>Tick在执行过程中检查线程池中是否有执行完的请求，并加入<strong>I/O观察者队列</strong>中，然后再从观察者取到可用的请求对象当做事件处理，取出对象中的回调函数执行,若有业务层callback再给js执行</p>
-</li>
-</ul>
-<p><img src="/../IO异步.png" alt="Smaller icon"></p>
-<h4 id="u4E8B_u4EF6_u9A71_u52A8_u7684_u9AD8_u6027_u80FD_u670D_u52A1_u5668"><a href="#u4E8B_u4EF6_u9A71_u52A8_u7684_u9AD8_u6027_u80FD_u670D_u52A1_u5668" class="headerlink" title="事件驱动的高性能服务器"></a>事件驱动的高性能服务器</h4><p>基于事件驱动的非阻塞I/O模型<br><code>通过主循环加载事件触发的方式来运行程序处理请求，无需为每一个请求创建额外的对应线程</code>：操作系统因为线程少，所以在上下文切换时代价很小，有助系统稳定处理大量请求（但不适合密集运算),但用户代码不能并行执行，I/O可以</p>
-<ul>
-<li>单线程保证运行安全，避免重入</li>
-</ul>
-<p><img src="/../高性能服务器.png" alt="Smaller icon"></p>
-<h3 id="u53E6_u5916_u4E00_u4E9B_u5F02_u6B65api"><a href="#u53E6_u5916_u4E00_u4E9B_u5F02_u6B65api" class="headerlink" title="另外一些异步api"></a>另外一些异步api</h3><h4 id="u5B9A_u65F6_u5668"><a href="#u5B9A_u65F6_u5668" class="headerlink" title="定时器"></a>定时器</h4><ul>
-<li>setTimeout()单次定时执行 setInterval()多次定时执行</li>
-</ul>
-<p>原理和异步I/O类似，将创建的定时器放到定时器观察者内部的红黑树，tick执行时，从红黑树中迭代取出定时器对象，检查是否超过定时时间，超过就形成事件并且立刻执行回调函数。</p>
-<p><code>问题</code>：定时不精确，如果某个循环占用时间过多，当再轮到定时器执行时就已经超时了</p>
-<h4 id="process-nextTick_28_29"><a href="#process-nextTick_28_29" class="headerlink" title="process.nextTick()"></a>process.nextTick()</h4><ul>
-<li>若想立即异步执行一个任务，用这个更高效</li>
-</ul>
-<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123; <span class="comment">// TODO</span>&#125;, <span class="number">0</span>);<span class="comment">// 比较浪费性能</span></span><br><span class="line"></span><br><span class="line">process.nextTick=<span class="function"><span class="keyword">function</span><span class="params">(callback)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(process._exiting) <span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">if</span>(tickDepth &gt;=process.maxTickDepth)</span><br><span class="line">	   maxTickWarn();</span><br><span class="line">	<span class="keyword">var</span> tock=&#123;<span class="keyword">callback</span>:<span class="keyword">callback</span>&#125;;</span><br><span class="line">	<span class="keyword">if</span>(process.domain) tock.domain=process.domain;</span><br><span class="line">	 nextTickQueue.push(tock);</span><br><span class="line">	<span class="keyword">if</span>(nextTickQueue.length)&#123;</span><br><span class="line">	  process._needTickCallback();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>调用process.nextTick(),只会将回调函数放入队列中，在下个Tick取出</code></p>
-<h4 id="setImmediate_28_29"><a href="#setImmediate_28_29" class="headerlink" title="setImmediate()"></a>setImmediate()</h4><ul>
-<li>类process.nextTick() 将回调函数延时执行，建议使用这个（v0.9.1以后）</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'nextTick延时执行1'</span>)</span><br><span class="line">&#125;);</span><br><span class="line">process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'nextTick延时执行2'</span>);</span><br><span class="line">&#125;);</span><br><span class="line">setImmdiate(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'setImmdiate延时执行1'</span>);</span><br><span class="line">	process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'强势插入'</span>);</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;);  </span><br><span class="line">setImmediate(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'setImmediate延时执行2'</span>); </span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'正常执行'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//正常执行 </span></span><br><span class="line"><span class="comment">//nextTick  延时执行1 </span></span><br><span class="line"><span class="comment">//nextTick  延时执行2 </span></span><br><span class="line"><span class="comment">//setImmediate  延时执行1  </span></span><br><span class="line"><span class="comment">//强势插入 </span></span><br><span class="line"><span class="comment">//setImmediate  延时执行2</span></span><br></pre></td></tr></table></figure>
-<p><code>process.nextTick()属于idle观察者，setImmediate()属于check观察者，在每轮循环中，idle观察者先于I/O观察者先与check</code></p>
-<p>process.nextTick()的回调函数保存在<strong>数组</strong>中,在每轮循环中会将数组中的回调函数<strong>全部执行</strong>完。setImmediate()保存在<strong>链表</strong>中,在每轮循环中<strong>执行链表的一个</strong>回调函数</p>
-<h3 id="u5F02_u6B65_u5E76_u53D1_u63A7_u5236"><a href="#u5F02_u6B65_u5E76_u53D1_u63A7_u5236" class="headerlink" title="异步并发控制"></a>异步并发控制</h3><p>并发量过大,下层服务器会吃不消</p>
-<h5 id="bagpipe"><a href="#bagpipe" class="headerlink" title="bagpipe"></a>bagpipe</h5><ol>
-<li>通过队列控制并发量</li>
-<li>在当前活跃的异步调用量小于限定值，从队列中取出执行</li>
-<li>活跃调用达到限定值后，调用暂存在队列中</li>
-<li>每个调用结束时，从队列中取出新的异步调用执行</li>
-</ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1732,7 +1924,7 @@ Step(
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-count">49</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

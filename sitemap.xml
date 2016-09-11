@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.wmtcore.com/2016/09/11/koa-csrf/</loc>
+    <lastmod>2016-09-11T08:03:14.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.wmtcore.com/2016/08/31/nodejs-web%E5%BA%94%E7%94%A8-%E4%B8%89/</loc>
+    <lastmod>2016-09-01T05:46:55.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.wmtcore.com/2016/08/19/nodejs-web%E5%BA%94%E7%94%A8-%E4%BA%8C/</loc>
     <lastmod>2016-08-31T09:04:43.000Z</lastmod>
   </url>
