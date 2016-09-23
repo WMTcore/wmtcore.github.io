@@ -69,6 +69,7 @@
 <meta name="twitter:description" content="问题和解决方法在对接支付宝时，发生了这样的问题,使用http链接时，支付宝notify是没有问题的，但换成https后便通知不到了
 最可能的问题便是ssl证书出错了,注意支付宝不支持自签名证书（https://doc.open.alipay.com/doc2/detail?treeId=66&amp;amp;articleId=104422&amp;amp;docType=1）
 12去这个网站检测下你的CSR吧h">
+<meta name="twitter:image" content="http://www.wmtcore.com/../picture/懵逼.jpg">
 
 
 
@@ -303,7 +304,7 @@
       
         <span itemprop="articleBody"><h3 id="u95EE_u9898_u548C_u89E3_u51B3_u65B9_u6CD5"><a href="#u95EE_u9898_u548C_u89E3_u51B3_u65B9_u6CD5" class="headerlink" title="问题和解决方法"></a>问题和解决方法</h3><p>在对接支付宝时，发生了这样的问题,使用http链接时，支付宝notify是没有问题的，但换成https后便通知不到了</p>
 <p>最可能的问题便是<strong>ssl证书出错</strong>了,注意支付宝不支持自签名证书（<a href="https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1）" target="_blank" rel="external">https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1）</a></p>
-<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">去这个网站检测下你的<span class="constant">CSR</span>吧</span><br><span class="line"><span class="symbol">https:</span>/<span class="regexp">/cryptoreport.websecurity.symantec.com/checker</span><span class="regexp">/views/csr</span>Check.jsp</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">去这个网站检测下你的CSR吧</div><div class="line">https:<span class="regexp">//</span>cryptoreport.websecurity.symantec.com<span class="regexp">/checker/</span>views<span class="regexp">/csrCheck.jsp</span></div></pre></td></tr></table></figure>
 <h3 id="u4E8B_u60C5_u7ECF_u8FC7"><a href="#u4E8B_u60C5_u7ECF_u8FC7" class="headerlink" title="事情经过"></a>事情经过</h3><p>某天，同事们偷偷给网站加了安全套接字，把http换成了https,于是我负责的支付模块就出错了。</p>
 <p>一开始，我就简单改了config,提交给支付宝的notify_url改成了https。本以为就没问题了，但在我又付出了￥0.01的巨款后，发现支付宝还是没有通知过来。。然后就懵逼了</p>
 <p><img src="/../picture/懵逼.jpg" alt="Smaller icon"></p>
@@ -419,7 +420,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-count">48</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

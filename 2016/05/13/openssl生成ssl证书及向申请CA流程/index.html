@@ -299,8 +299,8 @@
       
 
       
-        <span itemprop="articleBody"><h3 id="u751F_u6210key"><a href="#u751F_u6210key" class="headerlink" title="生成key"></a>生成key</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -des3 -out prvtkey<span class="class">.pem</span> <span class="number">2048</span> </span><br><span class="line">或者无密码保护的</span><br><span class="line">openssl genrsa -out prvtkey<span class="class">.pem</span> <span class="number">2048</span></span><br></pre></td></tr></table></figure>
-<h3 id="u751F_u6210-csr_28_u7528_u8FD9_u4E2A_u5411_u6570_u5B57_u8BC1_u4E66_u9881_u53D1_u673A_u6784_uFF08_u5373CA_uFF09_u7533_u8BF7_u4E00_u4E2A_u6570_u5B57_u8BC1_u4E66_29"><a href="#u751F_u6210-csr_28_u7528_u8FD9_u4E2A_u5411_u6570_u5B57_u8BC1_u4E66_u9881_u53D1_u673A_u6784_uFF08_u5373CA_uFF09_u7533_u8BF7_u4E00_u4E2A_u6570_u5B57_u8BC1_u4E66_29" class="headerlink" title="生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)"></a>生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)</h3><figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -<span class="keyword">new</span> -key prvtkey.pem -<span class="keyword">out</span> cert.csr</span><br></pre></td></tr></table></figure>
+        <span itemprop="articleBody"><h3 id="u751F_u6210key"><a href="#u751F_u6210key" class="headerlink" title="生成key"></a>生成key</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">openssl genrsa -des3 -out prvtkey<span class="selector-class">.pem</span> <span class="number">2048</span> </div><div class="line">或者无密码保护的</div><div class="line">openssl genrsa -out prvtkey<span class="selector-class">.pem</span> <span class="number">2048</span></div></pre></td></tr></table></figure>
+<h3 id="u751F_u6210-csr_28_u7528_u8FD9_u4E2A_u5411_u6570_u5B57_u8BC1_u4E66_u9881_u53D1_u673A_u6784_uFF08_u5373CA_uFF09_u7533_u8BF7_u4E00_u4E2A_u6570_u5B57_u8BC1_u4E66_29"><a href="#u751F_u6210-csr_28_u7528_u8FD9_u4E2A_u5411_u6570_u5B57_u8BC1_u4E66_u9881_u53D1_u673A_u6784_uFF08_u5373CA_uFF09_u7533_u8BF7_u4E00_u4E2A_u6570_u5B57_u8BC1_u4E66_29" class="headerlink" title="生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)"></a>生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl req -<span class="keyword">new</span> -key prvtkey.pem -<span class="keyword">out</span> cert.csr</div></pre></td></tr></table></figure>
 <p>然后填写信息，注意<strong>Common Name (eg, your websites domain name)</strong>，要填写网站域名,如:pay.abc.com</p>
 <p>生成的.csr文件是否规范可以在这检测：<br><a href="https://cryptoreport.websecurity.symantec.com/checker/views/csrCheck.jsp" target="_blank" rel="external">https://cryptoreport.websecurity.symantec.com/checker/views/csrCheck.jsp</a></p>
 <p>然后向CA申请数字证书，再用CA给的cacert.pem替换原来的prvtkey.pem</p>
@@ -404,7 +404,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-count">48</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

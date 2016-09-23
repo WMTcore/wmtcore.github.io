@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="nodejs,react," />
+  <meta name="keywords" content="react,nodejs," />
 
 
 
@@ -334,12 +334,12 @@ React组件的热替换
 <li>React组件的热替换</li>
 </ul>
 <p><code>创建一个server.js文件,用于启动webpack-dev-server</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"><span class="keyword">var</span> WebpackDevServer = <span class="built_in">require</span>(<span class="string">'webpack-dev-server'</span>);</span><br><span class="line"><span class="keyword">var</span> config = <span class="built_in">require</span>(<span class="string">'../webpack.config'</span>);</span><br><span class="line"><span class="keyword">new</span> WebpackDevServer(webpack(config), &#123;</span><br><span class="line">  publicPath: config.output.publicPath,</span><br><span class="line">  hot: <span class="literal">true</span>,<span class="comment">//开启Hot Module Replacement (HMR)</span></span><br><span class="line">  noInfo: <span class="literal">false</span>,</span><br><span class="line">  historyApiFallback: <span class="literal">true</span></span><br><span class="line">&#125;).listen(<span class="number">3000</span>, <span class="string">'127.0.0.1'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, result</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(err);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'Listening at localhost:3000'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</div><div class="line"><span class="keyword">var</span> WebpackDevServer = <span class="built_in">require</span>(<span class="string">'webpack-dev-server'</span>);</div><div class="line"><span class="keyword">var</span> config = <span class="built_in">require</span>(<span class="string">'../webpack.config'</span>);</div><div class="line"><span class="keyword">new</span> WebpackDevServer(webpack(config), &#123;</div><div class="line">  <span class="attr">publicPath</span>: config.output.publicPath,</div><div class="line">  <span class="attr">hot</span>: <span class="literal">true</span>,<span class="comment">//开启Hot Module Replacement (HMR)</span></div><div class="line">  noInfo: <span class="literal">false</span>,</div><div class="line">  <span class="attr">historyApiFallback</span>: <span class="literal">true</span></div><div class="line">&#125;).listen(<span class="number">3000</span>, <span class="string">'127.0.0.1'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, result</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (err) &#123;</div><div class="line">    <span class="built_in">console</span>.log(err);</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Listening at localhost:3000'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p><code>修改webpack.config.js</code></p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">entry: [</span><br><span class="line">  <span class="string">'webpack-dev-server/client?http://127.0.0.1:3000'</span>, <span class="comment">// WebpackDevServer host and port,资源服务器地址,打包生成的文件从client?http://127.0.0.1:3000去获取动态的代码更新</span></span><br><span class="line">  <span class="string">'webpack/hot/only-dev-server'</span>,</span><br><span class="line">  <span class="string">'./scripts/index.js'</span> <span class="comment">// Your appʼs entry point</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">loaders: [&#123;</span><br><span class="line">    test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">    <span class="keyword">exclude</span>: <span class="regexp">/node_modules/</span>,</span><br><span class="line">    loader: <span class="string">'react-hot!jsx-loader?harmony'</span><span class="comment">//让Webpack用react-hot-loader去加载React组件,harmony启动es6</span></span><br><span class="line">  &#125;]</span><br></pre></td></tr></table></figure>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">entry: [</div><div class="line">  <span class="string">'webpack-dev-server/client?http://127.0.0.1:3000'</span>, <span class="comment">// WebpackDevServer host and port,资源服务器地址,打包生成的文件从client?http://127.0.0.1:3000去获取动态的代码更新</span></div><div class="line">  <span class="string">'webpack/hot/only-dev-server'</span>,</div><div class="line">  <span class="string">'./scripts/index.js'</span> <span class="comment">// Your appʼs entry point</span></div><div class="line">]</div><div class="line"></div><div class="line"></div><div class="line">loaders: [&#123;</div><div class="line">    test: <span class="regexp">/\.js$/</span>,</div><div class="line">    <span class="keyword">exclude</span>: <span class="regexp">/node_modules/</span>,</div><div class="line">    loader: <span class="string">'react-hot!jsx-loader?harmony'</span><span class="comment">//让Webpack用react-hot-loader去加载React组件,harmony启动es6</span></div><div class="line">  &#125;]</div></pre></td></tr></table></figure>
 <p>之后启动node server.js</p>
 <h3 id="u524D_u7AEF_u670D_u52A1_u5668_u8C03_u7528"><a href="#u524D_u7AEF_u670D_u52A1_u5668_u8C03_u7528" class="headerlink" title="前端服务器调用"></a>前端服务器调用</h3><p><code>载入打包文件时指定完整的URL地址</code></p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"http://127.0.0.1:3000/assets/bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://127.0.0.1:3000/assets/bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>建立Socket IO来动态加载模块</p>
 </span>
       
@@ -349,9 +349,9 @@ React组件的热替换
       
         <div class="post-tags">
           
-            <a href="/tags/nodejs/" rel="tag">#nodejs</a>
-          
             <a href="/tags/react/" rel="tag">#react</a>
+          
+            <a href="/tags/nodejs/" rel="tag">#nodejs</a>
           
         </div>
       
@@ -368,8 +368,8 @@ React组件的热替换
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/01/13/nodejs递归调用setImmediate/" rel="prev" title="nodejs递归调用setImmediate">
-                nodejs递归调用setImmediate <i class="fa fa-chevron-right"></i>
+              <a href="/2016/01/14/http-request传参，取值/" rel="prev" title="http request传参，取值">
+                http request传参，取值 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -442,7 +442,7 @@ React组件的热替换
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-count">48</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

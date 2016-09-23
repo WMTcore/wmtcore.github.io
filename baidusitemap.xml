@@ -4,6 +4,46 @@
 
     
   <url>
+    <loc>http://www.wmtcore.com/2015/12/14/es6-Promise/</loc>
+    <lastmod>2016-09-23T08:04:24.000Z</lastmod>
+    <data>
+        <display>
+        <title>es6 Promise</title>
+        <pubTime>2015-12-14T06:51:57.000Z</pubTime>
+        
+        <tag>es6</tag>
+         
+         
+           
+             
+              <breadCrumb title="js" url="http://www.wmtcore.com/categories/js/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.wmtcore.com/2016/08/23/nodejs%E5%A4%9A%E8%BF%9B%E7%A8%8B/</loc>
+    <lastmod>2016-09-23T02:27:33.000Z</lastmod>
+    <data>
+        <display>
+        <title>nodejs多进程</title>
+        <pubTime>2016-08-23T03:38:19.000Z</pubTime>
+        
+        <tag>nodejs</tag>
+         
+         
+           
+             
+              <breadCrumb title="nodejs" url="http://www.wmtcore.com/categories/nodejs/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.wmtcore.com/2016/09/11/koa-csrf/</loc>
     <lastmod>2016-09-11T08:03:14.000Z</lastmod>
     <data>
@@ -84,26 +124,6 @@
 
     
   <url>
-    <loc>http://www.wmtcore.com/2016/08/23/nodejs%E5%A4%9A%E8%BF%9B%E7%A8%8B/</loc>
-    <lastmod>2016-08-28T08:01:58.000Z</lastmod>
-    <data>
-        <display>
-        <title>nodejs多进程</title>
-        <pubTime>2016-08-23T03:38:19.000Z</pubTime>
-        
-        <tag>nodejs</tag>
-         
-         
-           
-             
-              <breadCrumb title="nodejs" url="http://www.wmtcore.com/categories/nodejs/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://www.wmtcore.com/2016/07/22/nodejs-%E7%BD%91%E7%BB%9C(%E4%B8%80)/</loc>
     <lastmod>2016-08-23T03:06:43.000Z</lastmod>
     <data>
@@ -137,26 +157,6 @@
            
              
               <breadCrumb title="nodejs" url="http://www.wmtcore.com/categories/nodejs/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.wmtcore.com/2015/12/14/es6-Promise/</loc>
-    <lastmod>2016-08-10T06:44:09.000Z</lastmod>
-    <data>
-        <display>
-        <title>es6 Promise</title>
-        <pubTime>2015-12-14T06:51:57.000Z</pubTime>
-        
-        <tag>es6</tag>
-         
-         
-           
-             
-              <breadCrumb title="js" url="http://www.wmtcore.com/categories/js/"/>
           
         </display>
     </data>
@@ -717,21 +717,6 @@
 
     
   <url>
-    <loc>http://www.wmtcore.com/2016/01/13/nodejs%E9%80%92%E5%BD%92%E8%B0%83%E7%94%A8setImmediate/</loc>
-    <lastmod>2016-01-13T04:07:46.000Z</lastmod>
-    <data>
-        <display>
-        <title>nodejs递归调用setImmediate</title>
-        <pubTime>2016-01-13T04:07:46.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://www.wmtcore.com/2016/01/05/webpack%E7%83%AD%E5%8A%A0%E8%BD%BDReact-webpack-dev-server/</loc>
     <lastmod>2016-01-05T01:40:13.000Z</lastmod>
     <data>
@@ -739,9 +724,9 @@
         <title>webpack热加载React webpack-dev-server</title>
         <pubTime>2016-01-05T01:25:22.000Z</pubTime>
         
-        <tag>nodejs</tag>
-         
         <tag>react</tag>
+         
+        <tag>nodejs</tag>
          
          
            
@@ -779,9 +764,9 @@
         <title>webpack 初步</title>
         <pubTime>2016-01-04T07:20:48.000Z</pubTime>
         
-        <tag>nodejs</tag>
-         
         <tag>react</tag>
+         
+        <tag>nodejs</tag>
          
          
            
@@ -857,9 +842,9 @@
         <title>smtp fibjs nodejs</title>
         <pubTime>2015-12-04T09:30:35.000Z</pubTime>
         
-        <tag>fibjs</tag>
-         
         <tag>nodejs</tag>
+         
+        <tag>fibjs</tag>
          
          
            

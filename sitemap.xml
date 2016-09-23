@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.wmtcore.com/2015/12/14/es6-Promise/</loc>
+    <lastmod>2016-09-23T08:04:24.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.wmtcore.com/2016/08/23/nodejs%E5%A4%9A%E8%BF%9B%E7%A8%8B/</loc>
+    <lastmod>2016-09-23T02:27:33.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.wmtcore.com/2016/09/11/koa-csrf/</loc>
     <lastmod>2016-09-11T08:03:14.000Z</lastmod>
   </url>
@@ -22,11 +32,6 @@
   </url>
   
   <url>
-    <loc>http://www.wmtcore.com/2016/08/23/nodejs%E5%A4%9A%E8%BF%9B%E7%A8%8B/</loc>
-    <lastmod>2016-08-28T08:01:58.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://www.wmtcore.com/2016/07/22/nodejs-%E7%BD%91%E7%BB%9C(%E4%B8%80)/</loc>
     <lastmod>2016-08-23T03:06:43.000Z</lastmod>
   </url>
@@ -34,11 +39,6 @@
   <url>
     <loc>http://www.wmtcore.com/2016/08/02/nodejs-web%E5%BA%94%E7%94%A8-%E4%B8%80/</loc>
     <lastmod>2016-08-19T09:46:22.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.wmtcore.com/2015/12/14/es6-Promise/</loc>
-    <lastmod>2016-08-10T06:44:09.000Z</lastmod>
   </url>
   
   <url>
@@ -194,11 +194,6 @@
   <url>
     <loc>http://www.wmtcore.com/2016/01/14/http-request%E4%BC%A0%E5%8F%82%EF%BC%8C%E5%8F%96%E5%80%BC/</loc>
     <lastmod>2016-01-14T06:01:11.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.wmtcore.com/2016/01/13/nodejs%E9%80%92%E5%BD%92%E8%B0%83%E7%94%A8setImmediate/</loc>
-    <lastmod>2016-01-13T04:07:46.000Z</lastmod>
   </url>
   
   <url>

@@ -54,7 +54,7 @@
 <meta name="description" content="chmod +x ./test.sh  #使脚本具有执行权限
 变量名和等号之间不能有空格
 $ 表示当前Shell进程的ID，即pid     $echo $$
-$ 和 $@ 都表示传递给函数或脚本的所有参数,当它们被双引号(“ “)包含时，”$“ 会将所有的参数作为一个整体，以”$1 $2 … $n”的形式输出所有参数；”$@” 会将各个参数分开，以”$1” “$2” … “$n” 的形式输出所有">
+$ 和 $@ 都表示传递给函数或脚本的所有参数,当它们被双引号(“ “)包含时，”$“ 会将所有的参数作为一个整体，以”$1 $2 … $n”的形式输出所有参数；”$@” 会将各个参数分开，以”$1” “$2” … “$n” 的形式输出所">
 <meta property="og:type" content="article">
 <meta property="og:title" content="shell编程总结1.0">
 <meta property="og:url" content="http://www.wmtcore.com/2015/12/04/shell编程总结1-0/index.html">
@@ -62,14 +62,14 @@ $ 和 $@ 都表示传递给函数或脚本的所有参数,当它们被双引号(
 <meta property="og:description" content="chmod +x ./test.sh  #使脚本具有执行权限
 变量名和等号之间不能有空格
 $ 表示当前Shell进程的ID，即pid     $echo $$
-$ 和 $@ 都表示传递给函数或脚本的所有参数,当它们被双引号(“ “)包含时，”$“ 会将所有的参数作为一个整体，以”$1 $2 … $n”的形式输出所有参数；”$@” 会将各个参数分开，以”$1” “$2” … “$n” 的形式输出所有">
+$ 和 $@ 都表示传递给函数或脚本的所有参数,当它们被双引号(“ “)包含时，”$“ 会将所有的参数作为一个整体，以”$1 $2 … $n”的形式输出所有参数；”$@” 会将各个参数分开，以”$1” “$2” … “$n” 的形式输出所">
 <meta property="og:updated_time" content="2015-12-04T07:50:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="shell编程总结1.0">
 <meta name="twitter:description" content="chmod +x ./test.sh  #使脚本具有执行权限
 变量名和等号之间不能有空格
 $ 表示当前Shell进程的ID，即pid     $echo $$
-$ 和 $@ 都表示传递给函数或脚本的所有参数,当它们被双引号(“ “)包含时，”$“ 会将所有的参数作为一个整体，以”$1 $2 … $n”的形式输出所有参数；”$@” 会将各个参数分开，以”$1” “$2” … “$n” 的形式输出所有">
+$ 和 $@ 都表示传递给函数或脚本的所有参数,当它们被双引号(“ “)包含时，”$“ 会将所有的参数作为一个整体，以”$1 $2 … $n”的形式输出所有参数；”$@” 会将各个参数分开，以”$1” “$2” … “$n” 的形式输出所">
 
 
 
@@ -351,7 +351,7 @@ $ 和 $@ 都表示传递给函数或脚本的所有参数,当它们被双引号(
 </tr>
 </tbody>
 </table>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">#!/bin/bash</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"File Name: <span class="variable">$0</span>"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"First Parameter : <span class="variable">$1</span>"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"First Parameter : <span class="variable">$2</span>"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Quoted Values: <span class="variable">$@</span>"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Quoted Values: $*"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Total Number of Parameters : <span class="variable">$#</span>"</span></span><br><span class="line">$./test.sh Zara Ali</span><br><span class="line">File Name : ./test.sh</span><br><span class="line">First Parameter : Zara</span><br><span class="line">Second Parameter : Ali</span><br><span class="line">Quoted Values: Zara Ali</span><br><span class="line">Quoted Values: Zara Ali</span><br><span class="line">Total Number of Parameters : <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">    <span class="comment">#!/bin/bash</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"File Name: <span class="variable">$0</span>"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"First Parameter : <span class="variable">$1</span>"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"First Parameter : <span class="variable">$2</span>"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Quoted Values: <span class="variable">$@</span>"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Quoted Values: $*"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Total Number of Parameters : <span class="variable">$#</span>"</span></div><div class="line">$./test.sh Zara Ali</div><div class="line">File Name : ./test.sh</div><div class="line">First Parameter : Zara</div><div class="line">Second Parameter : Ali</div><div class="line">Quoted Values: Zara Ali</div><div class="line">Quoted Values: Zara Ali</div><div class="line">Total Number of Parameters : 2</div></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>
@@ -524,7 +524,7 @@ $ 和 $@ 都表示传递给函数或脚本的所有参数,当它们被双引号(
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-count">48</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
