@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.wmtcore.com/2016/06/08/redux-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/</loc>
+    <lastmod>2016-09-30T07:29:05.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.wmtcore.com/2016/09/26/mongo-%E6%9F%A5%E8%AF%A2/</loc>
+    <lastmod>2016-09-26T06:34:58.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.wmtcore.com/2015/12/14/es6-Promise/</loc>
     <lastmod>2016-09-23T08:04:24.000Z</lastmod>
   </url>
@@ -74,11 +84,6 @@
   <url>
     <loc>http://www.wmtcore.com/2016/07/01/pm2%E4%BB%8B%E7%BB%8D/</loc>
     <lastmod>2016-07-01T09:30:15.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.wmtcore.com/2016/06/08/redux-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/</loc>
-    <lastmod>2016-06-15T06:08:16.000Z</lastmod>
   </url>
   
   <url>

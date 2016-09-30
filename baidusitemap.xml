@@ -4,6 +4,46 @@
 
     
   <url>
+    <loc>http://www.wmtcore.com/2016/06/08/redux-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/</loc>
+    <lastmod>2016-09-30T07:29:05.000Z</lastmod>
+    <data>
+        <display>
+        <title>redux 学习笔记（1）</title>
+        <pubTime>2016-06-08T02:24:46.000Z</pubTime>
+        
+        <tag>react</tag>
+         
+         
+           
+             
+              <breadCrumb title="react" url="http://www.wmtcore.com/categories/react/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.wmtcore.com/2016/09/26/mongo-%E6%9F%A5%E8%AF%A2/</loc>
+    <lastmod>2016-09-26T06:34:58.000Z</lastmod>
+    <data>
+        <display>
+        <title>mongo 查询</title>
+        <pubTime>2016-09-26T05:54:52.000Z</pubTime>
+        
+        <tag>mongo</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据库" url="http://www.wmtcore.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.wmtcore.com/2015/12/14/es6-Promise/</loc>
     <lastmod>2016-09-23T08:04:24.000Z</lastmod>
     <data>
@@ -297,26 +337,6 @@
            
              
               <breadCrumb title="nodejs" url="http://www.wmtcore.com/categories/nodejs/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.wmtcore.com/2016/06/08/redux-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/</loc>
-    <lastmod>2016-06-15T06:08:16.000Z</lastmod>
-    <data>
-        <display>
-        <title>redux 学习笔记（1）</title>
-        <pubTime>2016-06-08T02:24:46.000Z</pubTime>
-        
-        <tag>react</tag>
-         
-         
-           
-             
-              <breadCrumb title="前端" url="http://www.wmtcore.com/categories/%E5%89%8D%E7%AB%AF/"/>
           
         </display>
     </data>
@@ -724,9 +744,9 @@
         <title>webpack热加载React webpack-dev-server</title>
         <pubTime>2016-01-05T01:25:22.000Z</pubTime>
         
-        <tag>react</tag>
-         
         <tag>nodejs</tag>
+         
+        <tag>react</tag>
          
          
            
@@ -764,9 +784,9 @@
         <title>webpack 初步</title>
         <pubTime>2016-01-04T07:20:48.000Z</pubTime>
         
-        <tag>react</tag>
-         
         <tag>nodejs</tag>
+         
+        <tag>react</tag>
          
          
            
