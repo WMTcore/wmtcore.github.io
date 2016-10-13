@@ -5,18 +5,58 @@
     
   <url>
     <loc>https://www.wmtcore.com/2016/06/08/redux-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/</loc>
-    <lastmod>2016-09-30T07:29:05.000Z</lastmod>
+    <lastmod>2016-10-13T06:11:07.000Z</lastmod>
     <data>
         <display>
         <title>redux 学习笔记（1）</title>
         <pubTime>2016-06-08T02:24:46.000Z</pubTime>
         
-        <tag>react</tag>
+        <tag>React</tag>
          
          
            
              
-              <breadCrumb title="react" url="https://www.wmtcore.com/categories/react/"/>
+              <breadCrumb title="React" url="https://www.wmtcore.com/categories/React/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.wmtcore.com/2015/12/28/React-Props%E4%B8%8EState/</loc>
+    <lastmod>2016-10-13T06:08:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>React Props与State</title>
+        <pubTime>2015-12-28T03:40:00.000Z</pubTime>
+        
+        <tag>React</tag>
+         
+         
+           
+             
+              <breadCrumb title="React" url="https://www.wmtcore.com/categories/React/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.wmtcore.com/2015/12/26/React-%E7%BB%84%E4%BB%B6%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</loc>
+    <lastmod>2016-10-13T06:08:42.000Z</lastmod>
+    <data>
+        <display>
+        <title>React 组件生命周期</title>
+        <pubTime>2015-12-26T02:19:25.000Z</pubTime>
+        
+        <tag>React</tag>
+         
+         
+           
+             
+              <breadCrumb title="React" url="https://www.wmtcore.com/categories/React/"/>
           
         </display>
     </data>
@@ -759,24 +799,6 @@
 
     
   <url>
-    <loc>https://www.wmtcore.com/2015/12/26/React-%E7%BB%84%E4%BB%B6%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</loc>
-    <lastmod>2016-01-05T01:39:28.000Z</lastmod>
-    <data>
-        <display>
-        <title>React 组件生命周期</title>
-        <pubTime>2015-12-26T02:19:25.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="React" url="https://www.wmtcore.com/categories/React/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://www.wmtcore.com/2016/01/04/webpack-%E5%88%9D%E6%AD%A5/</loc>
     <lastmod>2016-01-04T09:22:22.000Z</lastmod>
     <data>
@@ -792,24 +814,6 @@
            
              
               <breadCrumb title="前端" url="https://www.wmtcore.com/categories/%E5%89%8D%E7%AB%AF/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://www.wmtcore.com/2015/12/28/React-Props%E4%B8%8EState/</loc>
-    <lastmod>2015-12-29T01:07:06.000Z</lastmod>
-    <data>
-        <display>
-        <title>React Props与State</title>
-        <pubTime>2015-12-28T03:40:00.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="React" url="https://www.wmtcore.com/categories/React/"/>
           
         </display>
     </data>
