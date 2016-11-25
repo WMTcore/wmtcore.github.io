@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="mysql," />
+  <meta name="keywords" content="React," />
 
 
 
@@ -51,43 +51,28 @@
 
 
 
-<meta name="description" content="事务定义一组原子性SQL查询，独立的工作单元
-ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-持久性)
+<meta name="description" content="当组件是被connect绑定redux后，可以使用getWrappedInstance()获取组件的原型，但需要给connect添加{ withRef: true }选项才能使用
 
-事务不可分割
-从一个一致性状态转到另一个一致性状态
-事务修改提交之前对其他事务不可见
-一旦提交，永远保存
+connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])
 
-根据业务是否需要事务，选择合适的储存引擎，提升性能若存储引擎不支持事务也可以使用locktable提供一定保护
-隔">
+其中mergeProps(stateProps, dispatchP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mysql事务与锁">
-<meta property="og:url" content="https://www.wmtcore.com/2016/03/06/mysql事务与锁/index.html">
+<meta property="og:title" content="react获取connect绑定redux后的原始组件">
+<meta property="og:url" content="https://www.wmtcore.com/2016/11/25/react获取connect绑定redux后的原始组件/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="事务定义一组原子性SQL查询，独立的工作单元
-ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-持久性)
+<meta property="og:description" content="当组件是被connect绑定redux后，可以使用getWrappedInstance()获取组件的原型，但需要给connect添加{ withRef: true }选项才能使用
 
-事务不可分割
-从一个一致性状态转到另一个一致性状态
-事务修改提交之前对其他事务不可见
-一旦提交，永远保存
+connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])
 
-根据业务是否需要事务，选择合适的储存引擎，提升性能若存储引擎不支持事务也可以使用locktable提供一定保护
-隔">
-<meta property="og:updated_time" content="2016-04-13T01:45:37.000Z">
+其中mergeProps(stateProps, dispatchP">
+<meta property="og:updated_time" content="2016-11-25T10:29:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mysql事务与锁">
-<meta name="twitter:description" content="事务定义一组原子性SQL查询，独立的工作单元
-ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-持久性)
+<meta name="twitter:title" content="react获取connect绑定redux后的原始组件">
+<meta name="twitter:description" content="当组件是被connect绑定redux后，可以使用getWrappedInstance()获取组件的原型，但需要给connect添加{ withRef: true }选项才能使用
 
-事务不可分割
-从一个一致性状态转到另一个一致性状态
-事务修改提交之前对其他事务不可见
-一旦提交，永远保存
+connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])
 
-根据业务是否需要事务，选择合适的储存引擎，提升性能若存储引擎不支持事务也可以使用locktable提供一定保护
-隔">
+其中mergeProps(stateProps, dispatchP">
 
 
 
@@ -99,7 +84,7 @@ ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-�
   };
 </script>
 
-  <title> mysql事务与锁 | 大碗拉面 </title>
+  <title> react获取connect绑定redux后的原始组件 | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
@@ -265,7 +250,7 @@ ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-�
             
             
               
-                mysql事务与锁
+                react获取connect绑定redux后的原始组件
               
             
           </h1>
@@ -274,8 +259,8 @@ ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-�
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-03-06T14:56:20+08:00" content="2016-03-06">
-              2016-03-06
+            <time itemprop="dateCreated" datetime="2016-11-25T17:59:53+08:00" content="2016-11-25">
+              2016-11-25
             </time>
           </span>
 
@@ -284,8 +269,8 @@ ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-�
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/React/" itemprop="url" rel="index">
+                    <span itemprop="name">React</span>
                   </a>
                 </span>
 
@@ -300,8 +285,8 @@ ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-�
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/06/mysql事务与锁/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/06/mysql事务与锁/" itemprop="commentsCount"></span>
+                <a href="/2016/11/25/react获取connect绑定redux后的原始组件/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/25/react获取connect绑定redux后的原始组件/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -320,116 +305,18 @@ ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-�
       
 
       
-        <span itemprop="articleBody"><h3 id="u4E8B_u52A1_u5B9A_u4E49"><a href="#u4E8B_u52A1_u5B9A_u4E49" class="headerlink" title="事务定义"></a>事务定义</h3><p><code>一组原子性SQL查询，独立的工作单元</code></p>
-<p>ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-持久性)</p>
+        <span itemprop="articleBody"><p>当组件是被connect绑定redux后，可以使用<strong>getWrappedInstance()</strong>获取组件的原型，但需要给connect添加{ withRef: true }选项才能使用</p>
 <ul>
-<li>事务不可分割</li>
-<li>从一个一致性状态转到另一个一致性状态</li>
-<li>事务修改提交之前对其他事务不可见</li>
-<li>一旦提交，永远保存</li>
+<li>connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])</li>
 </ul>
-<p><code>根据业务是否需要事务，选择合适的储存引擎，提升性能</code><br>若存储引擎不支持事务也可以使用<strong>locktable</strong>提供一定保护</p>
-<h4 id="u9694_u79BB_u7EA7_u522B"><a href="#u9694_u79BB_u7EA7_u522B" class="headerlink" title="隔离级别"></a>隔离级别</h4><ul>
-<li>脏读（dirty read）：事务读取了未提交的数据</li>
-<li>不可重复读（nonrepeatable read）：事务T1读取一行记录，紧接着事务T2修改了T1刚才读取的那一行记录，然后T1又再次读取这行记录，发现与刚才读取的结果不同</li>
-<li>幻像读（phantom read）：当某个事务在读某个范围内的记录时，另一个事务又在该范围内加入了新的记录，当之前的事务再读取该范围的记录时，会产生幻行。InnoDB和XtraDB存储引擎通过MVCC解决了幻像读的问题</li>
-</ul>
-<p><code>READ UNCOMMITTED(未提交读)</code>: 事务的修改即使未提交，对其他事务也可见，性能略好，但有很多问题，不建议使用</p>
-<p><code>READ COMMITTED(提交读)</code>: 事务所做的修改在提交前对其他事务不可见，大多数数据库默认隔离级别</p>
-<p><code>REPEATABLE READ(可重复读)</code>: 同一事务多次读取的记录结果是一致的,Mysql默认级别</p>
-<p><code>SERIALIZABLE(序列化)</code> : 强制事务串行执行，会对读取的每一行数据加锁，会导致大量的超时和锁争用，用在非常需要确保数据的一致性并且可以接受没有并发的情况下</p>
-<table>
-<thead>
-<tr>
-<th>事务的隔离级别</th>
-<th>脏读可能性</th>
-<th>不可重复读可能性</th>
-<th>幻像读可能性</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>READ UNCOMMITTED未提交读</td>
-<td>YES</td>
-<td>YES</td>
-<td>YES</td>
-</tr>
-<tr>
-<td>READ COMMITTED提交读</td>
-<td>No</td>
-<td>YES</td>
-<td>YES</td>
-</tr>
-<tr>
-<td>REPEATABLE READ可重复读</td>
-<td>No</td>
-<td>No</td>
-<td>YES</td>
-<td>Mysql默认级别</td>
-</tr>
-<tr>
-<td>SERIALIZABLE序列化</td>
-<td>No</td>
-<td>No</td>
-<td>No</td>
-<td>会在读取的每一行数据上都加锁</td>
-</tr>
-</tbody>
-</table>
-<h4 id="u6B7B_u9501"><a href="#u6B7B_u9501" class="headerlink" title="死锁"></a>死锁</h4><p>多个事务在同一资源上互相占用，并请求锁定对方占用的资源，从而导致恶性循环</p>
-<ul>
-<li>多个事务以不同的顺序锁定资源</li>
-<li>多个事务同时锁定同一资源</li>
-</ul>
-<p>解决方式：1. 检测到死锁时，立刻返回错误 2. 当查询的时间达到锁等待超时的设定后放弃锁请求</p>
-<p><code>InnoDB处理方式</code>： 将持有最少行级排他锁的事务进行回滚</p>
-<p>发生死锁后，只有部分或者完全回滚其中一个事务，才能打破死锁。发生死锁无法避免，程序设计时需要考虑如何处理死锁，通常<strong>重新执行因死锁回滚的事务</strong>即可</p>
-<h4 id="u4E8B_u52A1_u65E5_u5FD7"><a href="#u4E8B_u52A1_u65E5_u5FD7" class="headerlink" title="事务日志"></a>事务日志</h4><p><code>提高事务的效率</code>：</p>
-<ol>
-<li>存储引擎在修改表的数据时只需要修改其内存拷贝，再把该修改行为记录到持久在硬盘上的事务日志中，而不用将修改的数据本身持久到磁盘。</li>
-<li>事务日志采用的是追加的方式，写日志的操作是在磁盘上的一小块顺序I/O，不像随机I/O需要在多次移动磁头。</li>
-</ol>
-<p>事务日志持久后，内存被修改的数据在后台慢慢刷回到磁盘。称为预写式日志（Write-Ahead Logging），<strong>修改数据需要写两次磁盘</strong>.</p>
-<p>若数据的修改已经记录到日志并持久化，即使内存的修改没及时写到磁盘，也可以在存储引擎重启时自动恢复</p>
-<h3 id="MySQL_u4E8B_u52A1"><a href="#MySQL_u4E8B_u52A1" class="headerlink" title="MySQL事务"></a>MySQL事务</h3><p>官方提供的事务存储引擎：InnoDB和NDB Cluster<br>             第三方：XtraDB和PBXT</p>
-<h4 id="u81EA_u52A8_u63D0_u4EA4"><a href="#u81EA_u52A8_u63D0_u4EA4" class="headerlink" title="自动提交"></a>自动提交</h4><p>mysql默认会启用自动提交，每个查询都会被当作一个事务执行提交操作，在当前连接中可以设置AUTOCOMMIT 1/ON或0/OFF。</p>
-<p><strong>导致大量数据改变的操作ALTER TABLE,还有LOCK TABLES等也会导致自动提交</strong></p>
-<h4 id="u4E8B_u52A1_u4E2D_u6DF7_u5408_u4F7F_u7528_u5B58_u50A8_u5F15_u64CE"><a href="#u4E8B_u52A1_u4E2D_u6DF7_u5408_u4F7F_u7528_u5B58_u50A8_u5F15_u64CE" class="headerlink" title="事务中混合使用存储引擎"></a>事务中混合使用存储引擎</h4><ul>
-<li>在非事务型的表上，回滚操作无效，且不会报错，只会有警告信息</li>
-</ul>
-<p>为每张表选择合适的存储引擎</p>
-<h4 id="u9690_u5F0F_u3001_u663E_u5F0F_u9501_u5B9A"><a href="#u9690_u5F0F_u3001_u663E_u5F0F_u9501_u5B9A" class="headerlink" title="隐式、显式锁定"></a>隐式、显式锁定</h4><ul>
-<li>InnoDB使用两段锁定协议，事务执行时，可随时执行锁定，只要到COMMIT或ROLLBACK时才会同时释放所有锁，InnoDB会根据隔离级别自动加锁（隐式）</li>
-<li>SELECT … LOCK IN SHARE MODE和 SELECT … FOR UPDATE 显式锁定，但不建议使用</li>
-</ul>
-<p><code>LOCK TABLES、UNLOCK TABLES</code>服务器层实现，不能代替事务，且影响性能</p>
-<h4 id="MVCC_u591A_u7248_u672C_u5E76_u53D1_u63A7_u5236"><a href="#MVCC_u591A_u7248_u672C_u5E76_u53D1_u63A7_u5236" class="headerlink" title="MVCC多版本并发控制"></a>MVCC多版本并发控制</h4><ul>
-<li>行级锁变种 能尽量避免加锁 开销低</li>
-<li></li>
-</ul>
-<p>此处介绍InnoDB对MVVC的实现</p>
-<p><code>实现原理</code>： 在每行记录后保存两个隐藏的列，一个保存行创建时间，一个保存过期（删除）时间，此处的时间指的是系统版本号，它会在创建事务时递增，</p>
-<p><code>具体操作</code>：</p>
-<ul>
-<li>SElECT<ul>
-<li>只查找版本号小号或等于当前事务的版本号，确保读取的行，或是在事务开始之前，或是事务自己插入的</li>
-<li>行的删除版本要么未定义，要么大于当前事务版本号，确保事务读到行在事务开始之前未被删除</li>
-</ul>
-</li>
-<li>INSERT<ul>
-<li>插入的每一行保存当前系统版本号作为行版本号</li>
-</ul>
-</li>
-<li>DELETE<ul>
-<li>插入的每一行保存当前系统版本号作为行版本号   </li>
-</ul>
-</li>
-<li>UPDATE<ul>
-<li>为插入的新记录保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为行删除标识</li>
-</ul>
-</li>
-</ul>
+<p>其中mergeProps(stateProps, dispatchProps, ownProps)是用于特定情况下，修改提供给组件的props</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function mergeProps(<span class="keyword">state</span>Props, dispatchProps, ownProps) &#123;</div><div class="line">	//默认情况下返回</div><div class="line">  return Object.assign(&#123;&#125;, ownProps, <span class="keyword">state</span>Props, dispatchProps)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>需要添加的{ withRef: true }选项要放在connect的<strong>第四个参数</strong></p>
+<p>###example</p>
+<p>使用connect绑定redux的后test组件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123;connect&#125; <span class="keyword">from</span> <span class="string">'react-redux'</span></div><div class="line"><span class="keyword">import</span> &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  testFunction =<span class="function">(<span class="params">test=<span class="string">'1'</span></span>)=&gt;</span>&#123;</div><div class="line">      alert(test)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mergeProps</span>(<span class="params">stateProps, dispatchProps, ownProps</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, ownProps, stateProps, dispatchProps)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(&#123;&#125;, &#123;&#125;,mergeProps,&#123;<span class="attr">withRef</span>:<span class="literal">true</span>&#125;)(Test)</div></pre></td></tr></table></figure>
+<p>获取test组件的原型</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span></div><div class="line"><span class="keyword">import</span> Test <span class="keyword">from</span> <span class="string">'./Test'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Test2</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  componentWillMount()&#123;</div><div class="line">	  <span class="comment">//使用connect提供的getWrappedInstance()</span></div><div class="line">      <span class="keyword">this</span>.refs.test.getWrappedInstance().testFunction(<span class="string">'test'</span>)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">Test</span> <span class="attr">ref</span>=<span class="string">'test'</span> /&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </span>
       
     </div>
@@ -438,7 +325,7 @@ ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-�
       
         <div class="post-tags">
           
-            <a href="/tags/mysql/" rel="tag">#mysql</a>
+            <a href="/tags/React/" rel="tag">#React</a>
           
         </div>
       
@@ -447,17 +334,13 @@ ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/02/24/angularjs-布局模板和路由/" rel="next" title="angularjs 布局模板和路由">
-                <i class="fa fa-chevron-left"></i> angularjs 布局模板和路由
+              <a href="/2016/11/22/Docker-image/" rel="next" title="Docker image">
+                <i class="fa fa-chevron-left"></i> Docker image
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/03/15/node的模块加载/" rel="prev" title="node的模块加载">
-                node的模块加载 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -484,8 +367,8 @@ ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-�
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/03/06/mysql事务与锁/"
-           data-title="mysql事务与锁" data-url="https://www.wmtcore.com/2016/03/06/mysql事务与锁/">
+      <div class="ds-thread" data-thread-key="2016/11/25/react获取connect绑定redux后的原始组件/"
+           data-title="react获取connect绑定redux后的原始组件" data-url="https://www.wmtcore.com/2016/11/25/react获取connect绑定redux后的原始组件/">
       </div>
     
   </div>
@@ -585,7 +468,7 @@ ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u4E8B_u52A1_u5B9A_u4E49"><span class="nav-number">1.</span> <span class="nav-text">事务定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u9694_u79BB_u7EA7_u522B"><span class="nav-number">1.1.</span> <span class="nav-text">隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u6B7B_u9501"><span class="nav-number">1.2.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u4E8B_u52A1_u65E5_u5FD7"><span class="nav-number">1.3.</span> <span class="nav-text">事务日志</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL_u4E8B_u52A1"><span class="nav-number">2.</span> <span class="nav-text">MySQL事务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u81EA_u52A8_u63D0_u4EA4"><span class="nav-number">2.1.</span> <span class="nav-text">自动提交</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u4E8B_u52A1_u4E2D_u6DF7_u5408_u4F7F_u7528_u5B58_u50A8_u5F15_u64CE"><span class="nav-number">2.2.</span> <span class="nav-text">事务中混合使用存储引擎</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u9690_u5F0F_u3001_u663E_u5F0F_u9501_u5B9A"><span class="nav-number">2.3.</span> <span class="nav-text">隐式、显式锁定</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MVCC_u591A_u7248_u672C_u5E76_u53D1_u63A7_u5236"><span class="nav-number">2.4.</span> <span class="nav-text">MVCC多版本并发控制</span></a></li></ol></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

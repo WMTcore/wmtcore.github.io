@@ -246,6 +246,126 @@
             
               
                 
+                <a class="post-title-link" href="/2015/12/26/React-组件生命周期/" itemprop="url">
+                  React 组件生命周期
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-26T10:19:25+08:00" content="2015-12-26">
+              2015-12-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/React/" itemprop="url" rel="index">
+                    <span itemprop="name">React</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/26/React-组件生命周期/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/26/React-组件生命周期/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="u5B9E_u4F8B_u5316"><a href="#u5B9E_u4F8B_u5316" class="headerlink" title="实例化"></a>实例化</h3><ul>
+<li>一个实例初次创建</li>
+</ul>
+<p><code>getDefaultProps</code> 只会被调用一次</p>
+<p><code>getInitalState</code> 每个实例调用一次</p>
+<p><code>componentWillMount</code> 首次渲染之前被调用，可以修改state</p>
+<p><code>render</code> 创建虚拟DOM，表示组件输出，必须要有的方法。只能通过this.props和this.state访问数据。返回null、false、任何React组件。只能有一个顶级组件，不能改变组件的状态或者修改DOM的输出。</p>
+<p><code>componentDidMount</code> 在真实的DOM渲染之后，可以通过this.getDOMNode()访问原生DOM,测量渲染的DOM元素高度，运行jQuery</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> datasource=[];</div><div class="line"></div><div class="line"><span class="keyword">var</span> MyComponent=React.creatClass(&#123;</div><div class="line">	render:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">		<span class="keyword">return</span> &lt;input /&gt;;</div><div class="line">	&#125;,</div><div class="line">	componentDidMount: <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">		$(<span class="keyword">this</span>.getDOMNOde()).autocomplete(&#123;</div><div class="line">			sources: datasource</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="u5B58_u5728_u671F"><a href="#u5B58_u5728_u671F" class="headerlink" title="存在期"></a>存在期</h3><ul>
+<li>组件已渲染好，可以和它交互</li>
+</ul>
+<p><code>componentWillReceiveprops</code> 通过父辈组件修改props、state</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">componentWillReceiveProps: <span class="function"><span class="keyword">function</span><span class="params">(nextProps)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (nextProps.checked !== <span class="literal">undefined</span>) &#123;</div><div class="line">		<span class="keyword">this</span>.setState(&#123;</div><div class="line">			checked: nextProps.checked</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>shouldComponentUpdate</code> 优化组件渲染，确实组件是否要渲染新的props、state</p>
+<p><code>componentWillUpdate</code> 在组件接收到新的props或者state渲染之前调用，不可在此更新state、props,要借助<strong>componentWillReceiveprops</strong>更新state</p>
+<p><code>componentDidUpdate</code> 类似<strong>componentDidMount</strong>,在此更新已渲染的DOM</p>
+<h3 id="u9500_u6BC1_26amp_3B_u6E05_u7406_u671F"><a href="#u9500_u6BC1_26amp_3B_u6E05_u7406_u671F" class="headerlink" title="销毁&amp;清理期"></a>销毁&amp;清理期</h3><p><code>componentWillUnmount</code> 在<strong>componentDidMount</strong>中添加的任务都要在此撤销，如定时器、事件监听</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/12/24/json-web-token/" itemprop="url">
                   json web token
                 </a>
@@ -1603,152 +1723,12 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/04/tmall-前端11-11/" itemprop="url">
-                  tmall 前端11.11
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-12-04T14:06:24+08:00" content="2015-12-04">
-              2015-12-04
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/04/tmall-前端11-11/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/04/tmall-前端11-11/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h4 id="u4F53_u79EF_u4F18_u5316"><a href="#u4F53_u79EF_u4F18_u5316" class="headerlink" title="体积优化"></a>体积优化</h4><ul>
-<li>全局图片开关管控，针对商品、店铺、页头、入口图等图片通过开关全局系数裁剪压缩处理，降低页面图片整体体积；</li>
-<li>zCache打包，js和css离线化，减少固定大资源阻塞和请求时间耗损；</li>
-</ul>
-<h4 id="u8BF7_u6C42_u4F18_u5316"><a href="#u8BF7_u6C42_u4F18_u5316" class="headerlink" title="请求优化"></a>请求优化</h4><ul>
-<li>通过全局开关控制，针对走节点懒加载模块图片做域名收敛管控，降低Mobile端的http建连和dns握手的成本；</li>
-<li>常用图标iconfont化，减少请求；</li>
-<li>节点懒加载接入，避免非首屏dom载入；</li>
-<li>空背景图请求修复，避免资源耗损；</li>
-<li>模块小图片base64化，减少不必要的请求；</li>
-</ul>
-<h4 id="u6E32_u67D3_u4F18_u5316"><a href="#u6E32_u67D3_u4F18_u5316" class="headerlink" title="渲染优化"></a>渲染优化</h4><ul>
-<li>gif动画去处和部分模块高度计算有误兼容避免引起重绘性能耗损；</li>
-</ul>
-<h4 id="u52A8_u6001_u964D_u9891_28_u9875_u9762_u6E32_u67D3wormhole_29"><a href="#u52A8_u6001_u964D_u9891_28_u9875_u9762_u6E32_u67D3wormhole_29" class="headerlink" title="动态降频(页面渲染wormhole)"></a>动态降频(页面渲染wormhole)</h4><ul>
-<li>整个渲染策略就是，定时备份页面到OSS集群，每次请求过来，都会去判断当前系统Load是否过载，若果过载则直接读取上次备份的页面返回，而不使用模板引擎渲染，达到动态降低系统负载，快速响应的目的。 如果发生了最极端的情况，源站全部挂掉，由当天的值班人员，手工切换CDN指向已经备份了的OSS文件，保障页面可访问。</li>
-</ul>
-<p>CDN根据终端类型（使用user-agent判断）转发到node渲染服务</p>
-<p>模块开发者需要编写一份模块需要数据的 JSON Schema 描述</p>
-<h4 id="u6BCF_u4E00_u4E2A_u9875_u9762_u90FD_u53D8_u6210_u4E86_u4EE5_u4E0B_u51E0_u4E2A_u90E8_u5206_uFF1A"><a href="#u6BCF_u4E00_u4E2A_u9875_u9762_u90FD_u53D8_u6210_u4E86_u4EE5_u4E0B_u51E0_u4E2A_u90E8_u5206_uFF1A" class="headerlink" title="每一个页面都变成了以下几个部分："></a>每一个页面都变成了以下几个部分：</h4><ul>
-<li>一份页面的描述文件，声明了这个页面依赖的所有模块，以及渲染这些模块所需的数据的地址。</li>
-<li>一系列相互独立的模块。</li>
-<li>一份包含页面上所有模块需要的数据的数据文件。</li>
-</ul>
-<h4 id="node_u4F18_u5316"><a href="#node_u4F18_u5316" class="headerlink" title="node优化"></a>node优化</h4><p>对于 node 应用自身而言，我们首先要保证它有充足的测试，通过 mocha + istanbul ，尽可能让测试覆盖每一个功能点和边缘情况。</p>
-<ul>
-<li>没有单点 多个节点，主备读取，同时对所有的文件都加上磁盘文件容灾，每一个依赖都不能够出现单点问题</li>
-<li><p>弱化依赖 对于每个依赖异常都有容灾的方案</p>
-</li>
-<li><p>预案自动化 对于每一个可能出现问题的环节，都需要有针对性的预案，做到自动化，通过健康检查自动剔除</p>
-</li>
-<li><p>视窗内渲染，就是只渲染可视区域的元素，以减少绘制消耗</p>
-</li>
-<li><p>懒加载，就是图片资源一开始是不加载的，在用户滚动到附近区域的时候才加载，减少网络请求</p>
-</li>
-<li>加载限流 限制同时只能加载4个图片，并实时调整加载顺序，优先加载用户当前可见区域的图片</li>
-</ul>
-<h4 id="u5BF9_u4E8E_u591A_u5C3A_u5BF8_u56FE_u7247"><a href="#u5BF9_u4E8E_u591A_u5C3A_u5BF8_u56FE_u7247" class="headerlink" title="对于多尺寸图片"></a>对于多尺寸图片</h4><p>自动处理图片的gulp任务，可以自动生成多种尺寸的图片，然后压缩、上传到cdn，最后生成一个imgs.js的文件，使用只需要依赖这个js，然后以原始文件名引用即可</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1789,7 +1769,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">50</span>
+              <span class="site-state-item-count">51</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
