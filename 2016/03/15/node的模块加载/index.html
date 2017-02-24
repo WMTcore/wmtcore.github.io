@@ -61,7 +61,7 @@ Node引入模块通过路径分析、文件定位、编译执行，会对引入�
 <meta property="og:description" content="模块实现依照CommonJS的模块规范，使用require()引入模块的api,使用exports导出模块的方法、变量；其中module对象代表模块本身，exports是它的属性
 优点： 每个模块有独立的空间、不必考虑变量污染
 Node引入模块通过路径分析、文件定位、编译执行，会对引入的模块缓存其编译和执行后的对象，二次加载时缓存优先核心模块之后文件模块。加载自定义模块（第三方包）最慢，要向上逐级">
-<meta property="og:updated_time" content="2016-08-30T08:44:43.000Z">
+<meta property="og:updated_time" content="2017-02-14T07:58:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="node的模块加载">
 <meta name="twitter:description" content="模块实现依照CommonJS的模块规范，使用require()引入模块的api,使用exports导出模块的方法、变量；其中module对象代表模块本身，exports是它的属性
@@ -299,26 +299,26 @@ Node引入模块通过路径分析、文件定位、编译执行，会对引入�
       
 
       
-        <span itemprop="articleBody"><h3 id="u6A21_u5757_u5B9E_u73B0"><a href="#u6A21_u5757_u5B9E_u73B0" class="headerlink" title="模块实现"></a>模块实现</h3><p>依照CommonJS的模块规范，使用require()引入模块的api,使用exports导出模块的方法、变量；其中module对象代表模块本身，exports是它的属性</p>
+        <span itemprop="articleBody"><h3 id="模块实现"><a href="#模块实现" class="headerlink" title="模块实现"></a>模块实现</h3><p>依照CommonJS的模块规范，使用require()引入模块的api,使用exports导出模块的方法、变量；其中module对象代表模块本身，exports是它的属性</p>
 <p><code>优点： 每个模块有独立的空间、不必考虑变量污染</code></p>
 <p>Node引入模块通过路径分析、文件定位、编译执行，会对引入的模块缓<strong>存其编译和执行后的对象</strong>，二次加载时缓存<strong>优先核心模块之后文件模块</strong>。加载自定义模块（第三方包）最慢，要向上逐级递归查找node_modules目录</p>
 <p>因为允许require()中不含文件拓展名，Node会按照<code>.js、.node、.json的次序补足，依次尝试</code>,并且需要调用fs模块同步阻塞判断文件是否存在，会因为Node单线程引起性能问题，<code>对于.node、.json文件带上拓展名能快些</code></p>
-<h4 id="u5206_u6790_u76EE_u5F55_u548C_u5305"><a href="#u5206_u6790_u76EE_u5F55_u548C_u5305" class="headerlink" title="分析目录和包"></a>分析目录和包</h4><p>require()通过分析文件拓展名后仍然没有查到文件、但取到一个目录，此时Node会将目录当做包来处理。</p>
+<h4 id="分析目录和包"><a href="#分析目录和包" class="headerlink" title="分析目录和包"></a>分析目录和包</h4><p>require()通过分析文件拓展名后仍然没有查到文件、但取到一个目录，此时Node会将目录当做包来处理。</p>
 <ol>
 <li>在当前目录下查找package.json(CommonJS规定的包描述文件)</li>
 <li>通过JSON.parse()解析，取出main属性指定的文件名，若无拓展名就遍历拓展名</li>
 </ol>
 <p>如果mian属性指定文件名错误、没有package.json文件，Node会把index.当做默认文件名，依次查找、遍历拓展名。</p>
 <p>如果分析目录后没有定位成功，就进入下一个模块路径查找，模块路径都都遍历完了还没找到就抛错。</p>
-<h3 id="u6A21_u5757_u7F16_u8BD1"><a href="#u6A21_u5757_u7F16_u8BD1" class="headerlink" title="模块编译"></a>模块编译</h3><p><code>.js 通过fs同步读取文件后编译执行</code> ,Node对获取的js文件内容进行了头尾包装</p>
+<h3 id="模块编译"><a href="#模块编译" class="headerlink" title="模块编译"></a>模块编译</h3><p><code>.js 通过fs同步读取文件后编译执行</code> ,Node对获取的js文件内容进行了头尾包装</p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">exports,<span class="built_in">require</span>,<span class="built_in">module</span>,__filename,__dirname</span>)</span>&#123;<span class="comment">//头尾包装</span></div><div class="line">  <span class="keyword">var</span> math=<span class="built_in">require</span>(<span class="string">'math'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>如此每个模块都有作作用域隔离，包装后的代码通过vm原生模块runInThisContext()执行，返回一个function对象，再将当前模块对象的exports属性、require()、module、文件的完整路径和文件目录作为参数传给function()。最后调用方拿到了exports属性</p>
-<p><strong>exports和module.exports 的区别 </strong>exports对象是以形参形式传入的，直接赋值不会改变作用域外的值。所以需要对module.exports对象赋值，对exports属性赋值则无碍</p>
+<p><strong>exports和module.exports的区别</strong> exports对象是以形参形式传入的，直接赋值不会改变作用域外的值。所以需要对module.exports对象赋值，对exports属性赋值则无碍</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> change = <span class="function"><span class="keyword">function</span>(<span class="params">a</span>) </span>&#123;</div><div class="line">	a = <span class="number">100</span>;</div><div class="line">	<span class="built_in">console</span>.log(a); <span class="comment">// =&gt; 100</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> a = <span class="number">10</span>;</div><div class="line">change(a);</div><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// =&gt; 10</span></div></pre></td></tr></table></figure>
 <p><code>.node 这是用c/c++编写的拓展文件，通过dlopen()加载再编译</code> 在windows、*nix有不同的实现，通过libuv兼容层封装,实际不用编译，它是c/c++编译生成的，只要加载、执行，exports对象直接和.node联系，执行效率高</p>
 <p><code>.json 通过fs读取，使用JSON.parse()解析，再赋值给exports</code> ,对于JSON文件直接用require()比fs高效</p>
 <p>将编译后的模块，以文件路径为索引缓存在Module.cache对象上</p>
-<h3 id="u6838_u5FC3_u6A21_u5757"><a href="#u6838_u5FC3_u6A21_u5757" class="headerlink" title="核心模块"></a>核心模块</h3><ul>
+<h3 id="核心模块"><a href="#核心模块" class="headerlink" title="核心模块"></a>核心模块</h3><ul>
 <li>将核心模块中纯用c/c++写的称为建内模块，因为通常不被用户调用</li>
 <li>部分模块通过c/c++编写核心部分，js实现包装、导出来提高性能</li>
 </ul>
@@ -426,21 +426,21 @@ Node引入模块通过路径分析、文件定位、编译执行，会对引入�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -482,7 +482,7 @@ Node引入模块通过路径分析、文件定位、编译执行，会对引入�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6A21_u5757_u5B9E_u73B0"><span class="nav-number">1.</span> <span class="nav-text">模块实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u5206_u6790_u76EE_u5F55_u548C_u5305"><span class="nav-number">1.1.</span> <span class="nav-text">分析目录和包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6A21_u5757_u7F16_u8BD1"><span class="nav-number">2.</span> <span class="nav-text">模块编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6838_u5FC3_u6A21_u5757"><span class="nav-number">3.</span> <span class="nav-text">核心模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NPM"><span class="nav-number">4.</span> <span class="nav-text">NPM</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#模块实现"><span class="nav-number">1.</span> <span class="nav-text">模块实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分析目录和包"><span class="nav-number">1.1.</span> <span class="nav-text">分析目录和包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模块编译"><span class="nav-number">2.</span> <span class="nav-text">模块编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核心模块"><span class="nav-number">3.</span> <span class="nav-text">核心模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NPM"><span class="nav-number">4.</span> <span class="nav-text">NPM</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -503,7 +503,7 @@ Node引入模块通过路径分析、文件定位、编译执行，会对引入�
         <div class="copyright" >
   
   &copy;  2015-12 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>

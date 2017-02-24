@@ -300,7 +300,7 @@ ng-view 由ngRoute模块提供的一">
 
       
         <span itemprop="articleBody"><p><strong>将视图（页面）分解成布局和模板视图，再根据当前URL展示对应视图</strong></p>
-<h3 id="u5E03_u5C40_u6A21_u677F"><a href="#u5E03_u5C40_u6A21_u677F" class="headerlink" title="布局模板"></a>布局模板</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt; header&gt;<span class="xml"><span class="tag">&lt; <span class="attr">h1</span>&gt;</span>Header<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">header</span>&gt;</span></span></div><div class="line">&lt; div <span class="class"><span class="keyword">class</span></span>=<span class="string">"content"</span> &gt;</div><div class="line">   <span class="xml"><span class="tag">&lt; <span class="attr">div</span> <span class="attr">ng-view</span>&gt;</span><span class="tag">&lt; /<span class="attr">div</span>&gt;</span></span><span class="xml"><span class="tag">&lt; /<span class="attr">div</span> &gt;</span></span></div></pre></td></tr></table></figure>
+<h3 id="布局模板"><a href="#布局模板" class="headerlink" title="布局模板"></a>布局模板</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt; header&gt;<span class="xml"><span class="tag">&lt; <span class="attr">h1</span>&gt;</span>Header<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">header</span>&gt;</span></span></div><div class="line">&lt; div <span class="class"><span class="keyword">class</span></span>=<span class="string">"content"</span> &gt;</div><div class="line">   <span class="xml"><span class="tag">&lt; <span class="attr">div</span> <span class="attr">ng-view</span>&gt;</span><span class="tag">&lt; /<span class="attr">div</span>&gt;</span></span><span class="xml"><span class="tag">&lt; /<span class="attr">div</span> &gt;</span></span></div></pre></td></tr></table></figure>
 <p>ng-view 由ngRoute模块提供的一个特殊指令, 在HTML中给$route对应的视图内容占位。优先级1000</p>
 <ul>
 <li>每次触发$routeChangeSuccess事件, 视图会更新 </li>
@@ -314,7 +314,7 @@ ng-view 由ngRoute模块提供的一">
 </ul>
 </li>
 </ul>
-<h3 id="u8DEF_u7531"><a href="#u8DEF_u7531" class="headerlink" title="路由"></a>路由</h3><ul>
+<h3 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h3><ul>
 <li>使用$routeProvider的when和otherwise</li>
 </ul>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">angular.module(<span class="string">'myApp'</span>, []).config(<span class="function"><span class="keyword">function</span><span class="params">($routeProvider)</span> </span>&#123;</div><div class="line">   $routeProvider</div><div class="line">       .when(<span class="string">'/'</span>,&#123;</div><div class="line">          <span class="comment">//  controller、template、templateURL、resolve、redirectTo、reloadOnSearch和css</span></div><div class="line">       &#125;)</div><div class="line">   &#125;）</div></pre></td></tr></table></figure>
@@ -323,10 +323,10 @@ ng-view 由ngRoute模块提供的一">
 <p><code>resolve</code> 将resolve对象里的值注入到控制器中</p>
 <p><code>redirectTo</code> 路由替换，字符串或者函数，在调用函数时会传入：从当前路径中提取的路由参数，当前路径，当前URL中的查询串</p>
 <p><code>reloadOnSearch</code> true时， $location.search()变化时会重新加载路由</p>
-<h4 id="u8DEF_u7531_u6A21_u5F0F"><a href="#u8DEF_u7531_u6A21_u5F0F" class="headerlink" title="路由模式"></a>路由模式</h4><ul>
+<h4 id="路由模式"><a href="#路由模式" class="headerlink" title="路由模式"></a>路由模式</h4><ul>
 <li>标签模式</li>
 </ul>
-<h3 id="24location_u670D_u52A1"><a href="#24location_u670D_u52A1" class="headerlink" title="$location服务"></a>$location服务</h3><p>类window.location,能修改路径和内部跳转，不能刷新整个页面</p>
+<h3 id="location服务"><a href="#location服务" class="headerlink" title="$location服务"></a>$location服务</h3><p>类window.location,能修改路径和内部跳转，不能刷新整个页面</p>
 <ul>
 <li>$location.path() 获取或修改路径，并且与HTML5的历史api交互，提供用户后退的功能,加replace()，就不能后退</li>
 <li>absUrl() 获取编码后完整的URL</li>
@@ -435,21 +435,21 @@ ng-view 由ngRoute模块提供的一">
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -491,7 +491,7 @@ ng-view 由ngRoute模块提供的一">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u5E03_u5C40_u6A21_u677F"><span class="nav-number">1.</span> <span class="nav-text">布局模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u8DEF_u7531"><span class="nav-number">2.</span> <span class="nav-text">路由</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u8DEF_u7531_u6A21_u5F0F"><span class="nav-number">2.1.</span> <span class="nav-text">路由模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#24location_u670D_u52A1"><span class="nav-number">3.</span> <span class="nav-text">$location服务</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#布局模板"><span class="nav-number">1.</span> <span class="nav-text">布局模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由"><span class="nav-number">2.</span> <span class="nav-text">路由</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#路由模式"><span class="nav-number">2.1.</span> <span class="nav-text">路由模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#location服务"><span class="nav-number">3.</span> <span class="nav-text">$location服务</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -512,7 +512,7 @@ ng-view 由ngRoute模块提供的一">
         <div class="copyright" >
   
   &copy;  2015-12 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>

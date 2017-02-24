@@ -314,18 +314,18 @@ Scheduler —&amp;gt; 负责挑选合适的计算节点创建虚拟机实例 只
       
 
       
-        <span itemprop="articleBody"><h4 id="Nova_u7684_u56DB_u4E2A_u6838_u5FC3_u670D_u52A1_uFF1A"><a href="#Nova_u7684_u56DB_u4E2A_u6838_u5FC3_u670D_u52A1_uFF1A" class="headerlink" title="Nova的四个核心服务："></a>Nova的四个核心服务：</h4><ol>
+        <span itemprop="articleBody"><h4 id="Nova的四个核心服务："><a href="#Nova的四个核心服务：" class="headerlink" title="Nova的四个核心服务："></a>Nova的四个核心服务：</h4><ol>
 <li>API       —&gt; 进入Nova的HTTP接口 有Policy保护 可以直接操作数据库</li>
 <li>Compute   —&gt; 与VMM交互运行和管理虚拟机 </li>
 <li>Conductor —&gt; 为数据库访问提供安全保障 建议数据库操作都通过Condutor</li>
 <li>Scheduler —&gt; 负责挑选合适的计算节点创建虚拟机实例 只读取数据库</li>
 </ol>
-<h4 id="u521B_u5EFA_u865A_u62DF_u673A_u7684_u6D41_u7A0B"><a href="#u521B_u5EFA_u865A_u62DF_u673A_u7684_u6D41_u7A0B" class="headerlink" title="创建虚拟机的流程"></a>创建虚拟机的流程</h4><ul>
+<h4 id="创建虚拟机的流程"><a href="#创建虚拟机的流程" class="headerlink" title="创建虚拟机的流程"></a>创建虚拟机的流程</h4><ul>
 <li>用户通过执行·client提供的命令，创建虚拟机。client,对原生RESTful Nova API封装、简化用户使用，将用户请求转换成HTTP请求</li>
 <li>API监听HTTP请求，并将其转换成AMQP消息 然后通过消息队列调用Conductor</li>
 <li>Conductor汇总参数，再、通过消息队列通知Scheduler去选择一个合适的计算节点，等拿到Scheduler提供的节点后，通知Compute创建虚拟机</li>
 </ul>
-<h4 id="u5220_u9664_u865A_u62DF_u673A"><a href="#u5220_u9664_u865A_u62DF_u673A" class="headerlink" title="删除虚拟机"></a>删除虚拟机</h4><ul>
+<h4 id="删除虚拟机"><a href="#删除虚拟机" class="headerlink" title="删除虚拟机"></a>删除虚拟机</h4><ul>
 <li>不需要Scheduler,API通过消息队列通知Compute删除指定虚拟机，Compute通过Condutor更新数据库</li>
 </ul>
 </span>
@@ -427,21 +427,21 @@ Scheduler —&amp;gt; 负责挑选合适的计算节点创建虚拟机实例 只
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -483,7 +483,7 @@ Scheduler —&amp;gt; 负责挑选合适的计算节点创建虚拟机实例 只
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nova_u7684_u56DB_u4E2A_u6838_u5FC3_u670D_u52A1_uFF1A"><span class="nav-number">1.</span> <span class="nav-text">Nova的四个核心服务：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u521B_u5EFA_u865A_u62DF_u673A_u7684_u6D41_u7A0B"><span class="nav-number">2.</span> <span class="nav-text">创建虚拟机的流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u5220_u9664_u865A_u62DF_u673A"><span class="nav-number">3.</span> <span class="nav-text">删除虚拟机</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nova的四个核心服务："><span class="nav-number">1.</span> <span class="nav-text">Nova的四个核心服务：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建虚拟机的流程"><span class="nav-number">2.</span> <span class="nav-text">创建虚拟机的流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除虚拟机"><span class="nav-number">3.</span> <span class="nav-text">删除虚拟机</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -504,7 +504,7 @@ Scheduler —&amp;gt; 负责挑选合适的计算节点创建虚拟机实例 只
         <div class="copyright" >
   
   &copy;  2015-12 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>

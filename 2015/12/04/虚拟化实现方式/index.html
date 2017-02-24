@@ -305,12 +305,12 @@
       
 
       
-        <span itemprop="articleBody"><h4 id="VMM_28Virtual_Machine_Monitor__u865A_u62DF_u673A_u76D1_u89C6_u5668_29"><a href="#VMM_28Virtual_Machine_Monitor__u865A_u62DF_u673A_u76D1_u89C6_u5668_29" class="headerlink" title="VMM(Virtual Machine Monitor 虚拟机监视器)"></a>VMM(Virtual Machine Monitor 虚拟机监视器)</h4><ul>
+        <span itemprop="articleBody"><h4 id="VMM-Virtual-Machine-Monitor-虚拟机监视器"><a href="#VMM-Virtual-Machine-Monitor-虚拟机监视器" class="headerlink" title="VMM(Virtual Machine Monitor 虚拟机监视器)"></a>VMM(Virtual Machine Monitor 虚拟机监视器)</h4><ul>
 <li>运行在硬件平台 Xen</li>
 <li>运行在操作系统里 KVM</li>
 </ul>
-<h4 id="u5B8C_u5168_u865A_u62DF_u5316_uFF1AVMM_u865A_u62DF_u73B0_u5B9E_u5B58_u5728_u7684_u5E73_u53F0_uFF0C_u5BA2_u6237_u673A_u611F_u89C9_u4E0D_u5230_uFF0C_u64CD_u4F5C_u7CFB_u7EDF_u4E0D_u7528_u4FEE_u6539"><a href="#u5B8C_u5168_u865A_u62DF_u5316_uFF1AVMM_u865A_u62DF_u73B0_u5B9E_u5B58_u5728_u7684_u5E73_u53F0_uFF0C_u5BA2_u6237_u673A_u611F_u89C9_u4E0D_u5230_uFF0C_u64CD_u4F5C_u7CFB_u7EDF_u4E0D_u7528_u4FEE_u6539" class="headerlink" title="完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改"></a>完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改</h4><p>Intel的VTx 在处理器上引入一个新的执行模式用于虚拟机，当虚拟机运行在这个模式中，它的任何特权操作都会被处理器截获并报告VMM.VMM运行在正常模式下，接收到处理器报告后，解码目标指令，找到相应的虚拟化模块进行模拟，并把效果反映在特殊模式的坏境中</p>
-<h4 id="u7C7B_u865A_u62DF_u5316"><a href="#u7C7B_u865A_u62DF_u5316" class="headerlink" title="类虚拟化"></a>类虚拟化</h4><p>VMM虚拟现实不存在的平台，虚拟平台对客户机操作系统进行修改，客户机也会主动适应。通过在源代码级别修改指令来避免虚拟化漏洞，对呀X86中难以虚拟化的指令，修改内核来避免，并自定义基于事务的高度优化的I/O协议，达到近似物理机的性能</p>
+<h4 id="完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改"><a href="#完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改" class="headerlink" title="完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改"></a>完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改</h4><p>Intel的VTx 在处理器上引入一个新的执行模式用于虚拟机，当虚拟机运行在这个模式中，它的任何特权操作都会被处理器截获并报告VMM.VMM运行在正常模式下，接收到处理器报告后，解码目标指令，找到相应的虚拟化模块进行模拟，并把效果反映在特殊模式的坏境中</p>
+<h4 id="类虚拟化"><a href="#类虚拟化" class="headerlink" title="类虚拟化"></a>类虚拟化</h4><p>VMM虚拟现实不存在的平台，虚拟平台对客户机操作系统进行修改，客户机也会主动适应。通过在源代码级别修改指令来避免虚拟化漏洞，对呀X86中难以虚拟化的指令，修改内核来避免，并自定义基于事务的高度优化的I/O协议，达到近似物理机的性能</p>
 <ul>
 <li><p>动态迁移:  </p>
 <ul>
@@ -437,21 +437,21 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -493,7 +493,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#VMM_28Virtual_Machine_Monitor__u865A_u62DF_u673A_u76D1_u89C6_u5668_29"><span class="nav-number">1.</span> <span class="nav-text">VMM(Virtual Machine Monitor 虚拟机监视器)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u5B8C_u5168_u865A_u62DF_u5316_uFF1AVMM_u865A_u62DF_u73B0_u5B9E_u5B58_u5728_u7684_u5E73_u53F0_uFF0C_u5BA2_u6237_u673A_u611F_u89C9_u4E0D_u5230_uFF0C_u64CD_u4F5C_u7CFB_u7EDF_u4E0D_u7528_u4FEE_u6539"><span class="nav-number">2.</span> <span class="nav-text">完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u7C7B_u865A_u62DF_u5316"><span class="nav-number">3.</span> <span class="nav-text">类虚拟化</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#VMM-Virtual-Machine-Monitor-虚拟机监视器"><span class="nav-number">1.</span> <span class="nav-text">VMM(Virtual Machine Monitor 虚拟机监视器)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改"><span class="nav-number">2.</span> <span class="nav-text">完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类虚拟化"><span class="nav-number">3.</span> <span class="nav-text">类虚拟化</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -514,7 +514,7 @@
         <div class="copyright" >
   
   &copy;  2015-12 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>

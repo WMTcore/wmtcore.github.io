@@ -311,7 +311,7 @@ render 创建虚拟DOM，表示组件输出，必须要有的方法。只能通�
       
 
       
-        <span itemprop="articleBody"><h3 id="u5B9E_u4F8B_u5316"><a href="#u5B9E_u4F8B_u5316" class="headerlink" title="实例化"></a>实例化</h3><ul>
+        <span itemprop="articleBody"><h3 id="实例化"><a href="#实例化" class="headerlink" title="实例化"></a>实例化</h3><ul>
 <li>一个实例初次创建</li>
 </ul>
 <p><code>getDefaultProps</code> 只会被调用一次</p>
@@ -320,7 +320,7 @@ render 创建虚拟DOM，表示组件输出，必须要有的方法。只能通�
 <p><code>render</code> 创建虚拟DOM，表示组件输出，必须要有的方法。只能通过this.props和this.state访问数据。返回null、false、任何React组件。只能有一个顶级组件，不能改变组件的状态或者修改DOM的输出。</p>
 <p><code>componentDidMount</code> 在真实的DOM渲染之后，可以通过this.getDOMNode()访问原生DOM,测量渲染的DOM元素高度，运行jQuery</p>
 <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> datasource=[];</div><div class="line"></div><div class="line"><span class="keyword">var</span> MyComponent=React.creatClass(&#123;</div><div class="line">	render:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">		<span class="keyword">return</span> &lt;input /&gt;;</div><div class="line">	&#125;,</div><div class="line">	componentDidMount: <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">		$(<span class="keyword">this</span>.getDOMNOde()).autocomplete(&#123;</div><div class="line">			sources: datasource</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h3 id="u5B58_u5728_u671F"><a href="#u5B58_u5728_u671F" class="headerlink" title="存在期"></a>存在期</h3><ul>
+<h3 id="存在期"><a href="#存在期" class="headerlink" title="存在期"></a>存在期</h3><ul>
 <li>组件已渲染好，可以和它交互</li>
 </ul>
 <p><code>componentWillReceiveprops</code> 通过父辈组件修改props、state</p>
@@ -328,7 +328,7 @@ render 创建虚拟DOM，表示组件输出，必须要有的方法。只能通�
 <p><code>shouldComponentUpdate</code> 优化组件渲染，确实组件是否要渲染新的props、state</p>
 <p><code>componentWillUpdate</code> 在组件接收到新的props或者state渲染之前调用，不可在此更新state、props,要借助<strong>componentWillReceiveprops</strong>更新state</p>
 <p><code>componentDidUpdate</code> 类似<strong>componentDidMount</strong>,在此更新已渲染的DOM</p>
-<h3 id="u9500_u6BC1_26amp_3B_u6E05_u7406_u671F"><a href="#u9500_u6BC1_26amp_3B_u6E05_u7406_u671F" class="headerlink" title="销毁&amp;清理期"></a>销毁&amp;清理期</h3><p><code>componentWillUnmount</code> 在<strong>componentDidMount</strong>中添加的任务都要在此撤销，如定时器、事件监听</p>
+<h3 id="销毁-amp-清理期"><a href="#销毁-amp-清理期" class="headerlink" title="销毁&amp;清理期"></a>销毁&amp;清理期</h3><p><code>componentWillUnmount</code> 在<strong>componentDidMount</strong>中添加的任务都要在此撤销，如定时器、事件监听</p>
 </span>
       
     </div>
@@ -428,21 +428,21 @@ render 创建虚拟DOM，表示组件输出，必须要有的方法。只能通�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -484,7 +484,7 @@ render 创建虚拟DOM，表示组件输出，必须要有的方法。只能通�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u5B9E_u4F8B_u5316"><span class="nav-number">1.</span> <span class="nav-text">实例化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5B58_u5728_u671F"><span class="nav-number">2.</span> <span class="nav-text">存在期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u9500_u6BC1_26amp_3B_u6E05_u7406_u671F"><span class="nav-number">3.</span> <span class="nav-text">销毁&清理期</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#实例化"><span class="nav-number">1.</span> <span class="nav-text">实例化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存在期"><span class="nav-number">2.</span> <span class="nav-text">存在期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#销毁-amp-清理期"><span class="nav-number">3.</span> <span class="nav-text">销毁&清理期</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -505,7 +505,7 @@ render 创建虚拟DOM，表示组件输出，必须要有的方法。只能通�
         <div class="copyright" >
   
   &copy;  2015-12 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>

@@ -299,12 +299,12 @@
       
 
       
-        <span itemprop="articleBody"><h3 id="u751F_u6210key"><a href="#u751F_u6210key" class="headerlink" title="生成key"></a>生成key</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">openssl genrsa -des3 -out prvtkey<span class="selector-class">.pem</span> <span class="number">2048</span> </div><div class="line">或者无密码保护的</div><div class="line">openssl genrsa -out prvtkey<span class="selector-class">.pem</span> <span class="number">2048</span></div></pre></td></tr></table></figure>
-<h3 id="u751F_u6210-csr_28_u7528_u8FD9_u4E2A_u5411_u6570_u5B57_u8BC1_u4E66_u9881_u53D1_u673A_u6784_uFF08_u5373CA_uFF09_u7533_u8BF7_u4E00_u4E2A_u6570_u5B57_u8BC1_u4E66_29"><a href="#u751F_u6210-csr_28_u7528_u8FD9_u4E2A_u5411_u6570_u5B57_u8BC1_u4E66_u9881_u53D1_u673A_u6784_uFF08_u5373CA_uFF09_u7533_u8BF7_u4E00_u4E2A_u6570_u5B57_u8BC1_u4E66_29" class="headerlink" title="生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)"></a>生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl req -<span class="keyword">new</span> -key prvtkey.pem -<span class="keyword">out</span> cert.csr</div></pre></td></tr></table></figure>
+        <span itemprop="articleBody"><h3 id="生成key"><a href="#生成key" class="headerlink" title="生成key"></a>生成key</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">openssl genrsa -des3 -out prvtkey<span class="selector-class">.pem</span> <span class="number">2048</span> </div><div class="line">或者无密码保护的</div><div class="line">openssl genrsa -out prvtkey<span class="selector-class">.pem</span> <span class="number">2048</span></div></pre></td></tr></table></figure>
+<h3 id="生成-csr-用这个向数字证书颁发机构（即CA）申请一个数字证书"><a href="#生成-csr-用这个向数字证书颁发机构（即CA）申请一个数字证书" class="headerlink" title="生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)"></a>生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl req -<span class="keyword">new</span> -key prvtkey.pem -<span class="keyword">out</span> cert.csr</div></pre></td></tr></table></figure>
 <p>然后填写信息，注意<strong>Common Name (eg, your websites domain name)</strong>，要填写网站域名,如:pay.abc.com</p>
 <p>生成的.csr文件是否规范可以在这检测：<br><a href="https://cryptoreport.websecurity.symantec.com/checker/views/csrCheck.jsp" target="_blank" rel="external">https://cryptoreport.websecurity.symantec.com/checker/views/csrCheck.jsp</a></p>
 <p>然后向CA申请数字证书，再用CA给的cacert.pem替换原来的prvtkey.pem</p>
-<h3 id="u81EA_u5EFACA"><a href="#u81EA_u5EFACA" class="headerlink" title="自建CA"></a>自建CA</h3><p><a href="http://www.cnblogs.com/AloneSword/p/3809002.html" target="_blank" rel="external">http://www.cnblogs.com/AloneSword/p/3809002.html</a></p>
+<h3 id="自建CA"><a href="#自建CA" class="headerlink" title="自建CA"></a>自建CA</h3><p><a href="http://www.cnblogs.com/AloneSword/p/3809002.html" target="_blank" rel="external">http://www.cnblogs.com/AloneSword/p/3809002.html</a></p>
 </span>
       
     </div>
@@ -404,21 +404,21 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -460,7 +460,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u751F_u6210key"><span class="nav-number">1.</span> <span class="nav-text">生成key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u751F_u6210-csr_28_u7528_u8FD9_u4E2A_u5411_u6570_u5B57_u8BC1_u4E66_u9881_u53D1_u673A_u6784_uFF08_u5373CA_uFF09_u7533_u8BF7_u4E00_u4E2A_u6570_u5B57_u8BC1_u4E66_29"><span class="nav-number">2.</span> <span class="nav-text">生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u81EA_u5EFACA"><span class="nav-number">3.</span> <span class="nav-text">自建CA</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成key"><span class="nav-number">1.</span> <span class="nav-text">生成key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成-csr-用这个向数字证书颁发机构（即CA）申请一个数字证书"><span class="nav-number">2.</span> <span class="nav-text">生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自建CA"><span class="nav-number">3.</span> <span class="nav-text">自建CA</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -481,7 +481,7 @@
         <div class="copyright" >
   
   &copy;  2015-12 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>

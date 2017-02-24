@@ -317,7 +317,7 @@ upstream
       
 
       
-        <span itemprop="articleBody"><h3 id="u8D1F_u8F7D_u5747_u8861"><a href="#u8D1F_u8F7D_u5747_u8861" class="headerlink" title="负载均衡"></a>负载均衡</h3><ul>
+        <span itemprop="articleBody"><h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><ul>
 <li>此处指的是选择一种策略，尽量把请求均匀的分布到每一个上游服务器</li>
 </ul>
 <h4 id="upstream"><a href="#upstream" class="headerlink" title="upstream"></a>upstream</h4><ul>
@@ -361,14 +361,14 @@ upstream
 </tr>
 </tbody>
 </table>
-<h5 id="ip_hash"><a href="#ip_hash" class="headerlink" title="ip_hash"></a>ip_hash</h5><ul>
+<h5 id="ip-hash"><a href="#ip-hash" class="headerlink" title="ip_hash"></a>ip_hash</h5><ul>
 <li>配置块 upstream</li>
 <li>语法 ip_hash;</li>
 <li>将单个用户的请求固定到某个上游服务器</li>
 </ul>
 <p>先根据客户端的ip地址计算一个key,将可以按照upstream集群的上游服务器数量进行取模，再根据取模的结果把请求地址转发到相应的上游服务器,不能与weight同时使用，<strong>在标识上游服务器不可用时，要用down不能直接删除，确保转发策略一贯性</strong></p>
 <figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">upstream <span class="keyword">backend </span>&#123;</div><div class="line"> 	ip_hash<span class="comment">;</span></div><div class="line">    server <span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>:<span class="number">5566</span> weight=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">30</span>s<span class="comment">;</span></div><div class="line">    server <span class="keyword">backend </span>down<span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="u8BB0_u5F55_u65E5_u5FD7_u65F6_u652F_u6301_u7684_u53D8_u91CF"><a href="#u8BB0_u5F55_u65E5_u5FD7_u65F6_u652F_u6301_u7684_u53D8_u91CF" class="headerlink" title="记录日志时支持的变量"></a>记录日志时支持的变量</h4><table>
+<h4 id="记录日志时支持的变量"><a href="#记录日志时支持的变量" class="headerlink" title="记录日志时支持的变量"></a>记录日志时支持的变量</h4><table>
 <thead>
 <tr>
 <th>变量名</th>
@@ -399,46 +399,46 @@ upstream
 </tbody>
 </table>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">log_format</span> timing <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] <span class="variable">$request</span> '</span></div><div class="line">	<span class="string">'upstream_response_time <span class="variable">$upstream_response_time</span> '</span></div><div class="line">	<span class="string">'msec <span class="variable">$msec</span> request_time <span class="variable">$request_time</span>'</span>;</div><div class="line"></div><div class="line"><span class="attribute">log_format</span> up_head <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] <span class="variable">$request</span> '</span></div><div class="line">	<span class="string">'upstream_http_content_type <span class="variable">$upstream_http_content_type</span>'</span></div></pre></td></tr></table></figure>
-<h3 id="u53CD_u5411_u4EE3_u7406_u914D_u7F6E"><a href="#u53CD_u5411_u4EE3_u7406_u914D_u7F6E" class="headerlink" title="反向代理配置"></a>反向代理配置</h3><h4 id="proxy_pass"><a href="#proxy_pass" class="headerlink" title="proxy_pass"></a>proxy_pass</h4><ul>
+<h3 id="反向代理配置"><a href="#反向代理配置" class="headerlink" title="反向代理配置"></a>反向代理配置</h3><h4 id="proxy-pass"><a href="#proxy-pass" class="headerlink" title="proxy_pass"></a>proxy_pass</h4><ul>
 <li>语法：proxy_pass URL;</li>
 <li>配置块 location、if</li>
 </ul>
 <p>将当前请求反向代理到URL参数指定的服务器上，URL可以是主机名或ip地址</p>
 <figure class="highlight nimrod"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">proxy_pass http://localhost:<span class="number">3000</span>/uri/;</div><div class="line"></div><div class="line">可以加上负载均衡 使用upstream</div><div class="line">upstream backend <span class="meta">&#123;...&#125;</span></div><div class="line">server &#123;location / &#123;</div><div class="line">            proxy_pass http://backend; <span class="comment">#backend指上游服务器</span></div><div class="line">        &#125;&#125;</div><div class="line"></div><div class="line">可以把httpz转换成https</div><div class="line">proxy_pass https://<span class="number">192</span>.<span class="number">168</span>.<span class="number">0</span>.<span class="number">1</span>/;</div><div class="line"></div><div class="line">若需要转发host头部</div><div class="line">proxy_set_header <span class="type">Host</span> $host;</div></pre></td></tr></table></figure>
-<h4 id="proxy_method"><a href="#proxy_method" class="headerlink" title="proxy_method"></a>proxy_method</h4><ul>
+<h4 id="proxy-method"><a href="#proxy-method" class="headerlink" title="proxy_method"></a>proxy_method</h4><ul>
 <li>语法：proxy_method method;</li>
 <li>配置块 http、server、location</li>
 </ul>
 <p>转发时的协议方法名<br>proxy_method POST; 客户端的GET请求也会被转发成POST</p>
-<h4 id="proxy_hide_header"><a href="#proxy_hide_header" class="headerlink" title="proxy_hide_header"></a>proxy_hide_header</h4><ul>
+<h4 id="proxy-hide-header"><a href="#proxy-hide-header" class="headerlink" title="proxy_hide_header"></a>proxy_hide_header</h4><ul>
 <li>语法：proxy_hide_header the_header;</li>
 <li>配置块 http、server、location</li>
 </ul>
 <p>Nginx会将上游服务器的响应转发给客户端，但默认不会转发以下HTTP头部字段：Date、Server、X-Pad和X-Accel-*.使用proxy_hide_header可以指定哪些不能转发</p>
 <p>proxy_hide_header Cache-Control;</p>
-<h4 id="proxy_pass_header"><a href="#proxy_pass_header" class="headerlink" title="proxy_pass_header"></a>proxy_pass_header</h4><ul>
+<h4 id="proxy-pass-header"><a href="#proxy-pass-header" class="headerlink" title="proxy_pass_header"></a>proxy_pass_header</h4><ul>
 <li>语法：proxy_pass_header the_header;</li>
 <li>配置块 http、server、location</li>
 </ul>
 <p>将原来禁止转发的header设为转发</p>
-<h4 id="proxy_pass_request_body"><a href="#proxy_pass_request_body" class="headerlink" title="proxy_pass_request_body"></a>proxy_pass_request_body</h4><ul>
+<h4 id="proxy-pass-request-body"><a href="#proxy-pass-request-body" class="headerlink" title="proxy_pass_request_body"></a>proxy_pass_request_body</h4><ul>
 <li>语法：proxy_pass_request_body on|off;</li>
 <li>默认 on;</li>
 <li>配置块 http、server、location<br>是否向上游转发http body</li>
 </ul>
-<h4 id="proxy_pass_request_headers"><a href="#proxy_pass_request_headers" class="headerlink" title="proxy_pass_request_headers"></a>proxy_pass_request_headers</h4><ul>
+<h4 id="proxy-pass-request-headers"><a href="#proxy-pass-request-headers" class="headerlink" title="proxy_pass_request_headers"></a>proxy_pass_request_headers</h4><ul>
 <li>语法：proxy_pass_request_headers on|off;</li>
 <li>默认 on;</li>
 <li>配置块 http、server、location<br>是否向上游转发http header</li>
 </ul>
-<h4 id="prxoy_redirect"><a href="#prxoy_redirect" class="headerlink" title="prxoy_redirect"></a>prxoy_redirect</h4><ul>
+<h4 id="prxoy-redirect"><a href="#prxoy-redirect" class="headerlink" title="prxoy_redirect"></a>prxoy_redirect</h4><ul>
 <li>语法：prxoy_redirect [default|off|redirect rep|replacement]];</li>
 <li>默认 default;</li>
 <li>配置块 http、server、location</li>
 </ul>
 <p>当上游返回响应是重定向或刷新请求（301，302),proxy_redirect 可以重设HTTP头部的location或refresh字段。</p>
 <figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">proxy_redirect <span class="symbol">http:</span>/<span class="regexp">/localhost:8000/two</span><span class="regexp">/ http:/</span><span class="regexp">/frontend/one</span><span class="regexp">/;</span></div><div class="line"></div><div class="line">对location字段的URI是http:/<span class="regexp">/localhost:8000/two</span><span class="regexp">/some/uri</span>.实际转发给客户端的是<span class="symbol">http:</span>/<span class="regexp">/frontend/one</span><span class="regexp">/;</span></div><div class="line"></div><div class="line">可以使用ngx-http-core-module提供的变量来设置</div><div class="line"></div><div class="line">proxy_redirect http:/<span class="regexp">/localhost:8000/</span> <span class="symbol">http:</span>/<span class="regexp">/$host:$server_port/</span>;</div><div class="line"></div><div class="line">可以省略replacement参数的主机名部分，这时会用虚拟主机名称填充</div><div class="line">proxy_redirect <span class="symbol">http:</span>/<span class="regexp">/localhost:8000/two</span><span class="regexp">/ /one</span><span class="regexp">/;</span></div><div class="line"></div><div class="line">使用default参数时，会按照proxy_pass配置项和所属的location配置项重组</div><div class="line"></div><div class="line">location /one<span class="regexp">/ &#123;</span></div><div class="line">  proxy_pass http:/<span class="regexp">/upstream:port/two</span><span class="regexp">/;</span></div><div class="line">  proxy_redirect default;</div><div class="line">&#125;</div><div class="line">等于</div><div class="line">location /one<span class="regexp">/ &#123;</span></div><div class="line">	proxy_pass http:/<span class="regexp">/upstream:port/two</span><span class="regexp">/;</span></div><div class="line">	proxy_redirect http:/<span class="regexp">/upstream:port/two</span><span class="regexp">/ /one</span><span class="regexp">/;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="proxy_next_upstream"><a href="#proxy_next_upstream" class="headerlink" title="proxy_next_upstream"></a>proxy_next_upstream</h4><ul>
+<h4 id="proxy-next-upstream"><a href="#proxy-next-upstream" class="headerlink" title="proxy_next_upstream"></a>proxy_next_upstream</h4><ul>
 <li>语法：proxy_next_upstream [error|timeout|invalid_header|http_500|http_502|http_503|http_504|http_404|off];</li>
 <li>默认 error timeout;</li>
 <li>配置块 http、server、location</li>
@@ -543,21 +543,21 @@ upstream
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -599,7 +599,7 @@ upstream
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u8D1F_u8F7D_u5747_u8861"><span class="nav-number">1.</span> <span class="nav-text">负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#upstream"><span class="nav-number">1.1.</span> <span class="nav-text">upstream</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#server"><span class="nav-number">1.1.1.</span> <span class="nav-text">server</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ip_hash"><span class="nav-number">1.1.2.</span> <span class="nav-text">ip_hash</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u8BB0_u5F55_u65E5_u5FD7_u65F6_u652F_u6301_u7684_u53D8_u91CF"><span class="nav-number">1.2.</span> <span class="nav-text">记录日志时支持的变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u53CD_u5411_u4EE3_u7406_u914D_u7F6E"><span class="nav-number">2.</span> <span class="nav-text">反向代理配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy_pass"><span class="nav-number">2.1.</span> <span class="nav-text">proxy_pass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy_method"><span class="nav-number">2.2.</span> <span class="nav-text">proxy_method</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy_hide_header"><span class="nav-number">2.3.</span> <span class="nav-text">proxy_hide_header</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy_pass_header"><span class="nav-number">2.4.</span> <span class="nav-text">proxy_pass_header</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy_pass_request_body"><span class="nav-number">2.5.</span> <span class="nav-text">proxy_pass_request_body</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy_pass_request_headers"><span class="nav-number">2.6.</span> <span class="nav-text">proxy_pass_request_headers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#prxoy_redirect"><span class="nav-number">2.7.</span> <span class="nav-text">prxoy_redirect</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy_next_upstream"><span class="nav-number">2.8.</span> <span class="nav-text">proxy_next_upstream</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#负载均衡"><span class="nav-number">1.</span> <span class="nav-text">负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#upstream"><span class="nav-number">1.1.</span> <span class="nav-text">upstream</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#server"><span class="nav-number">1.1.1.</span> <span class="nav-text">server</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ip-hash"><span class="nav-number">1.1.2.</span> <span class="nav-text">ip_hash</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#记录日志时支持的变量"><span class="nav-number">1.2.</span> <span class="nav-text">记录日志时支持的变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反向代理配置"><span class="nav-number">2.</span> <span class="nav-text">反向代理配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy-pass"><span class="nav-number">2.1.</span> <span class="nav-text">proxy_pass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy-method"><span class="nav-number">2.2.</span> <span class="nav-text">proxy_method</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy-hide-header"><span class="nav-number">2.3.</span> <span class="nav-text">proxy_hide_header</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy-pass-header"><span class="nav-number">2.4.</span> <span class="nav-text">proxy_pass_header</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy-pass-request-body"><span class="nav-number">2.5.</span> <span class="nav-text">proxy_pass_request_body</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy-pass-request-headers"><span class="nav-number">2.6.</span> <span class="nav-text">proxy_pass_request_headers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#prxoy-redirect"><span class="nav-number">2.7.</span> <span class="nav-text">prxoy_redirect</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy-next-upstream"><span class="nav-number">2.8.</span> <span class="nav-text">proxy_next_upstream</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -620,7 +620,7 @@ upstream
         <div class="copyright" >
   
   &copy;  2015-12 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>

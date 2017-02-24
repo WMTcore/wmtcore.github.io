@@ -304,11 +304,11 @@ koa-csrf
       
         <span itemprop="articleBody"><h1 id="koa-csrf"><a href="#koa-csrf" class="headerlink" title="koa-csrf"></a>koa-csrf</h1><p>Cross-Site Request Forgery 跨站请求伪造</p>
 <p><a href="https://github.com/koajs/csrf" target="_blank" rel="external">koa-csrf</a></p>
-<h2 id="u539F_u7406"><a href="#u539F_u7406" class="headerlink" title="原理"></a>原理</h2><p>它在session中保存一个<code>secret</code>字段，然后使用它生成token，其中salt是随机生成的字符串，长度可自定。每次请求时都会重新生成salt，于是每次token也会不同。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>它在session中保存一个<code>secret</code>字段，然后使用它生成token，其中salt是随机生成的字符串，长度可自定。每次请求时都会重新生成salt，于是每次token也会不同。</p>
 <figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">var hash</span> = crypto</div><div class="line">	.createHash(<span class="string">'sha1'</span>)</div><div class="line">	.update(salt + <span class="string">'-'</span> + secret, <span class="string">'ascii'</span>)</div><div class="line">	.digest(<span class="string">'base64'</span>);</div><div class="line"><span class="attribute">token</span> = salt + <span class="string">'-'</span> + hash;</div></pre></td></tr></table></figure>
 <p>验证的时候，只需要取出token头部的salt，再从session中取出<code>secret</code>,再生成expected，与token对比</p>
 <p>默认不检查<strong>GET,HEAD,OPTIONS</strong>请求</p>
-<h2 id="u4F7F_u7528"><a href="#u4F7F_u7528" class="headerlink" title="使用"></a>使用</h2><p>与session配合使用，在请求时附带字段<code>_csrf:token</code></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>与session配合使用，在请求时附带字段<code>_csrf:token</code></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> koa = <span class="keyword">require</span>(<span class="string">'koa'</span>)</div><div class="line"><span class="keyword">var</span> csrf = <span class="keyword">require</span>(<span class="string">'koa-csrf'</span>)</div><div class="line"><span class="keyword">var</span> session = <span class="keyword">require</span>(<span class="string">'koa-session'</span>)</div><div class="line"><span class="keyword">var</span> Router = <span class="keyword">require</span>(<span class="string">'koa-router'</span>);</div><div class="line"><span class="keyword">var</span> bodyParser = <span class="keyword">require</span>(<span class="string">'koa-bodyparser'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> app = koa();</div><div class="line"><span class="keyword">var</span> router = Router();</div><div class="line">app.<span class="keyword">use</span>(bodyParser());</div><div class="line">app.keys = [<span class="string">'session secret'</span>]</div><div class="line">session(app)</div><div class="line">app.<span class="keyword">use</span>(csrf());</div><div class="line"></div><div class="line">router.get(<span class="string">'/'</span>, async ctx =&gt; &#123;</div><div class="line">	ctx.body = ctx.csrf;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">router.post(<span class="string">'/'</span>, ctx =&gt; &#123;</div><div class="line">	ctx.body = ctx.request.body</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 </span>
       
@@ -409,21 +409,21 @@ koa-csrf
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -465,7 +465,7 @@ koa-csrf
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#koa-csrf"><span class="nav-number">1.</span> <span class="nav-text">koa-csrf</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u539F_u7406"><span class="nav-number">1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4F7F_u7528"><span class="nav-number">1.2.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#koa-csrf"><span class="nav-number">1.</span> <span class="nav-text">koa-csrf</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">1.2.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -486,7 +486,7 @@ koa-csrf
         <div class="copyright" >
   
   &copy;  2015-12 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>

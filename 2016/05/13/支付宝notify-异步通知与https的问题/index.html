@@ -302,19 +302,19 @@
       
 
       
-        <span itemprop="articleBody"><h3 id="u95EE_u9898_u548C_u89E3_u51B3_u65B9_u6CD5"><a href="#u95EE_u9898_u548C_u89E3_u51B3_u65B9_u6CD5" class="headerlink" title="问题和解决方法"></a>问题和解决方法</h3><p>在对接支付宝时，发生了这样的问题,使用http链接时，支付宝notify是没有问题的，但换成https后便通知不到了</p>
+        <span itemprop="articleBody"><h3 id="问题和解决方法"><a href="#问题和解决方法" class="headerlink" title="问题和解决方法"></a>问题和解决方法</h3><p>在对接支付宝时，发生了这样的问题,使用http链接时，支付宝notify是没有问题的，但换成https后便通知不到了</p>
 <p>最可能的问题便是<strong>ssl证书出错</strong>了,注意支付宝不支持自签名证书（<a href="https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1）" target="_blank" rel="external">https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1）</a></p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">去这个网站检测下你的CSR吧</div><div class="line">https:<span class="regexp">//</span>cryptoreport.websecurity.symantec.com<span class="regexp">/checker/</span>views<span class="regexp">/csrCheck.jsp</span></div></pre></td></tr></table></figure>
-<h3 id="u4E8B_u60C5_u7ECF_u8FC7"><a href="#u4E8B_u60C5_u7ECF_u8FC7" class="headerlink" title="事情经过"></a>事情经过</h3><p>某天，同事们偷偷给网站加了安全套接字，把http换成了https,于是我负责的支付模块就出错了。</p>
+<h3 id="事情经过"><a href="#事情经过" class="headerlink" title="事情经过"></a>事情经过</h3><p>某天，同事们偷偷给网站加了安全套接字，把http换成了https,于是我负责的支付模块就出错了。</p>
 <p>一开始，我就简单改了config,提交给支付宝的notify_url改成了https。本以为就没问题了，但在我又付出了￥0.01的巨款后，发现支付宝还是没有通知过来。。然后就懵逼了</p>
-<p><img src="/../picture/懵逼.jpg" alt="Smaller icon"></p>
+<p><img src="../picture/懵逼.jpg" alt="Smaller icon"></p>
 <p>懵逼了大概7.8秒后，我就去百度了一下、、、我居然去百度了一下。有人说原因是:</p>
 <blockquote>
 <p>支付宝对ssl证书也有检查，而那种免费的ssl证书通不过检查。后来没办法就只好改成http notify了 </p>
 </blockquote>
 <p>好吧。。。这种解决方法，这尼玛根本就不是个解决方案、</p>
 <p>注：俺们公司用的CA是GeoTrust,不是他们说的免费证书。顺带感叹下做CA真赚钱</p>
-<p>于是又去问支付宝客服，给了他交易号，让他帮我查了下日志,就是这样的<br><img src="/../picture/alipaylog.png" alt="Smaller icon"></p>
+<p>于是又去问支付宝客服，给了他交易号，让他帮我查了下日志,就是这样的<br><img src="../picture/alipaylog.png" alt="Smaller icon"></p>
 <p>http状态码是0耶。看来支付宝确实没有去访问我们的服务器嘛。看来确实在ssl证书检查这块了，但还不清楚是什么问题，还是问问Google吧~（推荐翻墙工具：<a href="http://www.ishadowsocks.net）" target="_blank" rel="external">http://www.ishadowsocks.net）</a></p>
 <p>Google帮我搜到了支付宝的这个<a href="https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1页面(别问我为什么之前没看到。。支付宝文档太多了，我有点眼花),其中对异步通知是这么说的：" target="_blank" rel="external">https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1页面(别问我为什么之前没看到。。支付宝文档太多了，我有点眼花),其中对异步通知是这么说的：</a></p>
 <blockquote>
@@ -322,7 +322,7 @@
 </blockquote>
 <p>然后就拿着csr去检测了。。靠，果然有鬼（毕竟不是我写的）~~然后改好重新部署</p>
 <p>再付出巨款做测试，终于等来支付宝敲门啦</p>
-<h3 id="u4E8B_u6545_u603B_u7ED3"><a href="#u4E8B_u6545_u603B_u7ED3" class="headerlink" title="事故总结"></a>事故总结</h3><p>不能说是事故，，因为网站还在测试阶段。。否则，我就该引咎辞职了（宝宝心里苦啊、、）</p>
+<h3 id="事故总结"><a href="#事故总结" class="headerlink" title="事故总结"></a>事故总结</h3><p>不能说是事故，，因为网站还在测试阶段。。否则，我就该引咎辞职了（宝宝心里苦啊、、）</p>
 <ol>
 <li>仔细看文档 </li>
 <li>不要用百度</li>
@@ -420,21 +420,21 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -476,7 +476,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u95EE_u9898_u548C_u89E3_u51B3_u65B9_u6CD5"><span class="nav-number">1.</span> <span class="nav-text">问题和解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4E8B_u60C5_u7ECF_u8FC7"><span class="nav-number">2.</span> <span class="nav-text">事情经过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4E8B_u6545_u603B_u7ED3"><span class="nav-number">3.</span> <span class="nav-text">事故总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题和解决方法"><span class="nav-number">1.</span> <span class="nav-text">问题和解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事情经过"><span class="nav-number">2.</span> <span class="nav-text">事情经过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事故总结"><span class="nav-number">3.</span> <span class="nav-text">事故总结</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -497,7 +497,7 @@
         <div class="copyright" >
   
   &copy;  2015-12 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>

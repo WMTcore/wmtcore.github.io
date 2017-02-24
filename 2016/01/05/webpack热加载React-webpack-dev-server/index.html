@@ -323,7 +323,7 @@ React组件的热替换
       
 
       
-        <span itemprop="articleBody"><h3 id="Webpack_u5F00_u53D1_u670D_u52A1_u5668_uFF08webpack-dev-server_uFF09"><a href="#Webpack_u5F00_u53D1_u670D_u52A1_u5668_uFF08webpack-dev-server_uFF09" class="headerlink" title="Webpack开发服务器（webpack-dev-server）"></a>Webpack开发服务器（webpack-dev-server）</h3><ul>
+        <span itemprop="articleBody"><h3 id="Webpack开发服务器（webpack-dev-server）"><a href="#Webpack开发服务器（webpack-dev-server）" class="headerlink" title="Webpack开发服务器（webpack-dev-server）"></a>Webpack开发服务器（webpack-dev-server）</h3><ul>
 <li>npm install -g webpack-dev-server</li>
 <li>静态资源Web服务器</li>
 <li>基于Node.js Express</li>
@@ -338,7 +338,7 @@ React组件的热替换
 <p><code>修改webpack.config.js</code></p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">entry: [</div><div class="line">  <span class="string">'webpack-dev-server/client?http://127.0.0.1:3000'</span>, <span class="comment">// WebpackDevServer host and port,资源服务器地址,打包生成的文件从client?http://127.0.0.1:3000去获取动态的代码更新</span></div><div class="line">  <span class="string">'webpack/hot/only-dev-server'</span>,</div><div class="line">  <span class="string">'./scripts/index.js'</span> <span class="comment">// Your appʼs entry point</span></div><div class="line">]</div><div class="line"></div><div class="line"></div><div class="line">loaders: [&#123;</div><div class="line">    test: <span class="regexp">/\.js$/</span>,</div><div class="line">    <span class="keyword">exclude</span>: <span class="regexp">/node_modules/</span>,</div><div class="line">    loader: <span class="string">'react-hot!jsx-loader?harmony'</span><span class="comment">//让Webpack用react-hot-loader去加载React组件,harmony启动es6</span></div><div class="line">  &#125;]</div></pre></td></tr></table></figure>
 <p>之后启动node server.js</p>
-<h3 id="u524D_u7AEF_u670D_u52A1_u5668_u8C03_u7528"><a href="#u524D_u7AEF_u670D_u52A1_u5668_u8C03_u7528" class="headerlink" title="前端服务器调用"></a>前端服务器调用</h3><p><code>载入打包文件时指定完整的URL地址</code></p>
+<h3 id="前端服务器调用"><a href="#前端服务器调用" class="headerlink" title="前端服务器调用"></a>前端服务器调用</h3><p><code>载入打包文件时指定完整的URL地址</code></p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://127.0.0.1:3000/assets/bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>建立Socket IO来动态加载模块</p>
 </span>
@@ -442,21 +442,21 @@ React组件的热替换
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -498,7 +498,7 @@ React组件的热替换
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Webpack_u5F00_u53D1_u670D_u52A1_u5668_uFF08webpack-dev-server_uFF09"><span class="nav-number">1.</span> <span class="nav-text">Webpack开发服务器（webpack-dev-server）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#react-hot-loader"><span class="nav-number">2.</span> <span class="nav-text">react-hot-loader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u524D_u7AEF_u670D_u52A1_u5668_u8C03_u7528"><span class="nav-number">3.</span> <span class="nav-text">前端服务器调用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Webpack开发服务器（webpack-dev-server）"><span class="nav-number">1.</span> <span class="nav-text">Webpack开发服务器（webpack-dev-server）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#react-hot-loader"><span class="nav-number">2.</span> <span class="nav-text">react-hot-loader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前端服务器调用"><span class="nav-number">3.</span> <span class="nav-text">前端服务器调用</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -519,7 +519,7 @@ React组件的热替换
         <div class="copyright" >
   
   &copy;  2015-12 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>
