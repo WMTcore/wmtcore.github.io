@@ -3,6 +3,128 @@
 
 
     
+  <url>
+    <loc>https://www.wmtcore.com/2015/12/22/Sequelize%E4%BA%8B%E5%8A%A1%E5%AE%9E%E7%8E%B0/</loc>
+    <lastmod>2017-05-24T14:23:01.000Z</lastmod>
+    <data>
+        <display>
+        <title>Sequelize事务实现</title>
+        <pubTime>2015-12-22T08:08:37.000Z</pubTime>
+        
+        <tag>ORM</tag>
+         
+        <tag>Sequelize</tag>
+         
+         
+           
+             
+              <breadCrumb title="nodejs" url="https://www.wmtcore.com/categories/nodejs/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.wmtcore.com/2016/03/06/mysql%E4%BA%8B%E5%8A%A1%E4%B8%8E%E9%94%81/</loc>
+    <lastmod>2017-05-19T02:30:04.000Z</lastmod>
+    <data>
+        <display>
+        <title>mysql事务与锁</title>
+        <pubTime>2016-03-06T06:56:20.000Z</pubTime>
+        
+        <tag>mysql</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据库" url="https://www.wmtcore.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.wmtcore.com/2016/07/01/pm2%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2017-05-11T11:08:40.000Z</lastmod>
+    <data>
+        <display>
+        <title>pm2</title>
+        <pubTime>2016-07-01T07:15:27.000Z</pubTime>
+        
+        <tag>nodejs</tag>
+         
+         
+           
+             
+              <breadCrumb title="nodejs" url="https://www.wmtcore.com/categories/nodejs/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.wmtcore.com/2016/08/19/nodejs-web%E5%BA%94%E7%94%A8-%E4%BA%8C/</loc>
+    <lastmod>2017-04-11T02:56:00.000Z</lastmod>
+    <data>
+        <display>
+        <title>nodejs web应用(二)</title>
+        <pubTime>2016-08-19T09:13:16.000Z</pubTime>
+        
+        <tag>nodejs</tag>
+         
+         
+           
+             
+              <breadCrumb title="nodejs" url="https://www.wmtcore.com/categories/nodejs/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.wmtcore.com/2016/08/23/nodejs%E5%A4%9A%E8%BF%9B%E7%A8%8B/</loc>
+    <lastmod>2017-03-23T10:05:24.000Z</lastmod>
+    <data>
+        <display>
+        <title>nodejs多进程</title>
+        <pubTime>2016-08-23T03:38:19.000Z</pubTime>
+        
+        <tag>nodejs</tag>
+         
+         
+           
+             
+              <breadCrumb title="nodejs" url="https://www.wmtcore.com/categories/nodejs/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.wmtcore.com/2017/03/16/%E5%88%86%E5%B8%83%E5%BC%8F%E9%80%9A%E4%BF%A1/</loc>
+    <lastmod>2017-03-17T06:30:57.000Z</lastmod>
+    <data>
+        <display>
+        <title>分布式通信</title>
+        <pubTime>2017-03-16T03:03:22.000Z</pubTime>
+        
+        <tag>分布式</tag>
+         
+         
+           
+             
+              <breadCrumb title="云计算" url="https://www.wmtcore.com/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
     
   <url>
     <loc>https://www.wmtcore.com/2016/03/15/node%E7%9A%84%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD/</loc>
@@ -31,26 +153,6 @@
         <display>
         <title>nodejs 网络(一)</title>
         <pubTime>2016-07-22T08:43:53.000Z</pubTime>
-        
-        <tag>nodejs</tag>
-         
-         
-           
-             
-              <breadCrumb title="nodejs" url="https://www.wmtcore.com/categories/nodejs/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://www.wmtcore.com/2016/08/19/nodejs-web%E5%BA%94%E7%94%A8-%E4%BA%8C/</loc>
-    <lastmod>2017-02-10T09:31:40.000Z</lastmod>
-    <data>
-        <display>
-        <title>nodejs web应用(二)</title>
-        <pubTime>2016-08-19T09:13:16.000Z</pubTime>
         
         <tag>nodejs</tag>
          
@@ -218,26 +320,6 @@
            
              
               <breadCrumb title="js" url="https://www.wmtcore.com/categories/js/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://www.wmtcore.com/2016/08/23/nodejs%E5%A4%9A%E8%BF%9B%E7%A8%8B/</loc>
-    <lastmod>2016-09-23T02:27:33.000Z</lastmod>
-    <data>
-        <display>
-        <title>nodejs多进程</title>
-        <pubTime>2016-08-23T03:38:19.000Z</pubTime>
-        
-        <tag>nodejs</tag>
-         
-         
-           
-             
-              <breadCrumb title="nodejs" url="https://www.wmtcore.com/categories/nodejs/"/>
           
         </display>
     </data>
@@ -418,26 +500,6 @@
            
              
               <breadCrumb title="nginx" url="https://www.wmtcore.com/categories/nginx/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://www.wmtcore.com/2016/07/01/pm2%E4%BB%8B%E7%BB%8D/</loc>
-    <lastmod>2016-07-01T09:30:15.000Z</lastmod>
-    <data>
-        <display>
-        <title>pm2</title>
-        <pubTime>2016-07-01T07:15:27.000Z</pubTime>
-        
-        <tag>nodejs</tag>
-         
-         
-           
-             
-              <breadCrumb title="nodejs" url="https://www.wmtcore.com/categories/nodejs/"/>
           
         </display>
     </data>
@@ -627,26 +689,6 @@
 
     
   <url>
-    <loc>https://www.wmtcore.com/2016/03/06/mysql%E4%BA%8B%E5%8A%A1%E4%B8%8E%E9%94%81/</loc>
-    <lastmod>2016-04-13T01:45:37.000Z</lastmod>
-    <data>
-        <display>
-        <title>mysql事务与锁</title>
-        <pubTime>2016-03-06T06:56:20.000Z</pubTime>
-        
-        <tag>mysql</tag>
-         
-         
-           
-             
-              <breadCrumb title="数据库" url="https://www.wmtcore.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://www.wmtcore.com/2016/03/31/es6-Generator/</loc>
     <lastmod>2016-04-07T08:41:16.000Z</lastmod>
     <data>
@@ -788,28 +830,6 @@
            
              
               <breadCrumb title="Mac" url="https://www.wmtcore.com/categories/Mac/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://www.wmtcore.com/2015/12/22/Sequelize%E4%BA%8B%E5%8A%A1%E5%AE%9E%E7%8E%B0/</loc>
-    <lastmod>2016-01-21T01:54:46.000Z</lastmod>
-    <data>
-        <display>
-        <title>Sequelize事务实现</title>
-        <pubTime>2015-12-22T08:08:37.000Z</pubTime>
-        
-        <tag>ORM</tag>
-         
-        <tag>Sequelize</tag>
-         
-         
-           
-             
-              <breadCrumb title="nodejs" url="https://www.wmtcore.com/categories/nodejs/"/>
           
         </display>
     </data>

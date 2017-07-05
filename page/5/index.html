@@ -223,6 +223,114 @@
 
     
     
+      
+      
+
+      
+    
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/28/git-常用命令/" itemprop="url">
+                  git 常用命令
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-28T12:42:09+08:00" content="2015-12-28">
+              2015-12-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/28/git-常用命令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/28/git-常用命令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p><img src="../git.jpg" alt="Resize icon"></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -710,7 +818,7 @@
 <li>事务并行</li>
 </ul>
 <figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">models.sequelize.transaction(<span class="function"><span class="keyword">function</span><span class="params">(t)</span></span> &#123;</div><div class="line">    <span class="keyword">return</span> models.Products.create(args, &#123;</div><div class="line">        transaction: t</div><div class="line">    &#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(result)</span></span> &#123;</div><div class="line">        <span class="keyword">return</span> Promise.<span class="built_in">all</span>([models.user.create(&#123;</div><div class="line">            <span class="keyword">name</span>: <span class="string">'test'</span></div><div class="line">        &#125;, &#123;</div><div class="line">            transaction: t</div><div class="line">        &#125;), models.address.create(&#123;</div><div class="line">            id: <span class="string">'1'</span></div><div class="line">        &#125;, &#123;</div><div class="line">            transaction: t</div><div class="line">        &#125;)]).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">()</span></span> &#123;&#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h3 id="push-promise-all-实现循环读取、写入"><a href="#push-promise-all-实现循环读取、写入" class="headerlink" title="push + promise.all 实现循环读取、写入"></a>push + promise.all 实现循环读取、写入</h3><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">models.sequelize.transaction(<span class="keyword">function</span>(t) &#123;</div><div class="line">    var tranArray = [];</div><div class="line">    if (!<span class="number">_</span>.isUndefined(args.categories_id)) &#123;</div><div class="line">        var categories_idArray = args.categories_id.split(<span class="string">','</span>);</div><div class="line">        tranArray.push(models.Categories_product.destroy(&#123;</div><div class="line">            where: &#123;</div><div class="line">                product_id: product_id</div><div class="line">            &#125;</div><div class="line">        &#125;, &#123;</div><div class="line">            transaction: t</div><div class="line">        &#125;));</div><div class="line">        categories_idArray.forEach(function(categories_id) &#123;</div><div class="line">            tranArray.push(models.Categories_product.create(&#123;</div><div class="line">                product_id: product_id,</div><div class="line">                categories_id: categories_id</div><div class="line">            &#125;, &#123;</div><div class="line">                transaction: t</div><div class="line">            &#125;));</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">    if (<span class="number">_</span>.isUndefined(areacode)) &#123;</div><div class="line">        tranArray.push(models.Products.update(args, &#123;</div><div class="line">            where: &#123;</div><div class="line">                id: product_id</div><div class="line">            &#125;</div><div class="line">        &#125;));</div><div class="line">    &#125; else &#123;</div><div class="line">        tranArray.push(models.Product_lang_details.update(args,</div><div class="line">            where: &#123;</div><div class="line">                product_id: product_id,</div><div class="line">                areacode: areacode</div><div class="line">            &#125;));</div><div class="line">        tranArray.push(models.Product_shipping_to.update(&#123;</div><div class="line">                freezeTableName: args.freezeTableName</div><div class="line">            &#125;,</div><div class="line">            where: &#123;</div><div class="line">                product_id: product_id,</div><div class="line">                areacode: areacode</div><div class="line">            &#125;));</div><div class="line">    &#125;</div><div class="line">    return Promise.all(tranArray);</div><div class="line">&#125;).<span class="keyword">then</span>(<span class="keyword">function</span>() &#123;</div><div class="line">    return utils.response(res, <span class="number">200</span>, &#123;</div><div class="line">        <span class="string">'message'</span>: <span class="string">'update product successful!'</span></div><div class="line">    &#125;);</div><div class="line">&#125;).<span class="keyword">catch</span>(<span class="keyword">function</span>(error) &#123;</div><div class="line">    logger.error(<span class="string">'product update fall'</span>, error);</div><div class="line">    return utils.responseError(res, <span class="number">500</span>, &#123;</div><div class="line">        <span class="string">'message'</span>: <span class="string">'format error'</span></div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="push-promise-all-实现循环读取、写入"><a href="#push-promise-all-实现循环读取、写入" class="headerlink" title="push + promise.all 实现循环读取、写入"></a>push + promise.all 实现循环读取、写入</h3><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">        models.sequelize.transaction(function(t) &#123;</div><div class="line">            <span class="built_in">var</span> tranArray = [];</div><div class="line">            <span class="keyword">if</span> (!<span class="symbol">_</span>.isUndefined(<span class="built_in">args</span>.categories_id)) &#123;</div><div class="line">                <span class="built_in">var</span> categories_idArray = <span class="built_in">args</span>.categories_id.<span class="built_in">split</span>(',');</div><div class="line">                tranArray.<span class="built_in">push</span>(models.Categories_product.destroy(&#123;</div><div class="line">                    where: &#123;</div><div class="line">                        product_id: product_id</div><div class="line">                    &#125;</div><div class="line">                &#125;, &#123;</div><div class="line">                    transaction: t</div><div class="line">                &#125;));</div><div class="line">                categories_idArray.forEach(function(categories_id) &#123;</div><div class="line">                    tranArray.<span class="built_in">push</span>(models.Categories_product.create(&#123;</div><div class="line">                        product_id: product_id,</div><div class="line">                        categories_id: categories_id</div><div class="line">                    &#125;, &#123;</div><div class="line">                        transaction: t</div><div class="line">                    &#125;));</div><div class="line">                &#125;);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (<span class="symbol">_</span>.isUndefined(areacode)) &#123;</div><div class="line">                tranArray.<span class="built_in">push</span>(models.Products.update(<span class="built_in">args</span>, &#123;</div><div class="line">                    where: &#123;</div><div class="line">                        id: product_id</div><div class="line">                    &#125;</div><div class="line">                &#125;));</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                tranArray.<span class="built_in">push</span>(models.Product_lang_details.update(<span class="built_in">args</span>,</div><div class="line">                    where: &#123;</div><div class="line">                        product_id: product_id,</div><div class="line">                        areacode: areacode</div><div class="line">                    &#125;));</div><div class="line">                tranArray.<span class="built_in">push</span>(models.Product_shipping_to.update(&#123;</div><div class="line">                        freezeTableName: <span class="built_in">args</span>.freezeTableName</div><div class="line">                    &#125;,</div><div class="line">                    where: &#123;</div><div class="line">                        product_id: product_id,</div><div class="line">                        areacode: areacode</div><div class="line">                    &#125;));</div><div class="line">            &#125;</div><div class="line">            <span class="built_in">return</span> Promise.all(tranArray);</div><div class="line">        &#125;).<span class="keyword">then</span>(function() &#123;</div><div class="line">            <span class="built_in">return</span> utils.response(res, <span class="number">200</span>, &#123;</div><div class="line">                'message': 'update <span class="built_in">product</span> successful!'</div><div class="line">            &#125;);</div><div class="line">        &#125;).<span class="built_in">catch</span>(function(<span class="built_in">error</span>) &#123;</div><div class="line">            logger.<span class="built_in">error</span>('<span class="built_in">product</span> update fall', <span class="built_in">error</span>);</div><div class="line">            <span class="built_in">return</span> utils.responseError(res, <span class="number">500</span>, &#123;</div><div class="line">                'message': 'format <span class="built_in">error</span>'</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div><div class="line">        </div><div class="line">###</div></pre></td></tr></table></figure>
             
           </span>
         
@@ -1584,141 +1692,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/04/虚拟化实现方式/" itemprop="url">
-                  虚拟化实现方式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-12-04T14:49:24+08:00" content="2015-12-04">
-              2015-12-04
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/云计算/" itemprop="url" rel="index">
-                    <span itemprop="name">云计算</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/04/虚拟化实现方式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/04/虚拟化实现方式/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h4 id="VMM-Virtual-Machine-Monitor-虚拟机监视器"><a href="#VMM-Virtual-Machine-Monitor-虚拟机监视器" class="headerlink" title="VMM(Virtual Machine Monitor 虚拟机监视器)"></a>VMM(Virtual Machine Monitor 虚拟机监视器)</h4><ul>
-<li>运行在硬件平台 Xen</li>
-<li>运行在操作系统里 KVM</li>
-</ul>
-<h4 id="完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改"><a href="#完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改" class="headerlink" title="完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改"></a>完全虚拟化：VMM虚拟现实存在的平台，客户机感觉不到，操作系统不用修改</h4><p>Intel的VTx 在处理器上引入一个新的执行模式用于虚拟机，当虚拟机运行在这个模式中，它的任何特权操作都会被处理器截获并报告VMM.VMM运行在正常模式下，接收到处理器报告后，解码目标指令，找到相应的虚拟化模块进行模拟，并把效果反映在特殊模式的坏境中</p>
-<h4 id="类虚拟化"><a href="#类虚拟化" class="headerlink" title="类虚拟化"></a>类虚拟化</h4><p>VMM虚拟现实不存在的平台，虚拟平台对客户机操作系统进行修改，客户机也会主动适应。通过在源代码级别修改指令来避免虚拟化漏洞，对呀X86中难以虚拟化的指令，修改内核来避免，并自定义基于事务的高度优化的I/O协议，达到近似物理机的性能</p>
-<ul>
-<li><p>动态迁移:  </p>
-<ul>
-<li>将虚拟机从一个物理机快速移到另一个，程序和网络保持连接。在目的服务器建立相同配置的虚拟机，同步各种内部状态，难点是内存同步，有脏页。如果有VTd设备（网卡），需要使用Bonding Drive，一个网络接口绑定多个网卡和hotplug 热插拔 </li>
-</ul>
-</li>
-<li><p>虚拟机快照：</p>
-<ul>
-<li>保存虚拟机某一时刻的硬盘、内存、CPU等信息</li>
-</ul>
-</li>
-<li><p>虚拟机克隆：</p>
-<ul>
-<li>把一个虚拟机的状态完全复制到另一个虚拟机 但要修改某些配置 如MAC 避免冲突</li>
-</ul>
-</li>
-<li><p>P2V( Physical to Virtual Machine): </p>
-<ul>
-<li>将物理机的操作系统、数据从物理硬盘移到虚拟机 降低服务器虚拟化的使用门槛</li>
-</ul>
-</li>
-<li><p>Xen: </p>
-<ul>
-<li>起源于剑桥 最初基于类虚拟化，修改linux内核来实现处理器和内存虚拟化，引入I/O的前端/后端驱动架构实现设备虚拟化，能达到接近物理机的效果。之后支持硬件完全虚拟化，如Intel的VT AMD-V</li>
-</ul>
-</li>
-</ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1765,7 +1738,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">52</span>
+              <span class="site-state-item-count">53</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1779,7 +1752,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
