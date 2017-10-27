@@ -63,16 +63,16 @@ Node本身是多线程的，但其中的JavaScript是单线程、因为v8的限�
 Node 在*nix平台，通过线程池实现(主线程和I/O线程)，在windows下使用IOCP(调用异步方法，等待I/O完成后通知，执行回调，内部也依靠线程池，但由系统内核管理)，通过libuv层来兼容。
 Node本身是多线程的，但其中的JavaScript是单线程、因为v8的限制，但计算之类的都是在此线程，多线程只是I/O（磁盘，网络等），I/O有另外的线程池
 事件循环">
-<meta property="og:image" content="https://www.wmtcore.com/../IO异步.png">
-<meta property="og:image" content="https://www.wmtcore.com/../高性能服务器.png">
-<meta property="og:updated_time" content="2016-05-20T05:58:03.000Z">
+<meta property="og:image" content="https://www.wmtcore.com/../picture/IO异步.png">
+<meta property="og:image" content="https://www.wmtcore.com/../picture/高性能服务器.png">
+<meta property="og:updated_time" content="2017-10-27T05:54:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node异步I/O">
 <meta name="twitter:description" content="让I/O与CPU计算并行
 Node 在*nix平台，通过线程池实现(主线程和I/O线程)，在windows下使用IOCP(调用异步方法，等待I/O完成后通知，执行回调，内部也依靠线程池，但由系统内核管理)，通过libuv层来兼容。
 Node本身是多线程的，但其中的JavaScript是单线程、因为v8的限制，但计算之类的都是在此线程，多线程只是I/O（磁盘，网络等），I/O有另外的线程池
 事件循环">
-<meta name="twitter:image" content="https://www.wmtcore.com/../IO异步.png">
+<meta name="twitter:image" content="https://www.wmtcore.com/../picture/IO异步.png">
 
 
 
@@ -320,12 +320,12 @@ Node本身是多线程的，但其中的JavaScript是单线程、因为v8的限�
 <li><p>Tick在执行过程中检查线程池中是否有执行完的请求，并加入<strong>I/O观察者队列</strong>中，然后再从观察者取到可用的请求对象当做事件处理，取出对象中的回调函数执行,若有业务层callback再给js执行</p>
 </li>
 </ul>
-<p><img src="../IO异步.png" alt="Smaller icon"></p>
+<p><img src="../picture/IO异步.png" alt="Smaller icon"></p>
 <h4 id="事件驱动的高性能服务器"><a href="#事件驱动的高性能服务器" class="headerlink" title="事件驱动的高性能服务器"></a>事件驱动的高性能服务器</h4><p>基于事件驱动的非阻塞I/O模型<br><code>通过主循环加载事件触发的方式来运行程序处理请求，无需为每一个请求创建额外的对应线程</code>：操作系统因为线程少，所以在上下文切换时代价很小，有助系统稳定处理大量请求（但不适合密集运算),但用户代码不能并行执行，I/O可以</p>
 <ul>
 <li>单线程保证运行安全，避免重入</li>
 </ul>
-<p><img src="../高性能服务器.png" alt="Smaller icon"></p>
+<p><img src="../picture/高性能服务器.png" alt="Smaller icon"></p>
 <h3 id="另外一些异步api"><a href="#另外一些异步api" class="headerlink" title="另外一些异步api"></a>另外一些异步api</h3><h4 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h4><ul>
 <li>setTimeout()单次定时执行 setInterval()多次定时执行</li>
 </ul>
@@ -441,7 +441,7 @@ Node本身是多线程的，但其中的JavaScript是单线程、因为v8的限�
 
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="https://schema.org/Person">
-          <img class="site-author-image" src="https://www.wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
+          <img class="site-author-image" src="http://wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
           <p class="site-author-name" itemprop="name">WMT</p>
         </div>
         <p class="site-description motion-element" itemprop="description">不扯犊子 -NOT ALONE</p>

@@ -53,20 +53,20 @@
 
 <meta name="description" content="关于URL编码的问题encodeURI，decodeURI :不会对下列字符编码 ASCII字母 数字 ~!@#$&amp;amp;*()=:/,;?+’，适合对整个url
 encodeURIComponent decodeURIComponent : 不会对下列字符编码 ASCII字母 数字 ~!*()’,适合对url参数
-字符串编码escape unescape :不会对 ASCII 字母、数字和@/">
+content-typeapplication/x-www-form-urlen">
 <meta property="og:type" content="article">
 <meta property="og:title" content="js 编码相关问题持续总结">
 <meta property="og:url" content="https://www.wmtcore.com/2016/01/25/js-编码相关问题持续总结/index.html">
 <meta property="og:site_name" content="大碗拉面">
 <meta property="og:description" content="关于URL编码的问题encodeURI，decodeURI :不会对下列字符编码 ASCII字母 数字 ~!@#$&amp;amp;*()=:/,;?+’，适合对整个url
 encodeURIComponent decodeURIComponent : 不会对下列字符编码 ASCII字母 数字 ~!*()’,适合对url参数
-字符串编码escape unescape :不会对 ASCII 字母、数字和@/">
-<meta property="og:updated_time" content="2016-08-04T06:37:03.000Z">
+content-typeapplication/x-www-form-urlen">
+<meta property="og:updated_time" content="2017-08-16T06:07:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="js 编码相关问题持续总结">
 <meta name="twitter:description" content="关于URL编码的问题encodeURI，decodeURI :不会对下列字符编码 ASCII字母 数字 ~!@#$&amp;amp;*()=:/,;?+’，适合对整个url
 encodeURIComponent decodeURIComponent : 不会对下列字符编码 ASCII字母 数字 ~!*()’,适合对url参数
-字符串编码escape unescape :不会对 ASCII 字母、数字和@/">
+content-typeapplication/x-www-form-urlen">
 
 
 
@@ -301,6 +301,7 @@ encodeURIComponent decodeURIComponent : 不会对下列字符编码 ASCII字母 
       
         <span itemprop="articleBody"><h3 id="关于URL编码的问题"><a href="#关于URL编码的问题" class="headerlink" title="关于URL编码的问题"></a>关于URL编码的问题</h3><p><code>encodeURI，decodeURI</code> :不会对下列字符编码 ASCII字母 数字 ~!@#$&amp;*()=:/,;?+’，适合对整个url</p>
 <p><code>encodeURIComponent decodeURIComponent</code> : 不会对下列字符编码 ASCII字母 数字 ~!*()’,适合对url参数</p>
+<h3 id="content-type"><a href="#content-type" class="headerlink" title="content-type"></a>content-type</h3><p><code>application/x-www-form-urlencoded</code>: body的内容为a=b&amp;c=d,服务端接收时会转为键值对并会<a href="https://www.w3.org/TR/html4/interact/forms.html#h-17.13.4.1" target="_blank" rel="external">把+转成空格</a>,需要对值做encodeURIComponent<br><code>application/json</code>: body的内容为JSON.stringify({a:1}})</p>
 <h3 id="字符串编码"><a href="#字符串编码" class="headerlink" title="字符串编码"></a>字符串编码</h3><p><code>escape unescape</code> :不会对 ASCII 字母、数字和@/*+进行编码,但<code>已不建议使用</code></p>
 <p><strong>escape和encodeURI区别</strong> :<br><code>escape</code>在处理 0xff 之外字符的时候，是直接使用字符的 unicode 在前面加上一个 「%u」<br><code>encodeURI</code> 先进行 UTF-8，再在 UTF-8 的每个字节码前加上一个 「%」</p>
 <h4 id="nodejs-处理编码文件"><a href="#nodejs-处理编码文件" class="headerlink" title="nodejs 处理编码文件"></a>nodejs 处理编码文件</h4><p><code>iconv-lite</code>: 纯js实现，少了c++到js的转换 比node-iconv快 </p>
@@ -407,7 +408,7 @@ encodeURIComponent decodeURIComponent : 不会对下列字符编码 ASCII字母 
 
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="https://schema.org/Person">
-          <img class="site-author-image" src="https://www.wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
+          <img class="site-author-image" src="http://wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
           <p class="site-author-name" itemprop="name">WMT</p>
         </div>
         <p class="site-description motion-element" itemprop="description">不扯犊子 -NOT ALONE</p>
@@ -470,7 +471,7 @@ encodeURIComponent decodeURIComponent : 不会对下列字符编码 ASCII字母 
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于URL编码的问题"><span class="nav-number">1.</span> <span class="nav-text">关于URL编码的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串编码"><span class="nav-number">2.</span> <span class="nav-text">字符串编码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nodejs-处理编码文件"><span class="nav-number">2.1.</span> <span class="nav-text">nodejs 处理编码文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL、URI、URN"><span class="nav-number">3.</span> <span class="nav-text">URL、URI、URN</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于URL编码的问题"><span class="nav-number">1.</span> <span class="nav-text">关于URL编码的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#content-type"><span class="nav-number">2.</span> <span class="nav-text">content-type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串编码"><span class="nav-number">3.</span> <span class="nav-text">字符串编码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nodejs-处理编码文件"><span class="nav-number">3.1.</span> <span class="nav-text">nodejs 处理编码文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL、URI、URN"><span class="nav-number">4.</span> <span class="nav-text">URL、URI、URN</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
