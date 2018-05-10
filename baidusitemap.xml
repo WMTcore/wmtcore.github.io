@@ -64,6 +64,26 @@
 
     
   <url>
+    <loc>https://www.wmtcore.com/2015/12/14/es6-Promise/</loc>
+    <lastmod>2018-01-12T08:28:55.000Z</lastmod>
+    <data>
+        <display>
+        <title>es6 Promise</title>
+        <pubTime>2015-12-14T06:51:57.000Z</pubTime>
+        
+        <tag>es6</tag>
+         
+         
+           
+             
+              <breadCrumb title="js" url="https://www.wmtcore.com/categories/js/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://www.wmtcore.com/2015/12/28/git-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</loc>
     <lastmod>2017-10-27T05:54:26.000Z</lastmod>
     <data>
@@ -378,26 +398,6 @@
            
              
               <breadCrumb title="数据库" url="https://www.wmtcore.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://www.wmtcore.com/2015/12/14/es6-Promise/</loc>
-    <lastmod>2016-09-23T08:04:24.000Z</lastmod>
-    <data>
-        <display>
-        <title>es6 Promise</title>
-        <pubTime>2015-12-14T06:51:57.000Z</pubTime>
-        
-        <tag>es6</tag>
-         
-         
-           
-             
-              <breadCrumb title="js" url="https://www.wmtcore.com/categories/js/"/>
           
         </display>
     </data>
