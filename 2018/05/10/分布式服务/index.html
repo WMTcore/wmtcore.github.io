@@ -71,8 +71,8 @@ CAP定理在一个分布式系统中，Consi">
 故障率 在由大量计算机组成的分布式系统中，故障是无法避免的
 
 CAP定理在一个分布式系统中，Consi">
-<meta property="og:image" content="https://www.wmtcore.com/../picture/分布式服务1.jpg">
-<meta property="og:updated_time" content="2018-05-10T07:22:56.547Z">
+<meta property="og:image" content="https://www.wmtcore.com/picture/分布式服务1.jpg">
+<meta property="og:updated_time" content="2018-05-10T07:26:55.441Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式通信">
 <meta name="twitter:description" content="分布式服务分布式特征
@@ -83,7 +83,7 @@ CAP定理在一个分布式系统中，Consi">
 故障率 在由大量计算机组成的分布式系统中，故障是无法避免的
 
 CAP定理在一个分布式系统中，Consi">
-<meta name="twitter:image" content="https://www.wmtcore.com/../picture/分布式服务1.jpg">
+<meta name="twitter:image" content="https://www.wmtcore.com/picture/分布式服务1.jpg">
 
 
 
@@ -336,7 +336,7 @@ CAP定理在一个分布式系统中，Consi">
 <li>最终一致性（Eventually consistent）强调系统所有的数据副本最终能达到一致状态，但不需要实时保证数据一致性，而所有客户端能获取到最新的值</li>
 </ul>
 <h2 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h2><h3 id="2PC-两段提交"><a href="#2PC-两段提交" class="headerlink" title="2PC 两段提交"></a>2PC 两段提交</h3><p>将事务的提交过程分成了两个阶段来进行处理,它对每个事务使用先尝试后提交的方式来处理，是一种强一致性算法。它的优点是原理简单，实现方便，而缺点是同步阻塞，单点问题，数据不一致</p>
-<p><img src="../picture/分布式服务1.jpg" alt="Smaller icon"></p>
+<p><img src="/picture/分布式服务1.jpg" alt="Smaller icon"></p>
 <h4 id="阶段一：提交事务请求"><a href="#阶段一：提交事务请求" class="headerlink" title="阶段一：提交事务请求"></a>阶段一：提交事务请求</h4><ol>
 <li>事务询问：向所有参与者发送事务内容，并询问事务提交是否可以执行，然后等待参与者响应</li>
 <li>执行事务：参与者执行事务，并在日志中记录Undo和Redo信息</li>
