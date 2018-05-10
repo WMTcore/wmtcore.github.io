@@ -251,6 +251,196 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/02/nodejs-web应用-一/" itemprop="url">
+                  nodejs web应用(一)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-08-02T17:50:42+08:00" content="2016-08-02">
+              2016-08-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/02/nodejs-web应用-一/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/02/nodejs-web应用-一/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="请求解析"><a href="#请求解析" class="headerlink" title="请求解析"></a>请求解析</h3><p>请求方法在报文的第一行，路径在其后</p>
+<pre><code>&gt; GET /path?foo=bar HTTP/1.1
+&gt; User-Agent: curl/7.24.0 (x86_64-apple-darwin12.0) libcurl/7.24.0 OpenSSL/0.9.8r zlib/1.2.5
+&gt; Host: 127.0.0.1:1337 
+&gt; Accept: */*
+</code></pre><p>HTTP_Parser在解析时，把报文头的方法取出来设置为req.method，把路径设置为req.url.根据路径进行业务处理的通常有静态文件服务器，选择控制器（/controller/action/a/b/c）</p>
+<p><code>查询字符串</code>：位于路径?之后，可用node提供的querystring处理，也可用url模块，url.parse(req.url,true).query<br>如果查询字符串的键出现多次，它的值会变成数组</p>
+<h3 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h3><ul>
+<li>记录状态</li>
+<li>服务端先向客户端发送cookie，浏览器保存，之后每次请求都会带上它</li>
+</ul>
+<h4 id="构造cookie"><a href="#构造cookie" class="headerlink" title="构造cookie"></a>构造cookie</h4><figure class="highlight 1c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//curl构造cookie字段</span></div><div class="line">curl -v -H <span class="string">"Cookie: foo=bar; baz=val"</span> <span class="string">"http://127.0.0.1:1337/path?foo=bar&amp;foo=baz"</span></div></pre></td></tr></table></figure>
+<p>HTTP_Parser会把cookie解析到req.headers.cookie上，格式为key=value;keys=value2</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> parseCookie = <span class="function"><span class="keyword">function</span><span class="params">(cookie)</span> </span>&#123;</div><div class="line">	<span class="keyword">var</span> cookies = &#123;&#125;;</div><div class="line">	<span class="keyword">if</span> (!cookie) &#123;</div><div class="line">		<span class="keyword">return</span> cookies;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">var</span> <span class="keyword">list</span> = cookie.split(<span class="string">';'</span>);</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">list</span>.length; i++) &#123;</div><div class="line">		<span class="keyword">var</span> pair = <span class="keyword">list</span>[i].split(<span class="string">'='</span>);</div><div class="line">		cookies[pair[<span class="number">0</span>].trim()] = pair[<span class="number">1</span>];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> cookies;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>发送cookie通过<strong>响应报文</strong>：Set-Cookie: name=value; Path=/; Expires=Sun, 23-Apr-23 09:01:35 GMT; Domain=.domain.com;</p>
+<ul>
+<li>path cookie使用的路径，路径不满足不会发送</li>
+<li>Expires 过期时间 Max-Age 多久后过期 不设置的话关闭浏览器cookie就丢失</li>
+<li>HttpOnly 不可过脚本document.cookie修改</li>
+<li>secure 只对https生效</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">// cookie序列规范化</div><div class="line"><span class="symbol">var</span> serialize = <span class="meta">function</span>(name, val, <span class="meta">opt</span>) &#123;</div><div class="line">	var pairs = [name + <span class="string">'='</span> + encode(val)]<span class="comment">;</span></div><div class="line">	<span class="meta">opt</span> = <span class="meta">opt</span> <span class="title">||</span> &#123;&#125;<span class="comment">;</span></div><div class="line">	<span class="meta">if</span> (<span class="meta">opt</span>.maxAge) pairs.<span class="keyword">push('Max-Age=' </span>+ <span class="meta">opt</span>.maxAge)<span class="comment">;</span></div><div class="line">	<span class="meta">if</span> (<span class="meta">opt</span>.domain) pairs.<span class="keyword">push('Domain=' </span>+ <span class="meta">opt</span>.domain)<span class="comment">;</span></div><div class="line">	<span class="meta">if</span> (<span class="meta">opt</span>.path) pairs.<span class="keyword">push('Path=' </span>+ <span class="meta">opt</span>.path)<span class="comment">;</span></div><div class="line">	<span class="meta">if</span> (<span class="meta">opt</span>.expires) pairs.<span class="keyword">push('Expires=' </span>+ <span class="meta">opt</span>.expires.toUTCString())<span class="comment">;</span></div><div class="line">	<span class="meta">if</span> (<span class="meta">opt</span>.httpOnly) pairs.<span class="keyword">push('HttpOnly');</span></div><div class="line">	<span class="meta">if</span> (<span class="meta">opt</span>.secure) pairs.<span class="keyword">push('Secure');</span></div><div class="line">	return pairs.join(<span class="string">'; '</span>)<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>res.setHeader的第二个参数可以是数组以设置多个字段 res.setHeader(‘Set-Cookie’, [serialize(‘foo’, ‘bar’), serialize(‘baz’, ‘val’)]);并且在头部形参两条Set-Cookie</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Set-Cookie: <span class="attr">foo=bar;</span> <span class="attr">Path=/;</span> <span class="attr">Expires=Sun,</span> <span class="number">23</span>-Apr-<span class="number">23</span> <span class="number">09</span>:<span class="number">01</span>:<span class="number">35</span> GMT; <span class="attr">Domain=.domain.com;</span> </div><div class="line">Set-Cookie: <span class="attr">baz=val;</span> <span class="attr">Path=/;</span> <span class="attr">Expires=Sun,</span> <span class="number">23</span>-Apr-<span class="number">23</span> <span class="number">09</span>:<span class="number">01</span>:<span class="number">35</span> GMT; <span class="attr">Domain=.domain.com;</span></div></pre></td></tr></table></figure>
+<h4 id="cookie对性能的影响"><a href="#cookie对性能的影响" class="headerlink" title="cookie对性能的影响"></a>cookie对性能的影响</h4><ul>
+<li>客户端每次请求都会带上服务端发给它cookie，只要路径匹配</li>
+</ul>
+<ol>
+<li>减少cookie的大小</li>
+<li>为静态组件使用不同的域名 静态文件一般不关心状态，用不到cookie,不同的域名cookie不匹配就不会发送，同时也可突破浏览器下载线程数限制</li>
+<li>减少DNS查询 上面的修改会增加dns查询，但浏览器有dns缓存</li>
+</ol>
+<h3 id="session"><a href="#session" class="headerlink" title="session"></a>session</h3><p>因为cookie会被前端修改，不安全并且体积大影响性能。而session的数据只保存在服务端，保障数据安全性，也不用每次传递。session会设置有效期且较短，通常20分钟，即此时间内客户端会与服务端交换，session就删掉了</p>
+<p>需要解决将用户和服务器的session对应</p>
+<h4 id="基于cookie实现用户和数据映射"><a href="#基于cookie实现用户和数据映射" class="headerlink" title="基于cookie实现用户和数据映射"></a>基于cookie实现用户和数据映射</h4><ul>
+<li>将口令（session_id）放在cookie与服务端数据映射</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//生成session</span></div><div class="line"><span class="keyword">var</span> sessions = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> key = 'session_id';</div><div class="line"><span class="keyword">var</span> EXPIRES = <span class="number">20</span> * <span class="number">60</span> * <span class="number">1000</span>;</div><div class="line"><span class="keyword">var</span> <span class="keyword">generate</span> = <span class="keyword">function</span>() &#123;</div><div class="line">	<span class="keyword">var</span> session = &#123;&#125;;</div><div class="line">	session<span class="variable">.id</span> = (<span class="keyword">new</span> Date())<span class="variable">.getTime</span>() + Math<span class="variable">.random</span>();</div><div class="line">	session<span class="variable">.cookie</span> = &#123;</div><div class="line">		expire: (<span class="keyword">new</span> Date())<span class="variable">.getTime</span>() + EXPIRES</div><div class="line">	&#125;;</div><div class="line">	sessions[session<span class="variable">.id</span>] = session;</div><div class="line">	<span class="keyword">return</span> session;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//检查cookie的口令和服务端数据，过期了就重新生成</span></div><div class="line"><span class="keyword">function</span>(req, res) &#123;</div><div class="line">	<span class="keyword">var</span> id = req<span class="variable">.cookies</span>[key];</div><div class="line">	<span class="keyword">if</span> (!id) &#123;</div><div class="line">		req<span class="variable">.session</span> = <span class="keyword">generate</span>();</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">var</span> session = sessions[id];</div><div class="line">		<span class="keyword">if</span> (session) &#123;</div><div class="line">			<span class="keyword">if</span> (session<span class="variable">.cookie</span><span class="variable">.expire</span> &gt; (<span class="keyword">new</span> Date())<span class="variable">.getTime</span>()) &#123;</div><div class="line">				<span class="comment">//更新超时时间</span></div><div class="line">				session<span class="variable">.cookie</span><span class="variable">.expire</span> = (<span class="keyword">new</span> Date())<span class="variable">.getTime</span>() + EXPIRES;</div><div class="line">				req<span class="variable">.session</span> = session;</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">//超时了，删除数据，重新生成</span></div><div class="line">				delete sessions[id];</div><div class="line">				req<span class="variable">.session</span> = <span class="keyword">generate</span>();</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="comment">// 如果session过期或口令不对，重新生成</span></div><div class="line">			req<span class="variable">.session</span> = <span class="keyword">generate</span>();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	handle(req, res);</div><div class="line">&#125;</div><div class="line"><span class="comment">//将口令注入cookie并响应给客户端</span></div><div class="line"><span class="keyword">var</span> writeHead = res<span class="variable">.writeHead</span>;</div><div class="line">res<span class="variable">.writeHead</span> = <span class="keyword">function</span>() &#123;</div><div class="line">	<span class="keyword">var</span> cookies = res<span class="variable">.getHeader</span>('Set-Cookie');</div><div class="line">	<span class="keyword">var</span> session = serialize('Set-Cookie', req<span class="variable">.session</span><span class="variable">.id</span>);</div><div class="line">	cookies = Array<span class="variable">.isArray</span>(cookies) ? cookies<span class="variable">.concat</span>(session) : [cookies, session]; <span class="comment">//array.push()一样</span></div><div class="line">	res<span class="variable">.setHeader</span>('Set-Cookie', cookies);</div><div class="line">	<span class="keyword">return</span> writeHead<span class="variable">.apply</span>(<span class="keyword">this</span>, arguments);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<ul>
+<li>通过查询字符串来让客户端和服务端对应(链接带key)</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//生成带key的url</span></div><div class="line"><span class="keyword">var</span> getURL = <span class="keyword">function</span>(<span class="number">_</span>url, key, value) &#123;</div><div class="line">	<span class="keyword">var</span> obj = url<span class="variable">.parse</span>(<span class="number">_</span>url, true);</div><div class="line">	obj<span class="variable">.query</span>[key] = value;</div><div class="line">	<span class="keyword">return</span> url<span class="variable">.format</span>(obj);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">function</span>(req, res) &#123;</div><div class="line">	<span class="keyword">var</span> redirect = <span class="keyword">function</span>(url) &#123;</div><div class="line">		res<span class="variable">.setHeader</span>('Location', url);</div><div class="line">		res<span class="variable">.writeHead</span>(<span class="number">302</span>);<span class="comment">//让浏览器重定向</span></div><div class="line">		res<span class="variable">.end</span>();</div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">var</span> id = req<span class="variable">.query</span>[key];</div><div class="line">	<span class="keyword">if</span> (!id) &#123;</div><div class="line">		<span class="keyword">var</span> session = <span class="keyword">generate</span>();</div><div class="line">		redirect(getURL(req<span class="variable">.url</span>, key, session<span class="variable">.id</span>));</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">var</span> session = sessions[id];</div><div class="line">		<span class="keyword">if</span> (session) &#123;</div><div class="line">			<span class="keyword">if</span> (session<span class="variable">.cookie</span><span class="variable">.expire</span> &gt; (<span class="keyword">new</span> Date())<span class="variable">.getTime</span>()) &#123;</div><div class="line">				<span class="comment">//更新超时时间</span></div><div class="line">				session<span class="variable">.cookie</span><span class="variable">.expire</span> = (<span class="keyword">new</span> Date())<span class="variable">.getTime</span>() + EXPIRES;</div><div class="line">				req<span class="variable">.session</span> = session;</div><div class="line">				handle(req, res);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">//超时删除旧数据，重新生成</span></div><div class="line">				delete sessions[id];</div><div class="line">				<span class="keyword">var</span> session = <span class="keyword">generate</span>();</div><div class="line">				redirect(getURL(req<span class="variable">.url</span>, key, session<span class="variable">.id</span>));</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="comment">//如果session过期或者口令不对，重新生成session </span></div><div class="line">			<span class="keyword">var</span> session = <span class="keyword">generate</span>(); redirect(getURL(req<span class="variable">.url</span>, key, session<span class="variable">.id</span>));</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="session与安全"><a href="#session与安全" class="headerlink" title="session与安全"></a>session与安全</h4><h5 id="对session用私钥加密"><a href="#对session用私钥加密" class="headerlink" title="对session用私钥加密"></a>对session用私钥加密</h5><ul>
+<li>随机产生口令值可能被命中，并用此套用服务端数据</li>
+</ul>
+<p>在服务端设定私钥，用私钥对口令加密</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 将值通过私钥签名，由.分割原值和签名 </span></div><div class="line"><span class="keyword">var</span> sign = function (<span class="keyword">val</span>, secret) &#123;</div><div class="line"><span class="keyword">return</span> <span class="keyword">val</span> + <span class="string">'.'</span> + crypto.createHmac(<span class="string">'sha256'</span>, secret).update(<span class="keyword">val</span>).digest(<span class="string">'base64'</span>).replace(/\=+$/, <span class="string">''</span>);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//在响应时，设置session值到cookie或跳转url</span></div><div class="line"><span class="keyword">var</span> <span class="keyword">val</span> = sign(req.sessionID, secret); </div><div class="line">res.setHeader(<span class="string">'Set-Cookie'</span>, cookie.serialize(key, <span class="keyword">val</span>));</div><div class="line"></div><div class="line"><span class="comment">//接受请求时取出口令再签名，经行对比</span></div><div class="line"><span class="keyword">var</span> unsign = function(<span class="keyword">val</span>, secret) &#123;</div><div class="line">	<span class="keyword">var</span> str = <span class="keyword">val</span>.slice(<span class="number">0</span>, <span class="keyword">val</span>.lastIndexOf(<span class="string">'.'</span>));</div><div class="line">	<span class="keyword">return</span> sign(str, secret) == <span class="keyword">val</span> ? str : <span class="literal">false</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h5 id="xxs漏洞"><a href="#xxs漏洞" class="headerlink" title="xxs漏洞"></a>xxs漏洞</h5><ul>
+<li>跨站脚本攻击 Access-Control-Allow-Origin</li>
+</ul>
+<p>这个前端脚本会获取页面的url,$(‘#box’).html(location.hash.replace(‘#’, ‘’));攻击者可以把脚本藏在链接后<a href="http://a.com/pathname#" target="_blank" rel="external">http://a.com/pathname#</a><script src="http://b.com/c.js"></script>，再对url压缩。用户打开后脚本会执行，攻击者可以用此获取cookie来伪装用户甚至管理员</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><ul>
+<li>让浏览器缓存静态资源</li>
+<li>通常只适应于get请求</li>
+</ul>
+<p><img src="../picture/get缓存流程.png" alt="Smaller icon"></p>
+<p>一开始本地没有文件，浏览器直接请求服务端并将文件缓存，二次请求时若不能确定是否可用，会发起条件请求，在get中附带If-Modified-Since字段</p>
+<h4 id="使用时间戳"><a href="#使用时间戳" class="headerlink" title="使用时间戳"></a>使用时间戳</h4><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//get报文附带<span class="keyword">If</span>-Modified-Since/<span class="keyword">Last</span>-Modified字段</div><div class="line"><span class="keyword">If</span>-Modified-Since: Sun, <span class="number">03</span> Feb <span class="number">2013</span> <span class="number">06</span>:<span class="number">01</span>:<span class="number">12</span> GMT</div></pre></td></tr></table></figure>
+<p>服务端如果没有新版本就只需要响应<strong>304</strong>，浏览器就会使用本地文件；若更新就发送新文件，让浏览器更新缓存</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	fs.stat(filename, <span class="function"><span class="keyword">function</span><span class="params">(err, stat)</span> </span>&#123;</div><div class="line">		<span class="keyword">var</span> lastModified = stat.mtime.toUTCString();</div><div class="line">		<span class="keyword">if</span> (lastModified === req.headers[<span class="string">'if-modified-since'</span>]) &#123;</div><div class="line">			res.writeHead(<span class="number">304</span>, <span class="string">"Not Modified"</span>);</div><div class="line">			res.end();</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			fs.readFile(filename, <span class="function"><span class="keyword">function</span><span class="params">(err, file)</span> </span>&#123;</div><div class="line">				<span class="keyword">var</span> lastModified = stat.mtime.toUTCString();</div><div class="line">				res.setHeader(<span class="string">"Last-Modified"</span>, lastModified);</div><div class="line">				res.writeHead(<span class="number">200</span>, <span class="string">"Ok"</span>);</div><div class="line">				res.end(file);</div><div class="line">			&#125;);</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>缺点：时间戳改动内容不一定改，只能精确到秒，更新频繁的内容可能不生效</p>
+<h4 id="ETag（Entity-Tag）"><a href="#ETag（Entity-Tag）" class="headerlink" title="ETag（Entity Tag）"></a>ETag（Entity Tag）</h4><ul>
+<li>服务端确定生成规则生成</li>
+<li>请求字段为If-None-Match/ETag</li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//生成文件hash</span></div><div class="line"><span class="keyword">var</span> getHash = <span class="function"><span class="keyword">function</span><span class="params">(str)</span> </span>&#123;</div><div class="line">	<span class="keyword">var</span> shasum = crypto.createHash(<span class="string">'sha1'</span>);</div><div class="line">	<span class="keyword">return</span> shasum.update(str).digest(<span class="string">'base64'</span>);</div><div class="line">&#125;;</div><div class="line"><span class="comment">//请求</span></div><div class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	fs.readFile(filename, <span class="function"><span class="keyword">function</span><span class="params">(err, file)</span> </span>&#123;</div><div class="line">		<span class="keyword">var</span> hash = getHash(file);</div><div class="line">		<span class="keyword">var</span> noneMatch = req.headers[<span class="string">'if-none-match'</span>];</div><div class="line">		<span class="keyword">if</span> (hash === noneMatch) &#123;</div><div class="line">			res.writeHead(<span class="number">304</span>, <span class="string">"Not Modified"</span>);</div><div class="line">			res.end();</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			res.setHeader(<span class="string">"ETag"</span>, hash);</div><div class="line">			res.writeHead(<span class="number">200</span>, <span class="string">"Ok"</span>);</div><div class="line">			res.end(file);</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h4 id="Expires，Cache-Control"><a href="#Expires，Cache-Control" class="headerlink" title="Expires，Cache-Control"></a>Expires，Cache-Control</h4><ul>
+<li>让浏览器明确缓存</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//Expires 设置一个过期时间，可能出现时间不同步，文件提前更新等问题</span></div><div class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	fs.readFile(filename, <span class="function"><span class="keyword">function</span>(<span class="params">err, file</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> expires = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">		expires.setTime(expires.getTime() + <span class="number">10</span> * <span class="number">365</span> * <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>);</div><div class="line">		res.setHeader(<span class="string">"Expires"</span>, expires.toUTCString());</div><div class="line">		res.writeHead(<span class="number">200</span>, <span class="string">"Ok"</span>);</div><div class="line">		res.end(file);</div><div class="line">	&#125;);</div><div class="line">&#125;;</div><div class="line"><span class="comment">//Cache-Control 可设置更多选项，使用max-age倒计时</span></div><div class="line"> <span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line"> 	fs.readFile(filename, <span class="function"><span class="keyword">function</span>(<span class="params">err, file</span>) </span>&#123;</div><div class="line"> 		res.setHeader(<span class="string">"Cache-Control"</span>, <span class="string">"max-age="</span> + <span class="number">10</span> * <span class="number">365</span> * <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>);</div><div class="line"> 		res.writeHead(<span class="number">200</span>, <span class="string">"Ok"</span>);</div><div class="line"> 		res.end(file);</div><div class="line"> 	&#125;);</div><div class="line"> &#125;;</div></pre></td></tr></table></figure>
+<p>http1.0不支持max-age，所以要同时设置Expires，Cache-Control，在浏览器中max-age优先级高于Expires</p>
+<h4 id="清除缓存"><a href="#清除缓存" class="headerlink" title="清除缓存"></a>清除缓存</h4><ul>
+<li>浏览器是根据url进行缓存的，内容更新时可以让浏览器发起新的url缓存</li>
+</ul>
+<p>每次发布在路径中跟随文件内容的hash,<a href="http://url.com/?hash=afadfadwe.这样能避免无意义的更新" target="_blank" rel="external">http://url.com/?hash=afadfadwe.这样能避免无意义的更新</a></p>
+<h3 id="Basic认证"><a href="#Basic认证" class="headerlink" title="Basic认证"></a>Basic认证</h3><ul>
+<li>通过用户名和密码实现的身份认证</li>
+</ul>
+<p>当页面需要Basic认证时，会检查请求头部的Authorization字段，它的值由认证方式和加密值构成</p>
+<pre><code>$ curl -v &quot;http://user:pass@www.baidu.com/&quot;
+&gt; GET / HTTP/1.1
+&gt; Authorization: Basic dXNlcjpwYXNz
+&gt; User-Agent: curl/7.24.0 (x86_64-apple-darwin12.0) libcurl/7.24.0 OpenSSL/0.9.8r zlib/1.2.5 
+&gt; Host: www.baidu.com
+&gt; Accept: */*
+</code></pre><p>它会将用户名和密码组合，再Base64编码</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> encode = <span class="function"><span class="keyword">function</span><span class="params">(username, password)</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">new</span> Buffer(username + <span class="string">':'</span> + password).toString(<span class="string">'base64'</span>);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//每次请求都要带上Authorization，对于没有带认证的请求会返回401</span></div><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	<span class="keyword">var</span> auth = req.headers[<span class="string">'authorization'</span>] || <span class="string">''</span>;</div><div class="line">	<span class="keyword">var</span> parts = auth.split(<span class="string">' '</span>);</div><div class="line">	<span class="keyword">var</span> method = parts[<span class="number">0</span>] || <span class="string">''</span>; <span class="comment">// Basic</span></div><div class="line">	<span class="keyword">var</span> encoded = parts[<span class="number">1</span>] || <span class="string">''</span>; <span class="comment">// dXNlcjpwYXNz，密码字段</span></div><div class="line">	<span class="keyword">var</span> decoded = <span class="keyword">new</span> Buffer(encoded, <span class="string">'base64'</span>).toString(<span class="string">'utf-8'</span>).split(<span class="string">":"</span>);</div><div class="line">	<span class="keyword">var</span> user = decoded[<span class="number">0</span>]; <span class="comment">// user</span></div><div class="line">	<span class="keyword">var</span> pass = decoded[<span class="number">1</span>]; <span class="comment">// pass</span></div><div class="line">	<span class="keyword">if</span> (!checkUser(user, pass)) &#123;</div><div class="line">		res.setHeader(<span class="string">'WWW-Authenticate'</span>, <span class="string">'Basic realm="Secure Area"'</span>);</div><div class="line">		res.writeHead(<span class="number">401</span>);</div><div class="line">		res.end();</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		handle(req, res);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>缺点</code>： 对于密码字段没有加密，只能在https下才能用，但几乎所有浏览器都支持。RFC 2069对它做了改进</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/07/29/nodejs-网络-二/" itemprop="url">
                   nodejs 网络(二)
                 </a>
@@ -1841,133 +2031,6 @@ node --max-new-space-size=1024 test.js // 单位为KB
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/13/支付宝notify-异步通知与https的问题/" itemprop="url">
-                  支付宝notify 异步通知与https的问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-05-13T15:36:49+08:00" content="2016-05-13">
-              2016-05-13
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/13/支付宝notify-异步通知与https的问题/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/13/支付宝notify-异步通知与https的问题/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="问题和解决方法"><a href="#问题和解决方法" class="headerlink" title="问题和解决方法"></a>问题和解决方法</h3><p>在对接支付宝时，发生了这样的问题,使用http链接时，支付宝notify是没有问题的，但换成https后便通知不到了</p>
-<p>最可能的问题便是<strong>ssl证书出错</strong>了,注意支付宝不支持自签名证书（<a href="https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1）" target="_blank" rel="external">https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1）</a></p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">去这个网站检测下你的CSR吧</div><div class="line">https:<span class="regexp">//</span>cryptoreport.websecurity.symantec.com<span class="regexp">/checker/</span>views<span class="regexp">/csrCheck.jsp</span></div></pre></td></tr></table></figure>
-<h3 id="事情经过"><a href="#事情经过" class="headerlink" title="事情经过"></a>事情经过</h3><p>某天，同事们偷偷给网站加了安全套接字，把http换成了https,于是我负责的支付模块就出错了。</p>
-<p>一开始，我就简单改了config,提交给支付宝的notify_url改成了https。本以为就没问题了，但在我又付出了￥0.01的巨款后，发现支付宝还是没有通知过来。。然后就懵逼了</p>
-<p><img src="../picture/懵逼.jpg" alt="Smaller icon"></p>
-<p>懵逼了大概7.8秒后，我就去百度了一下、、、我居然去百度了一下。有人说原因是:</p>
-<blockquote>
-<p>支付宝对ssl证书也有检查，而那种免费的ssl证书通不过检查。后来没办法就只好改成http notify了 </p>
-</blockquote>
-<p>好吧。。。这种解决方法，这尼玛根本就不是个解决方案、</p>
-<p>注：俺们公司用的CA是GeoTrust,不是他们说的免费证书。顺带感叹下做CA真赚钱</p>
-<p>于是又去问支付宝客服，给了他交易号，让他帮我查了下日志,就是这样的<br><img src="../picture/alipaylog.png" alt="Smaller icon"></p>
-<p>http状态码是0耶。看来支付宝确实没有去访问我们的服务器嘛。看来确实在ssl证书检查这块了，但还不清楚是什么问题，还是问问Google吧~（推荐翻墙工具：<a href="http://www.ishadowsocks.net）" target="_blank" rel="external">http://www.ishadowsocks.net）</a></p>
-<p>Google帮我搜到了支付宝的这个<a href="https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1页面(别问我为什么之前没看到。。支付宝文档太多了，我有点眼花),其中对异步通知是这么说的：" target="_blank" rel="external">https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1页面(别问我为什么之前没看到。。支付宝文档太多了，我有点眼花),其中对异步通知是这么说的：</a></p>
-<blockquote>
-<p>需确认页面是http还是https，如果是https，那么需要安装ssl证书，证书要求有如下：<br>要求“正规的证书机构签发，不支持自签名”，如果不理解请咨询证书供应商。<br>域名证书检测地址参考：<a href="https://cryptoreport.websecurity.symantec.com/checker/" target="_blank" rel="external">https://cryptoreport.websecurity.symantec.com/checker/</a></p>
-</blockquote>
-<p>然后就拿着csr去检测了。。靠，果然有鬼（毕竟不是我写的）~~然后改好重新部署</p>
-<p>再付出巨款做测试，终于等来支付宝敲门啦</p>
-<h3 id="事故总结"><a href="#事故总结" class="headerlink" title="事故总结"></a>事故总结</h3><p>不能说是事故，，因为网站还在测试阶段。。否则，我就该引咎辞职了（宝宝心里苦啊、、）</p>
-<ol>
-<li>仔细看文档 </li>
-<li>不要用百度</li>
-</ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -2014,7 +2077,7 @@ node --max-new-space-size=1024 test.js // 单位为KB
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">53</span>
+              <span class="site-state-item-count">54</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
