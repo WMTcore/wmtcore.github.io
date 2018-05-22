@@ -67,7 +67,7 @@
 然后查下是否有default mapping
 12345678GET /my_index//像这样&amp;#123;    &quot;mappings&quot;: &amp;#123;        &quot;_default_&quot;: &amp;#123;&amp;#125;    &amp;#125;&amp;#125;
 比较下和之前数据的mappin">
-<meta property="og:updated_time" content="2018-05-22T09:45:47.792Z">
+<meta property="og:updated_time" content="2018-05-22T09:49:48.485Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ELK Mapping conflict">
 <meta name="twitter:description" content="由filebeat导入的default template导致
@@ -330,8 +330,8 @@
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DELETE</span> <span class="regexp">/_template/</span>filebeat</div></pre></td></tr></table></figure>
 <p>在日志系统中通常直接由es按天生成索引，这样就简单了，直接把使用错误索引的数据删掉重新导入就好了。</p>
 <p>但在使用自己的索引时，就需要做重索引，可以尝试通过<strong>索引别名</strong>的方式切换</p>
-<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>在尝试新的日志格式时，启动了其他版本的filebeat并让它直接output到es,忘记设置 template.enabled: false 导致它导入个default模板</p>
-<p>在第二天生成新索引时发现kibana报warning shards failed,再发现mapping conflict</p>
+<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>在尝试新的日志格式时，启动了其他版本的filebeat并让它直接output到es,忘记设置 template.enabled: false 导致它导入default模板</p>
+<p>在第二天生成新索引时发现kibana报warning shards failed,才发现mapping conflict</p>
 <p>填完一坑，继续logstash挖坑</p>
 </span>
       
