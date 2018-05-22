@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="nodejs," />
+  <meta name="keywords" content="ELK," />
 
 
 
@@ -51,61 +51,31 @@
 
 
 
-<meta name="description" content="pm2 是一个带有负载均衡功能的Node应用的进程管理器
-内建负载均衡（使用Node cluster 集群模块）
-后台运行
-0秒停机重载，热升级
-具有Ubuntu和CentOS 的启动脚本
-停止不稳定的进程（避免无限循环）
-控制台检测
-提供 HTTP API
-远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )
-github
-
-
-
-
-command
-explain">
+<meta name="description" content="由filebeat导入的default template导致
+检查先创建个新的索引：
+1PUT /my_index
+然后查下是否有default mapping
+12345678GET /my_index//像这样&amp;#123;    &quot;mappings&quot;: &amp;#123;        &quot;_default_&quot;: &amp;#123;&amp;#125;    &amp;#125;&amp;#125;
+比较下和之前数据的mappin">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pm2">
-<meta property="og:url" content="https://www.wmtcore.com/2016/07/01/pm2介绍/index.html">
+<meta property="og:title" content="ELK Mapping conflict">
+<meta property="og:url" content="https://www.wmtcore.com/2018/05/10/ELK_Mapping_conflict/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="pm2 是一个带有负载均衡功能的Node应用的进程管理器
-内建负载均衡（使用Node cluster 集群模块）
-后台运行
-0秒停机重载，热升级
-具有Ubuntu和CentOS 的启动脚本
-停止不稳定的进程（避免无限循环）
-控制台检测
-提供 HTTP API
-远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )
-github
-
-
-
-
-command
-explain">
-<meta property="og:updated_time" content="2017-05-11T11:08:40.000Z">
+<meta property="og:description" content="由filebeat导入的default template导致
+检查先创建个新的索引：
+1PUT /my_index
+然后查下是否有default mapping
+12345678GET /my_index//像这样&amp;#123;    &quot;mappings&quot;: &amp;#123;        &quot;_default_&quot;: &amp;#123;&amp;#125;    &amp;#125;&amp;#125;
+比较下和之前数据的mappin">
+<meta property="og:updated_time" content="2018-05-22T09:45:47.792Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pm2">
-<meta name="twitter:description" content="pm2 是一个带有负载均衡功能的Node应用的进程管理器
-内建负载均衡（使用Node cluster 集群模块）
-后台运行
-0秒停机重载，热升级
-具有Ubuntu和CentOS 的启动脚本
-停止不稳定的进程（避免无限循环）
-控制台检测
-提供 HTTP API
-远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )
-github
-
-
-
-
-command
-explain">
+<meta name="twitter:title" content="ELK Mapping conflict">
+<meta name="twitter:description" content="由filebeat导入的default template导致
+检查先创建个新的索引：
+1PUT /my_index
+然后查下是否有default mapping
+12345678GET /my_index//像这样&amp;#123;    &quot;mappings&quot;: &amp;#123;        &quot;_default_&quot;: &amp;#123;&amp;#125;    &amp;#125;&amp;#125;
+比较下和之前数据的mappin">
 
 
 
@@ -117,7 +87,7 @@ explain">
   };
 </script>
 
-  <title> pm2 | 大碗拉面 </title>
+  <title> ELK Mapping conflict | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
@@ -283,7 +253,7 @@ explain">
             
             
               
-                pm2
+                ELK Mapping conflict
               
             
           </h1>
@@ -292,8 +262,8 @@ explain">
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-07-01T15:15:27+08:00" content="2016-07-01">
-              2016-07-01
+            <time itemprop="dateCreated" datetime="2018-05-10T14:32:22+08:00" content="2018-05-10">
+              2018-05-10
             </time>
           </span>
 
@@ -302,8 +272,20 @@ explain">
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/运维/日志/" itemprop="url" rel="index">
+                    <span itemprop="name">日志</span>
                   </a>
                 </span>
 
@@ -318,8 +300,8 @@ explain">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/01/pm2介绍/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/01/pm2介绍/" itemprop="commentsCount"></span>
+                <a href="/2018/05/10/ELK_Mapping_conflict/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/10/ELK_Mapping_conflict/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -338,160 +320,19 @@ explain">
       
 
       
-        <span itemprop="articleBody"><ul>
-<li>pm2 是一个带有负载均衡功能的Node应用的进程管理器</li>
-<li>内建负载均衡（使用Node cluster 集群模块）</li>
-<li>后台运行</li>
-<li>0秒停机重载，热升级</li>
-<li>具有Ubuntu和CentOS 的启动脚本</li>
-<li>停止不稳定的进程（避免无限循环）</li>
-<li>控制台检测</li>
-<li>提供 HTTP API</li>
-<li>远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )</li>
-<li><a href="https://github.com/Unitech/pm2" target="_blank">github</a></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>command</th>
-<th>explain</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$ npm install pm2 -g</td>
-<td># Install PM2</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js</td>
-<td># Start, Daemonize and auto restart application</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js -i 4</td>
-<td># Start 4 instances of application in cluster mode it will load balance network queries to each app</td>
-</tr>
-<tr>
-<td><strong>$ pm2 start app.js –name=”api”</strong></td>
-<td># Start application and name it “api”</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js –watch</td>
-<td># Restart application on file change</td>
-</tr>
-<tr>
-<td>$ pm2 start script.sh</td>
-<td># Start bash script</td>
-</tr>
-<tr>
-<td>$ pm2 list</td>
-<td># List all processes started with PM2</td>
-</tr>
-<tr>
-<td><strong>$ pm2 monit</strong></td>
-<td># Display memory and cpu usage of each app</td>
-</tr>
-<tr>
-<td>$ pm2 show [app-name]</td>
-<td># Show all informations about application</td>
-</tr>
-<tr>
-<td><strong>$ pm2 logs</strong></td>
-<td># Display logs of all apps</td>
-</tr>
-<tr>
-<td>$ pm2 logs [app-name]</td>
-<td># Display logs for a specific app</td>
-</tr>
-<tr>
-<td>$ pm2 flush</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>$ pm2 stop all</strong></td>
-<td># Stop all apps</td>
-</tr>
-<tr>
-<td>$ pm2 stop 0</td>
-<td># Stop process with id 0</td>
-</tr>
-<tr>
-<td><strong>$ pm2 restart all</strong></td>
-<td># Restart all apps</td>
-</tr>
-<tr>
-<td><strong>$ pm2 reload all</strong></td>
-<td># Reload all apps in cluster mode</td>
-</tr>
-<tr>
-<td>$ pm2 gracefulReload all</td>
-<td># Graceful reload all apps in cluster mode</td>
-</tr>
-<tr>
-<td>$ pm2 delete all</td>
-<td># Kill and delete all apps</td>
-</tr>
-<tr>
-<td>$ pm2 delete 0</td>
-<td># Delete app with id 0</td>
-</tr>
-<tr>
-<td>$ pm2 scale api 10</td>
-<td># Scale app with name api to 10 instances</td>
-</tr>
-<tr>
-<td>$ pm2 reset [app-name]</td>
-<td># Reset number of restart for [app-name]</td>
-</tr>
-<tr>
-<td>$ pm2 startup</td>
-<td># Generate a startup script to respawn PM2 on boot</td>
-</tr>
-<tr>
-<td>$ pm2 save</td>
-<td># Save current process list</td>
-</tr>
-<tr>
-<td>$ pm2 resurrect</td>
-<td># Restore previously save processes</td>
-</tr>
-<tr>
-<td>$ pm2 update</td>
-<td># Save processes, kill PM2 and restore processes</td>
-</tr>
-<tr>
-<td>$ pm2 generate</td>
-<td># Generate a sample json configuration file</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod setup</td>
-<td># Setup “prod” remote server</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod</td>
-<td># Update “prod” remote server</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod revert 2</td>
-<td># Revert “prod” remote server by 2</td>
-</tr>
-<tr>
-<td>$ pm2 module:generate [name]</td>
-<td># Generate sample module with name [name]</td>
-</tr>
-<tr>
-<td>$ pm2 install pm2-logrotate</td>
-<td># Install module (here a log rotation system)</td>
-</tr>
-<tr>
-<td>$ pm2 uninstall pm2-logrotate</td>
-<td># Uninstall module</td>
-</tr>
-<tr>
-<td>$ pm2 publish</td>
-<td># Increment version, git push and npm publish</td>
-</tr>
-</tbody>
-</table>
+        <span itemprop="articleBody"><p>由filebeat导入的default template导致</p>
+<h3 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h3><p>先创建个新的索引：</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">PUT</span> /my_index</div></pre></td></tr></table></figure>
+<p>然后查下是否有default mapping</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">GET /my_index</div><div class="line"></div><div class="line">//像这样</div><div class="line">&#123;</div><div class="line">    <span class="string">"mappings"</span>: &#123;</div><div class="line">        <span class="string">"_default_"</span>: &#123;&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>比较下和之前数据的mapping有没有冲突</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>首先查看es中存在的模板 /_template, 是否存在名为filebeat，存在就执行</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DELETE</span> <span class="regexp">/_template/</span>filebeat</div></pre></td></tr></table></figure>
+<p>在日志系统中通常直接由es按天生成索引，这样就简单了，直接把使用错误索引的数据删掉重新导入就好了。</p>
+<p>但在使用自己的索引时，就需要做重索引，可以尝试通过<strong>索引别名</strong>的方式切换</p>
+<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>在尝试新的日志格式时，启动了其他版本的filebeat并让它直接output到es,忘记设置 template.enabled: false 导致它导入个default模板</p>
+<p>在第二天生成新索引时发现kibana报warning shards failed,再发现mapping conflict</p>
+<p>填完一坑，继续logstash挖坑</p>
 </span>
       
     </div>
@@ -500,7 +341,7 @@ explain">
       
         <div class="post-tags">
           
-            <a href="/tags/nodejs/" rel="tag">#nodejs</a>
+            <a href="/tags/ELK/" rel="tag">#ELK</a>
           
         </div>
       
@@ -509,17 +350,13 @@ explain">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/06/08/redux-学习笔记（1）/" rel="next" title="redux 学习笔记（1）">
-                <i class="fa fa-chevron-left"></i> redux 学习笔记（1）
+              <a href="/2018/05/10/分布式服务/" rel="next" title="分布式服务">
+                <i class="fa fa-chevron-left"></i> 分布式服务
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/05/nginx-负载均衡和反向代理的基本配置/" rel="prev" title="nginx 负载均衡和反向代理的基本配置">
-                nginx 负载均衡和反向代理的基本配置 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -546,8 +383,8 @@ explain">
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/01/pm2介绍/"
-           data-title="pm2" data-url="https://www.wmtcore.com/2016/07/01/pm2介绍/">
+      <div class="ds-thread" data-thread-key="2018/05/10/ELK_Mapping_conflict/"
+           data-title="ELK Mapping conflict" data-url="https://www.wmtcore.com/2018/05/10/ELK_Mapping_conflict/">
       </div>
     
   </div>
@@ -647,7 +484,7 @@ explain">
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#检查"><span class="nav-number">1.</span> <span class="nav-text">检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案"><span class="nav-number">2.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#起因"><span class="nav-number">3.</span> <span class="nav-text">起因</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
