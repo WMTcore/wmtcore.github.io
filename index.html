@@ -223,15 +223,122 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/04/01/ons 阿里云 rocketMQ/" itemprop="url">
+                  ons 阿里云 rocketMQ
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2019-04-01T16:15:37+08:00" content="2019-04-01">
+              2019-04-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/04/01/ons 阿里云 rocketMQ/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/04/01/ons 阿里云 rocketMQ/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="broker"><a href="#broker" class="headerlink" title="broker"></a>broker</h3><p>ons 默认有两个brokerName组,分别有0-7共16个队列</p>
+<p>可能不存在主从关系，每个broker都可读写</p>
+<h3 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a>Producer</h3><p> 轮询发送到broker队列</p>
+<p> 如果发送失败会换个队列</p>
+<h3 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h3><h4 id="AllocateMessageQueueAveragely"><a href="#AllocateMessageQueueAveragely" class="headerlink" title="AllocateMessageQueueAveragely"></a>AllocateMessageQueueAveragely</h4><ul>
+<li>默认 集群消费</li>
+</ul>
+<p>平均分配可消费的 Broker 对应的消息队列 c1对应b1,b2,b3 c2对应d1,d2,d3</p>
+<h4 id="AllocateMessageQueueAveragelyByCircle"><a href="#AllocateMessageQueueAveragelyByCircle" class="headerlink" title="AllocateMessageQueueAveragelyByCircle"></a>AllocateMessageQueueAveragelyByCircle</h4><p>以环状轮流分Broker</p>
+<h4 id="广播消费"><a href="#广播消费" class="headerlink" title="广播消费"></a>广播消费</h4><p>每个Consume都订阅每个Broker</p>
+<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><ol>
+<li>刚启动时，broker分配还没有完成，会导致消息重复消费</li>
+<li>但是可能会存在同样的消息有两个不同 msgId的情况(有多种原因)，这种情况可能会使业务上重复消费，建议最好使用消息内容中的唯一标识字段去重</li>
+</ol>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -278,18 +385,6 @@
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/运维/" itemprop="url" rel="index">
                     <span itemprop="name">运维</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/运维/日志/" itemprop="url" rel="index">
-                    <span itemprop="name">日志</span>
                   </a>
                 </span>
 
@@ -403,8 +498,8 @@
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/架构/" itemprop="url" rel="index">
-                    <span itemprop="name">架构</span>
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
                   </a>
                 </span>
 
@@ -542,8 +637,8 @@
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/云计算/" itemprop="url" rel="index">
-                    <span itemprop="name">云计算</span>
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
                   </a>
                 </span>
 
@@ -647,8 +742,8 @@
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/运维/" itemprop="url" rel="index">
-                    <span itemprop="name">运维</span>
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
                   </a>
                 </span>
 
@@ -865,8 +960,8 @@
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/云计算/" itemprop="url" rel="index">
-                    <span itemprop="name">云计算</span>
+                  <a href="/categories/部署/" itemprop="url" rel="index">
+                    <span itemprop="name">部署</span>
                   </a>
                 </span>
 
@@ -1316,229 +1411,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/23/nodejs多进程/" itemprop="url">
-                  nodejs多进程
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-08-23T11:38:19+08:00" content="2016-08-23">
-              2016-08-23
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/23/nodejs多进程/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/23/nodejs多进程/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="多进程架构"><a href="#多进程架构" class="headerlink" title="多进程架构"></a>多进程架构</h3><p>依靠node提供的child_process模块，创建工作线程，实现多核cpu的利用</p>
-<ul>
-<li>主从模式</li>
-</ul>
-<p>主进程和工作进程，在分布式架构中用于并行处理业务的模式，主进程负责调度和管理工作进程，工作进程负责业务处理</p>
-<p>创建worker.js：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;</div><div class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></div><div class="line">	&#125;);</div><div class="line">	res.end(<span class="string">'Hello World\n'</span>);</div><div class="line">&#125;).listen(<span class="built_in">Math</span>.round((<span class="number">1</span> + <span class="built_in">Math</span>.random()) * <span class="number">1000</span>), <span class="string">'127.0.0.1'</span>);</div></pre></td></tr></table></figure>
-<p>创建master.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fork = <span class="built_in">require</span>(<span class="string">'child_process'</span>).fork;</div><div class="line"><span class="keyword">var</span> cpus = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus();</div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; cpus.length; i++) &#123;</div><div class="line">	fork(<span class="string">'./worker.js'</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>fork()复制的进程都是独立的进程，有独立的v8，但fork()过程比较长、内存占用多（至少10mb），多进程目的是充分使用cpu资源</p>
-<h4 id="创建工作线程"><a href="#创建工作线程" class="headerlink" title="创建工作线程"></a>创建工作线程</h4><p>child_process模块提供了4个方法创建工作线程</p>
-<ol>
-<li>spawn() 启动一个工作线程执行命令</li>
-<li>exec() 启动一个工作线程并且<strong>包含回调函数</strong> 可以设置超时时间</li>
-<li>execFile() 启动一个工作线程来执行可执行文件 可以设置超时时间</li>
-<li>fork() 指定js文件来创建工作线程</li>
-</ol>
-<p>后面三个方法都是spawn()的延伸</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cp = <span class="built_in">require</span>(<span class="string">'child_process'</span>);</div><div class="line">cp.spawn(<span class="string">'node'</span>, [<span class="string">'worker.js'</span>]);</div><div class="line">cp.exec(<span class="string">'node worker.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, stdout, stderr</span>) </span>&#123;</div><div class="line">	<span class="comment">// some code </span></div><div class="line">&#125;);</div><div class="line">cp.execFile(<span class="string">'worker.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, stdout, stderr</span>) </span>&#123;</div><div class="line">	<span class="comment">// some code</span></div><div class="line">&#125;);</div><div class="line">cp.fork(<span class="string">'./worker.js'</span>);</div></pre></td></tr></table></figure>
-<p><img src="/picture/node_child_process.png" alt="Smaller icon"></p>
-<p>通过execFile()执行的js文件，需要在首行加入： #!/usr/bin/env node</p>
-<h4 id="进程通信"><a href="#进程通信" class="headerlink" title="进程通信"></a>进程通信</h4><ul>
-<li>IPC Inter-Process Communication 进程间通信</li>
-<li>node使用libuv提供的管道(pipe)实现IPC,在window中使用named pipe,*nix使用Unix Domain Socket实现</li>
-<li>文件描述符：内核（kernel）利用文件描述符（file descriptor）来访问文件。文件描述符是非负整数。打开现存文件或新建文件时，内核会返回一个文件描述符，读写文件也需要使用文件描述符来指定待读写的文件。它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表</li>
-</ul>
-<p>在创建工作线程之前会<strong>先创建IPC通道并监听</strong>，然后通过环境变量（NODE_CHANNEL_FD）告诉工作线程这个IPC通道的文件描述符，工作线程会根据它连接IPC通道完成进程连接。</p>
-<p>IPC通道类似socket属于双向通信，直接在系统内核中完成更高效，<strong>IPC被node抽象为stream对象</strong>，在调用send()时(类似write())发送数据，接收到消息会通过message事件(类似data)触发</p>
-<h4 id="句柄传递"><a href="#句柄传递" class="headerlink" title="句柄传递"></a>句柄传递</h4><ul>
-<li>句柄是一种可以用来标识资源的引用，包含了指向对象的文件描述符，可以表示一个服务端socket对象，客户端socket对象等</li>
-</ul>
-<p>主进程接受到socket请求后，将socket直接发送给工作进程，不用重新与工作进程建立新的socket连接</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// parent.js</span></div><div class="line"><span class="keyword">var</span> cp = <span class="built_in">require</span>(<span class="string">'child_process'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> child1 = cp.fork(<span class="string">'child.js'</span>);</div><div class="line"><span class="keyword">var</span> child2 = cp.fork(<span class="string">'child.js'</span>);</div><div class="line"><span class="comment">// Open up the server object and send the handle </span></div><div class="line"><span class="keyword">var</span> server = <span class="built_in">require</span>(<span class="string">'net'</span>).createServer();</div><div class="line">server.listen(<span class="number">1337</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">//主进程发送完句柄后关闭了监听</span></div><div class="line">	child1.send(<span class="string">'server'</span>, server);</div><div class="line">	child2.send(<span class="string">'server'</span>, server); </div><div class="line">	server.close();</div><div class="line">&#125;);</div><div class="line"><span class="comment">// child.js</span></div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;</div><div class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></div><div class="line">	&#125;);</div><div class="line">	res.end(<span class="string">'handled by child, pid is '</span> + process.pid + <span class="string">'\n'</span>);</div><div class="line">&#125;);</div><div class="line">process.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">m, tcp</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (m === <span class="string">'server'</span>) &#123;</div><div class="line">		tcp.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</div><div class="line">			server.emit(<span class="string">'connection'</span>, socket);</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">&#125;);</div><div class="line"><span class="comment">//多个工作线程同时监听相同端口</span></div></pre></td></tr></table></figure>
-<p>child_process().fork.send()可以发送的句柄有：</p>
-<ol>
-<li>net.Socket tcp套接字</li>
-<li>net.Server tcp服务器 建立在tcp服务上的应用层服务都可以</li>
-<li>net.Native C++层面的tcp套接字或IPC管道</li>
-<li>dgarm.Socket UDP套接字</li>
-<li>dgram.Native c++层面的UDP套接字</li>
-</ol>
-<p>send()方法在将消息发送到IPC前，会组装成两个对象 一个是handle 一个是message：<br>{<br>    cmd: ‘NODE_HANDLE’,<br>    type: ‘net.Server’,<br>    msg: message<br>}</p>
-<p><img src="/picture/child_process_message.png" alt="Smaller icon"></p>
-<p>message会先JSON.stringify()序列化再写入IPC管道（IPC通道只接受字符串），子线程再解析还原为对象，然后触发message事件，这其中还要进行过滤，如果message.cmd的值以NODE_为前缀，就会响应internalMessage事件，例如为NODE_HANDLE，就会取出message.type和得到的文件描述符一起还原</p>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//此处为接受到tcp服务器句柄后工作线程的还原过程</span></div><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(message, handle, emit)</span> </span>&#123;</div><div class="line">	<span class="keyword">var</span> self = <span class="keyword">this</span>;</div><div class="line">	<span class="keyword">var</span> server = <span class="keyword">new</span> net.Server();</div><div class="line">	server.listen(handle, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">		emit(server);</div><div class="line">	&#125;);</div><div class="line">&#125; </div><div class="line"><span class="comment">// 子进程根据message.type创建对应TCP服务对象,然后监听到文件描述符</span></div><div class="line">上</div></pre></td></tr></table></figure>
-<p>node进程之间只有消息传递，没有实例对象传递</p>
-<h5 id="端口共同监听"><a href="#端口共同监听" class="headerlink" title="端口共同监听"></a>端口共同监听</h5><ul>
-<li>多进程使用相同的文件描述符</li>
-</ul>
-<p>node底层对每个端口监听都设置了SO_REUSEADDR，可以让不同进程对相同的网卡和端口监听，即服务端套接字可以被多进程服用</p>
-<p>setsockopt(tcp-&gt;io_watcher.fd, SOL_SOCKET, SO_REUSEADDR, &amp;on, sizeof(on));</p>
-<p>当独立启动进程时，多个tcp服务器socket套接字的文件描述符互不相同，所以在监听相同端口时会报错。但send()发送句柄再启动的服务，它们引用了相同的文件描述符，并且<strong>文件描述符同一时间只能被一个进程使用，所以当网络请求来时，会出现抢占式服务</strong></p>
-<h3 id="集群稳定"><a href="#集群稳定" class="headerlink" title="集群稳定"></a>集群稳定</h3><h4 id="进程事件"><a href="#进程事件" class="headerlink" title="进程事件"></a>进程事件</h4><ul>
-<li>error 当工作线程无法被复制创建、杀死、无法发送消息时触发</li>
-<li>exit 工作线程退出时触发 ，若正常退出，则第一个参数为退出码，若是kill()的，则第二个参数为杀死进程信号（第一个为null）</li>
-<li>close 工作线程的标准输入输出流中止时触发 参数与exit相同</li>
-<li>disconnect 父进程、工作线程调用disconnect()方法时触发 将关闭监听IPC</li>
-</ul>
-<p>父进程也可以用kill()发送信号 Node提供了kill -l列出的信号对应的事件</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">process.on(<span class="string">'SIGTERM'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'Got a SIGTERM, exiting...'</span>);</div><div class="line">	process.exit(<span class="number">1</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'sever running with PID:'</span>,process.pid);</div><div class="line">process.kill(process.pid,<span class="string">'SIGTERM'</span>);</div></pre></td></tr></table></figure>
-<h4 id="自动重启"><a href="#自动重启" class="headerlink" title="自动重启"></a>自动重启</h4><ul>
-<li>当工作线程退出时 启动新的工作进程来服务</li>
-</ul>
-<p><strong>给 process 对象添加 uncaughtException 事件绑定能够避免发生异常时进程直接退出</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// master.js</span></div><div class="line"><span class="keyword">var</span> fork = <span class="built_in">require</span>(<span class="string">'child_process'</span>).fork;</div><div class="line"><span class="keyword">var</span> cpus = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus();</div><div class="line"></div><div class="line"><span class="keyword">var</span> server = <span class="built_in">require</span>(<span class="string">'net'</span>).createServer();</div><div class="line">server.listen(<span class="number">1337</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> workers = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> createWorker = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> worker = fork(__dirname + <span class="string">'/worker.js'</span>);</div><div class="line">	<span class="comment">// 退出时重新启动新的进程</span></div><div class="line">	worker.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'Worker '</span> + worker.pid + <span class="string">' exited.'</span>);</div><div class="line">		<span class="keyword">delete</span> workers[worker.pid];</div><div class="line">		createWorker();</div><div class="line">	&#125;);</div><div class="line">	<span class="comment">// 句柄转发</span></div><div class="line">	worker.send(<span class="string">'server'</span>, server);</div><div class="line">	workers[worker.pid] = worker;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'Create worker. pid: '</span> + worker.pid);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; cpus.length; i++) &#123;</div><div class="line">	createWorker();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//主进程自己退出时，让所有工作进程退出 </span></div><div class="line">process.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">var</span> pid <span class="keyword">in</span> workers) &#123;</div><div class="line">		workers[pid].kill();</div><div class="line">	&#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>当工作线程出现未捕获的异常，就立刻停止接受新的连接，在所有连接断开后退出，主进程帧听到exit后启动新的进程服务</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// worker.js</span></div><div class="line"><span class="keyword">var</span> http = <span class="keyword">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;</div><div class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></div><div class="line">	&#125;);</div><div class="line">	res.end(<span class="string">'handled by child, pid is '</span> + process.pid + <span class="string">'\n'</span>);</div><div class="line">&#125;);</div><div class="line"><span class="keyword">var</span> worker;</div><div class="line">process.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span><span class="params">(m, tcp)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (m === <span class="string">'server'</span>) &#123;</div><div class="line">		worker = tcp;</div><div class="line">		worker.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span><span class="params">(socket)</span> </span>&#123;</div><div class="line">			server.emit(<span class="string">'connection'</span>, socket);</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">&#125;);</div><div class="line">process.on(<span class="string">'uncaughtException'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="comment">//停止接收新的连接 </span></div><div class="line">	worker.close(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="comment">// 所有已有的连接断开后，退出进程</span></div><div class="line">		process.<span class="keyword">exit</span>(<span class="number">1</span>);</div><div class="line">	&#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h5 id="自杀信号"><a href="#自杀信号" class="headerlink" title="自杀信号"></a>自杀信号</h5><ul>
-<li>当子工作线程因为意外要退出时 先发送自杀信号 再开始退出</li>
-</ul>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="regexp">//</span> worker.js</div><div class="line">process.on(<span class="string">'uncaughtException'</span>, <span class="keyword">function</span>(err) &#123;</div><div class="line">	<span class="regexp">//</span>记录日志</div><div class="line">	logger.error(err);</div><div class="line">	<span class="regexp">//</span> 发送自杀信号</div><div class="line">	process.send(&#123;</div><div class="line">		act: <span class="string">'suicide'</span></div><div class="line">	&#125;);</div><div class="line">	<span class="regexp">//</span> 停止接收新的连接 </div><div class="line">	worker.close(<span class="keyword">function</span>() &#123;</div><div class="line">		<span class="regexp">//</span> 所有已有连接断开后，退出进程</div><div class="line">		process.<span class="keyword">exit</span>(<span class="number">1</span>);</div><div class="line">	&#125;);		</div><div class="line">	<span class="regexp">//</span> <span class="number">5</span>秒后退出进程 此处不graceful</div><div class="line">	setTimeout(<span class="keyword">function</span>() &#123;</div><div class="line">		process.<span class="keyword">exit</span>(<span class="number">1</span>);</div><div class="line">	&#125;, <span class="number">5000</span>);</div><div class="line">&#125;);</div><div class="line"><span class="regexp">//</span>原本在<span class="keyword">exit</span>重启新进程的，改为在message事件中</div><div class="line">var createWorker = <span class="keyword">function</span>() &#123;</div><div class="line">	var worker = fork(__dirname + <span class="string">'/worker.js'</span>); </div><div class="line">	<span class="regexp">//</span> 启动新的进程</div><div class="line">	worker.on(<span class="string">'message'</span>, <span class="keyword">function</span>(message) &#123;</div><div class="line">		<span class="keyword">if</span> (message.act === <span class="string">'suicide'</span>) &#123;</div><div class="line">			createWorker();</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">	worker.on(<span class="string">'exit'</span>, <span class="keyword">function</span>() &#123;</div><div class="line">		console.log(<span class="string">'Worker '</span> + worker.pid + <span class="string">' exited.'</span>);</div><div class="line">		<span class="keyword">delete</span> workers[worker.pid];</div><div class="line">	&#125;);</div><div class="line">	worker.send(<span class="string">'server'</span>, server);</div><div class="line">	workers[worker.pid] = worker;</div><div class="line">	console.log(<span class="string">'Create worker. pid: '</span> + worker.pid);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h5 id="限量重启"><a href="#限量重启" class="headerlink" title="限量重启"></a>限量重启</h5><ul>
-<li>避免因为在启动过程就出现错误 导致进程一直被重启</li>
-</ul>
-<p>限制单位时间内重启次数，超过限制就触发giveup事件，并且<strong>对于此事件要着重加日志</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 重启次数 </span></div><div class="line"><span class="keyword">var</span> limit = <span class="number">10</span>;</div><div class="line"><span class="comment">// 时间单位</span></div><div class="line"><span class="keyword">var</span> during = <span class="number">60000</span>;</div><div class="line"><span class="keyword">var</span> restart = [];</div><div class="line"><span class="keyword">var</span> isTooFrequently = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">// 记录重启时间</span></div><div class="line">	<span class="keyword">var</span> time = <span class="built_in">Date</span>.now();</div><div class="line">	<span class="keyword">var</span> length = restart.push(time);</div><div class="line">	<span class="keyword">if</span> (length &gt; limit) &#123;</div><div class="line">		<span class="comment">// 取出最后10次记录</span></div><div class="line">		restart = restart.slice(limit * <span class="number">-1</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">// 最后一次重启到前10次重启之间的时间间隔 </span></div><div class="line">	<span class="keyword">return</span> restart.length &gt;= limit &amp;&amp; restart[restart.length - <span class="number">1</span>] - restart[<span class="number">0</span>] &lt; during;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> workers = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> createWorker = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">// 检查是否太过频繁 </span></div><div class="line">	<span class="keyword">if</span> (isTooFrequently()) &#123;</div><div class="line">		<span class="comment">// 触发giveup事件后，不再重启 </span></div><div class="line">		process.emit(<span class="string">'giveup'</span>, length, during);</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">var</span> worker = fork(__dirname + <span class="string">'/worker.js'</span>);</div><div class="line">	worker.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'Worker '</span> + worker.pid + <span class="string">' exited.'</span>);</div><div class="line">		<span class="keyword">delete</span> workers[worker.pid];</div><div class="line">	&#125;);</div><div class="line">	<span class="comment">// 重新启动新的进程</span></div><div class="line">	worker.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">message</span>) </span>&#123;</div><div class="line">		<span class="keyword">if</span> (message.act === <span class="string">'suicide'</span>) &#123;</div><div class="line">			createWorker();</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">	<span class="comment">// 句柄转发</span></div><div class="line">	worker.send(<span class="string">'server'</span>, server);</div><div class="line">	workers[worker.pid] = worker;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'Create worker. pid: '</span> + worker.pid);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h4 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h4><ul>
-<li>Round-Robin 轮叫调度</li>
-</ul>
-<p>对于Node而言，它繁忙部分有CPU和I/O，影响抢占的是CPU的繁忙度，所以使用抢占式服务可能会导致负载不均衡。</p>
-<p>多线程/多进程等待同一个 socket 事件，当这个事件发生时，这些线程/进程被同时唤醒，就是<strong>惊群</strong>。可以想见，效率很低下，许多进程被内核重新调度唤醒，同时去响应这一个事件，当然只有一个进程能处理事件成功，其他的进程在处理该事件失败后重新休眠（也有其他选择）。这种性能浪费现象就是惊群。</p>
-<p>轮叫调度是由主线程接受连接，将它依次分发给工作线程，分发策略为：在N个工作线程中，每次选择第i=(i+1)mod n个进程来发送连接</p>
-<p>可以在cluster模块中启用：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 启用Round-Robin</span></div><div class="line">cluster<span class="selector-class">.schedulingPolicy</span> = cluster<span class="selector-class">.SCHED_RR</span> </div><div class="line"><span class="comment">// 不启用Round-Robin</span></div><div class="line">cluster<span class="selector-class">.schedulingPolicy</span> = cluster<span class="selector-class">.SCHED_NONE</span></div><div class="line"></div><div class="line">或者者在环境变量中设置NODE_CLUSTER_SCHED_POLICY的值    </div><div class="line">export NODE_CLUSTER_SCHED_POLICY=rr</div><div class="line">export NODE_CLUSTER_SCHED_POLICY=<span class="attribute">none</span></div></pre></td></tr></table></figure>
-<p>Round-Robin也可以通过代理服务器实现</p>
-<h4 id="状态共享"><a href="#状态共享" class="headerlink" title="状态共享"></a>状态共享</h4><ul>
-<li>在多个进程中共享数据</li>
-</ul>
-<p>将数据放到数据库、文件、缓存，在进程启动时读取进内存。但在数据改变时，需要通知各个工作线程，使它们及时同步状态</p>
-<p><code>定时轮询</code>各个工作线程向第三方定时轮询。但轮询时间设定比较麻烦，过短会有并发处理，且增加性能损耗，过长则会导致数据更新不及时</p>
-<p><code>主动通知</code> 新建通知进程(服务)，由它来轮询获取数据更新，并通知工作线程.为了能跨服务器使用，可以使用TCP,UDP来通信。进程在启动时，主动将进程信息注册到通知服务，通知服务依次来通知</p>
-<p><img src="/picture/node_process_notify.png" alt="Smaller icon"></p>
-<h3 id="Cluster模块"><a href="#Cluster模块" class="headerlink" title="Cluster模块"></a>Cluster模块</h3><ul>
-<li>child_process和net模块的组合 </li>
-<li>提供完善的API,但没有child_process灵活</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cluster = <span class="built_in">require</span>(<span class="string">'cluster'</span>);</div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> numCPUs = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus().length;</div><div class="line"><span class="keyword">if</span> (cluster.isMaster) &#123;</div><div class="line">	<span class="comment">// Fork workers</span></div><div class="line">	<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; numCPUs; i++) &#123;</div><div class="line">		cluster.fork();</div><div class="line">	&#125;</div><div class="line">	cluster.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">worker, code, signal</span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'worker '</span> + worker.process.pid + <span class="string">' died'</span>);</div><div class="line">	&#125;);</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">	<span class="comment">// Workers can share any TCP connection</span></div><div class="line">	<span class="comment">// In this case its a HTTP server </span></div><div class="line">	http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">		res.writeHead(<span class="number">200</span>);</div><div class="line">		res.end(<span class="string">"hello world\n"</span>);</div><div class="line">	&#125;).listen(<span class="number">8000</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>在进程中判断是主进程还是工作进程：主要通过环境变量的NODE_UNIQUE_ID</p>
-<figure class="highlight mel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">cluster</span>.isWorker = (<span class="string">'NODE_UNIQUE_ID'</span> <span class="keyword">in</span> process.<span class="keyword">env</span>); </div><div class="line"><span class="keyword">cluster</span>.isMaster = (<span class="keyword">cluster</span>.isWorker === false);</div><div class="line"><span class="comment">//使用cluster.setupMaster()设置主进程</span></div></pre></td></tr></table></figure>
-<p>Cluster会在内部启动TCP服务器，在fork()工作线程时，将tcp服务器的socket文件描述符发送给工作线程，并行该工作线程的环境变量里存在NODE_UNIQUE_ID。<strong>如果工作线程有listen()帧听端口，就会拿到文件描述符</strong>，通过SO_REUSEADDR设置实现端口共享。</p>
-<p>使用cluster模块后，无法主动指定要共享的socket文件描述符，所以<strong>主进程只能管理一组工作进程</strong>。而使用child_process则<strong>可以创建多个tcp服务器</strong>，共享多个socket</p>
-<h4 id="Cluster事件"><a href="#Cluster事件" class="headerlink" title="Cluster事件"></a>Cluster事件</h4><ul>
-<li>fork  复制一个工作线程后触发</li>
-<li>online 复制工作线程完成后，工作线程主动发送online消息给主进程，主进程收到消息后触发</li>
-<li>listening 工作线程调用listen()后，会发送listening消息给主进程，主进程收到消息后触发</li>
-<li>disconnect 主进程和工作线程的IPC通道断开后触发</li>
-<li>exit 工作线程退出时触发</li>
-<li>setup cluster.setupMaster()执行后触发</li>
-</ul>
-<p>上面的事件大都和child_process相关，是在进程间消息传递的基础上封装完成的</p>
-<h3 id="graceful"><a href="#graceful" class="headerlink" title="graceful"></a>graceful</h3><ul>
-<li>优雅退出进程</li>
-</ul>
-<p>在调用http.createServer().close()关闭server时，它会停止接收新的连接，但对于keepalive的连接，它依然会继续接受，导致close()无法完成</p>
-<p>解决方案：</p>
-<ul>
-<li>记录所有连接 在关闭时全部销毁</li>
-</ul>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">enableDestroy</span><span class="params">(server)</span> </span>&#123;</div><div class="line">  <span class="keyword">var</span> connections = &#123;&#125;</div><div class="line"></div><div class="line">  server.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span><span class="params">(conn)</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> key = conn.remoteAddress + <span class="string">':'</span> + conn.remotePort;</div><div class="line">    connections[key] = conn;</div><div class="line">    conn.on(<span class="string">'close'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">      <span class="keyword">delete</span> connections[key];</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  server.destroy = <span class="function"><span class="keyword">function</span><span class="params">(cb)</span> </span>&#123;</div><div class="line">    server.close(cb);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> connections)</div><div class="line">      connections[key].destroy();</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>但是太浪费内存了</p>
-<p>req.socket.destroy()</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1585,21 +1457,21 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">55</span>
+              <span class="site-state-item-count">56</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -1645,7 +1517,7 @@
         <div class="copyright" >
   
   &copy;  2015-12 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>

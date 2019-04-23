@@ -251,6 +251,140 @@
             
               
                 
+                <a class="post-title-link" href="/2016/06/08/redux-学习笔记（1）/" itemprop="url">
+                  redux 学习笔记（1）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-06-08T10:24:46+08:00" content="2016-06-08">
+              2016-06-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/React/" itemprop="url" rel="index">
+                    <span itemprop="name">React</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/08/redux-学习笔记（1）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/08/redux-学习笔记（1）/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="redux的作用"><a href="#redux的作用" class="headerlink" title="redux的作用"></a>redux的作用</h3><p><img src="../picture/redux流程.png" alt="Smaller icon"></p>
+<p>Redux 主要分为三个部分 Action、Reducer、及 Store</p>
+<h4 id="action"><a href="#action" class="headerlink" title="action"></a>action</h4><ul>
+<li>action用来传递操作 State 的信息,以 Javascript Plain Object 的形式存在，形如</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attribute">type</span>: <span class="string">'ADD_FILM'</span>,</div><div class="line">  name: <span class="string">'Mission: Impossible'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>type 属性是必要的，用来表达处理 state 数据的方式，其他属性任意，建议简单</p>
+<p>但为了方便组织，可以创建函数来生产 action，即Action Creator</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="title">addFilm</span>(name) &#123;</div><div class="line">  <span class="keyword">return</span> <span class="type">&#123;</span> <span class="keyword">type</span>: <span class="symbol">'ADD_FILM</span>', name: name &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Reducer"><a href="#Reducer" class="headerlink" title="Reducer"></a>Reducer</h4><ul>
+<li>处理action传达需要操作的信息</li>
+<li>通过传入旧的 state 和指示操作的 action 来更新 state</li>
+</ul>
+<p>Reducer 根据传入的<strong> action.type</strong> 来匹配 case 进行不同的 state 更新</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">function films(<span class="keyword">state</span> = initialState, action) &#123;</div><div class="line">  switch (action.type) &#123;</div><div class="line"> </div><div class="line">  case 'ADD_FILM':</div><div class="line">    // 更新 <span class="keyword">state</span> 中的 films 字段</div><div class="line">    return [&#123;</div><div class="line">      id: <span class="keyword">state</span>.films.reduce((<span class="keyword">max</span>Id, film) =&gt; Math.<span class="keyword">max</span>(film.id, <span class="keyword">max</span>Id), -<span class="number">1</span>) + <span class="number">1</span>,</div><div class="line">      name: action.name</div><div class="line">    &#125;, ...<span class="keyword">state</span>];</div><div class="line"> </div><div class="line">  case 'DELETE_FILM':</div><div class="line">    return <span class="keyword">state</span>.films.filter(film =&gt;</div><div class="line">        film.id !== action.id</div><div class="line">    );</div><div class="line"> </div><div class="line">  case 'SHOW_ALL_FILM':</div><div class="line">    return Object.assign(&#123;&#125;, <span class="keyword">state</span>, &#123;</div><div class="line">        visibilityFilter: action.filter</div><div class="line">      &#125;);</div><div class="line"> //不要修改原先<span class="keyword">state</span>(redux会比较前后两份<span class="keyword">state</span>的引用，相同就直接return不做更新)。 使用 Object.assign() 新建了一个副本</div><div class="line">  <span class="keyword">default</span>:</div><div class="line">    return <span class="keyword">state</span>;</div><div class="line">    //在 <span class="keyword">default</span> 情况下返回旧的 <span class="keyword">state</span>。遇到未知的 action 时，一定要返回旧的 <span class="keyword">state</span>。</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>当 action.type变多时，可以按照功能拆分，在通过组合函数合并</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">function rootReducer(<span class="keyword">state</span> = &#123;&#125;, action) &#123;</div><div class="line">  return &#123;</div><div class="line">    films: filmReducer(<span class="keyword">state</span>.films, action),</div><div class="line">    filter: filterReducer(<span class="keyword">state</span>.filter, action)</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line"> // rootReducer 将不同部分的 <span class="keyword">state</span> 传给对应的 reducer 处理，最终合并所有 reducer 的返回值，组成整个<span class="keyword">state</span>。</div><div class="line"> </div><div class="line"> //使用Redux 提供的 combineReducers() 方法</div><div class="line">import &#123; combineReducers &#125; <span class="keyword">from</span> 'redux'</div><div class="line"></div><div class="line">var rootReducer = combineReducers(&#123;</div><div class="line">    films: filmReducer,</div><div class="line">    filter: filterReducer</div><div class="line">  &#125;);</div><div class="line">  </div><div class="line"> //combineReducers() 将调用一系列 reducer，并根据对应的 key 来筛选出 <span class="keyword">state</span> 中的一部分数据给相应的 reducer，这样也意味着每一个小的 reducer 将只能处理 <span class="keyword">state</span> 的一部分数据</div></pre></td></tr></table></figure>
+<h4 id="Store"><a href="#Store" class="headerlink" title="Store"></a>Store</h4><ul>
+<li>衔接action和reducer</li>
+</ul>
+<p>Store 是单一的,维护着一个全局的 State，并且根<strong>据 Action 来进行事件分发处理 State</strong>,Store 是一个把 Action 和 Reducer 结合起来的对象。</p>
+<p>生成store</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123;createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> store = createStore(rootReducer);</div></pre></td></tr></table></figure>
+<p>store 对象可以简单的理解为如下形式</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createStore</span>(<span class="params">reducer, initialState</span>) </span>&#123;</div><div class="line">    <span class="comment">//闭包私有变量 </span></div><div class="line">    <span class="keyword">var</span> currentReducer = reducer;</div><div class="line">    <span class="keyword">var</span> currentState = initialState;</div><div class="line">    <span class="keyword">var</span> listeners = [];</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getState</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> currentState;</div><div class="line">    &#125;    </div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">subscribe</span>(<span class="params">listener</span>) </span>&#123;</div><div class="line">      listeners.push(listener);</div><div class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">unsubscribe</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> index = listeners.indexOf(listener);</div><div class="line">        listeners.splice(index, <span class="number">1</span>);</div><div class="line">      &#125;;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span>(<span class="params">action</span>) </span>&#123;</div><div class="line">        currentState = currentReducer(currentState, action);</div><div class="line">        listeners.slice().forEach(<span class="function"><span class="params">listener</span> =&gt;</span> listener());</div><div class="line">        <span class="keyword">return</span> action;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//返回一个包含可访问闭包变量的公有方法</span></div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">      dispatch,</div><div class="line">      subscribe,</div><div class="line">      getState</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>store.getState() 用来获取 state 数据。<br>store.subscribe(listener) 用于注册监听函数。每当 state 数据更新时，将会触发监听函数。<br>store.dispatch(action) 是用于将一个 action 对象发送给 reducer 进行处理</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">store</span><span class="selector-class">.dispatch</span>(&#123;</div><div class="line">  <span class="attribute">type</span>: <span class="string">'ADD_FILM'</span>,</div><div class="line">  name: <span class="string">'Mission: Impossible'</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h4 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h4><ul>
+<li>Connect 组件主要为 React 组件提供 store 中的部分 state 数据 及 dispatch 方法</li>
+</ul>
+<p>通过<strong>import { connect } from ‘react-redux’</strong>将state的值和action绑定到组件的props上</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">import &#123; connect &#125; <span class="keyword">from</span> 'react-redux'</div><div class="line">import Counter <span class="keyword">from</span> '../components/Counter' //一个组件</div><div class="line">import * as CounterActions <span class="keyword">from</span> '../actions/counter'</div><div class="line"></div><div class="line">//将<span class="keyword">state</span>.counter绑定到props的counter</div><div class="line">// <span class="keyword">state</span> 将由 store 提供</div><div class="line">function mapStateToProps(<span class="keyword">state</span>) &#123;</div><div class="line">  return &#123;</div><div class="line">    counter: <span class="keyword">state</span>.counter</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//将action的所有方法绑定到props上</div><div class="line">function mapDispatchToProps(dispatch) &#123;</div><div class="line">  return bindActionCreators(CounterActions, dispatch)</div><div class="line">&#125;</div><div class="line"></div><div class="line">//通过react-redux提供的connect方法将我们需要的<span class="keyword">state</span>中的数据和actions中的方法绑定到props上</div><div class="line">export <span class="keyword">default</span> connect(mapStateToProps, CounterActions)(Counter)</div></pre></td></tr></table></figure>
+<h4 id="saga"><a href="#saga" class="headerlink" title="saga"></a>saga</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123;</div><div class="line">  takeEvery</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'redux-saga'</span></div><div class="line"><span class="keyword">import</span> &#123;</div><div class="line">  call,</div><div class="line">  put,</div><div class="line">  fork,</div><div class="line">  take,</div><div class="line">  cancel</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span></div><div class="line"><span class="keyword">import</span> &#123;</div><div class="line">  GET_LOGINED_REQUEST,</div><div class="line">  LOGIN_REQUEST</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'./login.js'</span></div><div class="line"><span class="keyword">import</span> &#123;</div><div class="line">  loginAPI,</div><div class="line">  loginedAPI</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'../../../api'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">watchRequestLogined</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">yield</span> takeEvery(GET_LOGINED_REQUEST, queryFlow)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">queryFlow</span>(<span class="params">action</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> task = <span class="keyword">yield</span> fork(logined)</div><div class="line">  <span class="keyword">yield</span> take(LOGIN_CANCEL)</div><div class="line">  <span class="keyword">yield</span> cancel(task)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">logined</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">const</span> response = <span class="keyword">yield</span> call(loginedAPI)</div><div class="line">    <span class="keyword">yield</span> put(&#123;</div><div class="line">      <span class="attr">type</span>: LOGIN_SUCCESS,</div><div class="line">      response</div><div class="line">    &#125;)</div><div class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</div><div class="line">    <span class="keyword">yield</span> put(&#123;</div><div class="line">      <span class="attr">type</span>: LOGIN_CANCEL,</div><div class="line">      error</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">watchRequestLogin</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">yield</span> takeEvery(LOGIN_REQUEST, loginFlow)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">authorize</span>(<span class="params">&#123;account, password&#125;</span>)</span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">const</span> response = <span class="keyword">yield</span> call(loginAPI, &#123;</div><div class="line">      account,</div><div class="line">      password</div><div class="line">    &#125;)</div><div class="line">    <span class="keyword">yield</span> put(&#123;</div><div class="line">      <span class="attr">type</span>: LOGIN_SUCCESS,</div><div class="line">      response</div><div class="line">    &#125;)</div><div class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</div><div class="line">    <span class="keyword">yield</span> put(&#123;</div><div class="line">      <span class="attr">type</span>: LOGIN_ERROR,</div><div class="line">      error</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">loginFlow</span>(<span class="params">action</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> &#123; account, password &#125; = action.payload</div><div class="line">  <span class="keyword">const</span> task = <span class="keyword">yield</span> fork(authorize, &#123; account, password &#125;)</div><div class="line">  <span class="keyword">yield</span> take(LOGIN_CANCEL)</div><div class="line">  <span class="keyword">yield</span> cancel(task)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/06/01/Flux/" itemprop="url">
                   Flux
                 </a>
@@ -1552,136 +1686,6 @@ Step(
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/15/node的模块加载/" itemprop="url">
-                  node的模块加载
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-03-15T10:53:32+08:00" content="2016-03-15">
-              2016-03-15
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/15/node的模块加载/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/15/node的模块加载/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="模块实现"><a href="#模块实现" class="headerlink" title="模块实现"></a>模块实现</h3><p>依照CommonJS的模块规范，使用require()引入模块的api,使用exports导出模块的方法、变量；其中module对象代表模块本身，exports是它的属性</p>
-<p><code>优点： 每个模块有独立的空间、不必考虑变量污染</code></p>
-<p>Node引入模块通过路径分析、文件定位、编译执行，会对引入的模块缓<strong>存其编译和执行后的对象</strong>，二次加载时缓存<strong>优先核心模块之后文件模块</strong>。加载自定义模块（第三方包）最慢，要向上逐级递归查找node_modules目录</p>
-<p>因为允许require()中不含文件拓展名，Node会按照<code>.js、.node、.json的次序补足，依次尝试</code>,并且需要调用fs模块同步阻塞判断文件是否存在，会因为Node单线程引起性能问题，<code>对于.node、.json文件带上拓展名能快些</code></p>
-<h4 id="分析目录和包"><a href="#分析目录和包" class="headerlink" title="分析目录和包"></a>分析目录和包</h4><p>require()通过分析文件拓展名后仍然没有查到文件、但取到一个目录，此时Node会将目录当做包来处理。</p>
-<ol>
-<li>在当前目录下查找package.json(CommonJS规定的包描述文件)</li>
-<li>通过JSON.parse()解析，取出main属性指定的文件名，若无拓展名就遍历拓展名</li>
-</ol>
-<p>如果mian属性指定文件名错误、没有package.json文件，Node会把index.当做默认文件名，依次查找、遍历拓展名。</p>
-<p>如果分析目录后没有定位成功，就进入下一个模块路径查找，模块路径都都遍历完了还没找到就抛错。</p>
-<h3 id="模块编译"><a href="#模块编译" class="headerlink" title="模块编译"></a>模块编译</h3><p><code>.js 通过fs同步读取文件后编译执行</code> ,Node对获取的js文件内容进行了头尾包装</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">exports,<span class="built_in">require</span>,<span class="built_in">module</span>,__filename,__dirname</span>)</span>&#123;<span class="comment">//头尾包装</span></div><div class="line">  <span class="keyword">var</span> math=<span class="built_in">require</span>(<span class="string">'math'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>如此每个模块都有作作用域隔离，包装后的代码通过vm原生模块runInThisContext()执行，返回一个function对象，再将当前模块对象的exports属性、require()、module、文件的完整路径和文件目录作为参数传给function()。最后调用方拿到了exports属性</p>
-<p><strong>exports和module.exports的区别</strong> exports对象是以形参形式传入的，直接赋值不会改变作用域外的值。所以需要对module.exports对象赋值，对exports属性赋值则无碍</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> change = <span class="function"><span class="keyword">function</span>(<span class="params">a</span>) </span>&#123;</div><div class="line">	a = <span class="number">100</span>;</div><div class="line">	<span class="built_in">console</span>.log(a); <span class="comment">// =&gt; 100</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> a = <span class="number">10</span>;</div><div class="line">change(a);</div><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// =&gt; 10</span></div></pre></td></tr></table></figure>
-<p><code>.node 这是用c/c++编写的拓展文件，通过dlopen()加载再编译</code> 在windows、*nix有不同的实现，通过libuv兼容层封装,实际不用编译，它是c/c++编译生成的，只要加载、执行，exports对象直接和.node联系，执行效率高</p>
-<p><code>.json 通过fs读取，使用JSON.parse()解析，再赋值给exports</code> ,对于JSON文件直接用require()比fs高效</p>
-<p>将编译后的模块，以文件路径为索引缓存在Module.cache对象上</p>
-<h3 id="核心模块"><a href="#核心模块" class="headerlink" title="核心模块"></a>核心模块</h3><ul>
-<li>将核心模块中纯用c/c++写的称为建内模块，因为通常不被用户调用</li>
-<li>部分模块通过c/c++编写核心部分，js实现包装、导出来提高性能</li>
-</ul>
-<p>Node使用v8的js2c.py将所有内置js转成c++里的数组，生成node_natives.sh头文件，在Node启动时加入内存，然后再根据require()加载、执行;也要经历头尾包装，缓存在NativeModule._cache对象上</p>
-<h3 id="NPM"><a href="#NPM" class="headerlink" title="NPM"></a>NPM</h3><p><code>package.json 包描述文件</code>  dependencies npm根据这个自动加载依赖的包,scripts 用于包管理器来安装、编译、测试和卸载包(钩子命令，preinstall之类的) devDependencies 开发时的依赖包，bin 命令行工具</p>
-<p><code>全局安装 -g</code> 将包变成全局可用的执行命令，不是require()到</p>
-<p><code>其他方式安装包</code> npm install 指定package.json的位置，npm install [pg] –registry=<a href="http://registry.url" target="_blank" rel="external">http://registry.url</a> 或者直接采用镜像源 npm config set registry <a href="http://registry.url" target="_blank" rel="external">http://registry.url</a></p>
-<p><code>局域NPM</code></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1728,21 +1732,21 @@ Step(
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">55</span>
+              <span class="site-state-item-count">56</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -1788,7 +1792,7 @@ Step(
         <div class="copyright" >
   
   &copy;  2015-12 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>
