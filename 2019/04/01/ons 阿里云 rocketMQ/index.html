@@ -51,40 +51,31 @@
 
 
 
-<meta name="description" content="brokerons 默认有两个brokerName组,分别有0-7共16个队列
-可能不存在主从关系，每个broker都可读写
+<meta name="description" content="brokerons 默认有两个brokerName组,分别有0-7共16个队列 
+还有两个死信队列 topic是 %RETRY%+tag可能不存在主从关系，每个broker都可读写
 Producer 轮询发送到broker队列
  如果发送失败会换个队列
-ConsumerAllocateMessageQueueAveragely
-默认 集群消费
-
-平均分配可消费的 Broker 对应的消息队列 c1对应b1,b2,b3 c2对应d1,d2,d3
-Allo">
+defaultTopicQueueNums自动创建topic时设置队列数量ons不允许自动创建topic，也不允许修改队列数量
+ConsumerA">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ons 阿里云 rocketMQ">
 <meta property="og:url" content="https://www.wmtcore.com/2019/04/01/ons 阿里云 rocketMQ/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="brokerons 默认有两个brokerName组,分别有0-7共16个队列
-可能不存在主从关系，每个broker都可读写
+<meta property="og:description" content="brokerons 默认有两个brokerName组,分别有0-7共16个队列 
+还有两个死信队列 topic是 %RETRY%+tag可能不存在主从关系，每个broker都可读写
 Producer 轮询发送到broker队列
  如果发送失败会换个队列
-ConsumerAllocateMessageQueueAveragely
-默认 集群消费
-
-平均分配可消费的 Broker 对应的消息队列 c1对应b1,b2,b3 c2对应d1,d2,d3
-Allo">
-<meta property="og:updated_time" content="2019-04-23T10:33:11.277Z">
+defaultTopicQueueNums自动创建topic时设置队列数量ons不允许自动创建topic，也不允许修改队列数量
+ConsumerA">
+<meta property="og:updated_time" content="2019-04-24T06:47:18.204Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ons 阿里云 rocketMQ">
-<meta name="twitter:description" content="brokerons 默认有两个brokerName组,分别有0-7共16个队列
-可能不存在主从关系，每个broker都可读写
+<meta name="twitter:description" content="brokerons 默认有两个brokerName组,分别有0-7共16个队列 
+还有两个死信队列 topic是 %RETRY%+tag可能不存在主从关系，每个broker都可读写
 Producer 轮询发送到broker队列
  如果发送失败会换个队列
-ConsumerAllocateMessageQueueAveragely
-默认 集群消费
-
-平均分配可消费的 Broker 对应的消息队列 c1对应b1,b2,b3 c2对应d1,d2,d3
-Allo">
+defaultTopicQueueNums自动创建topic时设置队列数量ons不允许自动创建topic，也不允许修改队列数量
+ConsumerA">
 
 
 
@@ -317,10 +308,11 @@ Allo">
       
 
       
-        <span itemprop="articleBody"><h3 id="broker"><a href="#broker" class="headerlink" title="broker"></a>broker</h3><p>ons 默认有两个brokerName组,分别有0-7共16个队列</p>
-<p>可能不存在主从关系，每个broker都可读写</p>
+        <span itemprop="articleBody"><h3 id="broker"><a href="#broker" class="headerlink" title="broker"></a>broker</h3><p>ons 默认有两个brokerName组,分别有0-7共16个队列 </p>
+<p>还有两个死信队列 topic是 %RETRY%+tag<br>可能不存在主从关系，每个broker都可读写</p>
 <h3 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a>Producer</h3><p> 轮询发送到broker队列</p>
 <p> 如果发送失败会换个队列</p>
+<h4 id="defaultTopicQueueNums"><a href="#defaultTopicQueueNums" class="headerlink" title="defaultTopicQueueNums"></a>defaultTopicQueueNums</h4><p>自动创建topic时设置队列数量<br>ons不允许自动创建topic，也不允许修改队列数量</p>
 <h3 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h3><h4 id="AllocateMessageQueueAveragely"><a href="#AllocateMessageQueueAveragely" class="headerlink" title="AllocateMessageQueueAveragely"></a>AllocateMessageQueueAveragely</h4><ul>
 <li>默认 集群消费</li>
 </ul>
@@ -482,7 +474,7 @@ Allo">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#broker"><span class="nav-number">1.</span> <span class="nav-text">broker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Producer"><span class="nav-number">2.</span> <span class="nav-text">Producer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Consumer"><span class="nav-number">3.</span> <span class="nav-text">Consumer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AllocateMessageQueueAveragely"><span class="nav-number">3.1.</span> <span class="nav-text">AllocateMessageQueueAveragely</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AllocateMessageQueueAveragelyByCircle"><span class="nav-number">3.2.</span> <span class="nav-text">AllocateMessageQueueAveragelyByCircle</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#广播消费"><span class="nav-number">3.3.</span> <span class="nav-text">广播消费</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意点"><span class="nav-number">4.</span> <span class="nav-text">注意点</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#broker"><span class="nav-number">1.</span> <span class="nav-text">broker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Producer"><span class="nav-number">2.</span> <span class="nav-text">Producer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#defaultTopicQueueNums"><span class="nav-number">2.1.</span> <span class="nav-text">defaultTopicQueueNums</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Consumer"><span class="nav-number">3.</span> <span class="nav-text">Consumer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AllocateMessageQueueAveragely"><span class="nav-number">3.1.</span> <span class="nav-text">AllocateMessageQueueAveragely</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AllocateMessageQueueAveragelyByCircle"><span class="nav-number">3.2.</span> <span class="nav-text">AllocateMessageQueueAveragelyByCircle</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#广播消费"><span class="nav-number">3.3.</span> <span class="nav-text">广播消费</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意点"><span class="nav-number">4.</span> <span class="nav-text">注意点</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

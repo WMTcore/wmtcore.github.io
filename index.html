@@ -223,15 +223,6 @@
 
     
     
-      
-      
-        
-        
-        
-      
-
-      
-    
 
     
       
@@ -315,10 +306,11 @@
         
           <span itemprop="articleBody">
             
-              <h3 id="broker"><a href="#broker" class="headerlink" title="broker"></a>broker</h3><p>ons 默认有两个brokerName组,分别有0-7共16个队列</p>
-<p>可能不存在主从关系，每个broker都可读写</p>
+              <h3 id="broker"><a href="#broker" class="headerlink" title="broker"></a>broker</h3><p>ons 默认有两个brokerName组,分别有0-7共16个队列 </p>
+<p>还有两个死信队列 topic是 %RETRY%+tag<br>可能不存在主从关系，每个broker都可读写</p>
 <h3 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a>Producer</h3><p> 轮询发送到broker队列</p>
 <p> 如果发送失败会换个队列</p>
+<h4 id="defaultTopicQueueNums"><a href="#defaultTopicQueueNums" class="headerlink" title="defaultTopicQueueNums"></a>defaultTopicQueueNums</h4><p>自动创建topic时设置队列数量<br>ons不允许自动创建topic，也不允许修改队列数量</p>
 <h3 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h3><h4 id="AllocateMessageQueueAveragely"><a href="#AllocateMessageQueueAveragely" class="headerlink" title="AllocateMessageQueueAveragely"></a>AllocateMessageQueueAveragely</h4><ul>
 <li>默认 集群消费</li>
 </ul>
