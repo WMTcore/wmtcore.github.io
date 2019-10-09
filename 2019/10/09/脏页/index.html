@@ -37,7 +37,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="nodejs," />
+  <meta name="keywords" content="mysql," />
 
 
 
@@ -53,22 +53,25 @@
 
 
 
-<meta name="description" content="关于URL编码的问题encodeURI，decodeURI :不会对下列字符编码 ASCII字母 数字 ~!@#$&amp;amp;*()=:/,;?+’，适合对整个url
-encodeURIComponent decodeURIComponent : 不会对下列字符编码 ASCII字母 数字 ~!*()’,适合对url参数
-content-typeapplication/x-www-form-urlen">
+<meta name="description" content="脏页当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”
+刷脏页的时间第一种是“redo log写满了，要flush脏页” 整个系统就不能再接受更新了，所有的更新都必须堵住。如果你从监控上看，这时候更新数会跌为0
+第二种是“内存不够用了，要先将脏页写到磁盘” 这种情况是常态 
+InnoDB用缓冲池（buffe">
 <meta property="og:type" content="article">
-<meta property="og:title" content="js 编码相关问题持续总结">
-<meta property="og:url" content="https://www.wmtcore.com/2016/01/25/js-编码相关问题持续总结/index.html">
+<meta property="og:title" content="分布式服务">
+<meta property="og:url" content="https://www.wmtcore.com/2019/10/09/脏页/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="关于URL编码的问题encodeURI，decodeURI :不会对下列字符编码 ASCII字母 数字 ~!@#$&amp;amp;*()=:/,;?+’，适合对整个url
-encodeURIComponent decodeURIComponent : 不会对下列字符编码 ASCII字母 数字 ~!*()’,适合对url参数
-content-typeapplication/x-www-form-urlen">
-<meta property="og:updated_time" content="2017-08-16T06:07:03.000Z">
+<meta property="og:description" content="脏页当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”
+刷脏页的时间第一种是“redo log写满了，要flush脏页” 整个系统就不能再接受更新了，所有的更新都必须堵住。如果你从监控上看，这时候更新数会跌为0
+第二种是“内存不够用了，要先将脏页写到磁盘” 这种情况是常态 
+InnoDB用缓冲池（buffe">
+<meta property="og:updated_time" content="2019-10-09T09:56:38.008Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="js 编码相关问题持续总结">
-<meta name="twitter:description" content="关于URL编码的问题encodeURI，decodeURI :不会对下列字符编码 ASCII字母 数字 ~!@#$&amp;amp;*()=:/,;?+’，适合对整个url
-encodeURIComponent decodeURIComponent : 不会对下列字符编码 ASCII字母 数字 ~!*()’,适合对url参数
-content-typeapplication/x-www-form-urlen">
+<meta name="twitter:title" content="分布式服务">
+<meta name="twitter:description" content="脏页当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”
+刷脏页的时间第一种是“redo log写满了，要flush脏页” 整个系统就不能再接受更新了，所有的更新都必须堵住。如果你从监控上看，这时候更新数会跌为0
+第二种是“内存不够用了，要先将脏页写到磁盘” 这种情况是常态 
+InnoDB用缓冲池（buffe">
 
 
 
@@ -80,7 +83,7 @@ content-typeapplication/x-www-form-urlen">
   };
 </script>
 
-  <title> js 编码相关问题持续总结 | 大碗拉面 </title>
+  <title> 分布式服务 | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
@@ -246,7 +249,7 @@ content-typeapplication/x-www-form-urlen">
             
             
               
-                js 编码相关问题持续总结
+                分布式服务
               
             
           </h1>
@@ -255,8 +258,8 @@ content-typeapplication/x-www-form-urlen">
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-01-25T09:25:23+08:00" content="2016-01-25">
-              2016-01-25
+            <time itemprop="dateCreated" datetime="2019-10-09T15:31:22+08:00" content="2019-10-09">
+              2019-10-09
             </time>
           </span>
 
@@ -265,8 +268,8 @@ content-typeapplication/x-www-form-urlen">
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/js/" itemprop="url" rel="index">
-                    <span itemprop="name">js</span>
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
                   </a>
                 </span>
 
@@ -281,8 +284,8 @@ content-typeapplication/x-www-form-urlen">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/25/js-编码相关问题持续总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/js-编码相关问题持续总结/" itemprop="commentsCount"></span>
+                <a href="/2019/10/09/脏页/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/09/脏页/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -301,23 +304,28 @@ content-typeapplication/x-www-form-urlen">
       
 
       
-        <span itemprop="articleBody"><h3 id="关于URL编码的问题"><a href="#关于URL编码的问题" class="headerlink" title="关于URL编码的问题"></a>关于URL编码的问题</h3><p><code>encodeURI，decodeURI</code> :不会对下列字符编码 ASCII字母 数字 ~!@#$&amp;*()=:/,;?+’，适合对整个url</p>
-<p><code>encodeURIComponent decodeURIComponent</code> : 不会对下列字符编码 ASCII字母 数字 ~!*()’,适合对url参数</p>
-<h3 id="content-type"><a href="#content-type" class="headerlink" title="content-type"></a>content-type</h3><p><code>application/x-www-form-urlencoded</code>: body的内容为a=b&amp;c=d,服务端接收时会转为键值对并会<a href="https://www.w3.org/TR/html4/interact/forms.html#h-17.13.4.1" target="_blank" rel="external">把+转成空格</a>,需要对值做encodeURIComponent<br><code>application/json</code>: body的内容为JSON.stringify({a:1}})</p>
-<h3 id="字符串编码"><a href="#字符串编码" class="headerlink" title="字符串编码"></a>字符串编码</h3><p><code>escape unescape</code> :不会对 ASCII 字母、数字和@/*+进行编码,但<code>已不建议使用</code></p>
-<p><strong>escape和encodeURI区别</strong> :<br><code>escape</code>在处理 0xff 之外字符的时候，是直接使用字符的 unicode 在前面加上一个 「%u」<br><code>encodeURI</code> 先进行 UTF-8，再在 UTF-8 的每个字节码前加上一个 「%」</p>
-<h4 id="nodejs-处理编码文件"><a href="#nodejs-处理编码文件" class="headerlink" title="nodejs 处理编码文件"></a>nodejs 处理编码文件</h4><p><code>iconv-lite</code>: 纯js实现，少了c++到js的转换 比node-iconv快 </p>
-<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var iconv = require(<span class="symbol">'iconv</span>-lite');</div><div class="line"> </div><div class="line">// Convert from an encoded <span class="keyword">buffer</span> <span class="keyword">to</span> js <span class="built_in">string</span>.</div><div class="line">str = iconv.decode(buf, <span class="symbol">'win1251</span>');</div><div class="line"> </div><div class="line">// Convert from js <span class="built_in">string</span> <span class="keyword">to</span> an encoded <span class="keyword">buffer</span>.</div><div class="line">buf = iconv.encode(<span class="string">"Sample input string"</span>, <span class="symbol">'win1251</span>');</div><div class="line"> </div><div class="line">// Check <span class="keyword">if</span> encoding <span class="keyword">is</span> supported</div><div class="line">iconv.encodingExists(<span class="string">"us-ascii"</span>)</div></pre></td></tr></table></figure>
-<p><code>encoding</code>: 对node-iconv和iconv-lite的再次封装，encoding首先调用node-iconv，如果node-iconv无法解析，则调用iconv-lite作为替代方案.<br>encoding模块就一个方法convert()，使用方法为：encoding.convert(text, toCharset, fromCharset)。</p>
-<ul>
-<li>text: 需要转换的对象，可以为Buffer或者String对象。</li>
-<li>toCharset: 转换后的编码。</li>
-<li>fromCharset: 转换前的编码，缺省为uft8。</li>
-</ul>
-<p>转换后的输入结果为Buffer对象。</p>
-<h3 id="URL、URI、URN"><a href="#URL、URI、URN" class="headerlink" title="URL、URI、URN"></a>URL、URI、URN</h3><p><code>URI</code>:统一资源标识符</p>
-<p><code>URL</code>:统一资源定位器,具体的URI</p>
-<p><code>URN</code>:统一资源命名,如mailto:java-net@java.sun.com</p>
+        <span itemprop="articleBody"><h2 id="脏页"><a href="#脏页" class="headerlink" title="脏页"></a>脏页</h2><p>当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”</p>
+<h3 id="刷脏页的时间"><a href="#刷脏页的时间" class="headerlink" title="刷脏页的时间"></a>刷脏页的时间</h3><p><strong>第一种</strong>是“redo log写满了，要flush脏页” 整个系统就不能再接受更新了，所有的更新都必须堵住。如果你从监控上看，这时候更新数会跌为0</p>
+<p><strong>第二种</strong>是“内存不够用了，要先将脏页写到磁盘” 这种情况是常态 </p>
+<p>InnoDB用缓冲池（buffer pool）管理内存，缓冲池中的内存页有三种状态：</p>
+<ol>
+<li>还没有使用的；</li>
+<li>使用了并且是干净页；</li>
+<li>使用了并且是脏页。</li>
+</ol>
+<p>InnoDB的策略是尽量使用内存，因此对于一个长时间运行的库来说，未被使用的页面很少。</p>
+<p><strong>当要读入的数据页没有在内存的时候，就必须到缓冲池中申请一个数据页</strong>。这时候只能把最久不使用的数据页从内存中淘汰掉：如果要淘汰的是一个干净页，就直接释放出来复用；但如果是脏页呢，就必须将脏页先刷到磁盘，变成干净页后才能复用</p>
+<p>一个查询要淘汰的脏页个数太多，会导致查询的响应时间明显变长；</p>
+<p><strong>第三种</strong>是MySQL空闲时</p>
+<p><strong>第四种</strong>是MySQL正常关闭</p>
+<h3 id="刷脏页的控制策略"><a href="#刷脏页的控制策略" class="headerlink" title="刷脏页的控制策略"></a>刷脏页的控制策略</h3><p><code>innodb_io_capacity</code> 它会告诉InnoDB你的磁盘能力 设置成磁盘的IOPS</p>
+<p><code>innodb_max_dirty_pages_pct</code>脏页比例上限，默认值是75% 通过<code>Innodb_buffer_pool_pages_dirty</code>/<code>Innodb_buffer_pool_pages_total</code>得到的</p>
+<p>InnoDB的刷盘速度就是要参考这两个因素：一个是脏页比例，一个是redo log写盘速度</p>
+<h4 id="刷脏页的连坐”机制"><a href="#刷脏页的连坐”机制" class="headerlink" title="刷脏页的连坐”机制"></a>刷脏页的连坐”机制</h4><p>一旦一个查询请求需要在执行过程中先flush掉一个脏页时，这个查询就可能要比平时慢了。而MySQL中的一个机制，可能让你的查询会更慢：在准备刷一个脏页的时候，如果这个数据页旁边的数据页刚好是脏页，就会把这个“邻居”也带着一起刷掉；而且这个把“邻居”拖下水的逻辑还可以继续蔓延，也就是对于每个邻居数据页，如果跟它相邻的数据页也还是脏页的话，也会被放到一起刷</p>
+<p><code>innodb_flush_neighbors</code> 值为1的时候会有上述的“连坐”机制，值为0时表示不找邻居，自己刷自己的</p>
+<p>找“邻居”这个优化在机械硬盘时代是很有意义的，可以减少很多随机IO。机械硬盘的随机IOPS一般只有几百，相同的逻辑操作减少随机IO就意味着系统性能的大幅度提升</p>
+<p>使用的是SSD这类IOPS比较高的设备的话，建议把innodb_flush_neighbors的值设置成0</p>
+<p>在MySQL 8.0中，innodb_flush_neighbors参数的默认值已经是0了</p>
 </span>
       
     </div>
@@ -326,7 +334,7 @@ content-typeapplication/x-www-form-urlen">
       
         <div class="post-tags">
           
-            <a href="/tags/nodejs/" rel="tag">#nodejs</a>
+            <a href="/tags/mysql/" rel="tag">#mysql</a>
           
         </div>
       
@@ -335,17 +343,13 @@ content-typeapplication/x-www-form-urlen">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/23/Samba服务器的简单配置和快速搭建/" rel="next" title="最方便的Samba服务器的配置和搭建">
-                <i class="fa fa-chevron-left"></i> 最方便的Samba服务器的配置和搭建
+              <a href="/2019/04/01/ons 阿里云 rocketMQ/" rel="next" title="ons 阿里云 rocketMQ">
+                <i class="fa fa-chevron-left"></i> ons 阿里云 rocketMQ
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/25/js-call和apply/" rel="prev" title="js call和apply">
-                js call和apply <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -372,8 +376,8 @@ content-typeapplication/x-www-form-urlen">
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/25/js-编码相关问题持续总结/"
-           data-title="js 编码相关问题持续总结" data-url="https://www.wmtcore.com/2016/01/25/js-编码相关问题持续总结/">
+      <div class="ds-thread" data-thread-key="2019/10/09/脏页/"
+           data-title="分布式服务" data-url="https://www.wmtcore.com/2019/10/09/脏页/">
       </div>
     
   </div>
@@ -473,7 +477,7 @@ content-typeapplication/x-www-form-urlen">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于URL编码的问题"><span class="nav-number">1.</span> <span class="nav-text">关于URL编码的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#content-type"><span class="nav-number">2.</span> <span class="nav-text">content-type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串编码"><span class="nav-number">3.</span> <span class="nav-text">字符串编码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nodejs-处理编码文件"><span class="nav-number">3.1.</span> <span class="nav-text">nodejs 处理编码文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL、URI、URN"><span class="nav-number">4.</span> <span class="nav-text">URL、URI、URN</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#脏页"><span class="nav-number">1.</span> <span class="nav-text">脏页</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#刷脏页的时间"><span class="nav-number">1.1.</span> <span class="nav-text">刷脏页的时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#刷脏页的控制策略"><span class="nav-number">1.2.</span> <span class="nav-text">刷脏页的控制策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#刷脏页的连坐”机制"><span class="nav-number">1.2.1.</span> <span class="nav-text">刷脏页的连坐”机制</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

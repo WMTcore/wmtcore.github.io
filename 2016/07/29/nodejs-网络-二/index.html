@@ -83,7 +83,7 @@ websocket需要客户端与服务器之间的长连接，node事件驱动的方�
 WebSocket握手客户端发起">
 <meta property="og:image" content="https://www.wmtcore.com/../picture/websocket数据帧定义.png">
 <meta property="og:image" content="https://www.wmtcore.com/../picture/ssl交换秘钥.png">
-<meta property="og:updated_time" content="2016-08-05T05:19:54.000Z">
+<meta property="og:updated_time" content="2019-07-19T14:21:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nodejs 网络(二)">
 <meta name="twitter:description" content="构建websocket服务websocket的优势：
@@ -373,9 +373,9 @@ WebSocket握手客户端发起">
 <li><p>非对称加密，公钥用于加密传输数据，私钥解密</p>
 <p><img src="../picture/ssl交换秘钥.png" alt="Smaller icon"></p>
 <p>node的tls/ssl是用openssl实现的，公、私钥生成参照：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 生成服务器端私 </span>$ openssl genrsa -out server<span class="selector-class">.key</span> <span class="number">1024</span> <span class="comment">// 生成客户端私 </span>$ openssl genrsa -out client<span class="selector-class">.key</span> <span class="number">1024</span></div><div class="line"></div><div class="line"><span class="comment">//利用上面的1024位长的RSA私钥生成公钥</span>$ openssl rsa -<span class="keyword">in</span> server<span class="selector-class">.key</span> -pubout -out server<span class="selector-class">.pem</span>$ openssl rsa -<span class="keyword">in</span> client<span class="selector-class">.key</span> -pubout -out client.pem</div></pre></td></tr></table></figure>
 </li>
 </ul>
+ <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 生成服务器端私 </span>openssl genrsa -out server<span class="selector-class">.key</span> <span class="number">1024</span> <span class="comment">//生成客户端私 </span>openssl genrsa -out client<span class="selector-class">.key</span> <span class="number">1024</span></div><div class="line"><span class="comment">// 利用上面的1024位长的RSA私钥生成公钥</span>openssl rsa -<span class="keyword">in</span> server<span class="selector-class">.key</span> -pubout -out server<span class="selector-class">.pem</span>openssl rsa -<span class="keyword">in</span> client<span class="selector-class">.key</span> -pubout -out client.pem</div></pre></td></tr></table></figure>
 <h5 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h5><ul>
 <li>由CA颁发，并提供验证</li>
 <li>防止中间人攻击</li>
@@ -492,7 +492,7 @@ WebSocket握手客户端发起">
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">56</span>
+              <span class="site-state-item-count">57</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

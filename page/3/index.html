@@ -253,6 +253,266 @@
             
               
                 
+                <a class="post-title-link" href="/2016/07/01/pm2介绍/" itemprop="url">
+                  pm2
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-07-01T15:15:27+08:00" content="2016-07-01">
+              2016-07-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/01/pm2介绍/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/01/pm2介绍/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <ul>
+<li>pm2 是一个带有负载均衡功能的Node应用的进程管理器</li>
+<li>内建负载均衡（使用Node cluster 集群模块）</li>
+<li>后台运行</li>
+<li>0秒停机重载，热升级</li>
+<li>具有Ubuntu和CentOS 的启动脚本</li>
+<li>停止不稳定的进程（避免无限循环）</li>
+<li>控制台检测</li>
+<li>提供 HTTP API</li>
+<li>远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )</li>
+<li><a href="https://github.com/Unitech/pm2" target="_blank">github</a></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>explain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$ pm2 restart .pm2.yml  –only ra</td>
+<td>根据配置文件重启一个服务</td>
+</tr>
+<tr>
+<td>$ npm install pm2 -g</td>
+<td># Install PM2</td>
+</tr>
+<tr>
+<td>$ pm2 start app.js</td>
+<td># Start, Daemonize and auto restart application</td>
+</tr>
+<tr>
+<td>$ pm2 start app.js -i 4</td>
+<td># Start 4 instances of application in cluster mode it will load balance network queries to each app</td>
+</tr>
+<tr>
+<td><strong>$ pm2 start app.js –name=”api”</strong></td>
+<td># Start application and name it “api”</td>
+</tr>
+<tr>
+<td>$ pm2 start app.js –watch</td>
+<td># Restart application on file change</td>
+</tr>
+<tr>
+<td>$ pm2 start script.sh</td>
+<td># Start bash script</td>
+</tr>
+<tr>
+<td>$ pm2 list</td>
+<td># List all processes started with PM2</td>
+</tr>
+<tr>
+<td><strong>$ pm2 monit</strong></td>
+<td># Display memory and cpu usage of each app</td>
+</tr>
+<tr>
+<td>$ pm2 show [app-name]</td>
+<td># Show all informations about application</td>
+</tr>
+<tr>
+<td><strong>$ pm2 logs</strong></td>
+<td># Display logs of all apps</td>
+</tr>
+<tr>
+<td>$ pm2 logs [app-name]</td>
+<td># Display logs for a specific app</td>
+</tr>
+<tr>
+<td>$ pm2 flush</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>$ pm2 stop all</strong></td>
+<td># Stop all apps</td>
+</tr>
+<tr>
+<td>$ pm2 stop 0</td>
+<td># Stop process with id 0</td>
+</tr>
+<tr>
+<td><strong>$ pm2 restart all</strong></td>
+<td># Restart all apps</td>
+</tr>
+<tr>
+<td><strong>$ pm2 reload all</strong></td>
+<td># Reload all apps in cluster mode</td>
+</tr>
+<tr>
+<td>$ pm2 gracefulReload all</td>
+<td># Graceful reload all apps in cluster mode</td>
+</tr>
+<tr>
+<td>$ pm2 delete all</td>
+<td># Kill and delete all apps</td>
+</tr>
+<tr>
+<td>$ pm2 delete 0</td>
+<td># Delete app with id 0</td>
+</tr>
+<tr>
+<td>$ pm2 scale api 10</td>
+<td># Scale app with name api to 10 instances</td>
+</tr>
+<tr>
+<td>$ pm2 reset [app-name]</td>
+<td># Reset number of restart for [app-name]</td>
+</tr>
+<tr>
+<td>$ pm2 startup</td>
+<td># Generate a startup script to respawn PM2 on boot</td>
+</tr>
+<tr>
+<td>$ pm2 save</td>
+<td># Save current process list</td>
+</tr>
+<tr>
+<td>$ pm2 resurrect</td>
+<td># Restore previously save processes</td>
+</tr>
+<tr>
+<td>$ pm2 update</td>
+<td># Save processes, kill PM2 and restore processes</td>
+</tr>
+<tr>
+<td>$ pm2 generate</td>
+<td># Generate a sample json configuration file</td>
+</tr>
+<tr>
+<td>$ pm2 deploy app.json prod setup</td>
+<td># Setup “prod” remote server</td>
+</tr>
+<tr>
+<td>$ pm2 deploy app.json prod</td>
+<td># Update “prod” remote server</td>
+</tr>
+<tr>
+<td>$ pm2 deploy app.json prod revert 2</td>
+<td># Revert “prod” remote server by 2</td>
+</tr>
+<tr>
+<td>$ pm2 module:generate [name]</td>
+<td># Generate sample module with name [name]</td>
+</tr>
+<tr>
+<td>$ pm2 install pm2-logrotate</td>
+<td># Install module (here a log rotation system)</td>
+</tr>
+<tr>
+<td>$ pm2 uninstall pm2-logrotate</td>
+<td># Uninstall module</td>
+</tr>
+<tr>
+<td>$ pm2 publish</td>
+<td># Increment version, git push and npm publish</td>
+</tr>
+</tbody>
+</table>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/06/08/redux-学习笔记（1）/" itemprop="url">
                   redux 学习笔记（1）
                 </a>
@@ -1542,152 +1802,6 @@ Step(
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/29/Node异步I-O/" itemprop="url">
-                  Node异步I/O
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-03-29T15:27:32+08:00" content="2016-03-29">
-              2016-03-29
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/29/Node异步I-O/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/29/Node异步I-O/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p><code>让I/O与CPU计算并行</code></p>
-<p>Node 在*nix平台，通过线程池实现(主线程和I/O线程)，在windows下使用IOCP(调用异步方法，等待I/O完成后通知，执行回调，内部也依靠线程池，但由系统内核管理)，通过libuv层来兼容。</p>
-<p>Node本身是多线程的，但其中的JavaScript是单线程、因为v8的限制，但计算之类的都是在此线程，多线程只是I/O（磁盘，网络等），I/O有另外的线程池</p>
-<h3 id="事件循环"><a href="#事件循环" class="headerlink" title="事件循环"></a>事件循环</h3><ul>
-<li><p>Node自身的执行模型,在libuv中</p>
-</li>
-<li><p>在Node启动时，创建一个类似while(true)的循环，每循环一次成一个Tick,每次Tick查看是否有事件要处理，若有就处理事件和它的相关回调函数。在windows中基于IOCP,在*nix中基于多线程</p>
-</li>
-<li><p>在Tick过程中通过<strong>观察者</strong>判断是否有事件要处理  </p>
-</li>
-<li><p>异步过程中最重要的就是请求对象，所有状态、传入参数、当前方法和回调函数都封装在此，javascript将对象组装好，送入I/O线程池后就结束了，I/O操作在线程池中等待请求对象被执行</p>
-</li>
-<li><p>Tick在执行过程中检查线程池中是否有执行完的请求，并加入<strong>I/O观察者队列</strong>中，然后再从观察者取到可用的请求对象当做事件处理，取出对象中的回调函数执行,若有业务层callback再给js执行</p>
-</li>
-</ul>
-<p><img src="../picture/IO异步.png" alt="Smaller icon"></p>
-<h4 id="事件驱动的高性能服务器"><a href="#事件驱动的高性能服务器" class="headerlink" title="事件驱动的高性能服务器"></a>事件驱动的高性能服务器</h4><p>基于事件驱动的非阻塞I/O模型<br><code>通过主循环加载事件触发的方式来运行程序处理请求，无需为每一个请求创建额外的对应线程</code>：操作系统因为线程少，所以在上下文切换时代价很小，有助系统稳定处理大量请求（但不适合密集运算),但用户代码不能并行执行，I/O可以</p>
-<ul>
-<li>单线程保证运行安全，避免重入</li>
-</ul>
-<p><img src="../picture/高性能服务器.png" alt="Smaller icon"></p>
-<h3 id="另外一些异步api"><a href="#另外一些异步api" class="headerlink" title="另外一些异步api"></a>另外一些异步api</h3><h4 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h4><ul>
-<li>setTimeout()单次定时执行 setInterval()多次定时执行</li>
-</ul>
-<p>原理和异步I/O类似，将创建的定时器放到定时器观察者内部的红黑树，tick执行时，从红黑树中迭代取出定时器对象，检查是否超过定时时间，超过就形成事件并且立刻执行回调函数。</p>
-<p><code>问题</code>：定时不精确，如果某个循环占用时间过多，当再轮到定时器执行时就已经超时了</p>
-<h4 id="process-nextTick"><a href="#process-nextTick" class="headerlink" title="process.nextTick()"></a>process.nextTick()</h4><ul>
-<li>若想立即异步执行一个任务，用这个更高效</li>
-</ul>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">setTimeout(<span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123; <span class="comment">// TODO</span>&#125;, <span class="number">0</span>);<span class="comment">// 比较浪费性能</span></div><div class="line"></div><div class="line">process.nextTick=<span class="function"><span class="keyword">function</span><span class="params">(callback)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(process._exiting) <span class="keyword">return</span>;</div><div class="line">	<span class="keyword">if</span>(tickDepth &gt;=process.maxTickDepth)</div><div class="line">	   maxTickWarn();</div><div class="line">	<span class="keyword">var</span> tock=&#123;callback:callback&#125;;</div><div class="line">	<span class="keyword">if</span>(process.domain) tock.domain=process.domain;</div><div class="line">	 nextTickQueue.push(tock);</div><div class="line">	<span class="keyword">if</span>(nextTickQueue.length)&#123;</div><div class="line">	  process._needTickCallback();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><code>调用process.nextTick(),只会将回调函数放入队列中，在下个Tick取出</code></p>
-<h4 id="setImmediate"><a href="#setImmediate" class="headerlink" title="setImmediate()"></a>setImmediate()</h4><ul>
-<li>类process.nextTick() 将回调函数延时执行，建议使用这个（v0.9.1以后）</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'nextTick延时执行1'</span>)</div><div class="line">&#125;);</div><div class="line">process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'nextTick延时执行2'</span>);</div><div class="line">&#125;);</div><div class="line">setImmdiate(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'setImmdiate延时执行1'</span>);</div><div class="line">	process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'强势插入'</span>);</div><div class="line">	&#125;)</div><div class="line">&#125;);  </div><div class="line">setImmediate(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'setImmediate延时执行2'</span>); </div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'正常执行'</span>);</div><div class="line"></div><div class="line"><span class="comment">//正常执行 </span></div><div class="line"><span class="comment">//nextTick  延时执行1 </span></div><div class="line"><span class="comment">//nextTick  延时执行2 </span></div><div class="line"><span class="comment">//setImmediate  延时执行1  </span></div><div class="line"><span class="comment">//强势插入 </span></div><div class="line"><span class="comment">//setImmediate  延时执行2</span></div></pre></td></tr></table></figure>
-<p><code>process.nextTick()属于idle观察者，setImmediate()属于check观察者，在每轮循环中，idle观察者先于I/O观察者先与check</code></p>
-<p>process.nextTick()的回调函数保存在<strong>数组</strong>中,在每轮循环中会将数组中的回调函数<strong>全部执行</strong>完。setImmediate()保存在<strong>链表</strong>中,在每轮循环中<strong>执行链表的一个</strong>回调函数</p>
-<h3 id="异步并发控制"><a href="#异步并发控制" class="headerlink" title="异步并发控制"></a>异步并发控制</h3><p>并发量过大,下层服务器会吃不消</p>
-<h5 id="bagpipe"><a href="#bagpipe" class="headerlink" title="bagpipe"></a>bagpipe</h5><ol>
-<li>通过队列控制并发量</li>
-<li>在当前活跃的异步调用量小于限定值，从队列中取出执行</li>
-<li>活跃调用达到限定值后，调用暂存在队列中</li>
-<li>每个调用结束时，从队列中取出新的异步调用执行</li>
-</ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1734,7 +1848,7 @@ Step(
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">56</span>
+              <span class="site-state-item-count">57</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

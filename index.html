@@ -248,6 +248,130 @@
             
               
                 
+                <a class="post-title-link" href="/2019/10/09/脏页/" itemprop="url">
+                  分布式服务
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2019-10-09T15:31:22+08:00" content="2019-10-09">
+              2019-10-09
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/10/09/脏页/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/09/脏页/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="脏页"><a href="#脏页" class="headerlink" title="脏页"></a>脏页</h2><p>当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”</p>
+<h3 id="刷脏页的时间"><a href="#刷脏页的时间" class="headerlink" title="刷脏页的时间"></a>刷脏页的时间</h3><p><strong>第一种</strong>是“redo log写满了，要flush脏页” 整个系统就不能再接受更新了，所有的更新都必须堵住。如果你从监控上看，这时候更新数会跌为0</p>
+<p><strong>第二种</strong>是“内存不够用了，要先将脏页写到磁盘” 这种情况是常态 </p>
+<p>InnoDB用缓冲池（buffer pool）管理内存，缓冲池中的内存页有三种状态：</p>
+<ol>
+<li>还没有使用的；</li>
+<li>使用了并且是干净页；</li>
+<li>使用了并且是脏页。</li>
+</ol>
+<p>InnoDB的策略是尽量使用内存，因此对于一个长时间运行的库来说，未被使用的页面很少。</p>
+<p><strong>当要读入的数据页没有在内存的时候，就必须到缓冲池中申请一个数据页</strong>。这时候只能把最久不使用的数据页从内存中淘汰掉：如果要淘汰的是一个干净页，就直接释放出来复用；但如果是脏页呢，就必须将脏页先刷到磁盘，变成干净页后才能复用</p>
+<p>一个查询要淘汰的脏页个数太多，会导致查询的响应时间明显变长；</p>
+<p><strong>第三种</strong>是MySQL空闲时</p>
+<p><strong>第四种</strong>是MySQL正常关闭</p>
+<h3 id="刷脏页的控制策略"><a href="#刷脏页的控制策略" class="headerlink" title="刷脏页的控制策略"></a>刷脏页的控制策略</h3><p><code>innodb_io_capacity</code> 它会告诉InnoDB你的磁盘能力 设置成磁盘的IOPS</p>
+<p><code>innodb_max_dirty_pages_pct</code>脏页比例上限，默认值是75% 通过<code>Innodb_buffer_pool_pages_dirty</code>/<code>Innodb_buffer_pool_pages_total</code>得到的</p>
+<p>InnoDB的刷盘速度就是要参考这两个因素：一个是脏页比例，一个是redo log写盘速度</p>
+<h4 id="刷脏页的连坐”机制"><a href="#刷脏页的连坐”机制" class="headerlink" title="刷脏页的连坐”机制"></a>刷脏页的连坐”机制</h4><p>一旦一个查询请求需要在执行过程中先flush掉一个脏页时，这个查询就可能要比平时慢了。而MySQL中的一个机制，可能让你的查询会更慢：在准备刷一个脏页的时候，如果这个数据页旁边的数据页刚好是脏页，就会把这个“邻居”也带着一起刷掉；而且这个把“邻居”拖下水的逻辑还可以继续蔓延，也就是对于每个邻居数据页，如果跟它相邻的数据页也还是脏页的话，也会被放到一起刷</p>
+<p><code>innodb_flush_neighbors</code> 值为1的时候会有上述的“连坐”机制，值为0时表示不找邻居，自己刷自己的</p>
+<p>找“邻居”这个优化在机械硬盘时代是很有意义的，可以减少很多随机IO。机械硬盘的随机IOPS一般只有几百，相同的逻辑操作减少随机IO就意味着系统性能的大幅度提升</p>
+<p>使用的是SSD这类IOPS比较高的设备的话，建议把innodb_flush_neighbors的值设置成0</p>
+<p>在MySQL 8.0中，innodb_flush_neighbors参数的默认值已经是0了</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2019/04/01/ons 阿里云 rocketMQ/" itemprop="url">
                   ons 阿里云 rocketMQ
                 </a>
@@ -1309,112 +1433,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/31/nodejs-web应用-三/" itemprop="url">
-                  nodejs web应用 三
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-08-31T17:32:44+08:00" content="2016-08-31">
-              2016-08-31
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/31/nodejs-web应用-三/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/31/nodejs-web应用-三/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h3><ul>
-<li>封装底层细节，为上层提供更方便的服务</li>
-</ul>
-<p>node的http模块提供了应用层协议网络的封装，需要中间件来处理http请求的细节。因为node异步，所以需要在当前中间件处理完后通知下一中间件执行，例如Connect的尾触发next()</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1461,7 +1479,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">56</span>
+              <span class="site-state-item-count">57</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
