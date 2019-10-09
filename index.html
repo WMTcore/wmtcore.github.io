@@ -225,6 +225,15 @@
 
     
     
+      
+      
+        
+        
+        
+      
+
+      
+    
 
     
       
@@ -308,7 +317,7 @@
         
           <span itemprop="articleBody">
             
-              <h2 id="脏页"><a href="#脏页" class="headerlink" title="脏页"></a>脏页</h2><p>当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”</p>
+              <p>当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”</p>
 <h3 id="刷脏页的时间"><a href="#刷脏页的时间" class="headerlink" title="刷脏页的时间"></a>刷脏页的时间</h3><p><strong>第一种</strong>是“redo log写满了，要flush脏页” 整个系统就不能再接受更新了，所有的更新都必须堵住。如果你从监控上看，这时候更新数会跌为0</p>
 <p><strong>第二种</strong>是“内存不够用了，要先将脏页写到磁盘” 这种情况是常态 </p>
 <p>InnoDB用缓冲池（buffer pool）管理内存，缓冲池中的内存页有三种状态：</p>
@@ -1486,14 +1495,14 @@
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-count">23</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
