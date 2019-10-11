@@ -225,15 +225,127 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/10/10/事务/" itemprop="url">
+                  事务
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2019-10-10T17:11:12+08:00" content="2019-10-10">
+              2019-10-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/10/10/事务/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/10/事务/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+              <p>事务就是要保证一组数据库操作，要么全部成功，要么全部失败。在MySQL中，事务支持是在引擎层实现的</p>
+<p>ACID（Atomicity、Consistency、Isolation、Durability，即原子性、一致性、隔离性、持久性）</p>
+<p>InnoDB里面每个事务有一个唯一的事务ID，叫作transaction id。它是在事务开始的时候向InnoDB的事务系统申请的，是按申请顺序严格递增的</p>
+<h3 id="隔离性与隔离级别"><a href="#隔离性与隔离级别" class="headerlink" title="隔离性与隔离级别"></a>隔离性与隔离级别</h3><p>读未提交（read uncommitted） 一个事务还没提交时，它做的变更就能被别的事务看到</p>
+<p>读提交（read committed）一个事务提交之后，它做的变更才会被其他事务看到,查询只承认在语句启动前就已经提交完成的数据</p>
+<p>可重复读（repeatable read） 一个事务执行过程中看到的数据，总是跟这个事务在启动时看到的数据是一致的，未提交变更对其他事务也是不可见的,查询只承认在事务启动前就已经提交完成的数据</p>
+<p>串行化（serializable ）同一行记录，“写”会加“写锁”，“读”会加“读锁”。当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，才能继续执行</p>
+<h4 id="长事务和回滚日志"><a href="#长事务和回滚日志" class="headerlink" title="长事务和回滚日志"></a>长事务和回滚日志</h4><p>回滚日志: 在MySQL中，每条记录在更新的时候都会同时记录一条回滚操作。记录上的最新值，通过回滚操作，都可以得到前一个状态的值</p>
+<p>在查询这条记录的时候，不同时刻启动的事务会有不同的read-view,要获取旧的视图，必须将当前值依次执行回滚操作得到</p>
+<p>当没有事务再需要用到这些回滚日志时，就是当系统里没有比这个回滚日志更早的read-view的时候，回滚日志会被删除</p>
+<p><strong>长事务的影响</strong>系统里面会存在很老的事务视图，在这个事务提交之前数据库里面它可能用到的回滚记录都必须保留，这就会导致大量占用存储空间</p>
+<p><strong>set autocommit=0</strong> 这个命令会将这个线程的自动提交关掉，只执行一个select语句，这个事务就启动了，而且并不会自动提交。持续存在直到你主动执行commit 或 rollback 语句，或者断开连接</p>
+<p><strong>commit work and chain</strong> 提交事务并自动启动下一个事务，省去了再次执行begin语句的开销</p>
+<p>查找持续时间超过60s的事务<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> information_schema.innodb_trx <span class="keyword">where</span> TIME_TO_SEC(<span class="keyword">timediff</span>(<span class="keyword">now</span>(),trx_started))&gt;<span class="number">60</span></div></pre></td></tr></table></figure></p>
+<h3 id="可重复读和MVCC"><a href="#可重复读和MVCC" class="headerlink" title="可重复读和MVCC"></a>可重复读和MVCC</h3><p><strong>MVCC</strong> 数据表中的一行记录，其实可能有多个版本(row)，每个版本有自己的row trx_id,旧版本需要根据当前版本和undo log计算出来</p>
+<p>begin/start transaction 命令并不是一个事务的起点，在执行到它们之后的第一个操作InnoDB表的语句（第一个快照读语句），事务才真正启动。如果想要马上启动一个事务，可以使用<code>start transaction with consistent snapshot1</code></p>
+<p>InnoDB为每个事务构造了一个数组，用来保存这个事务启动瞬间，当前正在“活跃”的所有事务ID。“活跃”指的就是，启动了但还没提交,数组里面事务ID的最小值记为低水位，当前系统里面已经创建过的事务ID的最大值加1记为高水位。</p>
+<p>这个视图数组和高水位，就组成了当前事务的一致性视图（read-view），<strong>只有版本已提交，而且是在视图创建前提交的才可见</strong></p>
+<p><strong>更新数据都是先读后写的，而这个读，只能读当前的值，称为“当前读”（current read）</strong> set k=k+1会拿最新的值做更新，更新后的trx_id是自己的更新，可以直接使用，如果当前的记录的行锁被其他事务占用的话，就需要进入锁等待</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -336,7 +448,7 @@
 <p>引擎将新数据更新到内存中，同时将更新操作记录到redo log里面，此时redo log处于prepare状态。然后告知执行器执行完成了，随时可以提交事务</p>
 <p>执行器生成操作的binlog，并把binlog写入磁盘</p>
 <p>行器调用引擎的提交事务接口，引擎把刚刚写入的redo log改成提交（commit）状态，更新完成</p>
-
+<h3 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h3>
             
           </span>
         
@@ -620,6 +732,121 @@
             
               
                 
+                <a class="post-title-link" href="/2018/05/10/ELK_Mapping_conflict/" itemprop="url">
+                  ELK Mapping conflict
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2018-05-10T14:32:22+08:00" content="2018-05-10">
+              2018-05-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/05/10/ELK_Mapping_conflict/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/10/ELK_Mapping_conflict/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>由filebeat导入的default template导致</p>
+<h3 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h3><p>先创建个新的索引：</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">PUT</span> /my_index</div></pre></td></tr></table></figure>
+<p>然后查下是否有default mapping</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">GET /my_index</div><div class="line"></div><div class="line">//像这样</div><div class="line">&#123;</div><div class="line">    <span class="string">"mappings"</span>: &#123;</div><div class="line">        <span class="string">"_default_"</span>: &#123;&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>比较下和之前数据的mapping有没有冲突</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>首先查看es中存在的模板 /_template, 是否存在名为filebeat，存在就执行</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DELETE</span> <span class="regexp">/_template/</span>filebeat</div></pre></td></tr></table></figure>
+<p>在日志系统中通常直接由es按天生成索引，这样就简单了，直接把使用错误索引的数据删掉重新导入就好了。</p>
+<p>但在使用自己的索引时，就需要做重索引，可以尝试通过<strong>索引别名</strong>的方式切换</p>
+<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>在尝试新的日志格式时，启动了其他版本的filebeat并让它直接output到es,忘记设置 template.enabled: false 导致它导入default模板</p>
+<p>在第二天生成新索引时发现kibana报warning shards failed,才发现mapping conflict</p>
+<p>填完一坑，继续logstash挖坑</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/05/10/分布式服务/" itemprop="url">
                   分布式服务
                 </a>
@@ -717,121 +944,6 @@
 <li>将一致性协议划分为领导者选举，Log复制和安全性</li>
 <li>将paxos的p2p模式改成Master-slave模式</li>
 </ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/05/10/ELK_Mapping_conflict/" itemprop="url">
-                  ELK Mapping conflict
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2018-05-10T14:32:22+08:00" content="2018-05-10">
-              2018-05-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/运维/" itemprop="url" rel="index">
-                    <span itemprop="name">运维</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2018/05/10/ELK_Mapping_conflict/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/10/ELK_Mapping_conflict/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>由filebeat导入的default template导致</p>
-<h3 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h3><p>先创建个新的索引：</p>
-<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">PUT</span> /my_index</div></pre></td></tr></table></figure>
-<p>然后查下是否有default mapping</p>
-<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">GET /my_index</div><div class="line"></div><div class="line">//像这样</div><div class="line">&#123;</div><div class="line">    <span class="string">"mappings"</span>: &#123;</div><div class="line">        <span class="string">"_default_"</span>: &#123;&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>比较下和之前数据的mapping有没有冲突</p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>首先查看es中存在的模板 /_template, 是否存在名为filebeat，存在就执行</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DELETE</span> <span class="regexp">/_template/</span>filebeat</div></pre></td></tr></table></figure>
-<p>在日志系统中通常直接由es按天生成索引，这样就简单了，直接把使用错误索引的数据删掉重新导入就好了。</p>
-<p>但在使用自己的索引时，就需要做重索引，可以尝试通过<strong>索引别名</strong>的方式切换</p>
-<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>在尝试新的日志格式时，启动了其他版本的filebeat并让它直接output到es,忘记设置 template.enabled: false 导致它导入default模板</p>
-<p>在第二天生成新索引时发现kibana报warning shards failed,才发现mapping conflict</p>
-<p>填完一坑，继续logstash挖坑</p>
 
             
           </span>
@@ -1293,166 +1405,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/26/mongo-查询/" itemprop="url">
-                  mongo 查询
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-09-26T13:54:52+08:00" content="2016-09-26">
-              2016-09-26
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/26/mongo-查询/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/26/mongo-查询/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">db</span><span class="selector-class">.c</span><span class="selector-class">.find</span>() 匹配集合所有文档</div><div class="line"></div><div class="line"><span class="selector-tag">db</span><span class="selector-class">.users</span><span class="selector-class">.find</span>(&#123;<span class="attribute">age</span>:<span class="number">27</span>&#125;) 查找特定键值的文档</div><div class="line"></div><div class="line"><span class="selector-tag">db</span><span class="selector-class">.user</span><span class="selector-class">.find</span>(&#123;&#125;,&#123;<span class="attribute">username</span>:<span class="number">1</span>,email:<span class="number">1</span>&#125;) 返回指定的键 默认有_<span class="selector-tag">id</span>，加_<span class="selector-tag">id</span><span class="selector-pseudo">:0</span>剔除</div></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>操作符</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$lt</td>
-<td>&lt;</td>
-</tr>
-<tr>
-<td>$lte</td>
-<td>&lt;=</td>
-</tr>
-<tr>
-<td>$gt</td>
-<td>&gt;</td>
-</tr>
-<tr>
-<td>$gte</td>
-<td>&gt;=</td>
-</tr>
-<tr>
-<td>$OR</td>
-<td></td>
-</tr>
-<tr>
-<td>$in</td>
-<td></td>
-</tr>
-<tr>
-<td>$not</td>
-<td>元条件句，用在其他条件之上</td>
-</tr>
-<tr>
-<td>$inc</td>
-<td>自增 {$inc:{age:1}} 自增一</td>
-</tr>
-<tr>
-<td>$all</td>
-<td>使用多个元素匹配数组</td>
-</tr>
-<tr>
-<td>$slice</td>
-<td>返回指定位置的数据 {$slice:”10”}</td>
-</tr>
-</tbody>
-</table>
-<h3 id="查询内嵌文档"><a href="#查询内嵌文档" class="headerlink" title="查询内嵌文档"></a>查询内嵌文档</h3><p><code>精确匹配</code> 查询条件与子文档完全匹配</p>
-<p><code>点表示法</code> 进入内嵌文档内部查询 db.people.find({name.first:’joe’,name.last:something})</p>
-<p><code>模糊查找</code> $elemMatch 对内嵌文档使用操作符查找 db.blog.find({comments:{$elemMatch:{author:joe,score:{$gte:5}}}}) </p>
-<h3 id="skip"><a href="#skip" class="headerlink" title="skip"></a>skip</h3><ul>
-<li>当数据量大时，使用skip会很慢，mongo还不支持在索引中保存太多的元数据</li>
-</ul>
-<p><code>利用上次结果来计算下次的查询条件</code></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1499,7 +1451,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">58</span>
+              <span class="site-state-item-count">59</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

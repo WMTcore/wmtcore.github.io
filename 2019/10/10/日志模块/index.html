@@ -65,7 +65,7 @@ WAL技术，WAL的全称是Write-Ahead Logging，它的关键点就是先写日�
 在MySQL里也有这个问题，如果每一次的更新操作都需要写进磁盘，然后磁盘也要找到对应的那条记录，然后再更新，整个过程IO成本、查找成本都很高
 WAL技术，WAL的全称是Write-Ahead Logging，它的关键点就是先写日志，再写磁盘 顺序i/o
 当有一条记录需要更新的时候，InnoDB引擎就会先把记录写到redo log里面，并更新内存，这个时候更新就">
-<meta property="og:updated_time" content="2019-10-09T11:39:32.494Z">
+<meta property="og:updated_time" content="2019-10-10T10:44:32.461Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="日志模块">
 <meta name="twitter:description" content="redo logInnoDB引擎实现
@@ -323,7 +323,7 @@ WAL技术，WAL的全称是Write-Ahead Logging，它的关键点就是先写日�
 <p>引擎将新数据更新到内存中，同时将更新操作记录到redo log里面，此时redo log处于prepare状态。然后告知执行器执行完成了，随时可以提交事务</p>
 <p>执行器生成操作的binlog，并把binlog写入磁盘</p>
 <p>行器调用引擎的提交事务接口，引擎把刚刚写入的redo log改成提交（commit）状态，更新完成</p>
-</span>
+<h3 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h3></span>
       
     </div>
 
@@ -347,6 +347,10 @@ WAL技术，WAL的全称是Write-Ahead Logging，它的关键点就是先写日�
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/10/事务/" rel="prev" title="事务">
+                事务 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -418,7 +422,7 @@ WAL技术，WAL的全称是Write-Ahead Logging，它的关键点就是先写日�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">58</span>
+              <span class="site-state-item-count">59</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -474,7 +478,7 @@ WAL技术，WAL的全称是Write-Ahead Logging，它的关键点就是先写日�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log"><span class="nav-number">1.</span> <span class="nav-text">redo log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bin-log"><span class="nav-number">2.</span> <span class="nav-text">bin log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两阶段提交"><span class="nav-number">3.</span> <span class="nav-text">两阶段提交</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log"><span class="nav-number">1.</span> <span class="nav-text">redo log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bin-log"><span class="nav-number">2.</span> <span class="nav-text">bin log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两阶段提交"><span class="nav-number">3.</span> <span class="nav-text">两阶段提交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undo-log"><span class="nav-number">4.</span> <span class="nav-text">undo log</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
