@@ -225,6 +225,15 @@
 
     
     
+      
+      
+        
+        
+        
+      
+
+      
+    
 
     
       
@@ -328,127 +337,6 @@
 <p>这个视图数组和高水位，就组成了当前事务的一致性视图（read-view），<strong>只有版本已提交，而且是在视图创建前提交的才可见</strong></p>
 <p><strong>更新数据都是先读后写的，而这个读，只能读当前的值，称为“当前读”（current read）</strong> set k=k+1会拿最新的值做更新，更新后的trx_id是自己的更新，可以直接使用，如果当前的记录的行锁被其他事务占用的话，就需要进入锁等待</p>
 
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/10/10/日志模块/" itemprop="url">
-                  日志模块
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2019-10-10T11:31:22+08:00" content="2019-10-10">
-              2019-10-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2019/10/10/日志模块/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/10/日志模块/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h3><p>InnoDB引擎实现</p>
-<p>在MySQL里也有这个问题，如果每一次的更新操作都需要写进磁盘，然后磁盘也要找到对应的那条记录，然后再更新，整个过程IO成本、查找成本都很高</p>
-<p><strong>WAL</strong>技术，WAL的全称是Write-Ahead Logging，它的关键点就是先写日志，再写磁盘 顺序i/o</p>
-<p>当有一条记录需要更新的时候，InnoDB引擎就会先把记录写到redo log里面，并更新内存，这个时候更新就算完成了。同时，InnoDB引擎会在适当的时候，将这个操作记录更新到磁盘里面</p>
-<p>redo log是物理日志，记录的是“在某个数据页上做了什么修改”</p>
-<p>InnoDB的redo log是固定大小的，比如可以配置为一组4个文件，每个文件的大小是1GB，总共就可以记录4GB的操作。从头开始写，写到末尾就又回到开头循环写。write pos是当前记录的位置，checkpoint是当前要擦除的位置也是往后推移并且循环的，擦除记录前要把记录更新到数据文件</p>
-<p>有了redo log，InnoDB就可以保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为<strong>crash-safe</strong></p>
-<h3 id="bin-log"><a href="#bin-log" class="headerlink" title="bin log"></a>bin log</h3><p>Server层日志</p>
-<p>binlog存在的原因 redolog只有InnoDB有，别的引擎没有，edolog是循环写的，不持久保存，binlog的“归档”这个功能，redolog是不具备的。</p>
-<p>binlog是逻辑日志，记录的是这个语句的原始逻辑，比如“给ID=2这一行的c字段加1 ”，binlog文件写到一定大小后会切换到下一个，并不会覆盖以前的日志</p>
-<ul>
-<li>statement：基于SQL语句的模式，某些语句中含有一些函数，例如 UUID NOW 等在复制过程可能导致数据不一致甚至出错。</li>
-<li>row：基于行的模式，记录的是行的变化，很安全。但是 binlog 的磁盘占用会比其他两种模式大很多，在一些大表中清除大量数据时在 binlog 中会生成很多条语句，可能导致从库延迟变大。</li>
-<li>mixed：混合模式，根据语句来选用是 statement 还是 row 模式。</li>
-</ul>
-<h3 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h3><p>由于redo log和binlog是两个独立的逻辑，如果不用两阶段提交，数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。</p>
-<p>引擎将新数据更新到内存中，同时将更新操作记录到redo log里面，此时redo log处于prepare状态。然后告知执行器执行完成了，随时可以提交事务</p>
-<p>执行器生成操作的binlog，并把binlog写入磁盘</p>
-<p>行器调用引擎的提交事务接口，引擎把刚刚写入的redo log改成提交（commit）状态，更新完成</p>
-<h3 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h3>
             
           </span>
         
