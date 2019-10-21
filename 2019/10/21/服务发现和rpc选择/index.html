@@ -37,7 +37,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="jwt," />
+  <meta name="keywords" content="rpc," />
 
 
 
@@ -53,22 +53,30 @@
 
 
 
-<meta name="description" content="由来
-Cookie+Session的方式,在用户登录通过验证后，服务端将 数据加密后 通过在响应头（Header）保存到客户端浏览器的Cookie(包含sid或token)中，同时服务器保留相对应的Session（文件或DB）。用户之后发起的请求（Request）都会携带Cookie信息，服 务端需要根据Cookie寻回对应的Session，从而完成验证，确认这是之前登陆过的用户。
-API应该被设">
+<meta name="description" content="rpc使用rpc的目的： 让远程调用服务就像调本地服务一样简单
+比http的优势：协议传输效率较低
+sofarpc与grpc性能: sofarpc好，grpc性能一般(单线程 30kqps,小于8k包时)易用性: Http2出现较晚，迁移转换成本高，sofarpc支持的协议多可行性: sofarpc的注册中心目前还没有正式支持SOFAMesh
+服务发现zookeeper
+健康检查依赖TCP长链接活">
 <meta property="og:type" content="article">
-<meta property="og:title" content="json web token">
-<meta property="og:url" content="https://www.wmtcore.com/2015/12/24/json-web-token/index.html">
+<meta property="og:title" content="服务发现和rpc选择">
+<meta property="og:url" content="https://www.wmtcore.com/2019/10/21/服务发现和rpc选择/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="由来
-Cookie+Session的方式,在用户登录通过验证后，服务端将 数据加密后 通过在响应头（Header）保存到客户端浏览器的Cookie(包含sid或token)中，同时服务器保留相对应的Session（文件或DB）。用户之后发起的请求（Request）都会携带Cookie信息，服 务端需要根据Cookie寻回对应的Session，从而完成验证，确认这是之前登陆过的用户。
-API应该被设">
-<meta property="og:updated_time" content="2015-12-25T06:07:42.000Z">
+<meta property="og:description" content="rpc使用rpc的目的： 让远程调用服务就像调本地服务一样简单
+比http的优势：协议传输效率较低
+sofarpc与grpc性能: sofarpc好，grpc性能一般(单线程 30kqps,小于8k包时)易用性: Http2出现较晚，迁移转换成本高，sofarpc支持的协议多可行性: sofarpc的注册中心目前还没有正式支持SOFAMesh
+服务发现zookeeper
+健康检查依赖TCP长链接活">
+<meta property="og:image" content="https://www.wmtcore.com/picture/sofa-sidecar.png">
+<meta property="og:updated_time" content="2019-10-21T09:47:12.398Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="json web token">
-<meta name="twitter:description" content="由来
-Cookie+Session的方式,在用户登录通过验证后，服务端将 数据加密后 通过在响应头（Header）保存到客户端浏览器的Cookie(包含sid或token)中，同时服务器保留相对应的Session（文件或DB）。用户之后发起的请求（Request）都会携带Cookie信息，服 务端需要根据Cookie寻回对应的Session，从而完成验证，确认这是之前登陆过的用户。
-API应该被设">
+<meta name="twitter:title" content="服务发现和rpc选择">
+<meta name="twitter:description" content="rpc使用rpc的目的： 让远程调用服务就像调本地服务一样简单
+比http的优势：协议传输效率较低
+sofarpc与grpc性能: sofarpc好，grpc性能一般(单线程 30kqps,小于8k包时)易用性: Http2出现较晚，迁移转换成本高，sofarpc支持的协议多可行性: sofarpc的注册中心目前还没有正式支持SOFAMesh
+服务发现zookeeper
+健康检查依赖TCP长链接活">
+<meta name="twitter:image" content="https://www.wmtcore.com/picture/sofa-sidecar.png">
 
 
 
@@ -80,7 +88,7 @@ API应该被设">
   };
 </script>
 
-  <title> json web token | 大碗拉面 </title>
+  <title> 服务发现和rpc选择 | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
@@ -246,7 +254,7 @@ API应该被设">
             
             
               
-                json web token
+                服务发现和rpc选择
               
             
           </h1>
@@ -255,8 +263,8 @@ API应该被设">
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2015-12-24T16:16:50+08:00" content="2015-12-24">
-              2015-12-24
+            <time itemprop="dateCreated" datetime="2019-10-21T17:31:12+08:00" content="2019-10-21">
+              2019-10-21
             </time>
           </span>
 
@@ -265,8 +273,8 @@ API应该被设">
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
                   </a>
                 </span>
 
@@ -281,8 +289,8 @@ API应该被设">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/12/24/json-web-token/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/24/json-web-token/" itemprop="commentsCount"></span>
+                <a href="/2019/10/21/服务发现和rpc选择/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/21/服务发现和rpc选择/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -301,54 +309,25 @@ API应该被设">
       
 
       
-        <span itemprop="articleBody"><h3 id="由来"><a href="#由来" class="headerlink" title="由来"></a>由来</h3><ul>
-<li>Cookie+Session的方式,在用户登录通过验证后，服务端将 数据加密后 通过在响应头（Header）保存到客户端浏览器的Cookie(包含sid或token)中，同时服务器保留相对应的Session（文件或DB）。用户之后发起的请求（Request）都会携带Cookie信息，服 务端需要根据Cookie寻回对应的Session，从而完成验证，确认这是之前登陆过的用户。</li>
-<li>API应该被设计成<strong>无状态</strong>的（Stateless）。这意味着没有登陆，注销的方法，也没有sessions，API的设计者同样也不能依赖Cookie，因为不能保证这些request是由浏览器所发出的</li>
-</ul>
-<h3 id="JWT介绍"><a href="#JWT介绍" class="headerlink" title="JWT介绍"></a>JWT介绍</h3><ul>
-<li>分为三段，通过解码可以得到：</li>
-</ul>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 1. Headers</span></div><div class="line"><span class="comment">// 包括类别（typ）、加密算法（alg）；</span></div><div class="line">&#123;</div><div class="line">  <span class="string">"alg"</span>: <span class="string">"HS256"</span>,</div><div class="line">  <span class="string">"typ"</span>: <span class="string">"JWT"</span></div><div class="line">&#125;</div><div class="line"><span class="comment">// 2. Claims</span></div><div class="line"><span class="comment">// 包括需要传递的用户信息；</span></div><div class="line">&#123;</div><div class="line">  <span class="string">"sub"</span>: <span class="string">"1234567890"</span>,</div><div class="line">  <span class="string">"name"</span>: <span class="string">"John Doe"</span>,</div><div class="line">  <span class="string">"admin"</span>: <span class="literal">true</span></div><div class="line">&#125;</div><div class="line"><span class="comment">// 3. Signature</span></div><div class="line"><span class="comment">// 根据alg算法与私有秘钥进行加密得到的签名字串；</span></div><div class="line"><span class="comment">// 这一段是最重要的敏感信息，只能在服务端解密；</span></div><div class="line">HMACSHA256(  </div><div class="line">    base64UrlEncode(<span class="keyword">header</span>) + <span class="string">"."</span> +</div><div class="line">    base64UrlEncode(payload),</div><div class="line">    SECREATE_KEY</div><div class="line">)</div></pre></td></tr></table></figure>
-<p>在使用过程中，服务端通过用户登录验证之后，将Header+Claim信息加密后得到第三段签名，然后将三段签名合并后返回给客户端。客户端获取到token后，应该在每次向服务器请求数据时附带这个token，然后服务端验证token。</p>
+        <span itemprop="articleBody"><h3 id="rpc"><a href="#rpc" class="headerlink" title="rpc"></a>rpc</h3><p>使用rpc的目的： 让远程调用服务就像调本地服务一样简单</p>
+<p>比http的优势：协议传输效率较低</p>
+<h4 id="sofarpc与grpc"><a href="#sofarpc与grpc" class="headerlink" title="sofarpc与grpc"></a>sofarpc与grpc</h4><p>性能: <a href="https://www.sofastack.tech/projects/sofa-rpc/overview" target="_blank" rel="external">sofarpc</a>好，grpc性能一般(单线程 30kqps,小于8k包时)<br>易用性: Http2出现较晚，迁移转换成本高，sofarpc支持的协议多<br>可行性: sofarpc的注册中心目前还没有正式支持SOFAMesh</p>
+<h3 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h3><h4 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h4><ol>
+<li>健康检查依赖TCP长链接活性探测不准确</li>
+<li>需要在服务中集成sdk</li>
+<li>更复杂的服务治理</li>
+</ol>
+<p><a href="https://yq.aliyun.com/articles/599997" target="_blank" rel="external"> 参考 </a></p>
+<p><strong>sofa-rpc-node</strong>: 目前只支持zk</p>
+<h4 id="k8s-service"><a href="#k8s-service" class="headerlink" title="k8s service"></a>k8s service</h4><p>服务注册和发现，转发，负载均衡能力</p>
+<p>缺点: 同一个应用的不同的实例提供了不同的服务会出错</p>
+<h4 id="istio"><a href="#istio" class="headerlink" title="istio"></a>istio</h4><p>弥补k8s service的不足<br>可配置的服务发现(从k8s获取服务注册表)，由Sidecar保持长连接，转发，负载并提供熔断、限流降级、调用链治理等能力</p>
+<h4 id="SOFAMesh"><a href="#SOFAMesh" class="headerlink" title="SOFAMesh"></a>SOFAMesh</h4><p><a href="https://www.sofastack.tech/projects/sofa-mesh/overview" target="_blank" rel="external"> 基于istio,还在测试中</a></p>
+<p><img src="/picture/sofa-sidecar.png" alt="Resize icon"></p>
 <ul>
-<li><p>因此JWT是用来取代服务端的Session而非客户端Cookie的方案.对于客户端本地存储,不同的选择更多是出于安全性的考虑</p>
-</li>
-<li><p>客户端在与服务器第一次通信时，通过一些可靠信息（用户名、密码）和服务器交换取token，这个token作为客服端再次请求的权限钥匙。Token通常比密码更加长而且复杂。JWTs通常会长达150个字符。一旦获得了token，在每次调用API的时候都要附加上它。把token想象成一个安全的护照。你在一个安全的前台验证你的身份（通过你的用户名和密码），如果你成功验证了自己，你就可以取得这个。当你走进大楼的时候（试图从调用API获取资源），你会被要求验证你的护照，而不是在前台重新验证。</p>
-</li>
-</ul>
-<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><ul>
-<li>client 头部值部分使用Bearer<token> Authorization: Bearer <token></token></token></li>
-<li>.set(‘Authorization’, ‘Bearer ‘ + token)</li>
-</ul>
-<h3 id="encoded"><a href="#encoded" class="headerlink" title="encoded"></a>encoded</h3><ul>
-<li><a href="https://github.com/auth0/node-jsonwebtoken" target="_blank" rel="external">https://github.com/auth0/node-jsonwebtoken</a></li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">jwt</span><span class="selector-class">.sign</span>(<span class="selector-tag">payload</span>, <span class="selector-tag">secretOrPrivateKey</span>, <span class="selector-tag">options</span>, <span class="selector-attr">[callback]</span>);</div></pre></td></tr></table></figure>
-<p><code>payload</code> Claims,即传递的用户信息，could be an object literal, buffer or string.if not,it will be coerced into a string using <code>JSON.stringify</code>.</p>
-<p><code>secretOrPrivateKey</code> is a string or buffer containing either the secret for HMAC algorithms, or the PEM encoded private key for RSA and ECDSA.字符串，或着fs.readFileSync读取的证书</p>
-<p><code>options</code>:</p>
-<ul>
-<li><code>algorithm</code> (default: <code>HS256</code>) 加密算法</li>
-<li><code>expiresIn</code>: expressed in seconds or an string describing a time span <a href="https://github.com/rauchg/ms.js" target="_blank" rel="external">rauchg/ms</a>. Eg: <code>60</code>, <code>&quot;2 days&quot;</code>, <code>&quot;10h&quot;</code>, <code>&quot;7d&quot;</code> 有效期/分钟</li>
-<li><code>audience</code></li>
-<li><code>subject</code></li>
-<li><code>issuer</code></li>
-<li><code>noTimestamp</code></li>
-<li><code>headers</code></li>
-</ul>
-<p>Example</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// sign with default (HMAC SHA256)</span></div><div class="line"><span class="keyword">var</span> jwt = <span class="built_in">require</span>(<span class="string">'jsonwebtoken'</span>);</div><div class="line"><span class="keyword">var</span> token = jwt.sign(&#123; <span class="attr">foo</span>: <span class="string">'bar'</span> &#125;, <span class="string">'shhhhh'</span>);</div><div class="line"></div><div class="line"><span class="comment">// sign with RSA SHA256</span></div><div class="line"><span class="keyword">var</span> cert = fs.readFileSync(<span class="string">'private.key'</span>);  <span class="comment">// get private key</span></div><div class="line"><span class="keyword">var</span> token = jwt.sign(&#123; <span class="attr">foo</span>: <span class="string">'bar'</span> &#125;, cert, &#123; <span class="attr">algorithm</span>: <span class="string">'RS256'</span>&#125;);</div></pre></td></tr></table></figure>
-<h3 id="decoded"><a href="#decoded" class="headerlink" title="decoded"></a>decoded</h3><ul>
-<li><a href="https://github.com/auth0/express-jwt" target="_blank" rel="external">https://github.com/auth0/express-jwt</a></li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> jwt = <span class="built_in">require</span>(<span class="string">'express-jwt'</span>);</div><div class="line"></div><div class="line">app.get(<span class="string">'/protected'</span>,</div><div class="line">  jwt(&#123;<span class="attr">secret</span>: <span class="string">'shhhhhhared-secret'</span>&#125;),</div><div class="line">  <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!req.user.admin) <span class="keyword">return</span> res.sendStatus(<span class="number">401</span>);</div><div class="line">    res.sendStatus(<span class="number">200</span>);            </div><div class="line">  &#125;);</div></pre></td></tr></table></figure>
-<p>you can make some paths unprotected as follows:</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//设置路由/token 不验证</span></div><div class="line"><span class="selector-tag">app</span><span class="selector-class">.use</span>(jwt(&#123; <span class="attribute">secret</span>: <span class="string">'shhhhhhared-secret'</span>&#125;).unless(&#123;<span class="attribute">path</span>: [<span class="string">'/token'</span>]&#125;));</div></pre></td></tr></table></figure>
-<p>By default, the decoded token is attached to req.user but can be configured with the requestProperty option.<br>默认解密后的token Claim内容加到req.user </p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//将解密后的token加到req.auth</span></div><div class="line">jwt(&#123; <span class="string">secret:</span> publicKey, <span class="string">requestProperty:</span> <span class="string">'auth'</span> &#125;);</div></pre></td></tr></table></figure>
-<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><ul>
-<li>XSS 主要原因是对用户输入信息不加过滤，导致用户 （被误导）恶意输入的Js代码在访问该网页时被执行，而Js可以读取当前网站域名下保存的Cookie信息.<code>对用户输入的所有信息进行过滤即可</code>,CDN服务也有可能引入不安全的Js脚本</li>
-<li>CSRF,跨站请求伪造 主要利用Cookie是按照域名存储，同时访问某域名时浏览器会自动携带该域名所保存的Cookie信息这一特征.如果执意要将JWT存储在Cookie中，服务端则需要额外验证请求来源.将JWT保存在localStorage中，即将JWT放入Request Header中的Authorization位。</li>
+<li>采用 Golang 编写的 MOSN 取代 Envoy(sidecar)</li>
+<li>合并 Mixer 到数据平面以解决性能瓶颈</li>
+<li>增强 Pilot 以实现更灵活的服务发现机制（主动告诉对应的 Sidecar，它需要发布哪些服务，主动告诉对应的 Sidecar，它需要订阅哪些服务），增加数据同步模块，以实现多个服务注册中心之间的数据交换</li>
 </ul>
 </span>
       
@@ -358,7 +337,7 @@ API应该被设">
       
         <div class="post-tags">
           
-            <a href="/tags/jwt/" rel="tag">#jwt</a>
+            <a href="/tags/rpc/" rel="tag">#rpc</a>
           
         </div>
       
@@ -367,17 +346,13 @@ API应该被设">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/12/22/Sequelize事务实现/" rel="next" title="Sequelize事务实现">
-                <i class="fa fa-chevron-left"></i> Sequelize事务实现
+              <a href="/2019/10/10/事务/" rel="next" title="事务">
+                <i class="fa fa-chevron-left"></i> 事务
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/12/26/React-组件生命周期/" rel="prev" title="React 组件生命周期">
-                React 组件生命周期 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -404,8 +379,8 @@ API应该被设">
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/12/24/json-web-token/"
-           data-title="json web token" data-url="https://www.wmtcore.com/2015/12/24/json-web-token/">
+      <div class="ds-thread" data-thread-key="2019/10/21/服务发现和rpc选择/"
+           data-title="服务发现和rpc选择" data-url="https://www.wmtcore.com/2019/10/21/服务发现和rpc选择/">
       </div>
     
   </div>
@@ -505,7 +480,7 @@ API应该被设">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#由来"><span class="nav-number">1.</span> <span class="nav-text">由来</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JWT介绍"><span class="nav-number">2.</span> <span class="nav-text">JWT介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#client"><span class="nav-number">3.</span> <span class="nav-text">client</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#encoded"><span class="nav-number">4.</span> <span class="nav-text">encoded</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#decoded"><span class="nav-number">5.</span> <span class="nav-text">decoded</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安全性"><span class="nav-number">6.</span> <span class="nav-text">安全性</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#rpc"><span class="nav-number">1.</span> <span class="nav-text">rpc</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sofarpc与grpc"><span class="nav-number">1.1.</span> <span class="nav-text">sofarpc与grpc</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务发现"><span class="nav-number">2.</span> <span class="nav-text">服务发现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#zookeeper"><span class="nav-number">2.1.</span> <span class="nav-text">zookeeper</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#k8s-service"><span class="nav-number">2.2.</span> <span class="nav-text">k8s service</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#istio"><span class="nav-number">2.3.</span> <span class="nav-text">istio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SOFAMesh"><span class="nav-number">2.4.</span> <span class="nav-text">SOFAMesh</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

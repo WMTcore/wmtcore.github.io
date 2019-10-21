@@ -225,6 +225,122 @@
 
     
     
+      
+      
+
+      
+    
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/04/19/node中一堆凌乱的小知识/" itemprop="url">
+                  node中一堆凌乱的小知识
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-04-19T14:17:56+08:00" content="2016-04-19">
+              2016-04-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/19/node中一堆凌乱的小知识/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/19/node中一堆凌乱的小知识/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h4 id="xml相关"><a href="#xml相关" class="headerlink" title="xml相关"></a>xml相关</h4><p><code>xml转json</code>: npm包 xml2js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//explicitArray:false 返回json的value不为数组，explicitRoot:false，去掉头部</span></div><div class="line"><span class="keyword">var</span> xml=<span class="string">'&lt;xml&gt;&lt;a&gt;1&lt;/a&gt;&lt;b&gt;2&lt;/b&gt;&lt;/xml&gt;'</span>;</div><div class="line">blue.promisify(<span class="keyword">new</span> xml2js.Parser(&#123;<span class="attr">explicitArray</span>:<span class="literal">false</span>,<span class="attr">explicitRoot</span>:<span class="literal">false</span>&#125;).parseString)(xml).then(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.dir(result);</div><div class="line">&#125;,<span class="function"><span class="keyword">function</span>(<span class="params">error</span>)</span>&#123;</div><div class="line"><span class="comment">//&#123; a: '1', b: '2' &#125;</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><code>json转xml</code>:npm包 xmlbuilder</p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="xml">//‘xml’ root名称，headless: true 去掉 xml 头部，pretty: true 格式化</span></div><div class="line">var json = <span class="template-variable">&#123;</span></div><div class="line">	a: 1,</div><div class="line">	b: 2</div><div class="line">&#125;<span class="xml">;</span></div><div class="line">console.error(xmlbuilder.create('xml',<span class="template-variable">&#123;headless: true&#125;</span><span class="xml">).ele(json).end(</span><span class="template-variable">&#123; pretty: true&#125;</span><span class="xml">))</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">xml</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">a</span>&gt;</span>1<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">b</span>&gt;</span>2<span class="tag">&lt;/<span class="name">b</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">xml</span>&gt;</span></div></pre></td></tr></table></figure>
+<h4 id="bluebird"><a href="#bluebird" class="headerlink" title="bluebird"></a>bluebird</h4><p><code>promise.promisify 将api promise 化</code></p>
+<h4 id="prcess"><a href="#prcess" class="headerlink" title="prcess"></a>prcess</h4><p><code>To set an environment variable in Windows</code>:</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SET</span> NODE_ENV=development</div></pre></td></tr></table></figure>
+<p><code>on OS X or Linux</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> NODE_ENV=development</div></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1747,93 +1863,6 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/01/25/js-call和apply/" itemprop="url">
-                  js call和apply
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-01-25T16:06:14+08:00" content="2016-01-25">
-              2016-01-25
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/25/js-call和apply/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/js-call和apply/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1880,7 +1909,7 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">59</span>
+              <span class="site-state-item-count">60</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
