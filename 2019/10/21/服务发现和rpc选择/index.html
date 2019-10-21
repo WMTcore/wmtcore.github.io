@@ -68,7 +68,7 @@ sofarpc与grpc性能: sofarpc好，grpc性能一般(单线程 30kqps,小于8k包
 服务发现zookeeper
 健康检查依赖TCP长链接活">
 <meta property="og:image" content="https://www.wmtcore.com/picture/sofa-sidecar.png">
-<meta property="og:updated_time" content="2019-10-21T09:47:12.398Z">
+<meta property="og:updated_time" content="2019-10-21T10:09:39.820Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="服务发现和rpc选择">
 <meta name="twitter:description" content="rpc使用rpc的目的： 让远程调用服务就像调本地服务一样简单
@@ -320,7 +320,7 @@ sofarpc与grpc性能: sofarpc好，grpc性能一般(单线程 30kqps,小于8k包
 <p><a href="https://yq.aliyun.com/articles/599997" target="_blank" rel="external"> 参考 </a></p>
 <p><strong>sofa-rpc-node</strong>: 目前只支持zk</p>
 <h4 id="k8s-service"><a href="#k8s-service" class="headerlink" title="k8s service"></a>k8s service</h4><p>服务注册和发现，转发，负载均衡能力</p>
-<p>缺点: 同一个应用的不同的实例提供了不同的服务会出错</p>
+<p>缺点: 同一个应用的不同的实例提供了不同的服务会出错,只能在同集群内使用</p>
 <h4 id="istio"><a href="#istio" class="headerlink" title="istio"></a>istio</h4><p>弥补k8s service的不足<br>可配置的服务发现(从k8s获取服务注册表)，由Sidecar保持长连接，转发，负载并提供熔断、限流降级、调用链治理等能力</p>
 <h4 id="SOFAMesh"><a href="#SOFAMesh" class="headerlink" title="SOFAMesh"></a>SOFAMesh</h4><p><a href="https://www.sofastack.tech/projects/sofa-mesh/overview" target="_blank" rel="external"> 基于istio,还在测试中</a></p>
 <p><img src="/picture/sofa-sidecar.png" alt="Resize icon"></p>
