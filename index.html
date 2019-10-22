@@ -225,125 +225,15 @@
 
     
     
+      
+      
+        
+        
+        
+      
 
+      
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/10/22/鲜知后端/" itemprop="url">
-                  鲜知后端
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2019-10-22T15:31:12+08:00" content="2019-10-22">
-              2019-10-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2019/10/22/鲜知后端/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/22/鲜知后端/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><p><img src="/picture/鲜知数据库ER图.png" alt="Resize icon"></p>
-<h3 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h3><h4 id="ccs登录流程"><a href="#ccs登录流程" class="headerlink" title="ccs登录流程"></a>ccs登录流程</h4><p><img src="/picture/ccs登录流程.png" alt="Resize icon"></p>
-<h5 id="plugin-ccsLogin"><a href="#plugin-ccsLogin" class="headerlink" title="plugin/ccsLogin"></a>plugin/ccsLogin</h5><p>对接ccs登录的中间件</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">options, app</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">ccsLogin</span>(<span class="params">ctx, next</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (ctx.session &amp;&amp; ctx.session.user) <span class="keyword">return</span> <span class="keyword">await</span> next();</div><div class="line"></div><div class="line">    <span class="keyword">const</span> css_token = ctx.cookies.get(<span class="string">'ccs-token'</span>, &#123;</div><div class="line">      <span class="attr">signed</span>: <span class="literal">false</span>,</div><div class="line">    &#125;); <span class="comment">// 避免对它做验签导致获取不到 cookie 的值</span></div><div class="line">    <span class="keyword">if</span> (!css_token) <span class="keyword">return</span> <span class="keyword">await</span> next();</div><div class="line"></div><div class="line">    <span class="keyword">const</span> &#123; ccsHost, appId, secret &#125; = app.config.ccsLogin;</div><div class="line">    <span class="keyword">const</span> result = <span class="keyword">await</span> ctx.curl(ccsHost, &#123;</div><div class="line">      <span class="attr">method</span>: <span class="string">'POST'</span>,</div><div class="line">      <span class="attr">headers</span>: &#123;</div><div class="line">        appId,</div><div class="line">        secret,</div><div class="line">        <span class="attr">accessToken</span>: css_token,</div><div class="line">      &#125;,</div><div class="line">      <span class="attr">contentType</span>: <span class="string">'json'</span>,</div><div class="line">      <span class="attr">data</span>: &#123;&#125;,</div><div class="line">      <span class="attr">dataType</span>: <span class="string">'json'</span>,</div><div class="line">    &#125;);</div><div class="line">    ctx.ccsUserInfo = result.data.data;</div><div class="line">    <span class="keyword">await</span> next();</div><div class="line">  &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h5 id="middileware-user-check"><a href="#middileware-user-check" class="headerlink" title="middileware/user_check"></a>middileware/user_check</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">options, app</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">userCheck</span>(<span class="params">ctx, next</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> ((ctx.session &amp;&amp; ctx.session.user) || !ctx.ccsUserInfo) <span class="keyword">return</span> <span class="keyword">await</span> next();</div><div class="line"></div><div class="line">    <span class="keyword">const</span> &#123; name, deptFullname, mobile, userId, email &#125; = ctx.ccsUserInfo;</div><div class="line">    <span class="keyword">let</span> [ user ] = <span class="keyword">await</span> app.knex(<span class="string">'users'</span>).select(<span class="string">'id'</span>).where(<span class="string">'ccs_user_id'</span>, ctx.ccsUserInfo.userId);</div><div class="line">    <span class="keyword">if</span> (!user) &#123;</div><div class="line">      <span class="keyword">const</span> id = <span class="keyword">await</span> ctx.service.users.create(&#123;</div><div class="line">        name,</div><div class="line">        <span class="attr">ccs_user_id</span>: userId,</div><div class="line">        <span class="attr">dept_full_name</span>: deptFullname,</div><div class="line">        mobile,</div><div class="line">        email,</div><div class="line">      &#125;);</div><div class="line">      user = &#123; id &#125;;</div><div class="line">    &#125;</div><div class="line">    ctx.session.user = &#123; <span class="attr">id</span>: user.id, name &#125;;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">await</span> next();</div><div class="line">  &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h4 id="ErrorHandler"><a href="#ErrorHandler" class="headerlink" title="ErrorHandler"></a>ErrorHandler</h4><p>返回标准的错误格式,提供多国语言的支持</p>
-<p>在app/lib/Message.js定义错误</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">NO_PERMISSION_TO_ACCESS_DATA</span>: &#123;</div><div class="line">  <span class="attribute">code</span>: <span class="number">801</span>, // 注意code的区分</div><div class="line">  value: <span class="string">'No Permission To Access Data'</span>,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>并在config/locale/zh-CN.js增加对应的中文翻译(<a href="https://eggjs.org/zh-cn/core/i18n.html" target="_blank" rel="external">参考</a>)</p>
-<p>使用:</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">throw</span> <span class="selector-tag">new</span> <span class="selector-tag">this</span><span class="selector-class">.app</span><span class="selector-class">.Error</span>(<span class="selector-tag">this</span><span class="selector-class">.app</span><span class="selector-class">.Message</span><span class="selector-class">.NO_PERMISSION_TO_ACCESS_DATA</span>);</div></pre></td></tr></table></figure>
-<h4 id="WrapResponseBody"><a href="#WrapResponseBody" class="headerlink" title="WrapResponseBody"></a>WrapResponseBody</h4><p>返回体统一封装</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attribute">code</span>: <span class="number">0</span>,</div><div class="line">  message: <span class="string">'成功'</span>,</div><div class="line">  result: ctx.body || &#123;&#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="热度计算"><a href="#热度计算" class="headerlink" title="热度计算"></a>热度计算</h3><p><code>文章</code>:遍历reads和likes获取每篇文章的点赞数和阅读数来计算热度值，存入post_rank,目前读和赞的热度系数都是1</p>
-<p><code>用户</code>:遍历post_rank获取用户每篇文章的热度值来计算用户rank</p>
-<h4 id="文章热度衰减-TODO"><a href="#文章热度衰减-TODO" class="headerlink" title="文章热度衰减(TODO)"></a>文章热度衰减(TODO)</h4><figure class="highlight excel"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">value</span>=<span class="built_in">value</span>*<span class="number">2</span>^(-⌊<span class="built_in">t</span>/<span class="built_in">t</span>'⌋)</div></pre></td></tr></table></figure>
-<p>t是当前时间减去上次衰减时间，t’是半衰期,注意统一时间单位</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
 
     
       
@@ -978,6 +868,121 @@
             
               
                 
+                <a class="post-title-link" href="/2018/05/10/ELK_Mapping_conflict/" itemprop="url">
+                  ELK Mapping conflict
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2018-05-10T14:32:22+08:00" content="2018-05-10">
+              2018-05-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/05/10/ELK_Mapping_conflict/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/10/ELK_Mapping_conflict/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>由filebeat导入的default template导致</p>
+<h3 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h3><p>先创建个新的索引：</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">PUT</span> /my_index</div></pre></td></tr></table></figure>
+<p>然后查下是否有default mapping</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">GET /my_index</div><div class="line"></div><div class="line">//像这样</div><div class="line">&#123;</div><div class="line">    <span class="string">"mappings"</span>: &#123;</div><div class="line">        <span class="string">"_default_"</span>: &#123;&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>比较下和之前数据的mapping有没有冲突</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>首先查看es中存在的模板 /_template, 是否存在名为filebeat，存在就执行</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DELETE</span> <span class="regexp">/_template/</span>filebeat</div></pre></td></tr></table></figure>
+<p>在日志系统中通常直接由es按天生成索引，这样就简单了，直接把使用错误索引的数据删掉重新导入就好了。</p>
+<p>但在使用自己的索引时，就需要做重索引，可以尝试通过<strong>索引别名</strong>的方式切换</p>
+<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>在尝试新的日志格式时，启动了其他版本的filebeat并让它直接output到es,忘记设置 template.enabled: false 导致它导入default模板</p>
+<p>在第二天生成新索引时发现kibana报warning shards failed,才发现mapping conflict</p>
+<p>填完一坑，继续logstash挖坑</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/05/10/分布式服务/" itemprop="url">
                   分布式服务
                 </a>
@@ -1075,121 +1080,6 @@
 <li>将一致性协议划分为领导者选举，Log复制和安全性</li>
 <li>将paxos的p2p模式改成Master-slave模式</li>
 </ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/05/10/ELK_Mapping_conflict/" itemprop="url">
-                  ELK Mapping conflict
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2018-05-10T14:32:22+08:00" content="2018-05-10">
-              2018-05-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/运维/" itemprop="url" rel="index">
-                    <span itemprop="name">运维</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2018/05/10/ELK_Mapping_conflict/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/10/ELK_Mapping_conflict/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>由filebeat导入的default template导致</p>
-<h3 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h3><p>先创建个新的索引：</p>
-<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">PUT</span> /my_index</div></pre></td></tr></table></figure>
-<p>然后查下是否有default mapping</p>
-<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">GET /my_index</div><div class="line"></div><div class="line">//像这样</div><div class="line">&#123;</div><div class="line">    <span class="string">"mappings"</span>: &#123;</div><div class="line">        <span class="string">"_default_"</span>: &#123;&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>比较下和之前数据的mapping有没有冲突</p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>首先查看es中存在的模板 /_template, 是否存在名为filebeat，存在就执行</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DELETE</span> <span class="regexp">/_template/</span>filebeat</div></pre></td></tr></table></figure>
-<p>在日志系统中通常直接由es按天生成索引，这样就简单了，直接把使用错误索引的数据删掉重新导入就好了。</p>
-<p>但在使用自己的索引时，就需要做重索引，可以尝试通过<strong>索引别名</strong>的方式切换</p>
-<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>在尝试新的日志格式时，启动了其他版本的filebeat并让它直接output到es,忘记设置 template.enabled: false 导致它导入default模板</p>
-<p>在第二天生成新索引时发现kibana报warning shards failed,才发现mapping conflict</p>
-<p>填完一坑，继续logstash挖坑</p>
 
             
           </span>
@@ -1420,12 +1310,126 @@
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/11/25/react获取connect绑定redux后的原始组件/" itemprop="url">
+                  react获取connect绑定redux后的原始组件
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-11-25T17:59:53+08:00" content="2016-11-25">
+              2016-11-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/React/" itemprop="url" rel="index">
+                    <span itemprop="name">React</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/25/react获取connect绑定redux后的原始组件/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/25/react获取connect绑定redux后的原始组件/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>当组件是被connect绑定redux后，可以使用<strong>getWrappedInstance()</strong>获取组件的原型，但需要给connect添加{ withRef: true }选项才能使用</p>
+<ul>
+<li>connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])</li>
+</ul>
+<p>其中mergeProps(stateProps, dispatchProps, ownProps)是用于特定情况下，修改提供给组件的props</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function mergeProps(<span class="keyword">state</span>Props, dispatchProps, ownProps) &#123;</div><div class="line">	//默认情况下返回</div><div class="line">  return Object.assign(&#123;&#125;, ownProps, <span class="keyword">state</span>Props, dispatchProps)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>需要添加的{ withRef: true }选项要放在connect的<strong>第四个参数</strong></p>
+<p>###example</p>
+<p>使用connect绑定redux的后test组件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123;connect&#125; <span class="keyword">from</span> <span class="string">'react-redux'</span></div><div class="line"><span class="keyword">import</span> &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  testFunction =<span class="function">(<span class="params">test=<span class="string">'1'</span></span>)=&gt;</span>&#123;</div><div class="line">      alert(test)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mergeProps</span>(<span class="params">stateProps, dispatchProps, ownProps</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, ownProps, stateProps, dispatchProps)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(&#123;&#125;, &#123;&#125;,mergeProps,&#123;<span class="attr">withRef</span>:<span class="literal">true</span>&#125;)(Test)</div></pre></td></tr></table></figure>
+<p>获取test组件的原型</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span></div><div class="line"><span class="keyword">import</span> Test <span class="keyword">from</span> <span class="string">'./Test'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Test2</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  componentWillMount()&#123;</div><div class="line">	  <span class="comment">//使用connect提供的getWrappedInstance()</span></div><div class="line">      <span class="keyword">this</span>.refs.test.getWrappedInstance().testFunction(<span class="string">'test'</span>)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">Test</span> <span class="attr">ref</span>=<span class="string">'test'</span> /&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
 
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1466,7 +1470,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-count">60</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

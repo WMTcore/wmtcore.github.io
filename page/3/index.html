@@ -253,162 +253,6 @@
             
               
                 
-                <a class="post-title-link" href="/2016/07/18/nodejs-buffer/" itemprop="url">
-                  nodejs buffer
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-07-18T09:55:23+08:00" content="2016-07-18">
-              2016-07-18
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/18/nodejs-buffer/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/18/nodejs-buffer/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="Buffer结构"><a href="#Buffer结构" class="headerlink" title="Buffer结构"></a>Buffer结构</h3><ul>
-<li>类似Array，为16进制的两位数，即占一个字节</li>
-<li>js与c++结合的模块，内存由c++申请，js分配。因为v8垃圾回收影响性能</li>
-<li>node启动时就加载，放在全局对象global</li>
-</ul>
-<figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> buf = <span class="function"><span class="keyword">new</span> <span class="title">Buffer</span>(<span class="number">100</span>);</span></div><div class="line"><span class="title">console</span>.<span class="title">log</span>(buf.length); <span class="comment">// =&gt; 100</span></div></pre></td></tr></table></figure>
-<p><code>如给buffer赋值数字，则范围在0-255,否则负数就加256,过大就减256</code></p>
-<p>内存使用slab分配机制，动态内存管理，包含三种状态（full,partial,empty）。Node以8KB为界限区分Buffer是大对象还是小对象（Buffer.poolSize=8*1024），即8kb为slab单元大小，js以它为单元分配内存</p>
-<h4 id="分配小Buffer对象"><a href="#分配小Buffer对象" class="headerlink" title="分配小Buffer对象"></a>分配小Buffer对象</h4><ul>
-<li>小于8kb</li>
-</ul>
-<p>使用局部变量pool,让处于分配状态的slab单元指向它</p>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> pool;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">allocPool</span><span class="params">()</span> </span>&#123;</div><div class="line">	pool = <span class="keyword">new</span> SlowBuffer(Buffer.poolSize);</div><div class="line">	pool.used = <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>新建小buffer时，如果还没pool,就创建一个slab指向它，当前的buffer对象的parent指向slab</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.parent = pool; <span class="comment">//当前的buffer对象的parent指向slab</span></div><div class="line"><span class="keyword">this</span>.offset = pool.used;<span class="comment">//slab开始使用的位置</span></div><div class="line">pool.used += <span class="keyword">this</span>.length;<span class="comment">//slab已使用量</span></div><div class="line"><span class="keyword">if</span> (pool.used &amp; <span class="number">7</span>) pool.used = (pool.used + <span class="number">8</span>) &amp; ~<span class="number">7</span>;</div></pre></td></tr></table></figure>
-<p>此时slab状态为partial,在创建buffer时会判断次slab是否够用，如果不够，就构建新的slab,原来的slab剩余的空间浪费，如果不释放就占据8kb</p>
-<h4 id="分配大Buffer"><a href="#分配大Buffer" class="headerlink" title="分配大Buffer"></a>分配大Buffer</h4><p>直接分配一个SlowBuffer对象作为slab单元，并且独占</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Big buffer,just alloc one  SlowBuffer由c++定义,勿直接操作它</span></div><div class="line"><span class="keyword">this</span>.parent=new SlowBuffer(<span class="keyword">this</span>.length);<span class="keyword">this</span>.offset=<span class="number">0</span>;</div></pre></td></tr></table></figure>
-<p><strong>Buffer对象是js层面的，能被v8标记回收</strong>，但其内部parent指向SlowBuffer,由c++提供的Buffer,所以内存由c++提供，js只是使用它，对于小buffer的频繁操作，使用<strong>slab机制来先申请后分配</strong>，减少内存申请的系统调用，对于<strong>大buffe就直接用C++提供内存</strong></p>
-<h3 id="Buffer转换"><a href="#Buffer转换" class="headerlink" title="Buffer转换"></a>Buffer转换</h3><ul>
-<li>支持的字符串编码 ASCII,UTF-8,UTF-16LE/UCS-2,Base64,Binary,Hex</li>
-</ul>
-<h4 id="字符串与Buffer的转换"><a href="#字符串与Buffer的转换" class="headerlink" title="字符串与Buffer的转换"></a>字符串与Buffer的转换</h4><p>字符串转buffer,使用构造函数new Buffer(str,[encoding]);默认UTF-8</p>
-<p><strong>一个Buffer对象可以存多种编码类型的字符串转码的值</strong></p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">buf.<span class="built_in">write</span>(<span class="built_in">string</span>, [<span class="built_in">offset</span>], [<span class="built_in">length</span>], [encoding])</div></pre></td></tr></table></figure>
-<p>buffer转字符串</p>
-<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">buf.toString([<span class="keyword">encoding</span>], [<span class="keyword">start</span>], [<span class="keyword">end</span>]) //<span class="keyword">encoding</span>默认UTF-<span class="number">8</span>,配合<span class="keyword">start</span>和<span class="keyword">end</span>实现局部转换</div></pre></td></tr></table></figure>
-<h4 id="Buffer不支持的编码类型"><a href="#Buffer不支持的编码类型" class="headerlink" title="Buffer不支持的编码类型"></a>Buffer不支持的编码类型</h4><ul>
-<li>使用Buffer.isEncoding(encoding)判断</li>
-</ul>
-<p>iconv 通过c++调用libiconv<br>iconv-lite使用纯js实现，但基于v8高性能，少了c++到js的转换，所以比C++实现好</p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">var iconv</span> = require(<span class="string">"iconv-lite"</span>);<span class="attribute">v</span><span class="attribute">a</span><span class="attribute">r</span> <span class="attribute">s</span><span class="attribute">t</span><span class="attribute">r</span> = iconv.decode(buf,<span class="string">"win1251"</span>);</div><div class="line"><span class="attribute">var buf</span> = iconv.encode(<span class="string">'Sample input string'</span>, <span class="string">'win1251'</span>);</div></pre></td></tr></table></figure>
-<p><code>对无法转换的内容会降级处理，输出部分或者？</code></p>
-<h3 id="Buffer拼接"><a href="#Buffer拼接" class="headerlink" title="Buffer拼接"></a>Buffer拼接</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> rs = fs.createReadStream(<span class="string">'test.md'</span>);</div><div class="line"><span class="keyword">var</span> data = <span class="string">''</span>;</div><div class="line">rs.on(<span class="string">"data"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>) </span>&#123;</div><div class="line">	data += chunk; <span class="comment">//等价于data = data.toString() + chunk.toString();此处对宽字节的中文可能造成乱码，即字节没读全就转码</span></div><div class="line">&#125;);</div><div class="line">rs.on(<span class="string">"end"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(data);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h4 id="解决乱码问题"><a href="#解决乱码问题" class="headerlink" title="解决乱码问题"></a>解决乱码问题</h4><ul>
-<li>在调用setEncoding()时，可读流对象在内部设置一个decoder对象</li>
-</ul>
-<p>req.setEncoding(‘utf8’);</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var StringDecoder = require('string_decoder').StringDecoder;</div><div class="line">var decoder = new StringDecoder('utf8');</div><div class="line">var buf1 = new Buffer([<span class="number">0xE5</span>, <span class="number">0xBA</span>, <span class="number">0x8A</span>, <span class="number">0xE5</span>, <span class="number">0x89</span>, <span class="number">0x8D</span>, <span class="number">0xE6</span>, <span class="number">0x98</span>, <span class="number">0x8E</span>, <span class="number">0xE6</span>, <span class="number">0x9C</span>]);</div><div class="line">console.log(decoder.write(buf1));</div><div class="line"><span class="comment">// =&gt; 床前明</span></div><div class="line">var buf2 = new Buffer([<span class="number">0x88</span>, <span class="number">0xE5</span>, <span class="number">0x85</span>, <span class="number">0x89</span>, <span class="number">0xEF</span>, <span class="number">0xBC</span>, <span class="number">0x8C</span>, <span class="number">0xE7</span>, <span class="number">0x96</span>, <span class="number">0x91</span>, <span class="number">0xE6</span>]);</div><div class="line">console.log(decoder.write(buf2));</div><div class="line"><span class="comment">// =&gt;月光，凝</span></div></pre></td></tr></table></figure>
-<p>StringDecoder在得到编码后，知道宽字节在utf-8下占3个字节，所以在处理末尾不全的字节时，会保留到第二次write().目前只能处理UTF-8、Base64和UCS-2/UTF-16LE</p>
-<h4 id="正确拼接Buffer"><a href="#正确拼接Buffer" class="headerlink" title="正确拼接Buffer"></a>正确拼接Buffer</h4><figure class="highlight qml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> chunks = [];</div><div class="line"><span class="built_in">var</span> <span class="built_in">size</span> = <span class="number">0</span>;</div><div class="line">res.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>) </span>&#123;</div><div class="line">	chunks.push(chunk);</div><div class="line">	<span class="built_in">size</span> += chunk.length;</div><div class="line">&#125;);</div><div class="line">res.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">var</span> buf = Buffer.concat(chunks, <span class="built_in">size</span>);</div><div class="line">	<span class="built_in">var</span> str = iconv.decode(buf, <span class="string">'utf8'</span>);</div><div class="line">	<span class="built_in">console</span>.log(str);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>用数组来储存接收的所有Buffer片段并记录总长度，然后调用Buffer.concat()–&gt;</p>
-<figure class="highlight qml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">Buffer.concat = <span class="function"><span class="keyword">function</span>(<span class="params">list, length</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (!<span class="built_in">Array</span>.isArray(<span class="built_in">list</span>)) &#123;</div><div class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Usage: Buffer.concat(list, [length])'</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (<span class="built_in">list</span>.length === <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Buffer(<span class="number">0</span>);</div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">list</span>.length === <span class="number">1</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="built_in">list</span>[<span class="number">0</span>];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> length !== <span class="string">'number'</span>) &#123;</div><div class="line">		length = <span class="number">0</span>;</div><div class="line">		<span class="keyword">for</span> (<span class="built_in">var</span> i = <span class="number">0</span>; i &lt; <span class="built_in">list</span>.length; i++) &#123;</div><div class="line">			<span class="built_in">var</span> buf = <span class="built_in">list</span>[i];</div><div class="line">			length += buf.length;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">var</span> buffer = <span class="keyword">new</span> Buffer(length);</div><div class="line">	<span class="built_in">var</span> pos = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span> (<span class="built_in">var</span> i = <span class="number">0</span>; i &lt; <span class="built_in">list</span>.length; i++) &#123;</div><div class="line">		<span class="built_in">var</span> buf = <span class="built_in">list</span>[i];</div><div class="line">		buf.copy(buffer, pos);</div><div class="line">		pos += buf.length;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> buffer;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h3 id="Buffer与性能"><a href="#Buffer与性能" class="headerlink" title="Buffer与性能"></a>Buffer与性能</h3><p>Buffer广泛应用于文件I/O和网络I/O,尤其在网络传输，<strong>使用Buffer比直接使用字符串要性能要高很多。在web开发中对于静态内容可以预先转成buffer</strong>,在不需要改变内容时，只读取buffer,不做转换</p>
-<h4 id="文件读取"><a href="#文件读取" class="headerlink" title="文件读取"></a>文件读取</h4><p>fs.createReadStream()先在内存中准备一段buffer,然后在fs.read()读取时逐步将磁盘中的字节复制到buffer,读完一次就用slice()从buffer取出部分作为小buffer通过data事件传给调用方。Buffer用完会重新分配</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">fs</span><span class="selector-class">.createReadStream</span>(path, opts)</div><div class="line"><span class="comment">//参数</span></div><div class="line">&#123;</div><div class="line">	<span class="attribute">flags</span>: <span class="string">'r'</span>,</div><div class="line">	<span class="attribute">encoding</span>: null,</div><div class="line">	<span class="attribute">fd</span>: null,</div><div class="line">	<span class="attribute">mode</span>: <span class="number">0666</span>,</div><div class="line">	<span class="attribute">highWaterMark</span>: <span class="number">64</span> * <span class="number">1024</span> <span class="comment">// 每次读取的长度</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>重新分配</p>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> pool;<span class="comment">//常驻内存</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">allocNewPool</span><span class="params">(poolSize)</span> </span>&#123;</div><div class="line">	pool = <span class="keyword">new</span> Buffer(poolSize);</div><div class="line">	pool.used = <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//当pool剩余数量小于128(kMinPoolSpace)字节时，会重新分配</span></div><div class="line"><span class="keyword">if</span> (!pool || pool.length - pool.used &lt; kMinPoolSpace) &#123; </div><div class="line"><span class="comment">// discard the old pool</span></div><div class="line">	pool = <span class="literal">null</span>;</div><div class="line">	allocNewPool(<span class="keyword">this</span>._readableState.highWaterMark);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>highWaterMark的大小对性能的影响有：<strong>buffer内存的分配和使用、系统调用次数</strong>;</p>
-<ul>
-<li>文件流读取基于buffer,buffer基于slowbuffer，文件小于8kb可能造成slab浪费</li>
-<li>fs.createReadStream()内部使用fs.read()，会引起系统对磁盘的调用，highWaterMark的大小决定调用次数和data事件次数</li>
-</ul>
-<p><img src="../picture/node-buffer" alt="Smaller icon"></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/07/12/node内存控制/" itemprop="url">
                   node内存控制
                 </a>
@@ -1827,12 +1671,145 @@ node --max-new-space-size=1024 test.js // 单位为KB
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/04/22/hate-css-1/" itemprop="url">
+                  hate css of 选择器
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-04-22T08:58:18+08:00" content="2016-04-22">
+              2016-04-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/hate/" itemprop="url" rel="index">
+                    <span itemprop="name">hate</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/22/hate-css-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/22/hate-css-1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h3><h4 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h4><ul>
+<li>子元素从父元素继承属性，<code>IE/Windows 直到 IE6 还存在相关的问题，在表格内的字体样式会被忽略。</code></li>
+<li>针对子元素创建规则，则可摆脱继承</li>
+</ul>
+<h4 id="元素选择器"><a href="#元素选择器" class="headerlink" title="元素选择器"></a>元素选择器</h4><ul>
+<li>文档的元素就是最基本的选择器 比如 p、h1、em、a，甚至可以是 html 本身</li>
+</ul>
+<h4 id="选择器分组"><a href="#选择器分组" class="headerlink" title="选择器分组"></a>选择器分组</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">h2</span>, <span class="selector-tag">p</span> &#123;<span class="attribute">color</span>:gray;&#125;</div></pre></td></tr></table></figure>
+<p>将 h2 和 p 选择器放在规则左边，然后用逗号分隔，就定义了一个规则。其右边的样式（color:gray;）将应用到这两个选择器所引用的元素。逗号告诉浏览器，规则中包含两个不同的选择器</p>
+<ul>
+<li>通配符选择器 *,与任何元素匹配</li>
+</ul>
+<h4 id="类选择器"><a href="#类选择器" class="headerlink" title="类选择器"></a>类选择器</h4><ul>
+<li>class </li>
+</ul>
+<p><code>结合元素选择器</code> </p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">p</span><span class="selector-class">.important</span> &#123;<span class="attribute">color</span>:red;&#125; <span class="comment">//匹配 class 属性包含 important 的所有 p 元素</span></div></pre></td></tr></table></figure>
+<p><code>class 值中可能包含一个词列表，各个词之间用空格分隔</code></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt; <span class="selector-tag">p</span> class=<span class="string">"important warning"</span>&gt;</div><div class="line">This paragraph is <span class="selector-tag">a</span> very important warning.</div><div class="line">&lt; /p&gt;</div><div class="line"></div><div class="line"><span class="selector-class">.important</span><span class="selector-class">.warning</span> &#123;<span class="attribute">background</span>:silver;&#125;<span class="comment">//class 中同时包含 important 和 warning</span></div></pre></td></tr></table></figure>
+<p><code>在 IE7 之前的版本中，不同平台的 Internet Explorer 都不能正确地处理多类选择器</code></p>
+<h4 id="ID选择器"><a href="#ID选择器" class="headerlink" title="ID选择器"></a>ID选择器</h4><ul>
+<li>ID 选择器前面有一个 # 号</li>
+<li>不能使用 ID 词列表</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#intro</span> &#123;<span class="attribute">font-weight</span>:bold;&#125;</div></pre></td></tr></table></figure>
+<h4 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h4><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">*<span class="selector-attr">[title]</span> &#123;<span class="attribute">color</span>:red;&#125;<span class="comment">// 把包含标题（title）的所有元素变为红色</span></div><div class="line"><span class="selector-tag">a</span><span class="selector-attr">[href]</span> &#123;<span class="attribute">color</span>:red;&#125; <span class="comment">// 对有 href 属性的锚（a 元素）应用样式</span></div><div class="line"><span class="selector-tag">a</span><span class="selector-attr">[href]</span><span class="selector-attr">[title]</span> &#123;<span class="attribute">color</span>:red;&#125; <span class="comment">//将同时有 href 和 title 属性的 HTML 超链接的文本设置为红色</span></div></pre></td></tr></table></figure>
+<p><code>根据具体属性值选择</code></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//将指向 Web 服务器上某个指定文档的超链接变成红色</div><div class="line">a[href="http://www.w3school.com.cn/about_us.asp"] &#123;color: red;&#125;</div><div class="line">//可以把多个属性-值选择器链接在一起来选择一个文档</div><div class="line">a[<span class="string">href="http://www.w3school.com.cn/"</span>][<span class="symbol">title="W3School"</span>] &#123;color: red;&#125;</div></pre></td></tr></table></figure>
+<h4 id="后代选择器"><a href="#后代选择器" class="headerlink" title="后代选择器"></a>后代选择器</h4><ul>
+<li>依赖于上下文关系来应用或者避免某项规则</li>
+</ul>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//列表中的 strong 元素变为斜体字</span></div><div class="line"></div><div class="line">li <span class="class">strong </span>&#123;</div><div class="line">    font-style: italic;</div><div class="line">    font-weight: normal;</div><div class="line">  &#125;</div><div class="line"> </div><div class="line"> <span class="params">&lt;p&gt;</span><span class="params">&lt;strong&gt;</span>我是粗体字，不是斜体字，因为我不在列表当中，所以这个规则对我不起作用<span class="params">&lt;/strong&gt;</span><span class="params">&lt;/p&gt;</span></div><div class="line"></div><div class="line"><span class="params">&lt;ol&gt;</span></div><div class="line"><span class="params">&lt;li&gt;</span><span class="params">&lt;strong&gt;</span>我是斜体字。这是因为 strong 元素位于 li 元素内。<span class="params">&lt;/strong&gt;</span><span class="params">&lt;/li&gt;</span></div><div class="line"><span class="params">&lt;li&gt;</span>我是正常的字体。<span class="params">&lt;/li&gt;</span></div><div class="line"><span class="params">&lt;/ol&gt;</span></div></pre></td></tr></table></figure>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
 
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1873,7 +1850,7 @@ node --max-new-space-size=1024 test.js // 单位为KB
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-count">60</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
