@@ -1,0 +1,752 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="Dkf0E0xe3Q" />
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nodejs," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="数据库
+插件ccs登录流程
+plugin/ccsLogin对接ccs登录的中间件
+12345678910111213141516171819202122232425module.exports = (options, app) =&amp;gt; &amp;#123;  return async function ccsLogin(ctx, next) &amp;#123;    if (ctx.session &amp;amp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="鲜知后端">
+<meta property="og:url" content="https://www.wmtcore.com/2019/10/22/鲜知后端/index.html">
+<meta property="og:site_name" content="大碗拉面">
+<meta property="og:description" content="数据库
+插件ccs登录流程
+plugin/ccsLogin对接ccs登录的中间件
+12345678910111213141516171819202122232425module.exports = (options, app) =&amp;gt; &amp;#123;  return async function ccsLogin(ctx, next) &amp;#123;    if (ctx.session &amp;amp">
+<meta property="og:image" content="https://www.wmtcore.com/picture/鲜知数据库ER图.png">
+<meta property="og:image" content="https://www.wmtcore.com/picture/ccs登录流程.png">
+<meta property="og:updated_time" content="2019-10-22T08:14:52.275Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="鲜知后端">
+<meta name="twitter:description" content="数据库
+插件ccs登录流程
+plugin/ccsLogin对接ccs登录的中间件
+12345678910111213141516171819202122232425module.exports = (options, app) =&amp;gt; &amp;#123;  return async function ccsLogin(ctx, next) &amp;#123;    if (ctx.session &amp;amp">
+<meta name="twitter:image" content="https://www.wmtcore.com/picture/鲜知数据库ER图.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> 鲜知后端 | 大碗拉面 </title>
+</head>
+
+<body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="https://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="https://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?8fc1dcdaa63dc57073d1f217ba27dc7d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="https://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大碗拉面</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'hXvPsMvt_RLywgyzUhtE','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                鲜知后端
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2019-10-22T15:31:12+08:00" content="2019-10-22">
+              2019-10-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/10/22/鲜知后端/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/22/鲜知后端/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><p><img src="/picture/鲜知数据库ER图.png" alt="Resize icon"></p>
+<h3 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h3><h4 id="ccs登录流程"><a href="#ccs登录流程" class="headerlink" title="ccs登录流程"></a>ccs登录流程</h4><p><img src="/picture/ccs登录流程.png" alt="Resize icon"></p>
+<h5 id="plugin-ccsLogin"><a href="#plugin-ccsLogin" class="headerlink" title="plugin/ccsLogin"></a>plugin/ccsLogin</h5><p>对接ccs登录的中间件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">options, app</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">ccsLogin</span>(<span class="params">ctx, next</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (ctx.session &amp;&amp; ctx.session.user) <span class="keyword">return</span> <span class="keyword">await</span> next();</div><div class="line"></div><div class="line">    <span class="keyword">const</span> css_token = ctx.cookies.get(<span class="string">'ccs-token'</span>, &#123;</div><div class="line">      <span class="attr">signed</span>: <span class="literal">false</span>,</div><div class="line">    &#125;); <span class="comment">// 避免对它做验签导致获取不到 cookie 的值</span></div><div class="line">    <span class="keyword">if</span> (!css_token) <span class="keyword">return</span> <span class="keyword">await</span> next();</div><div class="line"></div><div class="line">    <span class="keyword">const</span> &#123; ccsHost, appId, secret &#125; = app.config.ccsLogin;</div><div class="line">    <span class="keyword">const</span> result = <span class="keyword">await</span> ctx.curl(ccsHost, &#123;</div><div class="line">      <span class="attr">method</span>: <span class="string">'POST'</span>,</div><div class="line">      <span class="attr">headers</span>: &#123;</div><div class="line">        appId,</div><div class="line">        secret,</div><div class="line">        <span class="attr">accessToken</span>: css_token,</div><div class="line">      &#125;,</div><div class="line">      <span class="attr">contentType</span>: <span class="string">'json'</span>,</div><div class="line">      <span class="attr">data</span>: &#123;&#125;,</div><div class="line">      <span class="attr">dataType</span>: <span class="string">'json'</span>,</div><div class="line">    &#125;);</div><div class="line">    ctx.ccsUserInfo = result.data.data;</div><div class="line">    <span class="keyword">await</span> next();</div><div class="line">  &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h5 id="middileware-user-check"><a href="#middileware-user-check" class="headerlink" title="middileware/user_check"></a>middileware/user_check</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">options, app</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">userCheck</span>(<span class="params">ctx, next</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> ((ctx.session &amp;&amp; ctx.session.user) || !ctx.ccsUserInfo) <span class="keyword">return</span> <span class="keyword">await</span> next();</div><div class="line"></div><div class="line">    <span class="keyword">const</span> &#123; name, deptFullname, mobile, userId, email &#125; = ctx.ccsUserInfo;</div><div class="line">    <span class="keyword">let</span> [ user ] = <span class="keyword">await</span> app.knex(<span class="string">'users'</span>).select(<span class="string">'id'</span>).where(<span class="string">'ccs_user_id'</span>, ctx.ccsUserInfo.userId);</div><div class="line">    <span class="keyword">if</span> (!user) &#123;</div><div class="line">      <span class="keyword">const</span> id = <span class="keyword">await</span> ctx.service.users.create(&#123;</div><div class="line">        name,</div><div class="line">        <span class="attr">ccs_user_id</span>: userId,</div><div class="line">        <span class="attr">dept_full_name</span>: deptFullname,</div><div class="line">        mobile,</div><div class="line">        email,</div><div class="line">      &#125;);</div><div class="line">      user = &#123; id &#125;;</div><div class="line">    &#125;</div><div class="line">    ctx.session.user = &#123; <span class="attr">id</span>: user.id, name &#125;;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">await</span> next();</div><div class="line">  &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h4 id="ErrorHandler"><a href="#ErrorHandler" class="headerlink" title="ErrorHandler"></a>ErrorHandler</h4><p>返回标准的错误格式,提供多国语言的支持</p>
+<p>在app/lib/Message.js定义错误</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">NO_PERMISSION_TO_ACCESS_DATA</span>: &#123;</div><div class="line">  <span class="attribute">code</span>: <span class="number">801</span>, // 注意code的区分</div><div class="line">  value: <span class="string">'No Permission To Access Data'</span>,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>并在config/locale/zh-CN.js增加对应的中文翻译(<a href="https://eggjs.org/zh-cn/core/i18n.html" target="_blank" rel="external">参考</a>)</p>
+<p>使用:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">throw</span> <span class="selector-tag">new</span> <span class="selector-tag">this</span><span class="selector-class">.app</span><span class="selector-class">.Error</span>(<span class="selector-tag">this</span><span class="selector-class">.app</span><span class="selector-class">.Message</span><span class="selector-class">.NO_PERMISSION_TO_ACCESS_DATA</span>);</div></pre></td></tr></table></figure>
+<h4 id="WrapResponseBody"><a href="#WrapResponseBody" class="headerlink" title="WrapResponseBody"></a>WrapResponseBody</h4><p>返回体统一封装</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attribute">code</span>: <span class="number">0</span>,</div><div class="line">  message: <span class="string">'成功'</span>,</div><div class="line">  result: ctx.body || &#123;&#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="热度计算"><a href="#热度计算" class="headerlink" title="热度计算"></a>热度计算</h3><p><code>文章</code>:遍历reads和likes获取每篇文章的点赞数和阅读数来计算热度值，存入post_rank,目前读和赞的热度系数都是1</p>
+<p><code>用户</code>:遍历post_rank获取用户每篇文章的热度值来计算用户rank</p>
+<h4 id="文章热度衰减-TODO"><a href="#文章热度衰减-TODO" class="headerlink" title="文章热度衰减(TODO)"></a>文章热度衰减(TODO)</h4><figure class="highlight excel"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">value</span>=<span class="built_in">value</span>*<span class="number">2</span>^(-⌊<span class="built_in">t</span>/<span class="built_in">t</span>'⌋)</div></pre></td></tr></table></figure>
+<p>t是当前时间减去上次衰减时间，t’是半衰期,注意统一时间单位</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag">#nodejs</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/21/服务发现和rpc选择/" rel="next" title="服务发现和rpc选择">
+                <i class="fa fa-chevron-left"></i> 服务发现和rpc选择
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/10/22/鲜知后端/"
+           data-title="鲜知后端" data-url="https://www.wmtcore.com/2019/10/22/鲜知后端/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="https://schema.org/Person">
+          <img class="site-author-image" src="http://wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">WMT</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">不扯犊子 -NOT ALONE</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/WMTcore" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库"><span class="nav-number">1.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插件"><span class="nav-number">2.</span> <span class="nav-text">插件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ccs登录流程"><span class="nav-number">2.1.</span> <span class="nav-text">ccs登录流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#plugin-ccsLogin"><span class="nav-number">2.1.1.</span> <span class="nav-text">plugin/ccsLogin</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#middileware-user-check"><span class="nav-number">2.1.2.</span> <span class="nav-text">middileware/user_check</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ErrorHandler"><span class="nav-number">2.2.</span> <span class="nav-text">ErrorHandler</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WrapResponseBody"><span class="nav-number">2.3.</span> <span class="nav-text">WrapResponseBody</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#热度计算"><span class="nav-number">3.</span> <span class="nav-text">热度计算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文章热度衰减-TODO"><span class="nav-number">3.1.</span> <span class="nav-text">文章热度衰减(TODO)</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015-12 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMT</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wmtcore"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+     
+  	  <script type="text/javascript">
+  		var duoshuo_user_ID = 6224283662221837000
+      var duoshuo_admin_nickname="作者"
+  	  </script>
+     
+  	<script src="/js/ua-parser.min.js"></script>
+  	<script src="/js/hook-duoshuo.js"></script>
+  
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>
