@@ -65,7 +65,7 @@ WAL技术，WAL的全称是Write-Ahead Logging，它的关键点就是先写日�
 在MySQL里也有这个问题，如果每一次的更新操作都需要写进磁盘，然后磁盘也要找到对应的那条记录，然后再更新，整个过程IO成本、查找成本都很高
 WAL技术，WAL的全称是Write-Ahead Logging，它的关键点就是先写日志，再写磁盘 顺序i/o
 当有一条记录需要更新的时候，InnoDB引擎就会先把记录写到redo log里面，并更新内存，这个时候更新就">
-<meta property="og:updated_time" content="2019-10-11T07:08:08.320Z">
+<meta property="og:updated_time" content="2019-10-11T07:08:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="日志模块">
 <meta name="twitter:description" content="redo logInnoDB引擎实现
@@ -424,14 +424,14 @@ WAL技术，WAL的全称是Write-Ahead Logging，它的关键点就是先写日�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">60</span>
+              <span class="site-state-item-count">61</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
