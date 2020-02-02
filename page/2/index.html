@@ -253,6 +253,110 @@
             
               
                 
+                <a class="post-title-link" href="/2017/02/10/kafka 基本介绍/" itemprop="url">
+                  kafka 基本介绍
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2017-02-10T15:05:45+08:00" content="2017-02-10">
+              2017-02-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/10/kafka 基本介绍/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/10/kafka 基本介绍/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>采用Pub-Sub机制的分布式消息系统，具有极高的消息吞吐量，支持消息传递至少到达一次</p>
+<h3 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h3><p>由三类角色组成:<code>消息生产者(producer)</code>,<code>代理服务器(Broker)</code>,<code>消息消费者(Consumer)</code></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/11/25/react获取connect绑定redux后的原始组件/" itemprop="url">
                   react获取connect绑定redux后的原始组件
                 </a>
@@ -1577,200 +1681,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/22/nodejs-网络(一)/" itemprop="url">
-                  nodejs 网络(一)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-07-22T16:43:53+08:00" content="2016-07-22">
-              2016-07-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/22/nodejs-网络(一)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/22/nodejs-网络(一)/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="TCP服务"><a href="#TCP服务" class="headerlink" title="TCP服务"></a>TCP服务</h3><ul>
-<li>传输控制协议，网络传输层</li>
-<li><code>OSI模型</code>： 物理层 数据链路层 网络层 传输层 会话层 表示层 应用层</li>
-</ul>
-<p>传输之前先要三次握手形成会话，一个套接字socket只用于一个服务</p>
-<h4 id="创建TCP服务"><a href="#创建TCP服务" class="headerlink" title="创建TCP服务"></a>创建TCP服务</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">var</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</div><div class="line"> </div><div class="line"><span class="comment">//使用net.createServer(listener)创建，**listener是连接事件connection的侦听器**</span></div><div class="line"><span class="keyword">var</span> server = net.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</div><div class="line">	socket.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">		socket.write(<span class="string">"hello"</span>);</div><div class="line">	&#125;);</div><div class="line">	socket.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'断开'</span>);</div><div class="line">	&#125;);</div><div class="line">	socket.write(<span class="string">"hello111:\n"</span>);</div><div class="line">&#125;);</div><div class="line">server.listen(<span class="number">8124</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'server bound'</span>);</div><div class="line">&#125;); </div><div class="line"><span class="comment">//或者</span></div><div class="line"><span class="keyword">var</span> server = net.createServer();</div><div class="line"></div><div class="line">server.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123; <span class="comment">//新的连接</span></div><div class="line">&#125;);</div><div class="line">server.listen(<span class="number">8124</span>);</div><div class="line"></div><div class="line"><span class="comment">//可以使用$ telnet 127.0.0.1 8124，或者使用net模块构建客户端</span></div><div class="line"><span class="keyword">var</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</div><div class="line"><span class="keyword">var</span> client = net.connect(&#123;  <span class="comment">//</span></div><div class="line">	port: <span class="number">812</span></div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">//'connect' listener</span></div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'client connected'</span>);</div><div class="line">	client.write(<span class="string">'world!\r\n'</span>);</div><div class="line">&#125;);</div><div class="line">client.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(data.toString());</div><div class="line">	client.end();</div><div class="line">&#125;);</div><div class="line">client.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'client disconnected'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>也可以对Domain Socket监听 server.listen(‘/tmp/echo.sock’);<br>使用 $ nc -U /tmp/echo.sock 测试</p>
-<h4 id="服务器事件"><a href="#服务器事件" class="headerlink" title="服务器事件"></a>服务器事件</h4><p>使用net.createServer()创建的服务器是个EventEmitter实例</p>
-<ol>
-<li>listening 在调用server.lisren()绑定端口或者Domain Socket后触发server.listen(port,listeningListener)</li>
-<li>connection 每个客户端套接字连接到服务端时触发 net.createServer(),最后一个参数传递</li>
-<li>close 当服务器关闭时触发 在调用server.close()后，服务器会停止接受新的套接字，但当前的连接不会断，直到所有连接都断后触发</li>
-<li>error 服务器发生异常时触发，如果不帧听error事件，会抛出异常</li>
-</ol>
-<h4 id="连接事件"><a href="#连接事件" class="headerlink" title="连接事件"></a>连接事件</h4><p>服务器可以同时与多个客户端保持连接，每个连接都是可读写的stream对象，用于服务器和客户端通信</p>
-<ol>
-<li>data 当一端调用write()发送数据时，另一端触发data事件</li>
-<li>end 任意一端发送了FIN数据时触发</li>
-<li>connect 用于客户端，当套接字与服务端连接成功时触发</li>
-<li>error 发生异常</li>
-<li>close 套接字完全关闭时触发</li>
-<li>timeout 连接在一定时间内部活跃，触发</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//使用pipe管道 管道提供了一个输出流到输入流的机制。通常我们用于从一个流中获取数据并将数据传递到另外一个流中。</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</div><div class="line"><span class="keyword">var</span> server = net.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</div><div class="line">	socket.write(<span class="string">'Echo server\r\n'</span>);</div><div class="line">	socket.pipe(socket);<span class="comment">//</span></div><div class="line">&#125;);</div><div class="line">server.listen(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>);</div></pre></td></tr></table></figure>
-<p><code>Nagle算法</code>：将tcp中的小数据包缓存合并到一定数量或时间后发出，避免浪费网络资源，但数据可能被延迟。tcp默认启动Nagle算法，可以调用socket.setNoDelay(true)关闭，关闭后一端调用write(),另一端可能将多个小数据包合并后触发一次data</p>
-<h3 id="UDP服务"><a href="#UDP服务" class="headerlink" title="UDP服务"></a>UDP服务</h3><ul>
-<li>用户数据包协议，网络传输层</li>
-<li>一个套接字可以和多个UDP服务通信，无须连接，资源消耗低，处理快速灵活</li>
-<li>可能丢包，应用在低丢包不影响的的场景，视频、DNS</li>
-</ul>
-<h4 id="创建UDP套接字"><a href="#创建UDP套接字" class="headerlink" title="创建UDP套接字"></a>创建UDP套接字</h4><p>UDP套接字可以做客户端也可做服务端</p>
-<ul>
-<li>作为服务端 调用dgram.bind(port,[address])方法对网卡和端口绑定</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> dgram = <span class="built_in">require</span>(<span class="string">'dgram'</span>);</div><div class="line"><span class="keyword">var</span> server = dgram.createSocket(<span class="string">'udp4'</span>);</div><div class="line">server.on(<span class="string">"message"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">msg, rinfo</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"server got: "</span> + msg + <span class="string">" from "</span> +</div><div class="line">		rinfo.address + <span class="string">":"</span> + rinfo.port);</div><div class="line">&#125;);</div><div class="line">server.on(<span class="string">"listening"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> address = server.address();</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"server listening "</span> + address.address + <span class="string">":"</span> + address.port);</div><div class="line">&#125;);</div><div class="line">server.bind(<span class="number">41234</span>);<span class="comment">//绑定完成后触发listening事件</span></div></pre></td></tr></table></figure>
-<ul>
-<li>作为客户端：使用dgram.send(buf, offset, length, port, address, [callback])发送消息到网络；参数对应含义,buffer,buffer偏移,buffer长度，目标端口，目标地址，发送完成后的回调。它可以随意发送数据到网络，tcp需要重新通过套接字构建新连接</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> dgram = <span class="built_in">require</span>(<span class="string">'dgram'</span>);</div><div class="line"><span class="keyword">var</span> message = <span class="keyword">new</span> Buffer(<span class="string">"Node.js"</span>);</div><div class="line"><span class="keyword">var</span> client = dgram.createSocket(<span class="string">"udp4"</span>);</div><div class="line">client.send(message, <span class="number">0</span>, message.length, <span class="number">41234</span>, <span class="string">"localhost"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, bytes</span>) </span>&#123;</div><div class="line">	client.close();</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h4 id="UPD套接字事件"><a href="#UPD套接字事件" class="headerlink" title="UPD套接字事件"></a>UPD套接字事件</h4><ul>
-<li>UDP是个EventEmitter实例使用更简单，TCP是个Stream实例</li>
-</ul>
-<ol>
-<li>message UDP套接字帧听网卡端口后，接受数据时触发，触发携带的数据为Buffer对象和远程地址</li>
-<li>listening UDP开始帧听时触发</li>
-<li>close 调用close()时触发，并不再触发message事件</li>
-<li>error 异常时触发，不帧听则直接抛出，进程退出</li>
-</ol>
-<h3 id="构建HTTP服务"><a href="#构建HTTP服务" class="headerlink" title="构建HTTP服务"></a>构建HTTP服务</h3><ul>
-<li>超文本传输协议 HyperText Transfer Protocol</li>
-<li>构建在TCP之上 属于应用层协议 B/S模式，目前最知名的标准RFC 2616</li>
-</ul>
-<p>通常的http通信的信息分三部分，TCP的3次握手，客户端向服务器发送请求报文，服务器完成处理后向客户端发送响应内容。<br>浏览器其实是http的代理，将用户的行为转化为http请求发送给服务端，服务端处理请求然后发送响应报文给代理，代理解析报文再展示给用户。http服务只做处理http请求和发送http响应</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//创建http服务</span></div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;</div><div class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></div><div class="line">	&#125;);</div><div class="line">	res.end(<span class="string">'Hello World\n'</span>);</div><div class="line">&#125;).listen(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Server running at http://127.0.0.1:1337/'</span>);</div><div class="line"></div><div class="line"><span class="comment">//使用net模块创建</span></div><div class="line"><span class="keyword">var</span> tcp = <span class="built_in">require</span>(<span class="string">'net'</span>).createServer();</div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;</div><div class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></div><div class="line">	&#125;);</div><div class="line">	res.end(<span class="string">'handled by child, pid is '</span> + process.pid + <span class="string">'\n'</span>);</div><div class="line">&#125;);</div><div class="line">tcp.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</div><div class="line">	server.emit(<span class="string">'connection'</span>, socket);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h4 id="http模块"><a href="#http模块" class="headerlink" title="http模块"></a>http模块</h4><ul>
-<li>继承自TCP服务（net模块)，通信方法都是使用net的，包括创建服务、关闭服务等</li>
-<li>能够与多个客户端保持连接，因为采用事件驱动，不用给每个连接创建额外的线程、进程，内存占用低，能高并发</li>
-<li>tcp以connection为单位服务，http以request为单位服务</li>
-</ul>
-<p>http模块将tcp连接的读操作封装为ServerRequest对象，报文头部使用http_parser解析然后放在req.headers上传递给业务逻辑。报文体部分为只读流对象,需要在数据流结束后转字符串</p>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	<span class="comment">// console.log(req.headers);</span></div><div class="line">	<span class="keyword">var</span> buffers = [];</div><div class="line">	req.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span><span class="params">(trunk)</span> </span>&#123;</div><div class="line">		buffers.push(trunk);</div><div class="line">	&#125;).on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">var</span> buffer = Buffer.concat(buffers); <span class="comment">// TODO</span></div><div class="line">		res.end(<span class="string">'Hello world'</span>);</div><div class="line">	&#125;);</div><div class="line">&#125;</div><div class="line"><span class="comment">//express中使用bodyParse，会自动解析，但要求请求头添加Content-Type=application/json</span></div></pre></td></tr></table></figure>
-<p>封装对底层连接的写操作为ServerResponse对象<br>影响响应报文头api为<strong>res.setHeader()</strong>和<strong>res.writeHead()</strong>，可以调用res.setHeader()进行多次设置，只要调用writeHead后，报头才会写入连接</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">res.writeHead(<span class="number">200</span>, &#123;<span class="symbol">'Content</span>-<span class="keyword">Type</span>': <span class="symbol">'text</span>/plain'&#125;);</div></pre></td></tr></table></figure>
-<p>设置报文体API为write(),end();end()会先调用write()发送数据，再发信号告知响应结束。</p>
-<p><strong>一旦开始了数据发送，writeHead()和setHeader()将不再生效</strong><br><strong>结束时要调用res.end(),否则客户端将一直处于等待状态，无论异常与否</strong></p>
-<h5 id="http服务端事件"><a href="#http服务端事件" class="headerlink" title="http服务端事件"></a>http服务端事件</h5><p>http服务器是个EventEmitter实例</p>
-<ul>
-<li>connection 客户端与服务器建立底层的tcp连接时触发。连接开启keep-alive,可以在多次请求响应之间使用</li>
-<li>request 当请求数据发送到服务端，在解析出http请求头后触发该事件</li>
-<li>close 调用server.close()方法停止接受新连接，当已有的连接也都断开后触发，可以给server.close()传个回调来快速注册该事件</li>
-<li>checkContinue 某些客户端在发送大数据时，会先发一个头部带Expect: 100-continue的请求，服务器接收后触发checkContinue。如果不监听，就自动回复100 Continue。如果不接收就响应400 Bad Request。注意，<strong>在客户端收到100 Continue后重新发起请求才会触发request</strong></li>
-<li>connect 客户端发起connect请求时触发，通常在http代理时才会发起connect,如果不监听，发起该请求的连接会关闭</li>
-<li>upgrade 客户端要升级连接协议时会在请求头部带上upgrade，服务端接收后触发，如果不监听，发起该请求的连接会关闭</li>
-<li>clientError 连接的客户端触发error事件，会传递到服务器端并触发</li>
-</ul>
-<h4 id="http客户端"><a href="#http客户端" class="headerlink" title="http客户端"></a>http客户端</h4><ul>
-<li>http.request(options, connect) 构建http客户端</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> options = &#123;</div><div class="line">	<span class="attr">hostname</span>: <span class="string">'127.0.0.1'</span>,</div><div class="line">	<span class="attr">port</span>: <span class="number">1334</span>,</div><div class="line">	<span class="attr">path</span>: <span class="string">'/'</span>,</div><div class="line">	<span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">	localAddress <span class="comment">//建立连接的本地网卡</span></div><div class="line">	socketPath <span class="comment">//Domain套接字路径</span></div><div class="line">	headers <span class="comment">//请求头对象</span></div><div class="line">	auth <span class="comment">//Basic认证 将被计算成请求头的Authorization部分</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">// 用request 包请求 不用自己来处理on end </span></div><div class="line"><span class="keyword">var</span> req = http.request(options, <span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'STATUS: '</span> + res.statusCode);</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'HEADERS: '</span> + <span class="built_in">JSON</span>.stringify(res.headers));</div><div class="line">	res.setEncoding(<span class="string">'utf8'</span>);</div><div class="line">	res.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(chunk);</div><div class="line">	&#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">req.end();</div></pre></td></tr></table></figure>
-<p>报文体的内容通过请求对象的write()写入，end()告知报文结束<br>客户端clientRequest(req)解析完响应头就触发response，并传递ClientResponse以供操作，之后报文体以<strong>只读流</strong>提供）</p>
-<h5 id="http代理"><a href="#http代理" class="headerlink" title="http代理"></a>http代理</h5><ul>
-<li>为了重用tcp连接(在keeplive时，一个tcp连接可以多次用于请求)</li>
-<li>http里包含一个客户端代理对象http.globalAgent，它管理每个服务端(host+port)创建的连接并创建一个连接池，默认每个服务器端5个连接</li>
-</ul>
-<p>在通过ClientRequest调用http请求时会走代理。可以在options中传递agentX修改连接限制</p>
-<figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var <span class="built_in">agent</span> = new http.<span class="built_in">Agent</span>(&#123;</div><div class="line">	maxSockets: <span class="number">10</span> </div><div class="line">&#125;);</div><div class="line">var options = &#123;</div><div class="line">	hostname: <span class="string">'127.0.0.1'</span>,</div><div class="line">	port: <span class="number">1334</span>,</div><div class="line">	path: <span class="string">'/'</span>,</div><div class="line">	method: <span class="string">'GET'</span>,</div><div class="line">	<span class="built_in">agent</span>: <span class="built_in">agent</span> <span class="comment">//设置为false就不受连接池限制</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h5 id="http客户端事件"><a href="#http客户端事件" class="headerlink" title="http客户端事件"></a>http客户端事件</h5><ul>
-<li>response 客户端得到响应后触发</li>
-<li>socket 当连接池中建立的连接分配给当前的对象时触发</li>
-<li>upgrade 客户端向服务端发起upgrade 服务端响应101 Switching Protocols时触发</li>
-<li>continue 客户端想发大数据，头部带Expect: 100-continue，服务端同意并响应100 continue时触发</li>
-</ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1817,7 +1727,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-count">62</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

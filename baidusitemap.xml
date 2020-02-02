@@ -4,6 +4,24 @@
 
     
   <url>
+    <loc>https://www.wmtcore.com/2020/02/02/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%AF%9D/</loc>
+    <lastmod>2020-02-02T11:33:57.351Z</lastmod>
+    <data>
+        <display>
+        <title>人月神话</title>
+        <pubTime>2020-02-02T11:08:37.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="人月神话" url="https://www.wmtcore.com/categories/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%AF%9D/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://www.wmtcore.com/2020/01/30/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%AF%9D%20-%20%E7%84%A6%E6%B2%B9%E5%9D%91%EF%BC%88The%20Tar%20Pit%EF%BC%89/</loc>
     <lastmod>2020-01-30T08:07:16.697Z</lastmod>
     <data>
@@ -1080,9 +1098,9 @@
         <title>webpack热加载React webpack-dev-server</title>
         <pubTime>2016-01-05T01:25:22.000Z</pubTime>
         
-        <tag>nodejs</tag>
-         
         <tag>react</tag>
+         
+        <tag>nodejs</tag>
          
          
            
@@ -1102,9 +1120,9 @@
         <title>webpack 初步</title>
         <pubTime>2016-01-04T07:20:48.000Z</pubTime>
         
-        <tag>nodejs</tag>
-         
         <tag>react</tag>
+         
+        <tag>nodejs</tag>
          
          
            
