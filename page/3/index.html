@@ -253,8 +253,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/07/22/nodejs-网络(一)/" itemprop="url">
-                  nodejs 网络(一)
+                <a class="post-title-link" href="/2016/07/29/nodejs-网络-二/" itemprop="url">
+                  nodejs 网络(二)
                 </a>
               
             
@@ -264,8 +264,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-07-22T16:43:53+08:00" content="2016-07-22">
-              2016-07-22
+            <time itemprop="dateCreated" datetime="2016-07-29T13:33:12+08:00" content="2016-07-29">
+              2016-07-29
             </time>
           </span>
 
@@ -290,8 +290,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/22/nodejs-网络(一)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/22/nodejs-网络(一)/" itemprop="commentsCount"></span>
+                <a href="/2016/07/29/nodejs-网络-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/29/nodejs-网络-二/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -313,98 +313,68 @@
         
           <span itemprop="articleBody">
             
-              <h3 id="TCP服务"><a href="#TCP服务" class="headerlink" title="TCP服务"></a>TCP服务</h3><ul>
-<li>传输控制协议，网络传输层</li>
-<li><code>OSI模型</code>： 物理层 数据链路层 网络层 传输层 会话层 表示层 应用层</li>
-</ul>
-<p>传输之前先要三次握手形成会话，一个套接字socket只用于一个服务</p>
-<h4 id="创建TCP服务"><a href="#创建TCP服务" class="headerlink" title="创建TCP服务"></a>创建TCP服务</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">var</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</div><div class="line"> </div><div class="line"><span class="comment">//使用net.createServer(listener)创建，**listener是连接事件connection的侦听器**</span></div><div class="line"><span class="keyword">var</span> server = net.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</div><div class="line">	socket.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">		socket.write(<span class="string">"hello"</span>);</div><div class="line">	&#125;);</div><div class="line">	socket.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'断开'</span>);</div><div class="line">	&#125;);</div><div class="line">	socket.write(<span class="string">"hello111:\n"</span>);</div><div class="line">&#125;);</div><div class="line">server.listen(<span class="number">8124</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'server bound'</span>);</div><div class="line">&#125;); </div><div class="line"><span class="comment">//或者</span></div><div class="line"><span class="keyword">var</span> server = net.createServer();</div><div class="line"></div><div class="line">server.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123; <span class="comment">//新的连接</span></div><div class="line">&#125;);</div><div class="line">server.listen(<span class="number">8124</span>);</div><div class="line"></div><div class="line"><span class="comment">//可以使用$ telnet 127.0.0.1 8124，或者使用net模块构建客户端</span></div><div class="line"><span class="keyword">var</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</div><div class="line"><span class="keyword">var</span> client = net.connect(&#123;  <span class="comment">//</span></div><div class="line">	port: <span class="number">812</span></div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">//'connect' listener</span></div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'client connected'</span>);</div><div class="line">	client.write(<span class="string">'world!\r\n'</span>);</div><div class="line">&#125;);</div><div class="line">client.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(data.toString());</div><div class="line">	client.end();</div><div class="line">&#125;);</div><div class="line">client.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'client disconnected'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>也可以对Domain Socket监听 server.listen(‘/tmp/echo.sock’);<br>使用 $ nc -U /tmp/echo.sock 测试</p>
-<h4 id="服务器事件"><a href="#服务器事件" class="headerlink" title="服务器事件"></a>服务器事件</h4><p>使用net.createServer()创建的服务器是个EventEmitter实例</p>
-<ol>
-<li>listening 在调用server.lisren()绑定端口或者Domain Socket后触发server.listen(port,listeningListener)</li>
-<li>connection 每个客户端套接字连接到服务端时触发 net.createServer(),最后一个参数传递</li>
-<li>close 当服务器关闭时触发 在调用server.close()后，服务器会停止接受新的套接字，但当前的连接不会断，直到所有连接都断后触发</li>
-<li>error 服务器发生异常时触发，如果不帧听error事件，会抛出异常</li>
-</ol>
-<h4 id="连接事件"><a href="#连接事件" class="headerlink" title="连接事件"></a>连接事件</h4><p>服务器可以同时与多个客户端保持连接，每个连接都是可读写的stream对象，用于服务器和客户端通信</p>
-<ol>
-<li>data 当一端调用write()发送数据时，另一端触发data事件</li>
-<li>end 任意一端发送了FIN数据时触发</li>
-<li>connect 用于客户端，当套接字与服务端连接成功时触发</li>
-<li>error 发生异常</li>
-<li>close 套接字完全关闭时触发</li>
-<li>timeout 连接在一定时间内部活跃，触发</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//使用pipe管道 管道提供了一个输出流到输入流的机制。通常我们用于从一个流中获取数据并将数据传递到另外一个流中。</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</div><div class="line"><span class="keyword">var</span> server = net.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</div><div class="line">	socket.write(<span class="string">'Echo server\r\n'</span>);</div><div class="line">	socket.pipe(socket);<span class="comment">//</span></div><div class="line">&#125;);</div><div class="line">server.listen(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>);</div></pre></td></tr></table></figure>
-<p><code>Nagle算法</code>：将tcp中的小数据包缓存合并到一定数量或时间后发出，避免浪费网络资源，但数据可能被延迟。tcp默认启动Nagle算法，可以调用socket.setNoDelay(true)关闭，关闭后一端调用write(),另一端可能将多个小数据包合并后触发一次data</p>
-<h3 id="UDP服务"><a href="#UDP服务" class="headerlink" title="UDP服务"></a>UDP服务</h3><ul>
-<li>用户数据包协议，网络传输层</li>
-<li>一个套接字可以和多个UDP服务通信，无须连接，资源消耗低，处理快速灵活</li>
-<li>可能丢包，应用在低丢包不影响的的场景，视频、DNS</li>
-</ul>
-<h4 id="创建UDP套接字"><a href="#创建UDP套接字" class="headerlink" title="创建UDP套接字"></a>创建UDP套接字</h4><p>UDP套接字可以做客户端也可做服务端</p>
+              <h3 id="构建websocket服务"><a href="#构建websocket服务" class="headerlink" title="构建websocket服务"></a>构建websocket服务</h3><p>websocket的优势：</p>
 <ul>
-<li>作为服务端 调用dgram.bind(port,[address])方法对网卡和端口绑定</li>
+<li>客户端与服务器只需要一个tcp连接</li>
+<li>服务器可以推送到客户端</li>
+<li>轻量化的协议头，提高传输效率</li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> dgram = <span class="built_in">require</span>(<span class="string">'dgram'</span>);</div><div class="line"><span class="keyword">var</span> server = dgram.createSocket(<span class="string">'udp4'</span>);</div><div class="line">server.on(<span class="string">"message"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">msg, rinfo</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"server got: "</span> + msg + <span class="string">" from "</span> +</div><div class="line">		rinfo.address + <span class="string">":"</span> + rinfo.port);</div><div class="line">&#125;);</div><div class="line">server.on(<span class="string">"listening"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> address = server.address();</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"server listening "</span> + address.address + <span class="string">":"</span> + address.port);</div><div class="line">&#125;);</div><div class="line">server.bind(<span class="number">41234</span>);<span class="comment">//绑定完成后触发listening事件</span></div></pre></td></tr></table></figure>
+<p>node使用websocket的优势：</p>
 <ul>
-<li>作为客户端：使用dgram.send(buf, offset, length, port, address, [callback])发送消息到网络；参数对应含义,buffer,buffer偏移,buffer长度，目标端口，目标地址，发送完成后的回调。它可以随意发送数据到网络，tcp需要重新通过套接字构建新连接</li>
+<li>WebSocket客户端基于事件的编程模式和node的自定义事件类似</li>
+<li>websocket需要客户端与服务器之间的长连接，node事件驱动的方式擅长与量大的客户端保持高并发连接</li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> dgram = <span class="built_in">require</span>(<span class="string">'dgram'</span>);</div><div class="line"><span class="keyword">var</span> message = <span class="keyword">new</span> Buffer(<span class="string">"Node.js"</span>);</div><div class="line"><span class="keyword">var</span> client = dgram.createSocket(<span class="string">"udp4"</span>);</div><div class="line">client.send(message, <span class="number">0</span>, message.length, <span class="number">41234</span>, <span class="string">"localhost"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, bytes</span>) </span>&#123;</div><div class="line">	client.close();</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h4 id="UPD套接字事件"><a href="#UPD套接字事件" class="headerlink" title="UPD套接字事件"></a>UPD套接字事件</h4><ul>
-<li>UDP是个EventEmitter实例使用更简单，TCP是个Stream实例</li>
-</ul>
-<ol>
-<li>message UDP套接字帧听网卡端口后，接受数据时触发，触发携带的数据为Buffer对象和远程地址</li>
-<li>listening UDP开始帧听时触发</li>
-<li>close 调用close()时触发，并不再触发message事件</li>
-<li>error 异常时触发，不帧听则直接抛出，进程退出</li>
-</ol>
-<h3 id="构建HTTP服务"><a href="#构建HTTP服务" class="headerlink" title="构建HTTP服务"></a>构建HTTP服务</h3><ul>
-<li>超文本传输协议 HyperText Transfer Protocol</li>
-<li>构建在TCP之上 属于应用层协议 B/S模式，目前最知名的标准RFC 2616</li>
-</ul>
-<p>通常的http通信的信息分三部分，TCP的3次握手，客户端向服务器发送请求报文，服务器完成处理后向客户端发送响应内容。<br>浏览器其实是http的代理，将用户的行为转化为http请求发送给服务端，服务端处理请求然后发送响应报文给代理，代理解析报文再展示给用户。http服务只做处理http请求和发送http响应</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//创建http服务</span></div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;</div><div class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></div><div class="line">	&#125;);</div><div class="line">	res.end(<span class="string">'Hello World\n'</span>);</div><div class="line">&#125;).listen(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Server running at http://127.0.0.1:1337/'</span>);</div><div class="line"></div><div class="line"><span class="comment">//使用net模块创建</span></div><div class="line"><span class="keyword">var</span> tcp = <span class="built_in">require</span>(<span class="string">'net'</span>).createServer();</div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;</div><div class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></div><div class="line">	&#125;);</div><div class="line">	res.end(<span class="string">'handled by child, pid is '</span> + process.pid + <span class="string">'\n'</span>);</div><div class="line">&#125;);</div><div class="line">tcp.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</div><div class="line">	server.emit(<span class="string">'connection'</span>, socket);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h4 id="http模块"><a href="#http模块" class="headerlink" title="http模块"></a>http模块</h4><ul>
-<li>继承自TCP服务（net模块)，通信方法都是使用net的，包括创建服务、关闭服务等</li>
-<li>能够与多个客户端保持连接，因为采用事件驱动，不用给每个连接创建额外的线程、进程，内存占用低，能高并发</li>
-<li>tcp以connection为单位服务，http以request为单位服务</li>
-</ul>
-<p>http模块将tcp连接的读操作封装为ServerRequest对象，报文头部使用http_parser解析然后放在req.headers上传递给业务逻辑。报文体部分为只读流对象,需要在数据流结束后转字符串</p>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	<span class="comment">// console.log(req.headers);</span></div><div class="line">	<span class="keyword">var</span> buffers = [];</div><div class="line">	req.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span><span class="params">(trunk)</span> </span>&#123;</div><div class="line">		buffers.push(trunk);</div><div class="line">	&#125;).on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">var</span> buffer = Buffer.concat(buffers); <span class="comment">// TODO</span></div><div class="line">		res.end(<span class="string">'Hello world'</span>);</div><div class="line">	&#125;);</div><div class="line">&#125;</div><div class="line"><span class="comment">//express中使用bodyParse，会自动解析，但要求请求头添加Content-Type=application/json</span></div></pre></td></tr></table></figure>
-<p>封装对底层连接的写操作为ServerResponse对象<br>影响响应报文头api为<strong>res.setHeader()</strong>和<strong>res.writeHead()</strong>，可以调用res.setHeader()进行多次设置，只要调用writeHead后，报头才会写入连接</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">res.writeHead(<span class="number">200</span>, &#123;<span class="symbol">'Content</span>-<span class="keyword">Type</span>': <span class="symbol">'text</span>/plain'&#125;);</div></pre></td></tr></table></figure>
-<p>设置报文体API为write(),end();end()会先调用write()发送数据，再发信号告知响应结束。</p>
-<p><strong>一旦开始了数据发送，writeHead()和setHeader()将不再生效</strong><br><strong>结束时要调用res.end(),否则客户端将一直处于等待状态，无论异常与否</strong></p>
-<h5 id="http服务端事件"><a href="#http服务端事件" class="headerlink" title="http服务端事件"></a>http服务端事件</h5><p>http服务器是个EventEmitter实例</p>
+<h4 id="WebSocket握手"><a href="#WebSocket握手" class="headerlink" title="WebSocket握手"></a>WebSocket握手</h4><p>客户端发起升级协议请求：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">GET <span class="regexp">/ chat HTTP /</span> <span class="number">1.1</span></div><div class="line"><span class="string">Host:</span> server.example.com</div><div class="line"><span class="string">Upgrade:</span> websocket <span class="comment">//升级协议为websocket</span></div><div class="line"><span class="string">Connection:</span> Upgrade</div><div class="line">Sec - WebSocket - <span class="string">Key:</span> dGhlIHNhbXBsZSBub25jZQ == </div><div class="line">Sec - WebSocket - <span class="string">Protocol:</span> chat, superchat <span class="comment">//子协议</span></div><div class="line">Sec - WebSocket - <span class="string">Version:</span> <span class="number">13</span> <span class="comment">//版本号</span></div></pre></td></tr></table></figure>
+<p>Sec-WebSocket-Key用于安全校验，值是随机生成的Base64编码的字符串。服务端将其与字符串258EAFA5-E914-47DA-95CA-C5AB0DC85B11拼接，然后再用sha1计算再Base64编码</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var crypto = require(<span class="string">'crypto'</span>);</div><div class="line">var val = crypto.createHash(<span class="string">'sha1'</span>).update(key).digest(<span class="string">'base64'</span>);</div><div class="line"></div><div class="line"><span class="comment">//服务端响应b报文</span></div><div class="line">HTTP / <span class="number">1.1</span> <span class="number">101</span> Switching Protocols</div><div class="line"><span class="string">Upgrade:</span> websocket</div><div class="line"><span class="string">Connection:</span> Upgrade </div><div class="line">Sec - WebSocket - <span class="string">Accept:</span> s3pPLMBiTxaQ9kYGzzhZRbK + xOo =</div><div class="line">Sec - WebSocket - <span class="string">Protocol:</span> chat</div></pre></td></tr></table></figure>
+<p>客户端校验Sec-WebSocket-Accept，正确的话就开始数据传输</p>
+<h4 id="WebSocket数据传输"><a href="#WebSocket数据传输" class="headerlink" title="WebSocket数据传输"></a>WebSocket数据传输</h4><p> 在握手后就开始websocket数据帧协议， 握手完成客户端onopen()被触发</p>
+ <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">socket.onopen = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </div><div class="line">   <span class="comment">// <span class="doctag">TODO:</span> opened()</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p> 服务端没有onopen()方法，想完成tcp套接字事件到websocket事件的封装，需要在收发数据时处理，Websocket的数据帧是在底层data事件上封装的</p>
+ <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> <span class="comment">//接收</span></div><div class="line"> WebSocket.prototype.setSocket = <span class="function"><span class="keyword">function</span><span class="params">(socket)</span> </span>&#123;</div><div class="line">	<span class="keyword">this</span>.socket = socket;</div><div class="line">	<span class="keyword">this</span>.socket.on(<span class="string">'data'</span>, <span class="keyword">this</span>.receiver);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//发送</span></div><div class="line">WebSocket.prototype.send = <span class="function"><span class="keyword">function</span><span class="params">(data)</span> </span>&#123;</div><div class="line">	<span class="keyword">this</span>._send(data);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p> 当一端调用send()发送时，另一端会触发onmessage,协议可能将数据封装为多帧发送。客户端需要对发送的数据帧做掩码处理，服务端收到无掩码帧会断开连接，而服务端发送时不需要</p>
+<p> <code>websocket数据帧定义</code><br> <img src="../picture/websocket数据帧定义.png" alt="Smaller icon"></p>
 <ul>
-<li>connection 客户端与服务器建立底层的tcp连接时触发。连接开启keep-alive,可以在多次请求响应之间使用</li>
-<li>request 当请求数据发送到服务端，在解析出http请求头后触发该事件</li>
-<li>close 调用server.close()方法停止接受新连接，当已有的连接也都断开后触发，可以给server.close()传个回调来快速注册该事件</li>
-<li>checkContinue 某些客户端在发送大数据时，会先发一个头部带Expect: 100-continue的请求，服务器接收后触发checkContinue。如果不监听，就自动回复100 Continue。如果不接收就响应400 Bad Request。注意，<strong>在客户端收到100 Continue后重新发起请求才会触发request</strong></li>
-<li>connect 客户端发起connect请求时触发，通常在http代理时才会发起connect,如果不监听，发起该请求的连接会关闭</li>
-<li>upgrade 客户端要升级连接协议时会在请求头部带上upgrade，服务端接收后触发，如果不监听，发起该请求的连接会关闭</li>
-<li>clientError 连接的客户端触发error事件，会传递到服务器端并触发</li>
+<li>fin 如果这数据帧是最后一帧时为1(如果数据就一帧，它也是1)，其余为0  <ul>
+<li>rsv1、rsv2、rsv3：1位长 用于标识拓展，当有拓展时为1</li>
+<li>opcode: 4位（0~15） 0：附加数据帧 ,1：文本数据帧  ,2：二进制数据帧,8：发送一个连接关闭帧,9：ping数据帧  ,10：pong数据帧 ping,pong用于心跳检测，一端发ping、一端发pong</li>
+<li>masked 是否进行掩码处理  客户端发送时是1 服务端是0 </li>
+<li>payload 标识数据长度</li>
+<li>masking key 当masked为1时存在 长度32位 用于解密</li>
+<li>payload data 目标数据 位数为8的倍数 </li>
 </ul>
-<h4 id="http客户端"><a href="#http客户端" class="headerlink" title="http客户端"></a>http客户端</h4><ul>
-<li>http.request(options, connect) 构建http客户端</li>
+</li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> options = &#123;</div><div class="line">	<span class="attr">hostname</span>: <span class="string">'127.0.0.1'</span>,</div><div class="line">	<span class="attr">port</span>: <span class="number">1334</span>,</div><div class="line">	<span class="attr">path</span>: <span class="string">'/'</span>,</div><div class="line">	<span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">	localAddress <span class="comment">//建立连接的本地网卡</span></div><div class="line">	socketPath <span class="comment">//Domain套接字路径</span></div><div class="line">	headers <span class="comment">//请求头对象</span></div><div class="line">	auth <span class="comment">//Basic认证 将被计算成请求头的Authorization部分</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">// 用request 包请求 不用自己来处理on end </span></div><div class="line"><span class="keyword">var</span> req = http.request(options, <span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'STATUS: '</span> + res.statusCode);</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'HEADERS: '</span> + <span class="built_in">JSON</span>.stringify(res.headers));</div><div class="line">	res.setEncoding(<span class="string">'utf8'</span>);</div><div class="line">	res.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(chunk);</div><div class="line">	&#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">req.end();</div></pre></td></tr></table></figure>
-<p>报文体的内容通过请求对象的write()写入，end()告知报文结束<br>客户端clientRequest(req)解析完响应头就触发response，并传递ClientResponse以供操作，之后报文体以<strong>只读流</strong>提供）</p>
-<h5 id="http代理"><a href="#http代理" class="headerlink" title="http代理"></a>http代理</h5><ul>
-<li>为了重用tcp连接(在keeplive时，一个tcp连接可以多次用于请求)</li>
-<li>http里包含一个客户端代理对象http.globalAgent，它管理每个服务端(host+port)创建的连接并创建一个连接池，默认每个服务器端5个连接</li>
+<h3 id="网络服务和安全"><a href="#网络服务和安全" class="headerlink" title="网络服务和安全"></a>网络服务和安全</h3><ul>
+<li>ssl(Secure Sockets Layer,安全套接层)，应用在传输层</li>
+<li>TLS(Transport Layer Security,安全传输层协议)，由IETF标准化</li>
 </ul>
-<p>在通过ClientRequest调用http请求时会走代理。可以在options中传递agentX修改连接限制</p>
-<figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var <span class="built_in">agent</span> = new http.<span class="built_in">Agent</span>(&#123;</div><div class="line">	maxSockets: <span class="number">10</span> </div><div class="line">&#125;);</div><div class="line">var options = &#123;</div><div class="line">	hostname: <span class="string">'127.0.0.1'</span>,</div><div class="line">	port: <span class="number">1334</span>,</div><div class="line">	path: <span class="string">'/'</span>,</div><div class="line">	method: <span class="string">'GET'</span>,</div><div class="line">	<span class="built_in">agent</span>: <span class="built_in">agent</span> <span class="comment">//设置为false就不受连接池限制</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h5 id="http客户端事件"><a href="#http客户端事件" class="headerlink" title="http客户端事件"></a>http客户端事件</h5><ul>
-<li>response 客户端得到响应后触发</li>
-<li>socket 当连接池中建立的连接分配给当前的对象时触发</li>
-<li>upgrade 客户端向服务端发起upgrade 服务端响应101 Switching Protocols时触发</li>
-<li>continue 客户端想发大数据，头部带Expect: 100-continue，服务端同意并响应100 continue时触发</li>
+<p>node提供crypto，tls,https。crypto用于加解密，tls与net功能类似，区别是它建立在TLS/SSL加密的tcp.https和http接口也一致，也是区别在建立于安全的连接</p>
+<h4 id="TLS-SSL"><a href="#TLS-SSL" class="headerlink" title="TLS/SSL"></a>TLS/SSL</h4><ul>
+<li><p>非对称加密，公钥用于加密传输数据，私钥解密</p>
+<p><img src="../picture/ssl交换秘钥.png" alt="Smaller icon"></p>
+<p>node的tls/ssl是用openssl实现的，公、私钥生成参照：</p>
+</li>
 </ul>
+ <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 生成服务器端私 </span>openssl genrsa -out server<span class="selector-class">.key</span> <span class="number">1024</span> <span class="comment">//生成客户端私 </span>openssl genrsa -out client<span class="selector-class">.key</span> <span class="number">1024</span></div><div class="line"><span class="comment">// 利用上面的1024位长的RSA私钥生成公钥</span>openssl rsa -<span class="keyword">in</span> server<span class="selector-class">.key</span> -pubout -out server<span class="selector-class">.pem</span>openssl rsa -<span class="keyword">in</span> client<span class="selector-class">.key</span> -pubout -out client.pem</div></pre></td></tr></table></figure>
+<h5 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h5><ul>
+<li>由CA颁发，并提供验证</li>
+<li>防止中间人攻击</li>
+</ul>
+<p><code>中间人攻击</code>：在服务端和客户端交换密钥时，伪装成其中一方发送公钥，如对客户端就伪装成服务端。所以需要对公钥认证，确认来自目标服务器</p>
+<p> 服务端通过私钥生成CSR（Certificate Signing Request，证书签名请求），ca通过它颁发属于该服务器的签名证书</p>
+<p> 自签名证书流程：</p>
+ <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> \\ca生成私钥，csr文件，和自签名的证书</div><div class="line">$ openssl genrsa -out ca<span class="selector-class">.key</span> <span class="number">1024</span>$ openssl req -new -key ca<span class="selector-class">.key</span> -out ca<span class="selector-class">.csr</span>$ openssl x509 -req -<span class="keyword">in</span> ca<span class="selector-class">.csr</span> -signkey ca<span class="selector-class">.key</span> -out ca<span class="selector-class">.crt</span></div><div class="line">\\服务器生成csr,向ca申请签名，获取证书$ openssl req -new -key server<span class="selector-class">.key</span> -out server<span class="selector-class">.csr</span>$ openssl x509 -req -CA ca<span class="selector-class">.crt</span> -CAkey ca<span class="selector-class">.key</span> -CAcreateserial -<span class="keyword">in</span> server<span class="selector-class">.csr</span> -out server.crt</div></pre></td></tr></table></figure>
+<p>客户端发起安全连接会获取服务端证书，然后用ca的证书验证服务器证书，包括真伪、服务器名称、ip等。对于知名ca,它的证书一般预装在浏览器，自签的ca需要客户端安装才能验证</p>
+<h4 id="创建tcl服务"><a href="#创建tcl服务" class="headerlink" title="创建tcl服务"></a>创建tcl服务</h4><ul>
+<li>通过node的tls创建安全的tcp服务</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//服务端</span></div><div class="line"><span class="keyword">var</span> tls = <span class="built_in">require</span>(<span class="string">'tls'</span>);</div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> options = &#123;</div><div class="line">	<span class="attr">key</span>: fs.readFileSync(<span class="string">'./keys/server.key'</span>),</div><div class="line">	<span class="attr">cert</span>: fs.readFileSync(<span class="string">'./keys/server.crt'</span>),</div><div class="line">	<span class="attr">requestCert</span>: <span class="literal">true</span>,</div><div class="line">	<span class="attr">ca</span>: [fs.readFileSync(<span class="string">'./keys/ca.crt'</span>)]</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> server = tls.createServer(options, <span class="function"><span class="keyword">function</span>(<span class="params">stream</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'server connected'</span>, stream.authorized ? <span class="string">'authorized'</span> : <span class="string">'unauthorized'</span>);</div><div class="line">	stream.write(<span class="string">"welcome!\n"</span>);</div><div class="line">	stream.setEncoding(<span class="string">'utf8'</span>);</div><div class="line">	stream.pipe(stream);</div><div class="line">&#125;);</div><div class="line">server.listen(<span class="number">8000</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'server bound'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">//测试： $ openssl s_client -connect 127.0.0.1:8000</span></div><div class="line"><span class="comment">//客户端</span></div><div class="line">$ openssl genrsa - out client.key <span class="number">1024</span></div><div class="line">$ openssl req - <span class="keyword">new</span> - key client.key - out client.csr</div><div class="line">$ openssl x509 - req - CA ca.crt - CAkey ca.key - CAcreateserial - <span class="keyword">in</span> client.csr - out client.crt</div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> tls = <span class="built_in">require</span>(<span class="string">'tls'</span>);</div><div class="line"><span class="keyword">var</span> options = &#123;</div><div class="line">	<span class="attr">key</span>: fs.readFileSync(<span class="string">'./keys/client.key'</span>),</div><div class="line">	<span class="attr">cert</span>: fs.readFileSync(<span class="string">'./keys/client.crt'</span>),</div><div class="line">	<span class="attr">ca</span>: [fs.readFileSync(<span class="string">'./keys/ca.crt'</span>)]</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> stream = tls.connect(<span class="number">8000</span>, options, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'client connected'</span>, stream.authorized ? <span class="string">'authorized'</span> : <span class="string">'unauthorized'</span>);</div><div class="line">	process.stdin.pipe(stream);</div><div class="line">&#125;);</div><div class="line">stream.setEncoding(<span class="string">'utf8'</span>);</div><div class="line">stream.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(data);</div><div class="line">&#125;);</div><div class="line">stream.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	server.close();</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">//和tcp相比只是多了证书配置</span></div></pre></td></tr></table></figure>
+<h4 id="https服务"><a href="#https服务" class="headerlink" title="https服务"></a>https服务</h4><ul>
+<li>使用node的https，比http多了一个配置</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> https = <span class="built_in">require</span>(<span class="string">'https'</span>);</div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> options = &#123;</div><div class="line">	<span class="attr">key</span>: fs.readFileSync(<span class="string">'./keys/server.key'</span>),</div><div class="line">	<span class="attr">cert</span>: fs.readFileSync(<span class="string">'./keys/server.crt'</span>)</div><div class="line">&#125;;</div><div class="line">https.createServer(options, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>);</div><div class="line">	res.end(<span class="string">"hello world\n"</span>);</div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"></div><div class="line"><span class="comment">//验证 $ curl https://localhost:8000/ -k, 忽略证书验证 -carcert ca证书地址</span></div><div class="line"><span class="comment">//客户端</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> https = <span class="built_in">require</span>(<span class="string">'https'</span>);</div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> options = &#123;</div><div class="line">	<span class="attr">hostname</span>: <span class="string">'localhost'</span>,</div><div class="line">	<span class="attr">port</span>: <span class="number">8000</span>,</div><div class="line">	<span class="attr">path</span>: <span class="string">'/'</span>,</div><div class="line">	<span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">	<span class="attr">key</span>: fs.readFileSync(<span class="string">'./keys/client.key'</span>),</div><div class="line">	<span class="attr">cert</span>: fs.readFileSync(<span class="string">'./keys/client.crt'</span>),</div><div class="line">	<span class="attr">ca</span>: [fs.readFileSync(<span class="string">'./keys/ca.crt'</span>)]</div><div class="line">&#125;;</div><div class="line">options.agent = <span class="keyword">new</span> https.Agent(options);<span class="comment">//https代理另设</span></div><div class="line"><span class="keyword">var</span> req = https.request(options, <span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">	res.setEncoding(<span class="string">'utf-8'</span>);</div><div class="line">	res.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">d</span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(d);</div><div class="line">	&#125;);</div><div class="line">&#125;);</div><div class="line">req.end();</div><div class="line">req.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(e);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 
             
           </span>
@@ -1810,114 +1780,6 @@ node --max-new-space-size=1024 test.js // 单位为KB
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/13/openssl生成ssl证书及向申请CA流程/" itemprop="url">
-                  openssl生成ssl证书及向申请CA流程
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-05-13T10:57:49+08:00" content="2016-05-13">
-              2016-05-13
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/13/openssl生成ssl证书及向申请CA流程/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/13/openssl生成ssl证书及向申请CA流程/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="生成key"><a href="#生成key" class="headerlink" title="生成key"></a>生成key</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">openssl genrsa -des3 -out prvtkey<span class="selector-class">.pem</span> <span class="number">2048</span> </div><div class="line">或者无密码保护的</div><div class="line">openssl genrsa -out prvtkey<span class="selector-class">.pem</span> <span class="number">2048</span></div></pre></td></tr></table></figure>
-<h3 id="生成-csr-用这个向数字证书颁发机构（即CA）申请一个数字证书"><a href="#生成-csr-用这个向数字证书颁发机构（即CA）申请一个数字证书" class="headerlink" title="生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)"></a>生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl req -<span class="keyword">new</span> -key prvtkey.pem -<span class="keyword">out</span> cert.csr</div></pre></td></tr></table></figure>
-<p>然后填写信息，注意<strong>Common Name (eg, your websites domain name)</strong>，要填写网站域名,如:pay.abc.com</p>
-<p>生成的.csr文件是否规范可以在这检测：<br><a href="https://cryptoreport.websecurity.symantec.com/checker/views/csrCheck.jsp" target="_blank" rel="external">https://cryptoreport.websecurity.symantec.com/checker/views/csrCheck.jsp</a></p>
-<p>然后向CA申请数字证书，再用CA给的cacert.pem替换原来的prvtkey.pem</p>
-<h3 id="自建CA"><a href="#自建CA" class="headerlink" title="自建CA"></a>自建CA</h3><p><a href="http://www.cnblogs.com/AloneSword/p/3809002.html" target="_blank" rel="external">http://www.cnblogs.com/AloneSword/p/3809002.html</a></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1964,7 +1826,7 @@ node --max-new-space-size=1024 test.js // 单位为KB
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-count">63</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

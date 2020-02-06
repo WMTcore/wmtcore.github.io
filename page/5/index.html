@@ -253,6 +253,118 @@
             
               
                 
+                <a class="post-title-link" href="/2016/02/19/angularjs初步-三/" itemprop="url">
+                  angularjs初步(三)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-02-19T13:58:14+08:00" content="2016-02-19">
+              2016-02-19
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/19/angularjs初步-三/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/angularjs初步-三/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h3><p><code>ng-click</code> 定义了 AngularJS 点击事件。</p>
+<figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt; <span class="attr">div</span> <span class="attr">ng-app</span>=<span class="string">""</span> <span class="attr">ng-controller</span>=<span class="string">"myCtrl"</span>&gt;</span></span></div><div class="line"></div><div class="line"><span class="tag">&lt; <span class="attr">button</span> <span class="attr">ng-click</span>=<span class="string">"count = count + 1"</span>&gt;</span>点我！<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt; <span class="attr">p</span>&gt;</span><span class="template-variable">&#123;&#123; count &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></div><div class="line"></div><div class="line"> <span class="tag">&lt; /<span class="attr">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><code>ng-show</code> 显示 HTML 元素<br><code>ng-hide</code> 隐藏 HTML 元素</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt; div ng-<span class="keyword">app</span>=<span class="string">"myApp"</span> ng-controller=<span class="string">"personCtrl"</span>&gt;</div><div class="line"></div><div class="line">&lt;button ng-click=<span class="string">"toggle()"</span>&gt;&gt;隐藏/显示&lt;/button&gt;</div><div class="line"></div><div class="line">&lt; p ng-hide=<span class="string">"myVar"</span>&gt;</div><div class="line">名: &lt;<span class="keyword">input</span> <span class="keyword">type</span>=<span class="string">"text"</span> ng-model=<span class="string">"firstName"</span>&gt;&lt;<span class="keyword">br</span>&gt;</div><div class="line">姓名: &lt;<span class="keyword">input</span> <span class="keyword">type</span>=<span class="string">"text"</span> ng-model=<span class="string">"lastName"</span>&gt;&lt;<span class="keyword">br</span>&gt;</div><div class="line">&lt;<span class="keyword">br</span>&gt;</div><div class="line">Full Name: &#123;&#123;firstName + <span class="string">" "</span> + lastName&#125;&#125;</div><div class="line">&lt;/p&gt;</div><div class="line"></div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">&lt; script&gt;</div><div class="line"><span class="keyword">var</span> <span class="keyword">app</span> = angular.module('myApp', []);</div><div class="line"><span class="keyword">app</span>.controller('personCtrl', function(<span class="variable">$scope</span>) &#123;</div><div class="line">    <span class="variable">$scope</span>.firstName = <span class="string">"John"</span>,</div><div class="line">    <span class="variable">$scope</span>.lastName = <span class="string">"Doe"</span></div><div class="line">    <span class="variable">$scope</span>.myVar = false;</div><div class="line">    <span class="variable">$scope</span>.toggle = function() &#123;</div><div class="line">        <span class="variable">$scope</span>.myVar = !<span class="variable">$scope</span>.myVar;</div><div class="line">    &#125;;</div><div class="line">&#125;);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<h3 id="模块-angular-module"><a href="#模块-angular-module" class="headerlink" title="模块 angular.module"></a>模块 angular.module</h3><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="params">&lt; div ng-app="myApp"&gt;</span>...<span class="params">&lt;/div&gt;</span></div><div class="line"></div><div class="line"><span class="params">&lt; script&gt;</span></div><div class="line"></div><div class="line"><span class="comment">//在模块定义中 [] 参数用于定义模块的依赖关系。中括号[]表示该模块没有依赖，如果有依赖的话会在中括号写上依赖的模块名字。</span></div><div class="line">var app = angular.module(<span class="string">"myApp"</span>, []); </div><div class="line"></div><div class="line"><span class="params">&lt;/script&gt;</span></div></pre></td></tr></table></figure>
+<p><code>添加控制器</code> 用 ng-controller 指令来添加应用的控制器</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt; div ng-app=<span class="string">"myApp"</span> ng-controller=<span class="string">"myCtrl"</span>&gt;</div><div class="line">&#123;&#123; firstName + <span class="string">" "</span> + lastName &#125;&#125;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">&lt; script&gt;</div><div class="line"></div><div class="line"><span class="keyword">var</span> app = angular.module(<span class="string">"myApp"</span>, []);</div><div class="line"></div><div class="line">app.controller(<span class="string">"myCtrl"</span>, <span class="function"><span class="keyword">function</span><span class="params">($scope)</span> </span>&#123;</div><div class="line">    $scope.firstName = <span class="string">"John"</span>;</div><div class="line">    $scope.lastName = <span class="string">"Doe"</span>;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<h3 id="表单"><a href="#表单" class="headerlink" title="表单"></a>表单</h3><ul>
+<li>输入控件的集合</li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">&lt; div ng-<span class="keyword">app</span>=<span class="string">"myApp"</span> ng-controller=<span class="string">"formCtrl"</span>&gt;</div><div class="line"><span class="comment">//novalidate 属性是在 HTML5 中新增的。禁用了使用浏览器的默认验证</span></div><div class="line">  &lt;<span class="keyword">form</span> novalidate&gt;</div><div class="line">    First Name:&lt;<span class="keyword">br</span>&gt;</div><div class="line">    <span class="comment">//ng-model 指令绑定了两个 input 元素到模型的 user 对象</span></div><div class="line">    &lt;<span class="keyword">input</span> <span class="keyword">type</span>=<span class="string">"text"</span> ng-model=<span class="string">"user.firstName"</span>&gt;&lt;<span class="keyword">br</span>&gt;</div><div class="line">    Last Name:&lt;<span class="keyword">br</span>&gt;</div><div class="line">    &lt;<span class="keyword">input</span> <span class="keyword">type</span>=<span class="string">"text"</span> ng-model=<span class="string">"user.lastName"</span>&gt;</div><div class="line">    &lt;<span class="keyword">br</span>&gt;&lt;<span class="keyword">br</span>&gt;</div><div class="line">    <span class="comment">//ng-click 指令调用了 reset() 方法，且在点击按钮时调用</span></div><div class="line">    &lt;button ng-click=<span class="string">"reset()"</span>&gt;RESET&lt;/button&gt;</div><div class="line">  &lt;/<span class="keyword">form</span>&gt;</div><div class="line">  &lt;p&gt;<span class="keyword">form</span> = &#123;&#123;user&#125;&#125;&lt;/p&gt;</div><div class="line">  &lt;p&gt;master = &#123;&#123;master&#125;&#125;&lt;/p&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">&lt; script&gt;</div><div class="line"><span class="keyword">var</span> <span class="keyword">app</span> = angular.module('myApp', []);</div><div class="line"><span class="comment">//formCtrl 函数设置了 master 对象的初始值，并定义了 reset() 方法</span></div><div class="line"><span class="keyword">app</span>.controller('formCtrl', function(<span class="variable">$scope</span>) &#123;</div><div class="line">    <span class="variable">$scope</span>.master = &#123;firstName: <span class="string">"John"</span>, lastName: <span class="string">"Doe"</span>&#125;;</div><div class="line">    <span class="variable">$scope</span>.reset = function() &#123;</div><div class="line">        <span class="variable">$scope</span>.user = angular.<span class="keyword">copy</span>(<span class="variable">$scope</span>.master);</div><div class="line">    &#125;;</div><div class="line">    <span class="variable">$scope</span>.reset();</div><div class="line">&#125;);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<h3 id="输入验证"><a href="#输入验证" class="headerlink" title="输入验证"></a>输入验证</h3><ul>
+<li>表单和控件可以提供验证功能</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt; <span class="attr">form</span>  <span class="attr">ng-app</span>=<span class="string">"myApp"</span>  <span class="attr">ng-controller</span>=<span class="string">"validateCtrl"</span></span></div><div class="line"><span class="attr">name</span>=<span class="string">"myForm"</span> <span class="attr">novalidate</span>&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt; <span class="attr">p</span>&gt;</span>用户名:<span class="tag">&lt;<span class="name">br</span>&gt;</span></div><div class="line">  <span class="tag">&lt; <span class="attr">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"user"</span> <span class="attr">ng-model</span>=<span class="string">"user"</span> <span class="attr">required</span>&gt;</span></div><div class="line">  <span class="tag">&lt; <span class="attr">span</span> <span class="attr">style</span>=<span class="string">"color:red"</span> <span class="attr">ng-show</span>=<span class="string">"myForm.user.$dirty &amp;&amp; myForm.user.$invalid"</span>&gt;</span></div><div class="line">  <span class="tag">&lt; <span class="attr">span</span> <span class="attr">ng-show</span>=<span class="string">"myForm.user.$error.required"</span>&gt;</span>用户名是必须的。<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt; <span class="attr">p</span>&gt;</span>邮箱:<span class="tag">&lt;<span class="name">br</span>&gt;</span></div><div class="line">  <span class="tag">&lt; <span class="attr">input</span> <span class="attr">type</span>=<span class="string">"email"</span> <span class="attr">name</span>=<span class="string">"email"</span> <span class="attr">ng-model</span>=<span class="string">"email"</span> <span class="attr">required</span>&gt;</span></div><div class="line">  <span class="tag">&lt; <span class="attr">span</span> <span class="attr">style</span>=<span class="string">"color:red"</span> <span class="attr">ng-show</span>=<span class="string">"myForm.email.$dirty &amp;&amp; myForm.email.$invalid"</span>&gt;</span></div><div class="line">  <span class="tag">&lt; <span class="attr">span</span> <span class="attr">ng-show</span>=<span class="string">"myForm.email.$error.required"</span>&gt;</span>邮箱是必须的。<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">  <span class="tag">&lt; <span class="attr">span</span> <span class="attr">ng-show</span>=<span class="string">"myForm.email.$error.email"</span>&gt;</span>非法的邮箱。<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt; /<span class="attr">p</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt; <span class="attr">p</span>&gt;</span></div><div class="line">  <span class="tag">&lt; <span class="attr">input</span> <span class="attr">type</span>=<span class="string">"submit"</span></span></div><div class="line">   <span class="attr">ng-disabled</span>=<span class="string">"myForm.user.$dirty &amp;&amp; myForm.user.$invalid ||</span></div><div class="line">  myForm.email.$dirty &amp;&amp; myForm.email.$invalid"&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt; /<span class="attr">form</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt; <span class="attr">script</span>&gt;</span></div><div class="line">var app = angular.module('myApp', []);</div><div class="line">app.controller('validateCtrl', function($scope) &#123;</div><div class="line">    $scope.user = 'John Doe';</div><div class="line">    $scope.email = 'john.doe@gmail.com';</div><div class="line">&#125;);</div><div class="line"><span class="tag">&lt; /<span class="attr">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><ul>
+<li>比较、迭代、转换</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">angular</span><span class="selector-class">.lowercase</span>()	</div><div class="line"><span class="selector-tag">angular</span><span class="selector-class">.uppercase</span>()	</div><div class="line"><span class="selector-tag">angular</span><span class="selector-class">.isString</span>()	</div><div class="line"><span class="selector-tag">angular</span><span class="selector-class">.isNumber</span>()</div></pre></td></tr></table></figure>
+<h3 id="包含-ng-include"><a href="#包含-ng-include" class="headerlink" title="包含 ng-include"></a>包含 ng-include</h3><ul>
+<li>可以在 HTML 中包含 HTML 文件</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt; <span class="attr">body</span> <span class="attr">ng-app</span>=<span class="string">"myApp"</span> <span class="attr">ng-controller</span>=<span class="string">"userCtrl"</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt; <span class="attr">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-include</span>=<span class="string">"'myUsers_List.htm'"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-include</span>=<span class="string">"'myUsers_Form.htm'"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt; /<span class="attr">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt; /<span class="attr">body</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="动画-angular-animate-min-js-ngAnimate"><a href="#动画-angular-animate-min-js-ngAnimate" class="headerlink" title="动画 angular-animate.min.js ngAnimate"></a>动画 angular-animate.min.js ngAnimate</h3><p><code>ngAnimate</code> 监测事件,添加或移除 class</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt; body ng-app=<span class="string">"myApp"</span>&gt;</div><div class="line"><span class="xml"><span class="tag">&lt; <span class="attr">h1</span>&gt;</span>隐藏 DIV: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"checkbox"</span> <span class="attr">ng-model</span>=<span class="string">"myCheck"</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></div><div class="line"></div><div class="line"><span class="tag">&lt; <span class="attr">div</span> <span class="attr">ng-hide</span>=<span class="string">"myCheck"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line">&lt; script&gt;</div><div class="line"><span class="keyword">var</span> app = angular.module(<span class="string">'myApp'</span>, [<span class="string">'ngAnimate'</span>]);</div><div class="line"><span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></div><div class="line"></div><div class="line"></div><div class="line">&lt; style&gt;</div><div class="line">@keyframes myChange &#123;</div><div class="line">    <span class="keyword">from</span> &#123;</div><div class="line">        <span class="attr">height</span>: <span class="number">100</span>px;</div><div class="line">    &#125; to &#123;</div><div class="line">        <span class="attr">height</span>: <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">div &#123;</div><div class="line">    <span class="attr">height</span>: <span class="number">100</span>px;</div><div class="line">    background-color: lightblue;</div><div class="line">&#125;</div><div class="line">div.ng-hide &#123;</div><div class="line">    <span class="attr">animation</span>: <span class="number">0.5</span>s myChange;</div><div class="line">&#125;</div><div class="line">&lt;<span class="regexp">/style&gt;</span></div></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/02/18/angularjs初步-二/" itemprop="url">
                   angularjs初步(二)
                 </a>
@@ -1324,109 +1436,6 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/28/git-常用命令/" itemprop="url">
-                  git 常用命令
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-12-28T12:42:09+08:00" content="2015-12-28">
-              2015-12-28
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/git/" itemprop="url" rel="index">
-                    <span itemprop="name">git</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/28/git-常用命令/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/28/git-常用命令/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p><img src="/picture/git.jpg" alt="Resize icon"></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1473,7 +1482,7 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-count">63</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
