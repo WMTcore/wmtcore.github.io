@@ -253,6 +253,145 @@
             
               
                 
+                <a class="post-title-link" href="/2016/02/24/angularjs-布局模板和路由/" itemprop="url">
+                  angularjs 布局模板和路由
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-02-24T14:54:28+08:00" content="2016-02-24">
+              2016-02-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/24/angularjs-布局模板和路由/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/24/angularjs-布局模板和路由/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p><strong>将视图（页面）分解成布局和模板视图，再根据当前URL展示对应视图</strong></p>
+<h3 id="布局模板"><a href="#布局模板" class="headerlink" title="布局模板"></a>布局模板</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt; header&gt;<span class="xml"><span class="tag">&lt; <span class="attr">h1</span>&gt;</span>Header<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">header</span>&gt;</span></span></div><div class="line">&lt; div <span class="class"><span class="keyword">class</span></span>=<span class="string">"content"</span> &gt;</div><div class="line">   <span class="xml"><span class="tag">&lt; <span class="attr">div</span> <span class="attr">ng-view</span>&gt;</span><span class="tag">&lt; /<span class="attr">div</span>&gt;</span></span><span class="xml"><span class="tag">&lt; /<span class="attr">div</span> &gt;</span></span></div></pre></td></tr></table></figure>
+<p>ng-view 由ngRoute模块提供的一个特殊指令, 在HTML中给$route对应的视图内容占位。优先级1000</p>
+<ul>
+<li>每次触发$routeChangeSuccess事件, 视图会更新 </li>
+<li>如果某个模板同当前的路由关联<ul>
+<li>创建新作用域</li>
+<li>移除上一视图和作用域</li>
+<li>将新作用域与当前模板关联</li>
+<li>如果路由中控制器定义，则与当前作用域关联</li>
+<li>触发$viewContentLoaded </li>
+<li>如果提供onload属性,调用所指定的函数     </li>
+</ul>
+</li>
+</ul>
+<h3 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h3><ul>
+<li>使用$routeProvider的when和otherwise</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">angular.module(<span class="string">'myApp'</span>, []).config(<span class="function"><span class="keyword">function</span><span class="params">($routeProvider)</span> </span>&#123;</div><div class="line">   $routeProvider</div><div class="line">       .when(<span class="string">'/'</span>,&#123;</div><div class="line">          <span class="comment">//  controller、template、templateURL、resolve、redirectTo、reloadOnSearch和css</span></div><div class="line">       &#125;)</div><div class="line">   &#125;）</div></pre></td></tr></table></figure>
+<p><code>controller</code> 字符串或函数</p>
+<p><code>template</code> html模板,<code>templateURL</code>模板链接</p>
+<p><code>resolve</code> 将resolve对象里的值注入到控制器中</p>
+<p><code>redirectTo</code> 路由替换，字符串或者函数，在调用函数时会传入：从当前路径中提取的路由参数，当前路径，当前URL中的查询串</p>
+<p><code>reloadOnSearch</code> true时， $location.search()变化时会重新加载路由</p>
+<h4 id="路由模式"><a href="#路由模式" class="headerlink" title="路由模式"></a>路由模式</h4><ul>
+<li>标签模式</li>
+</ul>
+<h3 id="location服务"><a href="#location服务" class="headerlink" title="$location服务"></a>$location服务</h3><p>类window.location,能修改路径和内部跳转，不能刷新整个页面</p>
+<ul>
+<li>$location.path() 获取或修改路径，并且与HTML5的历史api交互，提供用户后退的功能,加replace()，就不能后退</li>
+<li>absUrl() 获取编码后完整的URL</li>
+<li>hash() 获取URL中的hash片段  </li>
+<li>host() 获取URL中的主机，port()端口号，</li>
+<li>protocol() 获取URL中的协议</li>
+<li>search() 获取URL中的查询串，也可以用对象、字符串设置查询</li>
+<li>url() 获取或修改当前的URL</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/02/19/angularjs初步-三/" itemprop="url">
                   angularjs初步(三)
                 </a>
@@ -1317,125 +1456,6 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/01/04/webpack-初步/" itemprop="url">
-                  webpack 初步
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-01-04T15:20:48+08:00" content="2016-01-04">
-              2016-01-04
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/04/webpack-初步/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/04/webpack-初步/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="这是啥"><a href="#这是啥" class="headerlink" title="这是啥"></a>这是啥</h3><ul>
-<li>模块加载器兼打包工具</li>
-<li>可以使用 require(XXX)来引入各模块</li>
-<li>加载器（loader）编译（JSX、sass、、、）</li>
-<li>以 commonJS 形式书写</li>
-<li>能打包、压缩混淆、图片转base64等</li>
-<li>扩展性强，插件机制完善，支持 React 热插拔</li>
-</ul>
-<h3 id="安装，配置"><a href="#安装，配置" class="headerlink" title="安装，配置"></a>安装，配置</h3><ul>
-<li>npm init,npm install webpack –save</li>
-<li>webpack.config.js配置文件</li>
-</ul>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">var webpack = require(<span class="string">'webpack'</span>);</div><div class="line"></div><div class="line">module.exports = &#123;</div><div class="line">    <span class="comment">//入口文件配置</span></div><div class="line"><span class="symbol">    entry:</span> &#123;</div><div class="line"><span class="symbol">        a:</span> <span class="string">"./a"</span>, <span class="string">b:</span> <span class="string">"./b"</span> </div><div class="line">    &#125;,</div><div class="line">    <span class="comment">//出口文件输出配置</span></div><div class="line"><span class="symbol">    output:</span> &#123;</div><div class="line"><span class="symbol">        path:</span> <span class="string">'dist/js/page'</span>,<span class="comment">//打包文件存放的绝对路径</span></div><div class="line"><span class="symbol">        filename:</span> <span class="string">'[name].js'</span>，<span class="comment">//打包后的文件名</span></div><div class="line">        publicPath：“<span class="regexp">/js” /</span>/网站运行时的访问路径</div><div class="line">    &#125;,</div><div class="line"><span class="symbol">   module:</span> &#123;</div><div class="line">        <span class="comment">//加载器配置，需要npm install *-loader</span></div><div class="line"><span class="symbol">        loaders:</span> [</div><div class="line">            <span class="comment">//.css 文件使用 style-loader 和 css-loader 来处理</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.css$/</span>, <span class="string">loader:</span> <span class="string">'style-loader!css-loader'</span> &#125;,</div><div class="line">            <span class="comment">//.js 文件使用 jsx-loader 来编译处理</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.js$/</span>, <span class="string">loader:</span> <span class="string">'jsx-loader?harmony'</span>,<span class="string">exclude:</span> <span class="regexp">/node_modules/</span> &#125;,<span class="comment">//exclude排除</span></div><div class="line">            <span class="comment">//.scss 文件使用 style-loader、css-loader 和 sass-loader 来编译处理</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.scss$/</span>, <span class="string">loader:</span> <span class="string">'style!css!sass?sourceMap'</span>&#125;,</div><div class="line">            <span class="comment">//图片文件使用 url-loader 来处理，小于8kb的直接转为base64</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.(png|jpg)$/</span>, <span class="string">loader:</span> <span class="string">'url-loader?limit=8192'</span>&#125;,</div><div class="line">            &#123;<span class="string">test:</span> <span class="regexp">/\.json$/</span>,<span class="string">loader:</span> <span class="string">'json'</span>&#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//插件项</span></div><div class="line"><span class="symbol">    plugins:</span> [<span class="keyword">new</span> webpack.CommonsChunkPlugin(<span class="string">"init.js"</span>) ],<span class="comment">//这个插件可以将多个打包后的资源中的公共部分打包成单独的文件，这里指定公共文件输出为“init.js” 生成文件：init.js,a.js,b.js</span></div><div class="line">    <span class="comment">//其它解决方案配置</span></div><div class="line"><span class="string">resolve:</span> &#123;</div><div class="line">        <span class="comment">//查找module的话从这里开始查找</span></div><div class="line"><span class="symbol">        root:</span> <span class="string">'E:/github/flux-example/src'</span>, <span class="comment">//绝对路径</span></div><div class="line">        <span class="comment">//自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名</span></div><div class="line"><span class="symbol">        extensions:</span> [<span class="string">''</span>, <span class="string">'.js'</span>, <span class="string">'.json'</span>, <span class="string">'.scss'</span>],</div><div class="line">        <span class="comment">//模块别名定义，方便后续直接引用别名，无须多写长长的地址</span></div><div class="line"><span class="symbol">        alias:</span> &#123;</div><div class="line">            <span class="string">AppStore :</span> <span class="string">'js/stores/AppStores.js'</span>,<span class="comment">//后续直接 require('AppStore') 即可</span></div><div class="line">            <span class="string">ActionType :</span> <span class="string">'js/actions/ActionType.js'</span>,</div><div class="line">            <span class="string">AppAction :</span> <span class="string">'js/actions/AppAction.js'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h3 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h3><p><code>CommonsChunkPlugin</code> 提取多个页面之间的公共模块</p>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">var CommonsChunkPlugin = require(<span class="string">"webpack/lib/optimize/CommonsChunkPlugin"</span>);</div><div class="line">module.exports = &#123;</div><div class="line"><span class="symbol">    entry:</span> &#123;</div><div class="line"><span class="symbol">        p1:</span> <span class="string">"./page1"</span>,</div><div class="line"><span class="symbol">        p2:</span> <span class="string">"./page2"</span>,</div><div class="line"><span class="symbol">        p3:</span> <span class="string">"./page3"</span>,</div><div class="line"><span class="symbol">        ap1:</span> <span class="string">"./admin/page1"</span>,</div><div class="line"><span class="symbol">        ap2:</span> <span class="string">"./admin/page2"</span></div><div class="line">    &#125;,</div><div class="line"><span class="symbol">    output:</span> &#123;</div><div class="line"><span class="symbol">        filename:</span> <span class="string">"[name].js"</span></div><div class="line">    &#125;,</div><div class="line"><span class="symbol">    plugins:</span> [</div><div class="line">        new CommonsChunkPlugin(<span class="string">"admin-commons.js"</span>, [<span class="string">"ap1"</span>, <span class="string">"ap2"</span>]),</div><div class="line">        new CommonsChunkPlugin(<span class="string">"commons.js"</span>, [<span class="string">"p1"</span>, <span class="string">"p2"</span>, <span class="string">"admin-commons.js"</span>])</div><div class="line">    ]</div><div class="line">&#125;;</div><div class="line"><span class="comment">// &lt;script&gt;s required:</span></div><div class="line"><span class="comment">// page1.html: commons.js, p1.js</span></div><div class="line"><span class="comment">// page2.html: commons.js, p2.js</span></div><div class="line"><span class="comment">// page3.html: p3.js</span></div><div class="line"><span class="comment">// admin-page1.html: commons.js, admin-commons.js, ap1.js</span></div><div class="line"><span class="comment">// admin-page2.html: commons.js, admin-commons.js, ap2.js</span></div></pre></td></tr></table></figure>
-<p><code>extract-text-webpack-plugin</code> 独立打包</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</div><div class="line">    <span class="keyword">var</span> commonsPlugin = <span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(<span class="string">'common.js'</span>);</div><div class="line">    <span class="keyword">var</span> ExtractTextPlugin = <span class="built_in">require</span>(<span class="string">"extract-text-webpack-plugin"</span>);</div><div class="line">    <span class="built_in">module</span>.exports = &#123;</div><div class="line">        <span class="attr">plugins</span>: [commonsPlugin, <span class="keyword">new</span> ExtractTextPlugin(<span class="string">"[name].css"</span>)],</div><div class="line">        <span class="attr">entry</span>: &#123;&#125;;</div><div class="line">     &#125;</div></pre></td></tr></table></figure>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1482,7 +1502,7 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-count">64</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

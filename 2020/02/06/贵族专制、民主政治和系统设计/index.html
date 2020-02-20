@@ -37,7 +37,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="react,nodejs," />
+  <meta name="keywords" content="WMTcore" />
 
 
 
@@ -53,52 +53,37 @@
 
 
 
-<meta name="description" content="这是啥
-模块加载器兼打包工具
-可以使用 require(XXX)来引入各模块
-加载器（loader）编译（JSX、sass、、、）
-以 commonJS 形式书写
-能打包、压缩混淆、图片转base64等
-扩展性强，插件机制完善，支持 React 热插拔
+<meta name="description" content="概念一致性
+在系统设计中，概念完整性应该是最重要的考虑因素
 
-安装，配置
-npm init,npm install webpack –save
-webpack.config.js配置文件
-
-12345678">
+大多数统体现出的概念差异和不一致性的原因: 并不是因为它由不同的设计师们开发，是由于设计被分成了由若干人完成的若干任务
+概念的完整性要求: 系统只反映唯一的设计理念，用户所见的技术说明来自少数人的思想
+为了连贯的设计思路，宁可省略一些不规则的特性和改进，也不提倡独立和无法整合的系统，哪怕包含着许多很好的设计
+获得概念的完整性
+系统的实现">
 <meta property="og:type" content="article">
-<meta property="og:title" content="webpack 初步">
-<meta property="og:url" content="https://www.wmtcore.com/2016/01/04/webpack-初步/index.html">
+<meta property="og:title" content="贵族专制、民主政治和系统设计(Aristocracy, Democracy, and System Design)">
+<meta property="og:url" content="https://www.wmtcore.com/2020/02/06/贵族专制、民主政治和系统设计/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="这是啥
-模块加载器兼打包工具
-可以使用 require(XXX)来引入各模块
-加载器（loader）编译（JSX、sass、、、）
-以 commonJS 形式书写
-能打包、压缩混淆、图片转base64等
-扩展性强，插件机制完善，支持 React 热插拔
+<meta property="og:description" content="概念一致性
+在系统设计中，概念完整性应该是最重要的考虑因素
 
-安装，配置
-npm init,npm install webpack –save
-webpack.config.js配置文件
-
-12345678">
-<meta property="og:updated_time" content="2016-01-04T09:22:22.000Z">
+大多数统体现出的概念差异和不一致性的原因: 并不是因为它由不同的设计师们开发，是由于设计被分成了由若干人完成的若干任务
+概念的完整性要求: 系统只反映唯一的设计理念，用户所见的技术说明来自少数人的思想
+为了连贯的设计思路，宁可省略一些不规则的特性和改进，也不提倡独立和无法整合的系统，哪怕包含着许多很好的设计
+获得概念的完整性
+系统的实现">
+<meta property="og:updated_time" content="2020-02-20T03:25:02.099Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="webpack 初步">
-<meta name="twitter:description" content="这是啥
-模块加载器兼打包工具
-可以使用 require(XXX)来引入各模块
-加载器（loader）编译（JSX、sass、、、）
-以 commonJS 形式书写
-能打包、压缩混淆、图片转base64等
-扩展性强，插件机制完善，支持 React 热插拔
+<meta name="twitter:title" content="贵族专制、民主政治和系统设计(Aristocracy, Democracy, and System Design)">
+<meta name="twitter:description" content="概念一致性
+在系统设计中，概念完整性应该是最重要的考虑因素
 
-安装，配置
-npm init,npm install webpack –save
-webpack.config.js配置文件
-
-12345678">
+大多数统体现出的概念差异和不一致性的原因: 并不是因为它由不同的设计师们开发，是由于设计被分成了由若干人完成的若干任务
+概念的完整性要求: 系统只反映唯一的设计理念，用户所见的技术说明来自少数人的思想
+为了连贯的设计思路，宁可省略一些不规则的特性和改进，也不提倡独立和无法整合的系统，哪怕包含着许多很好的设计
+获得概念的完整性
+系统的实现">
 
 
 
@@ -110,7 +95,7 @@ webpack.config.js配置文件
   };
 </script>
 
-  <title> webpack 初步 | 大碗拉面 </title>
+  <title> 贵族专制、民主政治和系统设计(Aristocracy, Democracy, and System Design) | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
@@ -276,7 +261,7 @@ webpack.config.js配置文件
             
             
               
-                webpack 初步
+                贵族专制、民主政治和系统设计(Aristocracy, Democracy, and System Design)
               
             
           </h1>
@@ -285,8 +270,8 @@ webpack.config.js配置文件
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-01-04T15:20:48+08:00" content="2016-01-04">
-              2016-01-04
+            <time itemprop="dateCreated" datetime="2020-02-06T21:08:37+08:00" content="2020-02-06">
+              2020-02-06
             </time>
           </span>
 
@@ -295,8 +280,8 @@ webpack.config.js配置文件
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
+                  <a href="/categories/人月神话/" itemprop="url" rel="index">
+                    <span itemprop="name">人月神话</span>
                   </a>
                 </span>
 
@@ -311,8 +296,8 @@ webpack.config.js配置文件
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/04/webpack-初步/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/04/webpack-初步/" itemprop="commentsCount"></span>
+                <a href="/2020/02/06/贵族专制、民主政治和系统设计/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/02/06/贵族专制、民主政治和系统设计/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -331,52 +316,63 @@ webpack.config.js配置文件
       
 
       
-        <span itemprop="articleBody"><h3 id="这是啥"><a href="#这是啥" class="headerlink" title="这是啥"></a>这是啥</h3><ul>
-<li>模块加载器兼打包工具</li>
-<li>可以使用 require(XXX)来引入各模块</li>
-<li>加载器（loader）编译（JSX、sass、、、）</li>
-<li>以 commonJS 形式书写</li>
-<li>能打包、压缩混淆、图片转base64等</li>
-<li>扩展性强，插件机制完善，支持 React 热插拔</li>
+        <span itemprop="articleBody"><h3 id="概念一致性"><a href="#概念一致性" class="headerlink" title="概念一致性"></a>概念一致性</h3><ul>
+<li>在系统设计中，概念完整性应该是最重要的考虑因素</li>
 </ul>
-<h3 id="安装，配置"><a href="#安装，配置" class="headerlink" title="安装，配置"></a>安装，配置</h3><ul>
-<li>npm init,npm install webpack –save</li>
-<li>webpack.config.js配置文件</li>
+<p><code>大多数统体现出的概念差异和不一致性的原因</code>: 并不是因为它由不同的设计师们开发，是由于设计被分成了由若干人完成的若干任务</p>
+<p><code>概念的完整性要求</code>: 系统只反映唯一的设计理念，用户所见的技术说明<strong>来自少数人的思想</strong></p>
+<p>为了连贯的设计思路，宁可省略一些不规则的特性和改进，也不提倡独立和无法整合的系统，哪怕包含着许多很好的设计</p>
+<h3 id="获得概念的完整性"><a href="#获得概念的完整性" class="headerlink" title="获得概念的完整性"></a>获得概念的完整性</h3><ul>
+<li>系统的实现目标：功能性，易用性，<strong>功能与理解上复杂程度的比值才是系统设计的最终测试标准</strong></li>
+<li>简洁和直白来自概念的完整性</li>
+<li><strong>易用性需要设计的一致性和概念上的完整性</strong></li>
 </ul>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">var webpack = require(<span class="string">'webpack'</span>);</div><div class="line"></div><div class="line">module.exports = &#123;</div><div class="line">    <span class="comment">//入口文件配置</span></div><div class="line"><span class="symbol">    entry:</span> &#123;</div><div class="line"><span class="symbol">        a:</span> <span class="string">"./a"</span>, <span class="string">b:</span> <span class="string">"./b"</span> </div><div class="line">    &#125;,</div><div class="line">    <span class="comment">//出口文件输出配置</span></div><div class="line"><span class="symbol">    output:</span> &#123;</div><div class="line"><span class="symbol">        path:</span> <span class="string">'dist/js/page'</span>,<span class="comment">//打包文件存放的绝对路径</span></div><div class="line"><span class="symbol">        filename:</span> <span class="string">'[name].js'</span>，<span class="comment">//打包后的文件名</span></div><div class="line">        publicPath：“<span class="regexp">/js” /</span>/网站运行时的访问路径</div><div class="line">    &#125;,</div><div class="line"><span class="symbol">   module:</span> &#123;</div><div class="line">        <span class="comment">//加载器配置，需要npm install *-loader</span></div><div class="line"><span class="symbol">        loaders:</span> [</div><div class="line">            <span class="comment">//.css 文件使用 style-loader 和 css-loader 来处理</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.css$/</span>, <span class="string">loader:</span> <span class="string">'style-loader!css-loader'</span> &#125;,</div><div class="line">            <span class="comment">//.js 文件使用 jsx-loader 来编译处理</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.js$/</span>, <span class="string">loader:</span> <span class="string">'jsx-loader?harmony'</span>,<span class="string">exclude:</span> <span class="regexp">/node_modules/</span> &#125;,<span class="comment">//exclude排除</span></div><div class="line">            <span class="comment">//.scss 文件使用 style-loader、css-loader 和 sass-loader 来编译处理</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.scss$/</span>, <span class="string">loader:</span> <span class="string">'style!css!sass?sourceMap'</span>&#125;,</div><div class="line">            <span class="comment">//图片文件使用 url-loader 来处理，小于8kb的直接转为base64</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.(png|jpg)$/</span>, <span class="string">loader:</span> <span class="string">'url-loader?limit=8192'</span>&#125;,</div><div class="line">            &#123;<span class="string">test:</span> <span class="regexp">/\.json$/</span>,<span class="string">loader:</span> <span class="string">'json'</span>&#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//插件项</span></div><div class="line"><span class="symbol">    plugins:</span> [<span class="keyword">new</span> webpack.CommonsChunkPlugin(<span class="string">"init.js"</span>) ],<span class="comment">//这个插件可以将多个打包后的资源中的公共部分打包成单独的文件，这里指定公共文件输出为“init.js” 生成文件：init.js,a.js,b.js</span></div><div class="line">    <span class="comment">//其它解决方案配置</span></div><div class="line"><span class="string">resolve:</span> &#123;</div><div class="line">        <span class="comment">//查找module的话从这里开始查找</span></div><div class="line"><span class="symbol">        root:</span> <span class="string">'E:/github/flux-example/src'</span>, <span class="comment">//绝对路径</span></div><div class="line">        <span class="comment">//自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名</span></div><div class="line"><span class="symbol">        extensions:</span> [<span class="string">''</span>, <span class="string">'.js'</span>, <span class="string">'.json'</span>, <span class="string">'.scss'</span>],</div><div class="line">        <span class="comment">//模块别名定义，方便后续直接引用别名，无须多写长长的地址</span></div><div class="line"><span class="symbol">        alias:</span> &#123;</div><div class="line">            <span class="string">AppStore :</span> <span class="string">'js/stores/AppStores.js'</span>,<span class="comment">//后续直接 require('AppStore') 即可</span></div><div class="line">            <span class="string">ActionType :</span> <span class="string">'js/actions/ActionType.js'</span>,</div><div class="line">            <span class="string">AppAction :</span> <span class="string">'js/actions/AppAction.js'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h3 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h3><p><code>CommonsChunkPlugin</code> 提取多个页面之间的公共模块</p>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">var CommonsChunkPlugin = require(<span class="string">"webpack/lib/optimize/CommonsChunkPlugin"</span>);</div><div class="line">module.exports = &#123;</div><div class="line"><span class="symbol">    entry:</span> &#123;</div><div class="line"><span class="symbol">        p1:</span> <span class="string">"./page1"</span>,</div><div class="line"><span class="symbol">        p2:</span> <span class="string">"./page2"</span>,</div><div class="line"><span class="symbol">        p3:</span> <span class="string">"./page3"</span>,</div><div class="line"><span class="symbol">        ap1:</span> <span class="string">"./admin/page1"</span>,</div><div class="line"><span class="symbol">        ap2:</span> <span class="string">"./admin/page2"</span></div><div class="line">    &#125;,</div><div class="line"><span class="symbol">    output:</span> &#123;</div><div class="line"><span class="symbol">        filename:</span> <span class="string">"[name].js"</span></div><div class="line">    &#125;,</div><div class="line"><span class="symbol">    plugins:</span> [</div><div class="line">        new CommonsChunkPlugin(<span class="string">"admin-commons.js"</span>, [<span class="string">"ap1"</span>, <span class="string">"ap2"</span>]),</div><div class="line">        new CommonsChunkPlugin(<span class="string">"commons.js"</span>, [<span class="string">"p1"</span>, <span class="string">"p2"</span>, <span class="string">"admin-commons.js"</span>])</div><div class="line">    ]</div><div class="line">&#125;;</div><div class="line"><span class="comment">// &lt;script&gt;s required:</span></div><div class="line"><span class="comment">// page1.html: commons.js, p1.js</span></div><div class="line"><span class="comment">// page2.html: commons.js, p2.js</span></div><div class="line"><span class="comment">// page3.html: p3.js</span></div><div class="line"><span class="comment">// admin-page1.html: commons.js, admin-commons.js, ap1.js</span></div><div class="line"><span class="comment">// admin-page2.html: commons.js, admin-commons.js, ap2.js</span></div></pre></td></tr></table></figure>
-<p><code>extract-text-webpack-plugin</code> 独立打包</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</div><div class="line">    <span class="keyword">var</span> commonsPlugin = <span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(<span class="string">'common.js'</span>);</div><div class="line">    <span class="keyword">var</span> ExtractTextPlugin = <span class="built_in">require</span>(<span class="string">"extract-text-webpack-plugin"</span>);</div><div class="line">    <span class="built_in">module</span>.exports = &#123;</div><div class="line">        <span class="attr">plugins</span>: [commonsPlugin, <span class="keyword">new</span> ExtractTextPlugin(<span class="string">"[name].css"</span>)],</div><div class="line">        <span class="attr">entry</span>: &#123;&#125;;</div><div class="line">     &#125;</div></pre></td></tr></table></figure>
+<p>每个部分必须反映相同的原理、原则和一致的折衷机制。在语法上， 每个部分应使用相同的技巧;在语义上，应具有同样的相似性</p>
+<h3 id="贵族专制统治和民主政治"><a href="#贵族专制统治和民主政治" class="headerlink" title="贵族专制统治和民主政治"></a>贵族专制统治和民主政治</h3><h4 id="系统的概念完整性"><a href="#系统的概念完整性" class="headerlink" title="系统的概念完整性"></a>系统的概念完整性</h4><ul>
+<li>要求<strong>设计必须由一个人，或者非常少数互有默契的人员来实现</strong></li>
+<li>决定了使用的容易程度</li>
+</ul>
+<p><strong>不能与系统基本概念进行整合的想法和特色，最好放到一边不予考虑</strong>。如果出现了很多非常重要但不兼容的构想，就应该抛弃原来的设计，对不同基本概念进行合并，在合并后的系统上重新开始</p>
+<h4 id="系统的结构师-产品"><a href="#系统的结构师-产品" class="headerlink" title="系统的结构师(产品)"></a>系统的结构师(产品)</h4><ul>
+<li>用户的代理人，支持用户的真正利益，而不是维护销售人员所鼓吹的利益</li>
+<li>易用性很大程度上依赖结构师</li>
+</ul>
+<p>结构师工作产物的生命周期比那些实现人员的产物要长，并且结构师一直处在解决用户问题，实现用户利益的核心地位。如果要得到系统概念上的完整性，那么<strong>必须控制这些概念</strong></p>
+<h4 id="实现人员"><a href="#实现人员" class="headerlink" title="实现人员"></a>实现人员</h4><ul>
+<li>产品的成本性能比很大程度上依靠实现人员</li>
+</ul>
+<p>在给定体系结构下的设计实现，同样需要创造性、同样新的思路和卓越的才华</p>
+<h4 id="纪律和规则"><a href="#纪律和规则" class="headerlink" title="纪律和规则"></a>纪律和规则</h4><ul>
+<li>最差的建筑往往是那些预算远远超过起始目标的项目</li>
+<li>外部的体系结构规定实际上是增强，而不是限制实现小组的创造性</li>
+<li>创造性活动会因为规范化而得到增强</li>
+</ul>
+<p><strong>一旦将注意力集中在没有人解决过的问题上，创意就开始奔涌而出</strong>。在毫无限制的实现小组中，在进行结构上的决策时，会出现大量的想法和争议，对具体实现的关注反而会比较少</p>
+<h3 id="在等待时，实现人员应该做什么"><a href="#在等待时，实现人员应该做什么" class="headerlink" title="在等待时，实现人员应该做什么"></a>在等待时，实现人员应该做什么</h3><ul>
+<li>不能让实现队伍来负责产品设计： 进度推迟，质量更加低劣: 概念完整性的缺乏导致系统开发和 修改上要付出更昂贵的代价</li>
+</ul>
+<p>工作的垂直划分(工作被划分成体系结构、设计实现和物理实现)从根本上大大减少了劳动量，结果是使交流彻底地简化，概念完整性得到大幅提高</p>
 </span>
       
     </div>
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/react/" rel="tag">#react</a>
-          
-            <a href="/tags/nodejs/" rel="tag">#nodejs</a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/12/28/git-常用命令/" rel="next" title="git 常用命令">
-                <i class="fa fa-chevron-left"></i> git 常用命令
+              <a href="/2020/02/02/人月神话/" rel="next" title="人月神话">
+                <i class="fa fa-chevron-left"></i> 人月神话
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/01/05/webpack热加载React-webpack-dev-server/" rel="prev" title="webpack热加载React webpack-dev-server">
-                webpack热加载React webpack-dev-server <i class="fa fa-chevron-right"></i>
+              <a href="/2020/02/06/外科手术队伍/" rel="prev" title="外科手术队伍(The Surgical Team)">
+                外科手术队伍(The Surgical Team) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -404,8 +400,8 @@ webpack.config.js配置文件
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/04/webpack-初步/"
-           data-title="webpack 初步" data-url="https://www.wmtcore.com/2016/01/04/webpack-初步/">
+      <div class="ds-thread" data-thread-key="2020/02/06/贵族专制、民主政治和系统设计/"
+           data-title="贵族专制、民主政治和系统设计(Aristocracy, Democracy, and System Design)" data-url="https://www.wmtcore.com/2020/02/06/贵族专制、民主政治和系统设计/">
       </div>
     
   </div>
@@ -505,7 +501,7 @@ webpack.config.js配置文件
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#这是啥"><span class="nav-number">1.</span> <span class="nav-text">这是啥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装，配置"><span class="nav-number">2.</span> <span class="nav-text">安装，配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打包"><span class="nav-number">3.</span> <span class="nav-text">打包</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念一致性"><span class="nav-number">1.</span> <span class="nav-text">概念一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获得概念的完整性"><span class="nav-number">2.</span> <span class="nav-text">获得概念的完整性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#贵族专制统治和民主政治"><span class="nav-number">3.</span> <span class="nav-text">贵族专制统治和民主政治</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#系统的概念完整性"><span class="nav-number">3.1.</span> <span class="nav-text">系统的概念完整性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#系统的结构师-产品"><span class="nav-number">3.2.</span> <span class="nav-text">系统的结构师(产品)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现人员"><span class="nav-number">3.3.</span> <span class="nav-text">实现人员</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#纪律和规则"><span class="nav-number">3.4.</span> <span class="nav-text">纪律和规则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在等待时，实现人员应该做什么"><span class="nav-number">4.</span> <span class="nav-text">在等待时，实现人员应该做什么</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
