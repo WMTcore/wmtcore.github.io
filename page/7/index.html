@@ -253,6 +253,224 @@
             
               
                 
+                <a class="post-title-link" href="/2015/12/08/Nova体系结构/" itemprop="url">
+                  Nova体系结构
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-08T13:36:25+08:00" content="2015-12-08">
+              2015-12-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/openstack/" itemprop="url" rel="index">
+                    <span itemprop="name">openstack</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/08/Nova体系结构/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/08/Nova体系结构/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h4 id="Nova的四个核心服务："><a href="#Nova的四个核心服务：" class="headerlink" title="Nova的四个核心服务："></a>Nova的四个核心服务：</h4><ol>
+<li>API       —&gt; 进入Nova的HTTP接口 有Policy保护 可以直接操作数据库</li>
+<li>Compute   —&gt; 与VMM交互运行和管理虚拟机 </li>
+<li>Conductor —&gt; 为数据库访问提供安全保障 建议数据库操作都通过Condutor</li>
+<li>Scheduler —&gt; 负责挑选合适的计算节点创建虚拟机实例 只读取数据库</li>
+</ol>
+<h4 id="创建虚拟机的流程"><a href="#创建虚拟机的流程" class="headerlink" title="创建虚拟机的流程"></a>创建虚拟机的流程</h4><ul>
+<li>用户通过执行·client提供的命令，创建虚拟机。client,对原生RESTful Nova API封装、简化用户使用，将用户请求转换成HTTP请求</li>
+<li>API监听HTTP请求，并将其转换成AMQP消息 然后通过消息队列调用Conductor</li>
+<li>Conductor汇总参数，再、通过消息队列通知Scheduler去选择一个合适的计算节点，等拿到Scheduler提供的节点后，通知Compute创建虚拟机</li>
+</ul>
+<h4 id="删除虚拟机"><a href="#删除虚拟机" class="headerlink" title="删除虚拟机"></a>删除虚拟机</h4><ul>
+<li>不需要Scheduler,API通过消息队列通知Compute删除指定虚拟机，Compute通过Condutor更新数据库</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/04/smtp-fibjs-nodejs/" itemprop="url">
+                  smtp fibjs nodejs
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-04T17:30:35+08:00" content="2015-12-04">
+              2015-12-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/snippets/" itemprop="url" rel="index">
+                    <span itemprop="name">snippets</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/04/smtp-fibjs-nodejs/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/04/smtp-fibjs-nodejs/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="string">"use strict"</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> net = require(<span class="string">'net'</span>);</div><div class="line"><span class="keyword">var</span> fs = require(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> name = <span class="string">""</span>,<span class="comment">//send-email-address</span></div><div class="line">    pwd = <span class="string">""</span>,<span class="comment">//email-password</span></div><div class="line">    host = <span class="string">"smtp.exmail.qq.com"</span>,</div><div class="line">    port = <span class="number">25</span>,</div><div class="line">    to = <span class="string">""</span>;to-email-address</div><div class="line"></div><div class="line"><span class="keyword">var</span> argx = &#123;</div><div class="line">    title: <span class="string">"test"</span>,</div><div class="line">    attachment: [&#123;</div><div class="line">        name: <span class="string">"1.png"</span>,</div><div class="line">        path: <span class="string">"1.png"</span></div><div class="line">    &#125;, &#123;</div><div class="line">        name: <span class="string">"2.txt"</span>,</div><div class="line">        path: <span class="string">"2.txt"</span></div><div class="line">    &#125;],</div><div class="line">    content: <span class="string">'内容'</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">send(argx)</div><div class="line"></div><div class="line">function send(arg) &#123;</div><div class="line">    <span class="keyword">var</span> title = <span class="string">"test"</span>;</div><div class="line">    <span class="keyword">var</span> f = fs.<span class="keyword">open</span>(<span class="string">"1.png"</span>);</div><div class="line">    <span class="keyword">var</span> buffer = f.readAll();</div><div class="line">    <span class="keyword">var</span> content = buffer.base64();</div><div class="line">    <span class="keyword">var</span> f1 = fs.<span class="keyword">open</span>(<span class="string">"2.txt"</span>);</div><div class="line">    <span class="keyword">var</span> content1 = f1.readAll().base64();</div><div class="line"></div><div class="line">    <span class="keyword">var</span> _smtp = new net.Smtp();</div><div class="line">    _smtp.connect(host, port);</div><div class="line">    _smtp.hello();</div><div class="line">    _smtp.login(name, pwd);</div><div class="line">    _smtp.from(name);</div><div class="line"></div><div class="line">    <span class="keyword">var</span> <span class="keyword">data</span> = <span class="string">"from:"</span> + name + <span class="string">"\r\n"</span>;</div><div class="line">    <span class="keyword">data</span> += <span class="string">"to:"</span> + to + <span class="string">"\r\n"</span>;</div><div class="line">    <span class="keyword">data</span> += <span class="string">"subject:"</span> + arg.title + <span class="string">"\r\n"</span>;</div><div class="line">    <span class="keyword">data</span> += <span class="string">"MIME-Version: 1.0 \r\nContent-Type: multipart/mixed;\r\n "</span></div><div class="line">    <span class="keyword">data</span> += <span class="string">"boundary=#qwertyuiop#;\r\n"</span></div><div class="line"></div><div class="line">    <span class="keyword">data</span> += <span class="string">"\r\n--#qwertyuiop#\r\n"</span></div><div class="line">    <span class="keyword">data</span> += <span class="string">"Content-Type: text/plain;charset=utf8\r\nContend˙t-Transfer-Encoding:7bit\r\n"</span></div><div class="line">    <span class="keyword">data</span> += <span class="string">"\r\n"</span> + arg.content + <span class="string">"\r\n"</span></div><div class="line"></div><div class="line">    arg.attachment.forEach(function(o) &#123;</div><div class="line">        <span class="keyword">data</span> += <span class="string">"\r\n--#qwertyuiop#\r\n"</span></div><div class="line">        <span class="keyword">data</span> += <span class="string">"Content-Type: application/octet-stream;"</span></div><div class="line">        <span class="keyword">data</span> += <span class="string">"name="</span> + o.name + <span class="string">"\r\n"</span></div><div class="line">        <span class="keyword">data</span> += <span class="string">"Content-Transfer-Encoding: base64\r\n"</span></div><div class="line">        <span class="keyword">data</span> += <span class="string">"\r\n"</span> + fs.<span class="keyword">open</span>(o.path).readAll().base64()</div><div class="line">    &#125;)</div><div class="line">    <span class="keyword">data</span> += <span class="string">"\r\n--#qwertyuiop#\r\n"</span></div><div class="line"></div><div class="line">    f.dispose();</div><div class="line">    _smtp.to(to);</div><div class="line">    _smtp.<span class="keyword">data</span>(<span class="keyword">data</span>);</div><div class="line">    _smtp.quit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/12/04/shell编程总结1-0/" itemprop="url">
                   shell编程总结1.0
                 </a>
@@ -895,7 +1113,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-count">66</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

@@ -37,7 +37,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="nginx," />
+  <meta name="keywords" content="WMTcore" />
 
 
 
@@ -53,40 +53,34 @@
 
 
 
-<meta name="description" content="虚拟主机和请求分发
-多个域名对应同一ip时,配置多个server虚拟主机，对应多个域名，server_name对应用户请求的域名
+<meta name="description" content="文档化的规格说明——手册
+产品的外部规格说明，它描述和规定了用户所见的每一个细节，也是结构师主要的工作产物
 
-监听端口
-默认： listen 80;
-配置块： server
-
-可以加ip、端口、主机名
-1234listen 127.0.0.1:8000;listen 127.0.0.1;//不加端口号，默认监听80listen *:8000;listen 127.0.0.1">
+随着系统的使用和反馈，规格说明中难以使用的地方也不断地被修改，对实现人员而言，修改需要阶段化，有进度时间表和版本
+实现人员的设计和创造不应该被手册限制，手册要避免描述用户看不见的事物
+体系结构设计人员必须为自己描述的任何特性准备一种实现方法，但是他不应该试图支配具体的实现过程。
+规格说明的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="nginx http模块基本配置">
-<meta property="og:url" content="https://www.wmtcore.com/2016/07/08/nginx-http模块基本配置/index.html">
+<meta property="og:title" content="贯彻执行(Passing the Word)">
+<meta property="og:url" content="https://www.wmtcore.com/2020/02/24/贯彻执行/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="虚拟主机和请求分发
-多个域名对应同一ip时,配置多个server虚拟主机，对应多个域名，server_name对应用户请求的域名
+<meta property="og:description" content="文档化的规格说明——手册
+产品的外部规格说明，它描述和规定了用户所见的每一个细节，也是结构师主要的工作产物
 
-监听端口
-默认： listen 80;
-配置块： server
-
-可以加ip、端口、主机名
-1234listen 127.0.0.1:8000;listen 127.0.0.1;//不加端口号，默认监听80listen *:8000;listen 127.0.0.1">
-<meta property="og:updated_time" content="2016-07-08T09:06:19.000Z">
+随着系统的使用和反馈，规格说明中难以使用的地方也不断地被修改，对实现人员而言，修改需要阶段化，有进度时间表和版本
+实现人员的设计和创造不应该被手册限制，手册要避免描述用户看不见的事物
+体系结构设计人员必须为自己描述的任何特性准备一种实现方法，但是他不应该试图支配具体的实现过程。
+规格说明的">
+<meta property="og:updated_time" content="2020-02-23T12:34:48.775Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="nginx http模块基本配置">
-<meta name="twitter:description" content="虚拟主机和请求分发
-多个域名对应同一ip时,配置多个server虚拟主机，对应多个域名，server_name对应用户请求的域名
+<meta name="twitter:title" content="贯彻执行(Passing the Word)">
+<meta name="twitter:description" content="文档化的规格说明——手册
+产品的外部规格说明，它描述和规定了用户所见的每一个细节，也是结构师主要的工作产物
 
-监听端口
-默认： listen 80;
-配置块： server
-
-可以加ip、端口、主机名
-1234listen 127.0.0.1:8000;listen 127.0.0.1;//不加端口号，默认监听80listen *:8000;listen 127.0.0.1">
+随着系统的使用和反馈，规格说明中难以使用的地方也不断地被修改，对实现人员而言，修改需要阶段化，有进度时间表和版本
+实现人员的设计和创造不应该被手册限制，手册要避免描述用户看不见的事物
+体系结构设计人员必须为自己描述的任何特性准备一种实现方法，但是他不应该试图支配具体的实现过程。
+规格说明的">
 
 
 
@@ -98,7 +92,7 @@
   };
 </script>
 
-  <title> nginx http模块基本配置 | 大碗拉面 </title>
+  <title> 贯彻执行(Passing the Word) | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
@@ -264,7 +258,7 @@
             
             
               
-                nginx http模块基本配置
+                贯彻执行(Passing the Word)
               
             
           </h1>
@@ -273,8 +267,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-07-08T10:20:26+08:00" content="2016-07-08">
-              2016-07-08
+            <time itemprop="dateCreated" datetime="2020-02-24T19:08:37+08:00" content="2020-02-24">
+              2020-02-24
             </time>
           </span>
 
@@ -283,8 +277,8 @@
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nginx/" itemprop="url" rel="index">
-                    <span itemprop="name">nginx</span>
+                  <a href="/categories/人月神话/" itemprop="url" rel="index">
+                    <span itemprop="name">人月神话</span>
                   </a>
                 </span>
 
@@ -299,8 +293,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/08/nginx-http模块基本配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/08/nginx-http模块基本配置/" itemprop="commentsCount"></span>
+                <a href="/2020/02/24/贯彻执行/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/02/24/贯彻执行/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -319,103 +313,34 @@
       
 
       
-        <span itemprop="articleBody"><h3 id="虚拟主机和请求分发"><a href="#虚拟主机和请求分发" class="headerlink" title="虚拟主机和请求分发"></a>虚拟主机和请求分发</h3><ul>
-<li>多个域名对应同一ip时,配置多个server虚拟主机，对应多个域名，server_name对应用户请求的域名</li>
+        <span itemprop="articleBody"><h3 id="文档化的规格说明——手册"><a href="#文档化的规格说明——手册" class="headerlink" title="文档化的规格说明——手册"></a>文档化的规格说明——手册</h3><ul>
+<li>产品的外部规格说明，它描述和规定了用户所见的每一个细节，也是结构师主要的工作产物</li>
 </ul>
-<h4 id="监听端口"><a href="#监听端口" class="headerlink" title="监听端口"></a>监听端口</h4><ul>
-<li>默认： listen 80;</li>
-<li>配置块： server</li>
+<p>随着系统的使用和反馈，规格说明中难以使用的地方也不断地被修改，对实现人员而言，<strong>修改需要阶段化</strong>，有进度时间表和版本</p>
+<p>实现人员的设计和创造不应该被手册限制，手册要避免描述用户看不见的事物</p>
+<p>体系结构设计人员必须为自己描述的任何特性准备一种实现方法，但是他不应该试图支配具体的实现过程。</p>
+<h4 id="规格说明的风格"><a href="#规格说明的风格" class="headerlink" title="规格说明的风格"></a>规格说明的风格</h4><ul>
+<li>清晰、完整和准确，每条说明都必须<em>**</em>，所有文字都要相互一致</li>
+<li>由一个或两个人将结论转换成书面规格说明，保持文字和产品之间的一致性 </li>
 </ul>
-<p>可以加ip、端口、主机名</p>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">listen <span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">8000</span><span class="comment">;</span></div><div class="line">listen <span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span><span class="comment">;//不加端口号，默认监听80</span></div><div class="line">listen *:<span class="number">8000</span><span class="comment">;</span></div><div class="line">listen <span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>  default_server backlog=<span class="number">1024</span><span class="comment">;</span></div></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>parameters</th>
-<th>定义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>default/default_server</td>
-<td>默认server块，不设置就默认第一个server，当请求没能匹配到主机域名时，就选择默认</td>
-</tr>
-<tr>
-<td>backlog=num</td>
-<td>tcp中的backlog队列大小。默认-1，不设置。存放等待建立tcp三次握手连接</td>
-</tr>
-<tr>
-<td>rcvbuf=size</td>
-<td>监听句柄的SO_RCVBUF</td>
-</tr>
-<tr>
-<td>sndbuf=size</td>
-<td>监听句柄的SO_SNDBUF</td>
-</tr>
-<tr>
-<td>accpet_filter</td>
-<td>设置accept过滤器，只对FreeBSD</td>
-</tr>
-<tr>
-<td>deferred</td>
-<td>只有用户发送请求数据，内核在网卡中收到请求数据包，内核才会唤醒worker进程处理，适用于大并发情况，一般不建议使用</td>
-</tr>
-<tr>
-<td>bind</td>
-<td>绑定当前端口/地址对，如127.0.0.1：8000.只有同时对一个端口监听多个地址时有效</td>
-</tr>
-<tr>
-<td>ssl</td>
-<td>监听的端口连接必须基于ssl</td>
-</tr>
-</tbody>
-</table>
-<h4 id="主机域名"><a href="#主机域名" class="headerlink" title="主机域名"></a>主机域名</h4><ul>
-<li>语法： server——name name[…];可以跟多个主机名</li>
-<li>默认： server_name “”; 匹配没有Host的http请求</li>
-<li>配置块： server</li>
-</ul>
-<p>当header的host和多个server匹配，则按匹配优先级</p>
-<ol>
-<li>字符串完全匹配 www.test.com</li>
-<li>通配符在前面的 *.test.com</li>
-<li>通配符在后面的 www.test. *</li>
-<li>使用正则的</li>
-</ol>
-<p>都不匹配就选默认的</p>
-<h4 id="location"><a href="#location" class="headerlink" title="location"></a>location</h4><ul>
-<li>语法： location [=|~|~*|^~|@]</li>
-<li>默认： server_name “”; 匹配没有Host的http请求</li>
-<li>配置块： server</li>
-</ul>
-</span>
+<h3 id="形式化定义"><a href="#形式化定义" class="headerlink" title="形式化定义"></a>形式化定义</h3></span>
       
     </div>
 
     <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/nginx/" rel="tag">#nginx</a>
-          
-        </div>
       
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/05/nginx-负载均衡和反向代理的基本配置/" rel="next" title="nginx 负载均衡和反向代理的基本配置">
-                <i class="fa fa-chevron-left"></i> nginx 负载均衡和反向代理的基本配置
+              <a href="/2020/02/23/ 画蛇添足/" rel="next" title="画蛇添足(The Second-System Effect)">
+                <i class="fa fa-chevron-left"></i> 画蛇添足(The Second-System Effect)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/12/node内存控制/" rel="prev" title="node内存控制">
-                node内存控制 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -442,8 +367,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/08/nginx-http模块基本配置/"
-           data-title="nginx http模块基本配置" data-url="https://www.wmtcore.com/2016/07/08/nginx-http模块基本配置/">
+      <div class="ds-thread" data-thread-key="2020/02/24/贯彻执行/"
+           data-title="贯彻执行(Passing the Word)" data-url="https://www.wmtcore.com/2020/02/24/贯彻执行/">
       </div>
     
   </div>
@@ -543,7 +468,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟主机和请求分发"><span class="nav-number">1.</span> <span class="nav-text">虚拟主机和请求分发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#监听端口"><span class="nav-number">1.1.</span> <span class="nav-text">监听端口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主机域名"><span class="nav-number">1.2.</span> <span class="nav-text">主机域名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#location"><span class="nav-number">1.3.</span> <span class="nav-text">location</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#文档化的规格说明——手册"><span class="nav-number">1.</span> <span class="nav-text">文档化的规格说明——手册</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#规格说明的风格"><span class="nav-number">1.1.</span> <span class="nav-text">规格说明的风格</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#形式化定义"><span class="nav-number">2.</span> <span class="nav-text">形式化定义</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
