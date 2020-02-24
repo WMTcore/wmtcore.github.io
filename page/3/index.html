@@ -253,6 +253,112 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/31/nodejs-web应用-三/" itemprop="url">
+                  nodejs web应用 三
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-08-31T17:32:44+08:00" content="2016-08-31">
+              2016-08-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/31/nodejs-web应用-三/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/31/nodejs-web应用-三/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h3><ul>
+<li>封装底层细节，为上层提供更方便的服务</li>
+</ul>
+<p>node的http模块提供了应用层协议网络的封装，需要中间件来处理http请求的细节。因为node异步，所以需要在当前中间件处理完后通知下一中间件执行，例如Connect的尾触发next()</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/23/nodejs多进程/" itemprop="url">
                   nodejs多进程
                 </a>
@@ -1908,266 +2014,6 @@ node --max-new-space-size=1024 test.js // 单位为KB
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/01/pm2介绍/" itemprop="url">
-                  pm2
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-07-01T15:15:27+08:00" content="2016-07-01">
-              2016-07-01
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/01/pm2介绍/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/01/pm2介绍/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <ul>
-<li>pm2 是一个带有负载均衡功能的Node应用的进程管理器</li>
-<li>内建负载均衡（使用Node cluster 集群模块）</li>
-<li>后台运行</li>
-<li>0秒停机重载，热升级</li>
-<li>具有Ubuntu和CentOS 的启动脚本</li>
-<li>停止不稳定的进程（避免无限循环）</li>
-<li>控制台检测</li>
-<li>提供 HTTP API</li>
-<li>远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )</li>
-<li><a href="https://github.com/Unitech/pm2" target="_blank">github</a></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>command</th>
-<th>explain</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$ pm2 restart .pm2.yml  –only ra</td>
-<td>根据配置文件重启一个服务</td>
-</tr>
-<tr>
-<td>$ npm install pm2 -g</td>
-<td># Install PM2</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js</td>
-<td># Start, Daemonize and auto restart application</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js -i 4</td>
-<td># Start 4 instances of application in cluster mode it will load balance network queries to each app</td>
-</tr>
-<tr>
-<td><strong>$ pm2 start app.js –name=”api”</strong></td>
-<td># Start application and name it “api”</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js –watch</td>
-<td># Restart application on file change</td>
-</tr>
-<tr>
-<td>$ pm2 start script.sh</td>
-<td># Start bash script</td>
-</tr>
-<tr>
-<td>$ pm2 list</td>
-<td># List all processes started with PM2</td>
-</tr>
-<tr>
-<td><strong>$ pm2 monit</strong></td>
-<td># Display memory and cpu usage of each app</td>
-</tr>
-<tr>
-<td>$ pm2 show [app-name]</td>
-<td># Show all informations about application</td>
-</tr>
-<tr>
-<td><strong>$ pm2 logs</strong></td>
-<td># Display logs of all apps</td>
-</tr>
-<tr>
-<td>$ pm2 logs [app-name]</td>
-<td># Display logs for a specific app</td>
-</tr>
-<tr>
-<td>$ pm2 flush</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>$ pm2 stop all</strong></td>
-<td># Stop all apps</td>
-</tr>
-<tr>
-<td>$ pm2 stop 0</td>
-<td># Stop process with id 0</td>
-</tr>
-<tr>
-<td><strong>$ pm2 restart all</strong></td>
-<td># Restart all apps</td>
-</tr>
-<tr>
-<td><strong>$ pm2 reload all</strong></td>
-<td># Reload all apps in cluster mode</td>
-</tr>
-<tr>
-<td>$ pm2 gracefulReload all</td>
-<td># Graceful reload all apps in cluster mode</td>
-</tr>
-<tr>
-<td>$ pm2 delete all</td>
-<td># Kill and delete all apps</td>
-</tr>
-<tr>
-<td>$ pm2 delete 0</td>
-<td># Delete app with id 0</td>
-</tr>
-<tr>
-<td>$ pm2 scale api 10</td>
-<td># Scale app with name api to 10 instances</td>
-</tr>
-<tr>
-<td>$ pm2 reset [app-name]</td>
-<td># Reset number of restart for [app-name]</td>
-</tr>
-<tr>
-<td>$ pm2 startup</td>
-<td># Generate a startup script to respawn PM2 on boot</td>
-</tr>
-<tr>
-<td>$ pm2 save</td>
-<td># Save current process list</td>
-</tr>
-<tr>
-<td>$ pm2 resurrect</td>
-<td># Restore previously save processes</td>
-</tr>
-<tr>
-<td>$ pm2 update</td>
-<td># Save processes, kill PM2 and restore processes</td>
-</tr>
-<tr>
-<td>$ pm2 generate</td>
-<td># Generate a sample json configuration file</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod setup</td>
-<td># Setup “prod” remote server</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod</td>
-<td># Update “prod” remote server</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod revert 2</td>
-<td># Revert “prod” remote server by 2</td>
-</tr>
-<tr>
-<td>$ pm2 module:generate [name]</td>
-<td># Generate sample module with name [name]</td>
-</tr>
-<tr>
-<td>$ pm2 install pm2-logrotate</td>
-<td># Install module (here a log rotation system)</td>
-</tr>
-<tr>
-<td>$ pm2 uninstall pm2-logrotate</td>
-<td># Uninstall module</td>
-</tr>
-<tr>
-<td>$ pm2 publish</td>
-<td># Increment version, git push and npm publish</td>
-</tr>
-</tbody>
-</table>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -2214,7 +2060,7 @@ node --max-new-space-size=1024 test.js // 单位为KB
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">66</span>
+              <span class="site-state-item-count">67</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
