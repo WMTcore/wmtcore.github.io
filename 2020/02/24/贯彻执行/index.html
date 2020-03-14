@@ -73,7 +73,7 @@
 体系结构设计人员必须为自己描述的特性准备一种实现方法，但是他不应该试图支配具体的实现过程。
 规格说明的风格
 清晰、">
-<meta property="og:updated_time" content="2020-02-24T02:55:32.599Z">
+<meta property="og:updated_time" content="2020-03-14T08:39:25.033Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="贯彻执行(Passing the Word)">
 <meta name="twitter:description" content="文档化的规格说明——手册
@@ -324,13 +324,20 @@
 <p>体系结构设计人员必须<strong>为自己描述的特性准备一种实现方法</strong>，但是他不应该试图支配具体的实现过程。</p>
 <h4 id="规格说明的风格"><a href="#规格说明的风格" class="headerlink" title="规格说明的风格"></a>规格说明的风格</h4><ul>
 <li>清晰、完整和准确，每条说明都必须<strong>重复所有的基本要素</strong>，所有文字都要相互一致</li>
-<li>由一两个人将结论转换成书面规格说明，保持文字和产品之间的<strong>一致性 </strong></li>
+<li>由一两个人将结论转换成书面规格说明，保持文字和产品之间的<strong>一致性</strong></li>
 </ul>
-<h3 id="形式化定义"><a href="#形式化定义" class="headerlink" title="形式化定义"></a>形式化定义</h3><p>手册的作者必须注意自己的思路和语言，达到所需要的精确程度。一种颇具吸引力的 作法是对上述定义使用形式化标记方法。毕竟，精确度是我们需要的东西，这也正是形式化 标记方法存在的理由和原因</p>
-<p>形式化定义的优点和缺点 形式化定义是精确的，它们 倾向于更加完整;差异得更加明显，可以更快地完成。但是形式化定义的缺点是不易理解 需要记叙性文字的辅助，才能使内容易于领会和讲授</p>
-<p>一句古老的格言警告说:“决不要携带两个时钟出海，带一个或三个。”同样的原则也 适用于形式化和记叙性定义。如果同时具有两种方式，则必须以一种作为标准，另一种作为 辅助描述，并照此明确地进行划分</p>
-<p>几乎所有的形式化定义均会用来描述和表达硬件系统或 软件系统的某个设计实现，过多地 限定了体系结构。所以必须特别指出形式化定义仅仅用于外部功能，说明它们是什么</p>
-<p>形式化定义可以是一种设计实现，设计实现也可以作为一种形 式化定义的方法</p>
+<h3 id="形式化定义"><a href="#形式化定义" class="headerlink" title="形式化定义"></a>形式化定义</h3><ul>
+<li>使用形式化标记方法达到所定义需要的精确程度</li>
+</ul>
+<p><code>优缺点</code> 精确完整,差异得更加明显，可以更快地完成。缺点是不易理解 需要记叙性文字的辅助，才能使内容易于领会和讲授</p>
+<p><code>决不要携带两个时钟出海，带一个或三个</code> 如果同时使用形式化和记叙性定义，则必须以一种作为标准，另一种作为 辅助描述，并照此明确地进行划分</p>
+<p><code>形式化定义仅仅用于外部功能说明它们是什么</code> 有时会通过一段实现该功能的程序来定义，但只是说明功能，不能限定体系结构</p>
+<h4 id="设计实现可以作为一种形式化定义的方法"><a href="#设计实现可以作为一种形式化定义的方法" class="headerlink" title="设计实现可以作为一种形式化定义的方法"></a>设计实现可以作为一种形式化定义的方法</h4><p><code>优点</code>所有问题可以通过试验清晰地得到答案，从来不需要争辩和商讨，回答是快捷迅速的<br><code>缺点</code> 可能过度地规定了外部功能。有时会给出未在计划中的意外答案;特别容易引起混淆,当实现充当标准时，还必须防止对实现的任何修改</p>
+<h3 id="周会和大会"><a href="#周会和大会" class="headerlink" title="周会和大会"></a>周会和大会</h3><h4 id="周会"><a href="#周会" class="headerlink" title="周会"></a>周会</h4><p>每周半天的会议，所有的结构师，加上硬件和软件实现人员代表和市场计划人员参与，由首席系统结构师主持</p>
+<p>在会议之前分发建议、会议内容，解决方案会被传递给结构师并做记录，当决策没有达成共识时由首席结构师来决定</p>
+<p><code>周会优势</code>： 相同小组每周交流，对相关内容比较了解，不需要安排额外时间培训；深刻理解所面对的问题，并且与产品密切相关；正式的书面建议集中了注意力，强制了决策的制订，避免了会议草稿纪要方式的不一致;清晰地授予首席结构师决策的权力，避免了妥协和拖延</p>
+<h4 id="大会"><a href="#大会" class="headerlink" title="大会"></a>大会</h4><p>随着时间的推移，一些决定、一些小事情并没有被某个参与者真正地 接受。对于这些问题，有时周例会没有重新考虑，慢慢地， 很多小要求、公开问题或者不愉快会堆积起来。通过年度大会解决这些堆积起来的问题</p>
+<p>大多数条目的规模很小，每个不同的声音都有机会得到表达。然后会制订出决策，每个人都在倾听、参与，每个人对复杂约束和决策之间的相互关系有了更透彻的理解，使决策更容易被接受</p>
 </span>
       
     </div>
@@ -349,6 +356,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/24/工作日报20-2-24/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -420,7 +431,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">67</span>
+              <span class="site-state-item-count">70</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -476,7 +487,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#文档化的规格说明——手册"><span class="nav-number">1.</span> <span class="nav-text">文档化的规格说明——手册</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#规格说明的风格"><span class="nav-number">1.1.</span> <span class="nav-text">规格说明的风格</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#形式化定义"><span class="nav-number">2.</span> <span class="nav-text">形式化定义</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#文档化的规格说明——手册"><span class="nav-number">1.</span> <span class="nav-text">文档化的规格说明——手册</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#规格说明的风格"><span class="nav-number">1.1.</span> <span class="nav-text">规格说明的风格</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#形式化定义"><span class="nav-number">2.</span> <span class="nav-text">形式化定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设计实现可以作为一种形式化定义的方法"><span class="nav-number">2.1.</span> <span class="nav-text">设计实现可以作为一种形式化定义的方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#周会和大会"><span class="nav-number">3.</span> <span class="nav-text">周会和大会</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#周会"><span class="nav-number">3.1.</span> <span class="nav-text">周会</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#大会"><span class="nav-number">3.2.</span> <span class="nav-text">大会</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

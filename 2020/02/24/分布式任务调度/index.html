@@ -74,7 +74,7 @@ worker之前不能区分，原因还是没有直接由master派发任务，也�
 稳定、高可用，不执行具体运算
 接收、记录待执行的任务，按任务优先级派发，记录任务">
 <meta property="og:image" content="https://www.wmtcore.com/picture/分布式任务调度.jpg">
-<meta property="og:updated_time" content="2020-02-24T09:06:02.534Z">
+<meta property="og:updated_time" content="2020-02-25T11:26:44.473Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式任务调度">
 <meta name="twitter:description" content="分布式任务调度原因
@@ -356,9 +356,15 @@ worker之前不能区分，原因还是没有直接由master派发任务，也�
 </ul>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// app/service/authorization.js</span></div><div class="line"><span class="keyword">const</span> Service = <span class="built_in">require</span>(<span class="string">'@fgrid/egg'</span>).Service;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AuthorizationService</span> <span class="keyword">extends</span> <span class="title">Service</span> </span>&#123;</div><div class="line">	<span class="keyword">async</span> deleteAuthorization()&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>代码结构与业务框架一致，业务数据通过rpc获取，原则上不直连业务数据库</p>
-<h4 id="业务服务调用任务"><a href="#业务服务调用任务" class="headerlink" title="业务服务调用任务"></a>业务服务调用任务</h4><h3 id="计划实现功能"><a href="#计划实现功能" class="headerlink" title="计划实现功能"></a>计划实现功能</h3><ol>
+<h4 id="业务服务调用任务"><a href="#业务服务调用任务" class="headerlink" title="业务服务调用任务"></a>业务服务调用任务</h4><ul>
+<li>sdk直接写在fgrid-middleware</li>
+</ul>
+<p>调用方式和rpc调用类似</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 通过mifStart来调用分布式任务，后面接serviceName.methodName</span></div><div class="line">this<span class="selector-class">.ctx</span><span class="selector-class">.mifStart</span><span class="selector-class">.authorization</span><span class="selector-class">.deleteAuthorization</span>()</div></pre></td></tr></table></figure>
+<h3 id="计划实现功能"><a href="#计划实现功能" class="headerlink" title="计划实现功能"></a>计划实现功能</h3><ol>
 <li>master高可用</li>
 <li>worker多语言版和算力等属性</li>
+<li>定时任务</li>
 </ol>
 </span>
       
@@ -453,7 +459,7 @@ worker之前不能区分，原因还是没有直接由master派发任务，也�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">67</span>
+              <span class="site-state-item-count">70</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
