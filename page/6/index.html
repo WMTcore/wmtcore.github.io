@@ -253,6 +253,133 @@
             
               
                 
+                <a class="post-title-link" href="/2016/01/23/Samba服务器的简单配置和快速搭建/" itemprop="url">
+                  最方便的Samba服务器的配置和搭建
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-23T15:40:26+08:00" content="2016-01-23">
+              2016-01-23
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/23/Samba服务器的简单配置和快速搭建/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/23/Samba服务器的简单配置和快速搭建/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="选择系统版本"><a href="#选择系统版本" class="headerlink" title="选择系统版本"></a>选择系统版本</h3><ul>
+<li>Ubuntu server </li>
+</ul>
+<h3 id="系统安装步骤"><a href="#系统安装步骤" class="headerlink" title="系统安装步骤"></a>系统安装步骤</h3><ul>
+<li>其他不变，注意在安装软件时选中Samba Server</li>
+</ul>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><ul>
+<li>配置文件在 /etc/samba/samba.conf<ul>
+<li>如需要权限编辑：chmod 777 .</li>
+</ul>
+</li>
+<li>修改[profiles],它在最后几行<ul>
+<li>取消注释</li>
+<li>guest ok =yes//允许匿名登录</li>
+<li>browseable=yes//允许浏览</li>
+<li>readonly=no // 可写 </li>
+<li>path//共享文件存放路径，可能还不存在，创建（mkdir,记得开放权限）</li>
+</ul>
+</li>
+</ul>
+<h3 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h3><ul>
+<li>sudo smbd</li>
+</ul>
+<h3 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h3><p><code>mac :</code>命令 open smb://ip address</p>
+<p><code>windows :</code>运行 //ip address</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/01/22/mac-导入iso文件到u盘/" itemprop="url">
                   mac 导入iso文件到u盘
                 </a>
@@ -1294,275 +1421,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/18/Sequelize-基本sql语句/" itemprop="url">
-                  Sequelize 基本sql语句
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-12-18T10:18:59+08:00" content="2015-12-18">
-              2015-12-18
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/18/Sequelize-基本sql语句/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/18/Sequelize-基本sql语句/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h4 id="SELECT、DELETE、UPDATE"><a href="#SELECT、DELETE、UPDATE" class="headerlink" title="SELECT、DELETE、UPDATE"></a>SELECT、DELETE、UPDATE</h4><table>
-<thead>
-<tr>
-<th>sql</th>
-<th>orm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>select</td>
-<td>findAll,findOne,findById,findOrCreate,findAndCountAll</td>
-</tr>
-<tr>
-<td>delete</td>
-<td>destroy</td>
-</tr>
-<tr>
-<td>update</td>
-<td>update</td>
-</tr>
-<tr>
-<td>insert</td>
-<td>create</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>sql</th>
-<th>orm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>SELECT foo, bar …</td>
-<td>Model.findAll({attributes: [‘foo’, ‘bar’]});</td>
-</tr>
-<tr>
-<td>SELECT foo, bar AS baz …</td>
-<td>Model.findAll({attributes: [‘foo’, <strong>[‘bar’, ‘baz’]</strong>]});</td>
-</tr>
-<tr>
-<td>SELECT COUNT(hats) AS no_hats …</td>
-<td>Model.findAll({attributes: [[<strong>sequelize.fn(‘COUNT’, sequelize.col(‘hats’))</strong>, ‘no_hats’]]});</td>
-</tr>
-<tr>
-<td>SELECT id, foo, bar, quz …</td>
-<td>Model.findAll({attributes: {<strong>exclude</strong>: [‘baz’] }});</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">Model</span><span class="selector-class">.findAll</span>(&#123;</div><div class="line">  <span class="attribute">attributes</span>: [<span class="string">'id'</span>, <span class="string">'foo'</span>, <span class="string">'bar'</span>, <span class="string">'baz'</span>, <span class="string">'quz'</span>, [sequelize.fn(<span class="string">'COUNT'</span>, sequelize.col(<span class="string">'hats'</span>)), <span class="string">'no_hats'</span>]]</div><div class="line">&#125;);</div><div class="line"><span class="comment">//等于</span></div><div class="line"><span class="selector-tag">Model</span><span class="selector-class">.findAll</span>(&#123;</div><div class="line">  <span class="attribute">attributes</span>: &#123; <span class="attribute">include</span>: [[sequelize.fn(<span class="string">'COUNT'</span>, sequelize.col(<span class="string">'hats'</span>)), <span class="string">'no_hats'</span>]] &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="selector-tag">SELECT</span> <span class="selector-tag">id</span>, <span class="selector-tag">foo</span>, <span class="selector-tag">bar</span>, <span class="selector-tag">baz</span>, <span class="selector-tag">quz</span>, <span class="selector-tag">COUNT</span>(hats) <span class="selector-tag">AS</span> <span class="selector-tag">no_hats</span> ...</div></pre></td></tr></table></figure>
-<h4 id="WHERE"><a href="#WHERE" class="headerlink" title="WHERE"></a>WHERE</h4><table>
-<thead>
-<tr>
-<th>sql</th>
-<th>orm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> SELECT * FROM post WHERE authorId = 12 AND status = ‘active’</td>
-<td>Post.findAll({where: { authorId: 2,status: ‘active’}});</td>
-</tr>
-</tbody>
-</table>
-<h4 id="Operators"><a href="#Operators" class="headerlink" title="Operators"></a>Operators</h4><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">Post.<span class="keyword">update</span>(&#123;</div><div class="line">  updatedAt: null,</div><div class="line">&#125;, &#123;</div><div class="line">  where: &#123;</div><div class="line">    deletedAt: &#123;</div><div class="line">      $ne: null</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line">// UPDATE post SET updatedAt = null WHERE deletedAt NOT NULL;</div><div class="line"></div><div class="line">Post.findAll(&#123;</div><div class="line">  where: sequelize.where(sequelize.fn(<span class="string">'char_length'</span>, sequelize.col(<span class="string">'status'</span>)), <span class="number">6</span>)</div><div class="line">&#125;);</div><div class="line">// SELECT * FROM post WHERE char_length(status) = <span class="number">6</span>;</div><div class="line"></div><div class="line">&#123;</div><div class="line">  rank: &#123;</div><div class="line">    $or: &#123;</div><div class="line">      $lt: <span class="number">1000</span>,</div><div class="line">      $eq: null</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">// rank &lt; <span class="number">1000</span> OR rank IS NULL</div><div class="line"></div><div class="line">&#123;</div><div class="line">  createdAt: &#123;</div><div class="line">    $lt: new Date(),</div><div class="line">    $gt: new Date(new Date() - <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">// createdAt &lt; [timestamp] AND createdAt &gt; [timestamp]</div><div class="line"></div><div class="line">&#123;</div><div class="line">  $or: [</div><div class="line">    &#123;</div><div class="line">      title: &#123;</div><div class="line">        $like: <span class="string">'Boat%'</span></div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">      description: &#123;</div><div class="line">        $like: <span class="string">'%boat%'</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  ]</div><div class="line">&#125;</div><div class="line">// title LIKE <span class="string">'Boat%'</span> OR description LIKE <span class="string">'%boat%'</span></div></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>op</th>
-<th>define</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$and: {a: 5}</td>
-<td>AND (a = 5)</td>
-</tr>
-<tr>
-<td>$or: [{a: 5}, {a: 6}]</td>
-<td>(a = 5 OR a = 6)</td>
-</tr>
-<tr>
-<td>$gt: 6,</td>
-<td>&gt; 6</td>
-</tr>
-<tr>
-<td>$gte: 6,</td>
-<td>&gt;= 6</td>
-</tr>
-<tr>
-<td>$lt: 10,</td>
-<td>&lt; 10</td>
-</tr>
-<tr>
-<td>$lte: 10,</td>
-<td>&lt;= 10</td>
-</tr>
-<tr>
-<td>$ne: 20,</td>
-<td>!= 20</td>
-</tr>
-<tr>
-<td>$between: [6, 10],</td>
-<td>BETWEEN 6 AND 10</td>
-</tr>
-<tr>
-<td>$notBetween: [11, 15],</td>
-<td>NOT BETWEEN 11 AND 15</td>
-</tr>
-<tr>
-<td>$in: [1, 2],</td>
-<td>IN [1, 2]</td>
-</tr>
-<tr>
-<td>$notIn: [1, 2],</td>
-<td>NOT IN [1, 2]</td>
-</tr>
-<tr>
-<td>$like: ‘%hat’,</td>
-<td>LIKE ‘%hat’</td>
-</tr>
-<tr>
-<td>$notLike: ‘%hat’</td>
-<td>NOT LIKE ‘%hat’</td>
-</tr>
-<tr>
-<td>$iLike: ‘%hat’</td>
-<td>ILIKE ‘%hat’ (case insensitive) (PG only)</td>
-</tr>
-<tr>
-<td>$notILike: ‘%hat’</td>
-<td>NOT ILIKE ‘%hat’  (PG only)</td>
-</tr>
-<tr>
-<td>$like: { $any: [‘cat’, ‘hat’]}</td>
-<td>LIKE ANY ARRAY[‘cat’, ‘hat’] - also works for iLike and notLike</td>
-</tr>
-<tr>
-<td>$overlap: [1, 2]</td>
-<td>&amp;&amp; [1, 2] (PG array overlap operator)</td>
-</tr>
-<tr>
-<td>$contains: [1, 2]</td>
-<td>@&gt; [1, 2] (PG array contains operator)</td>
-</tr>
-<tr>
-<td>$contained: [1, 2]</td>
-<td>&lt;@ [1, 2] (PG array contained by operator)</td>
-</tr>
-<tr>
-<td>$any: [2,3]</td>
-<td>ANY ARRAY[2, 3]::INTEGER (PG only)</td>
-</tr>
-<tr>
-<td>$col: ‘user.organization_id’</td>
-<td>“user”.”organization_id”, with dialect specific column identifiers, PG in this example  –$col取表的字段</td>
-</tr>
-</tbody>
-</table>
-<h4 id="WARNING"><a href="#WARNING" class="headerlink" title="WARNING"></a>WARNING</h4><p><code>tabel need primarykey</code>:如果没有，Sequlize会自己加个自增主键，可能引起错误</p>
-<h4 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h4><p><code>findOrCreate</code>: 查到一个，查不到就新建</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> <span class="selector-tag">models</span><span class="selector-class">.BrandReview</span><span class="selector-class">.findOrCreate</span>(&#123;</div><div class="line">     <span class="attribute">where</span>: &#123;</div><div class="line">         <span class="attribute">mem_id</span>: mem_id,</div><div class="line">         <span class="attribute">brand_id</span>: brand_id</div><div class="line">     &#125;,</div><div class="line">     <span class="attribute">defaults</span>: &#123;</div><div class="line">         <span class="attribute">score</span>: score <span class="comment">//新建的数据</span></div><div class="line">     &#125;</div><div class="line"> &#125;)</div><div class="line"><span class="comment">//返回值为数组，[json,created] 第一位是查询或创建的数据，第二位标识是否新建</span></div></pre></td></tr></table></figure>
-<p><code>update</code>:返回值为数据，[2],数字代码改动记录数</p>
-<p><code>destroy</code>:返回数字，代表删除记录数</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1609,14 +1467,14 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">67</span>
+              <span class="site-state-item-count">68</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>

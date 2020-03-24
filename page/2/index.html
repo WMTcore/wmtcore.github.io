@@ -253,6 +253,129 @@
             
               
                 
+                <a class="post-title-link" href="/2019/10/10/日志模块/" itemprop="url">
+                  日志模块
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2019-10-10T11:31:22+08:00" content="2019-10-10">
+              2019-10-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/10/10/日志模块/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/10/日志模块/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h3><p>InnoDB引擎实现</p>
+<p>在MySQL里也有这个问题，如果每一次的更新操作都需要写进磁盘，然后磁盘也要找到对应的那条记录，然后再更新，整个过程IO成本、查找成本都很高</p>
+<p><strong>WAL</strong>技术，WAL的全称是Write-Ahead Logging，它的关键点就是先写日志，再写磁盘 顺序i/o</p>
+<p>当有一条记录需要更新的时候，InnoDB引擎就会先把记录写到redo log里面，并更新内存，这个时候更新就算完成了。同时，InnoDB引擎会在适当的时候，将这个操作记录更新到磁盘里面</p>
+<p>redo log是物理日志，记录的是“在某个数据页上做了什么修改”</p>
+<p>InnoDB的redo log是固定大小的，比如可以配置为一组4个文件，每个文件的大小是1GB，总共就可以记录4GB的操作。从头开始写，写到末尾就又回到开头循环写。write pos是当前记录的位置，checkpoint是当前要擦除的位置也是往后推移并且循环的，擦除记录前要把记录更新到数据文件</p>
+<p>有了redo log，InnoDB就可以保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为<strong>crash-safe</strong></p>
+<h3 id="bin-log"><a href="#bin-log" class="headerlink" title="bin log"></a>bin log</h3><p>Server层日志</p>
+<p>binlog存在的原因 redolog只有InnoDB有，别的引擎没有，edolog是循环写的，不持久保存，binlog的“归档”这个功能，redolog是不具备的。</p>
+<p>binlog是逻辑日志，记录的是这个语句的原始逻辑，比如“给ID=2这一行的c字段加1 ”，binlog文件写到一定大小后会切换到下一个，并不会覆盖以前的日志</p>
+<ul>
+<li>statement：基于SQL语句的模式，某些语句中含有一些函数，例如 UUID NOW 等在复制过程可能导致数据不一致甚至出错。</li>
+<li>row：基于行的模式，记录的是行的变化，很安全。但是 binlog 的磁盘占用会比其他两种模式大很多，在一些大表中清除大量数据时在 binlog 中会生成很多条语句，可能导致从库延迟变大。</li>
+<li>mixed：混合模式，根据语句来选用是 statement 还是 row 模式。</li>
+</ul>
+<h3 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h3><p>由于redo log和binlog是两个独立的逻辑，如果不用两阶段提交，数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。</p>
+<p>引擎将新数据更新到内存中，同时将更新操作记录到redo log里面，此时redo log处于prepare状态。然后告知执行器执行完成了，随时可以提交事务</p>
+<p>执行器生成操作的binlog，并把binlog写入磁盘</p>
+<p>行器调用引擎的提交事务接口，引擎把刚刚写入的redo log改成提交（commit）状态，更新完成</p>
+<h3 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h3><p>每条记录在更新的时候都会同时记录一条回滚操作。记录上的最新值，通过回滚操作，都可以得到前一个状态的值</p>
+<p>当没有事务再需要用到这些回滚日志时，回滚日志会被删除，长事务会导致保存很多回滚日志占用大量存储空间</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2019/10/09/脏页/" itemprop="url">
                   脏页
                 </a>
@@ -1328,116 +1451,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/11/koa-csrf/" itemprop="url">
-                  koa-csrf
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-09-11T14:03:00+08:00" content="2016-09-11">
-              2016-09-11
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/11/koa-csrf/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/11/koa-csrf/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h1 id="koa-csrf"><a href="#koa-csrf" class="headerlink" title="koa-csrf"></a>koa-csrf</h1><p>Cross-Site Request Forgery 跨站请求伪造</p>
-<p><a href="https://github.com/koajs/csrf" target="_blank" rel="external">koa-csrf</a></p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>它在session中保存一个<code>secret</code>字段，然后使用它生成token，其中salt是随机生成的字符串，长度可自定。每次请求时都会重新生成salt，于是每次token也会不同。</p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">var hash</span> = crypto</div><div class="line">	.createHash(<span class="string">'sha1'</span>)</div><div class="line">	.update(salt + <span class="string">'-'</span> + secret, <span class="string">'ascii'</span>)</div><div class="line">	.digest(<span class="string">'base64'</span>);</div><div class="line"><span class="attribute">token</span> = salt + <span class="string">'-'</span> + hash;</div></pre></td></tr></table></figure>
-<p>验证的时候，只需要取出token头部的salt，再从session中取出<code>secret</code>,再生成expected，与token对比</p>
-<p>默认不检查<strong>GET,HEAD,OPTIONS</strong>请求</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>与session配合使用，在请求时附带字段<code>_csrf:token</code></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> koa = <span class="keyword">require</span>(<span class="string">'koa'</span>)</div><div class="line"><span class="keyword">var</span> csrf = <span class="keyword">require</span>(<span class="string">'koa-csrf'</span>)</div><div class="line"><span class="keyword">var</span> session = <span class="keyword">require</span>(<span class="string">'koa-session'</span>)</div><div class="line"><span class="keyword">var</span> Router = <span class="keyword">require</span>(<span class="string">'koa-router'</span>);</div><div class="line"><span class="keyword">var</span> bodyParser = <span class="keyword">require</span>(<span class="string">'koa-bodyparser'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> app = koa();</div><div class="line"><span class="keyword">var</span> router = Router();</div><div class="line">app.<span class="keyword">use</span>(bodyParser());</div><div class="line">app.keys = [<span class="string">'session secret'</span>]</div><div class="line">session(app)</div><div class="line">app.<span class="keyword">use</span>(csrf());</div><div class="line"></div><div class="line">router.get(<span class="string">'/'</span>, async ctx =&gt; &#123;</div><div class="line">	ctx.body = ctx.csrf;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">router.post(<span class="string">'/'</span>, ctx =&gt; &#123;</div><div class="line">	ctx.body = ctx.request.body</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1484,14 +1497,14 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">67</span>
+              <span class="site-state-item-count">68</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>

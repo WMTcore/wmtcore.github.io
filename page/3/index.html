@@ -253,6 +253,116 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/11/koa-csrf/" itemprop="url">
+                  koa-csrf
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-09-11T14:03:00+08:00" content="2016-09-11">
+              2016-09-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/11/koa-csrf/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/11/koa-csrf/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h1 id="koa-csrf"><a href="#koa-csrf" class="headerlink" title="koa-csrf"></a>koa-csrf</h1><p>Cross-Site Request Forgery 跨站请求伪造</p>
+<p><a href="https://github.com/koajs/csrf" target="_blank" rel="external">koa-csrf</a></p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>它在session中保存一个<code>secret</code>字段，然后使用它生成token，其中salt是随机生成的字符串，长度可自定。每次请求时都会重新生成salt，于是每次token也会不同。</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">var hash</span> = crypto</div><div class="line">	.createHash(<span class="string">'sha1'</span>)</div><div class="line">	.update(salt + <span class="string">'-'</span> + secret, <span class="string">'ascii'</span>)</div><div class="line">	.digest(<span class="string">'base64'</span>);</div><div class="line"><span class="attribute">token</span> = salt + <span class="string">'-'</span> + hash;</div></pre></td></tr></table></figure>
+<p>验证的时候，只需要取出token头部的salt，再从session中取出<code>secret</code>,再生成expected，与token对比</p>
+<p>默认不检查<strong>GET,HEAD,OPTIONS</strong>请求</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>与session配合使用，在请求时附带字段<code>_csrf:token</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> koa = <span class="keyword">require</span>(<span class="string">'koa'</span>)</div><div class="line"><span class="keyword">var</span> csrf = <span class="keyword">require</span>(<span class="string">'koa-csrf'</span>)</div><div class="line"><span class="keyword">var</span> session = <span class="keyword">require</span>(<span class="string">'koa-session'</span>)</div><div class="line"><span class="keyword">var</span> Router = <span class="keyword">require</span>(<span class="string">'koa-router'</span>);</div><div class="line"><span class="keyword">var</span> bodyParser = <span class="keyword">require</span>(<span class="string">'koa-bodyparser'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> app = koa();</div><div class="line"><span class="keyword">var</span> router = Router();</div><div class="line">app.<span class="keyword">use</span>(bodyParser());</div><div class="line">app.keys = [<span class="string">'session secret'</span>]</div><div class="line">session(app)</div><div class="line">app.<span class="keyword">use</span>(csrf());</div><div class="line"></div><div class="line">router.get(<span class="string">'/'</span>, async ctx =&gt; &#123;</div><div class="line">	ctx.body = ctx.csrf;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">router.post(<span class="string">'/'</span>, ctx =&gt; &#123;</div><div class="line">	ctx.body = ctx.request.body</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/31/nodejs-web应用-三/" itemprop="url">
                   nodejs web应用 三
                 </a>
@@ -1785,235 +1895,6 @@ node --max-new-space-size=1024 test.js // 单位为KB
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/05/nginx-负载均衡和反向代理的基本配置/" itemprop="url">
-                  nginx 负载均衡和反向代理的基本配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-07-05T17:47:22+08:00" content="2016-07-05">
-              2016-07-05
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nginx/" itemprop="url" rel="index">
-                    <span itemprop="name">nginx</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/05/nginx-负载均衡和反向代理的基本配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/nginx-负载均衡和反向代理的基本配置/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><ul>
-<li>此处指的是选择一种策略，尽量把请求均匀的分布到每一个上游服务器</li>
-</ul>
-<h4 id="upstream"><a href="#upstream" class="headerlink" title="upstream"></a>upstream</h4><ul>
-<li>配置块 http</li>
-<li>语法 upstream name{}</li>
-<li>定义一个上游服务器的集群，便于反向代理的proxy_pass使用</li>
-</ul>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">upstream</span> backend &#123;</div><div class="line">    <span class="attribute">server</span> <span class="number">127.0.0.1:5566</span> weight=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">30s</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">location</span> / &#123;</div><div class="line">        <span class="attribute">proxy_pass</span> http://backend; <span class="comment">#backend指上游服务器</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="server"><a href="#server" class="headerlink" title="server"></a>server</h5><ul>
-<li>配置块 upstream</li>
-<li>语法 server names[parameters]</li>
-<li>指定一台上游服务器的名字 可以是域名，ip，UNIX句柄</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>parameters</th>
-<th>定义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>weight=number</td>
-<td>上游服务器转发的权重 默认1</td>
-</tr>
-<tr>
-<td>max_fails=number</td>
-<td>在fail_timeout时间内，如果向上游服务器转发失败次数超过number,就认为该服务器在此时间段里不可用，默认1 设为0就不检查失败次数</td>
-</tr>
-<tr>
-<td>fail_timeout=time</td>
-<td>用于优化反向代理功能，与连接、读取、响应超时无关，默认10秒</td>
-</tr>
-<tr>
-<td>down</td>
-<td>永久下线服务器，只在使用ip_hash有效</td>
-</tr>
-<tr>
-<td>backup</td>
-<td>在使用ip_hash时无效 表示上游服务器只是备份服务器，只有在所有非备份上游服务器失效后，才会指向备份</td>
-</tr>
-</tbody>
-</table>
-<h5 id="ip-hash"><a href="#ip-hash" class="headerlink" title="ip_hash"></a>ip_hash</h5><ul>
-<li>配置块 upstream</li>
-<li>语法 ip_hash;</li>
-<li>将单个用户的请求固定到某个上游服务器</li>
-</ul>
-<p>先根据客户端的ip地址计算一个key,将可以按照upstream集群的上游服务器数量进行取模，再根据取模的结果把请求地址转发到相应的上游服务器,不能与weight同时使用，<strong>在标识上游服务器不可用时，要用down不能直接删除，确保转发策略一贯性</strong></p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">upstream <span class="keyword">backend </span>&#123;</div><div class="line"> 	ip_hash<span class="comment">;</span></div><div class="line">    server <span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>:<span class="number">5566</span> weight=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">30</span>s<span class="comment">;</span></div><div class="line">    server <span class="keyword">backend </span>down<span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="记录日志时支持的变量"><a href="#记录日志时支持的变量" class="headerlink" title="记录日志时支持的变量"></a>记录日志时支持的变量</h4><table>
-<thead>
-<tr>
-<th>变量名</th>
-<th>定义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$upstream_addr</td>
-<td>处理请求的上游服务器地址</td>
-</tr>
-<tr>
-<td>$upstream_cache_status</td>
-<td>表示是否命中缓存，取值范围：MISS、EXPIRED、UPDATING、SATLE、HIT</td>
-</tr>
-<tr>
-<td>$upstream_status</td>
-<td>上游服务器返回的响应中HTTP响应码</td>
-</tr>
-<tr>
-<td>$upstream_response_time</td>
-<td>上游服务器响应时间，精度毫秒</td>
-</tr>
-<tr>
-<td>$upstream<em>http</em>$HEADER</td>
-<td>http头部，如upstream_http_host</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">log_format</span> timing <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] <span class="variable">$request</span> '</span></div><div class="line">	<span class="string">'upstream_response_time <span class="variable">$upstream_response_time</span> '</span></div><div class="line">	<span class="string">'msec <span class="variable">$msec</span> request_time <span class="variable">$request_time</span>'</span>;</div><div class="line"></div><div class="line"><span class="attribute">log_format</span> up_head <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] <span class="variable">$request</span> '</span></div><div class="line">	<span class="string">'upstream_http_content_type <span class="variable">$upstream_http_content_type</span>'</span></div></pre></td></tr></table></figure>
-<h3 id="反向代理配置"><a href="#反向代理配置" class="headerlink" title="反向代理配置"></a>反向代理配置</h3><h4 id="proxy-pass"><a href="#proxy-pass" class="headerlink" title="proxy_pass"></a>proxy_pass</h4><ul>
-<li>语法：proxy_pass URL;</li>
-<li>配置块 location、if</li>
-</ul>
-<p>将当前请求反向代理到URL参数指定的服务器上，URL可以是主机名或ip地址</p>
-<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">proxy_pass http://localhost:<span class="number">3000</span>/uri/;</div><div class="line"></div><div class="line">可以加上负载均衡 使用upstream</div><div class="line">upstream backend <span class="meta">&#123;...&#125;</span></div><div class="line">server &#123;location / &#123;</div><div class="line">            proxy_pass http://backend; <span class="comment">#backend指上游服务器</span></div><div class="line">        &#125;&#125;</div><div class="line"></div><div class="line">可以把httpz转换成https</div><div class="line">proxy_pass https://<span class="number">192</span>.<span class="number">168</span>.<span class="number">0</span>.<span class="number">1</span>/;</div><div class="line"></div><div class="line">若需要转发host头部</div><div class="line">proxy_set_header <span class="type">Host</span> $host;</div></pre></td></tr></table></figure>
-<h4 id="proxy-method"><a href="#proxy-method" class="headerlink" title="proxy_method"></a>proxy_method</h4><ul>
-<li>语法：proxy_method method;</li>
-<li>配置块 http、server、location</li>
-</ul>
-<p>转发时的协议方法名<br>proxy_method POST; 客户端的GET请求也会被转发成POST</p>
-<h4 id="proxy-hide-header"><a href="#proxy-hide-header" class="headerlink" title="proxy_hide_header"></a>proxy_hide_header</h4><ul>
-<li>语法：proxy_hide_header the_header;</li>
-<li>配置块 http、server、location</li>
-</ul>
-<p>Nginx会将上游服务器的响应转发给客户端，但默认不会转发以下HTTP头部字段：Date、Server、X-Pad和X-Accel-*.使用proxy_hide_header可以指定哪些不能转发</p>
-<p>proxy_hide_header Cache-Control;</p>
-<h4 id="proxy-pass-header"><a href="#proxy-pass-header" class="headerlink" title="proxy_pass_header"></a>proxy_pass_header</h4><ul>
-<li>语法：proxy_pass_header the_header;</li>
-<li>配置块 http、server、location</li>
-</ul>
-<p>将原来禁止转发的header设为转发</p>
-<h4 id="proxy-pass-request-body"><a href="#proxy-pass-request-body" class="headerlink" title="proxy_pass_request_body"></a>proxy_pass_request_body</h4><ul>
-<li>语法：proxy_pass_request_body on|off;</li>
-<li>默认 on;</li>
-<li>配置块 http、server、location<br>是否向上游转发http body</li>
-</ul>
-<h4 id="proxy-pass-request-headers"><a href="#proxy-pass-request-headers" class="headerlink" title="proxy_pass_request_headers"></a>proxy_pass_request_headers</h4><ul>
-<li>语法：proxy_pass_request_headers on|off;</li>
-<li>默认 on;</li>
-<li>配置块 http、server、location<br>是否向上游转发http header</li>
-</ul>
-<h4 id="prxoy-redirect"><a href="#prxoy-redirect" class="headerlink" title="prxoy_redirect"></a>prxoy_redirect</h4><ul>
-<li>语法：prxoy_redirect [default|off|redirect rep|replacement]];</li>
-<li>默认 default;</li>
-<li>配置块 http、server、location</li>
-</ul>
-<p>当上游返回响应是重定向或刷新请求（301，302),proxy_redirect 可以重设HTTP头部的location或refresh字段。</p>
-<figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">proxy_redirect <span class="symbol">http:</span>/<span class="regexp">/localhost:8000/two</span><span class="regexp">/ http:/</span><span class="regexp">/frontend/one</span><span class="regexp">/;</span></div><div class="line"></div><div class="line">对location字段的URI是http:/<span class="regexp">/localhost:8000/two</span><span class="regexp">/some/uri</span>.实际转发给客户端的是<span class="symbol">http:</span>/<span class="regexp">/frontend/one</span><span class="regexp">/;</span></div><div class="line"></div><div class="line">可以使用ngx-http-core-module提供的变量来设置</div><div class="line"></div><div class="line">proxy_redirect http:/<span class="regexp">/localhost:8000/</span> <span class="symbol">http:</span>/<span class="regexp">/$host:$server_port/</span>;</div><div class="line"></div><div class="line">可以省略replacement参数的主机名部分，这时会用虚拟主机名称填充</div><div class="line">proxy_redirect <span class="symbol">http:</span>/<span class="regexp">/localhost:8000/two</span><span class="regexp">/ /one</span><span class="regexp">/;</span></div><div class="line"></div><div class="line">使用default参数时，会按照proxy_pass配置项和所属的location配置项重组</div><div class="line"></div><div class="line">location /one<span class="regexp">/ &#123;</span></div><div class="line">  proxy_pass http:/<span class="regexp">/upstream:port/two</span><span class="regexp">/;</span></div><div class="line">  proxy_redirect default;</div><div class="line">&#125;</div><div class="line">等于</div><div class="line">location /one<span class="regexp">/ &#123;</span></div><div class="line">	proxy_pass http:/<span class="regexp">/upstream:port/two</span><span class="regexp">/;</span></div><div class="line">	proxy_redirect http:/<span class="regexp">/upstream:port/two</span><span class="regexp">/ /one</span><span class="regexp">/;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="proxy-next-upstream"><a href="#proxy-next-upstream" class="headerlink" title="proxy_next_upstream"></a>proxy_next_upstream</h4><ul>
-<li>语法：proxy_next_upstream [error|timeout|invalid_header|http_500|http_502|http_503|http_504|http_404|off];</li>
-<li>默认 error timeout;</li>
-<li>配置块 http、server、location</li>
-</ul>
-<p>当向一台上游转发请求出错时，继续换一台处理<br>（invaild_header 上游响应不合法）</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -2060,14 +1941,14 @@ node --max-new-space-size=1024 test.js // 单位为KB
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">67</span>
+              <span class="site-state-item-count">68</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
