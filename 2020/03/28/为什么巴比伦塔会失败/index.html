@@ -37,7 +37,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="nodejs," />
+  <meta name="keywords" content="WMTcore" />
 
 
 
@@ -53,25 +53,31 @@
 
 
 
-<meta name="description" content="koa-csrfCross-Site Request Forgery 跨站请求伪造
-koa-csrf
-原理它在session中保存一个secret字段，然后使用它生成token，其中salt是随机生成的字符串，长度可自定。每次请求时都会重新生成salt，于是每次token也会不同。
-12345var hash = crypto	.createHash(&apos;sha1&apos;)	.update(salt +">
+<meta name="description" content="交流的缺乏导致了争辩、沮丧和群体猜忌。很快，部落开始分裂——大家选择了孤立，而不是互相争吵
+缺少相互沟通会导致进度灾难、功能的不合理和系统缺陷
+对程序功能的修改要从系统角度来考虑和衡量，及时做公开，告知
+项目工作手册是项目文档的集合，包括目的、外部规格说明、接口说明、 技术标准、内部说明和管理备忘录，帮助后来者了解产品设计
+事先将项目工作手册设计好，能保证文档的结构本身是规范的
+控制信息发布：确保">
 <meta property="og:type" content="article">
-<meta property="og:title" content="koa-csrf">
-<meta property="og:url" content="https://www.wmtcore.com/2016/09/11/koa-csrf/index.html">
+<meta property="og:title" content="为什么巴比伦塔会失败?(Why Did the Tower of Babel Fail?)">
+<meta property="og:url" content="https://www.wmtcore.com/2020/03/28/为什么巴比伦塔会失败/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="koa-csrfCross-Site Request Forgery 跨站请求伪造
-koa-csrf
-原理它在session中保存一个secret字段，然后使用它生成token，其中salt是随机生成的字符串，长度可自定。每次请求时都会重新生成salt，于是每次token也会不同。
-12345var hash = crypto	.createHash(&apos;sha1&apos;)	.update(salt +">
-<meta property="og:updated_time" content="2016-09-11T08:03:14.000Z">
+<meta property="og:description" content="交流的缺乏导致了争辩、沮丧和群体猜忌。很快，部落开始分裂——大家选择了孤立，而不是互相争吵
+缺少相互沟通会导致进度灾难、功能的不合理和系统缺陷
+对程序功能的修改要从系统角度来考虑和衡量，及时做公开，告知
+项目工作手册是项目文档的集合，包括目的、外部规格说明、接口说明、 技术标准、内部说明和管理备忘录，帮助后来者了解产品设计
+事先将项目工作手册设计好，能保证文档的结构本身是规范的
+控制信息发布：确保">
+<meta property="og:updated_time" content="2020-03-28T07:46:01.038Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="koa-csrf">
-<meta name="twitter:description" content="koa-csrfCross-Site Request Forgery 跨站请求伪造
-koa-csrf
-原理它在session中保存一个secret字段，然后使用它生成token，其中salt是随机生成的字符串，长度可自定。每次请求时都会重新生成salt，于是每次token也会不同。
-12345var hash = crypto	.createHash(&apos;sha1&apos;)	.update(salt +">
+<meta name="twitter:title" content="为什么巴比伦塔会失败?(Why Did the Tower of Babel Fail?)">
+<meta name="twitter:description" content="交流的缺乏导致了争辩、沮丧和群体猜忌。很快，部落开始分裂——大家选择了孤立，而不是互相争吵
+缺少相互沟通会导致进度灾难、功能的不合理和系统缺陷
+对程序功能的修改要从系统角度来考虑和衡量，及时做公开，告知
+项目工作手册是项目文档的集合，包括目的、外部规格说明、接口说明、 技术标准、内部说明和管理备忘录，帮助后来者了解产品设计
+事先将项目工作手册设计好，能保证文档的结构本身是规范的
+控制信息发布：确保">
 
 
 
@@ -83,7 +89,7 @@ koa-csrf
   };
 </script>
 
-  <title> koa-csrf | 大碗拉面 </title>
+  <title> 为什么巴比伦塔会失败?(Why Did the Tower of Babel Fail?) | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
@@ -249,7 +255,7 @@ koa-csrf
             
             
               
-                koa-csrf
+                为什么巴比伦塔会失败?(Why Did the Tower of Babel Fail?)
               
             
           </h1>
@@ -258,8 +264,8 @@ koa-csrf
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-09-11T14:03:00+08:00" content="2016-09-11">
-              2016-09-11
+            <time itemprop="dateCreated" datetime="2020-03-28T14:08:11+08:00" content="2020-03-28">
+              2020-03-28
             </time>
           </span>
 
@@ -268,8 +274,8 @@ koa-csrf
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
+                  <a href="/categories/人月神话/" itemprop="url" rel="index">
+                    <span itemprop="name">人月神话</span>
                   </a>
                 </span>
 
@@ -284,8 +290,8 @@ koa-csrf
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/11/koa-csrf/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/11/koa-csrf/" itemprop="commentsCount"></span>
+                <a href="/2020/03/28/为什么巴比伦塔会失败/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/03/28/为什么巴比伦塔会失败/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -304,42 +310,74 @@ koa-csrf
       
 
       
-        <span itemprop="articleBody"><h1 id="koa-csrf"><a href="#koa-csrf" class="headerlink" title="koa-csrf"></a>koa-csrf</h1><p>Cross-Site Request Forgery 跨站请求伪造</p>
-<p><a href="https://github.com/koajs/csrf" target="_blank" rel="external">koa-csrf</a></p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>它在session中保存一个<code>secret</code>字段，然后使用它生成token，其中salt是随机生成的字符串，长度可自定。每次请求时都会重新生成salt，于是每次token也会不同。</p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">var hash</span> = crypto</div><div class="line">	.createHash(<span class="string">'sha1'</span>)</div><div class="line">	.update(salt + <span class="string">'-'</span> + secret, <span class="string">'ascii'</span>)</div><div class="line">	.digest(<span class="string">'base64'</span>);</div><div class="line"><span class="attribute">token</span> = salt + <span class="string">'-'</span> + hash;</div></pre></td></tr></table></figure>
-<p>验证的时候，只需要取出token头部的salt，再从session中取出<code>secret</code>,再生成expected，与token对比</p>
-<p>默认不检查<strong>GET,HEAD,OPTIONS</strong>请求</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>与session配合使用，在请求时附带字段<code>_csrf:token</code></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> koa = <span class="keyword">require</span>(<span class="string">'koa'</span>)</div><div class="line"><span class="keyword">var</span> csrf = <span class="keyword">require</span>(<span class="string">'koa-csrf'</span>)</div><div class="line"><span class="keyword">var</span> session = <span class="keyword">require</span>(<span class="string">'koa-session'</span>)</div><div class="line"><span class="keyword">var</span> Router = <span class="keyword">require</span>(<span class="string">'koa-router'</span>);</div><div class="line"><span class="keyword">var</span> bodyParser = <span class="keyword">require</span>(<span class="string">'koa-bodyparser'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> app = koa();</div><div class="line"><span class="keyword">var</span> router = Router();</div><div class="line">app.<span class="keyword">use</span>(bodyParser());</div><div class="line">app.keys = [<span class="string">'session secret'</span>]</div><div class="line">session(app)</div><div class="line">app.<span class="keyword">use</span>(csrf());</div><div class="line"></div><div class="line">router.get(<span class="string">'/'</span>, async ctx =&gt; &#123;</div><div class="line">	ctx.body = ctx.csrf;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">router.post(<span class="string">'/'</span>, ctx =&gt; &#123;</div><div class="line">	ctx.body = ctx.request.body</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+        <span itemprop="articleBody"><p>交流的缺乏导致了争辩、沮丧和群体猜忌。很快，部落开始分裂——大家选择了孤立，而不是互相争吵</p>
+<p>缺少相互沟通会导致进度灾难、功能的不合理和系统缺陷</p>
+<p>对程序功能的修改要从系统角度来考虑和衡量，及时做公开，告知</p>
+<h3 id="项目工作手册"><a href="#项目工作手册" class="headerlink" title="项目工作手册"></a>项目工作手册</h3><p>是项目文档的集合，包括目的、外部规格说明、接口说明、 技术标准、内部说明和管理备忘录，帮助后来者了解产品设计</p>
+<p>事先将项目工作手册设计好，能保证文档的结构本身是规范的</p>
+<p>控制信息发布：确保信息能到达所有需要它的人的手中，对所有的备忘录编号或者树状的索引结构</p>
+<p><strong>记录修订日期记录和标记变更标识条</strong></p>
+<p>编程人员仅了 解自己负责的部分，而不是整个系统的开发细节时，工作效率最高，先决条件是 精确和完整地定义所有接口</p>
+<h3 id="大型编程项目的组织架构"><a href="#大型编程项目的组织架构" class="headerlink" title="大型编程项目的组织架构"></a>大型编程项目的组织架构</h3><p>团队组织的目的是减少不必要交流和合作的数量</p>
+<p>减少交流的方法是人力划分和限定职责范围</p>
+<p>树状组织架构:</p>
+<ol>
+<li>任务(a mission)</li>
+<li>产品负责人(a producer)</li>
+<li>技术主管和结构师(a technical director or architect)</li>
+<li>进度(a schedule)</li>
+<li>人力的划分(a division of labor)</li>
+<li>各部分之间的接口定义(interface definitions among the parts)</li>
+</ol>
+<p>产品负责人:</p>
+<ol>
+<li>主要的工作是<strong>与团队外部，向上和水平地沟通</strong>，建立团队内部 的沟通和报告方式</li>
+<li>组建团队，划分工作及制订进度表，要求资源，确保进度目标的实现，根据环境的变化调整资源和团队的构架</li>
+</ol>
+<p>技术主管:</p>
+<ol>
+<li>提供整个设计的一致性和概念完整性,控制系统的复杂程度</li>
+<li>对设计进行构思，确定内部结构。</li>
+<li>提供技术问题的解决方案，或者根据需要调整系统设计。</li>
+<li>他的沟通交流在团队中是首要的。他的<strong>工作几乎完全是技术性的</strong></li>
+</ol>
+<h4 id="产品负责人和技术主管的组合方式"><a href="#产品负责人和技术主管的组合方式" class="headerlink" title="产品负责人和技术主管的组合方式"></a>产品负责人和技术主管的组合方式</h4><p>产品负责人和技术主管是同一个人: </p>
+<ol>
+<li>只适用于几个人的小团队开发</li>
+<li>同时具有管理技能和技术技能的人很难找到，大型项目中，每个角色都必须全职工作无法保证还能抽空做别的</li>
+</ol>
+<p>产品负责人作为总指挥，技术主管充当其左右手：</p>
+<ol>
+<li>实现难度在<strong>建立技术决策上的权威</strong></li>
+<li>必须对技术主管的技术才能表现出尊重，支持他的技术决定</li>
+<li>在主要的技术问题出现之前，私下讨论它们,达到<strong>在基本的技术理论上具有相似观点</strong></li>
+<li>一些技巧 通过一些微妙状态特征暗示来(如，办公室的大小、地毯、装修、复印机等等)体现技术主管的威信</li>
+<li>这种组合可以使工作很有效 项目经理可以使用并不很擅长管理的技术天才来完成工作</li>
+</ol>
+<p>技术主管作为总指挥，产品负责人充当其左右手：</p>
+<ol>
+<li><strong>小型的团队是最好的选择</strong></li>
+<li>参考 外科手术队伍</li>
+</ol>
+<p>对于真正大型项目中的一些开发队伍，产品负责人作为管理者是更合适的安排</p>
 </span>
       
     </div>
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/nodejs/" rel="tag">#nodejs</a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/31/nodejs-web应用-三/" rel="next" title="nodejs web应用 三">
-                <i class="fa fa-chevron-left"></i> nodejs web应用 三
+              <a href="/2020/03/20/反向授权逻辑梳理/" rel="next" title="反向授权性能优化">
+                <i class="fa fa-chevron-left"></i> 反向授权性能优化
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/26/mongo-查询/" rel="prev" title="mongo 查询">
-                mongo 查询 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -366,8 +404,8 @@ koa-csrf
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/11/koa-csrf/"
-           data-title="koa-csrf" data-url="https://www.wmtcore.com/2016/09/11/koa-csrf/">
+      <div class="ds-thread" data-thread-key="2020/03/28/为什么巴比伦塔会失败/"
+           data-title="为什么巴比伦塔会失败?(Why Did the Tower of Babel Fail?)" data-url="https://www.wmtcore.com/2020/03/28/为什么巴比伦塔会失败/">
       </div>
     
   </div>
@@ -467,7 +505,7 @@ koa-csrf
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#koa-csrf"><span class="nav-number">1.</span> <span class="nav-text">koa-csrf</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">1.2.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目工作手册"><span class="nav-number">1.</span> <span class="nav-text">项目工作手册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大型编程项目的组织架构"><span class="nav-number">2.</span> <span class="nav-text">大型编程项目的组织架构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#产品负责人和技术主管的组合方式"><span class="nav-number">2.1.</span> <span class="nav-text">产品负责人和技术主管的组合方式</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

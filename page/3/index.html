@@ -253,6 +253,166 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/26/mongo-查询/" itemprop="url">
+                  mongo 查询
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-09-26T13:54:52+08:00" content="2016-09-26">
+              2016-09-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/26/mongo-查询/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/26/mongo-查询/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">db</span><span class="selector-class">.c</span><span class="selector-class">.find</span>() 匹配集合所有文档</div><div class="line"></div><div class="line"><span class="selector-tag">db</span><span class="selector-class">.users</span><span class="selector-class">.find</span>(&#123;<span class="attribute">age</span>:<span class="number">27</span>&#125;) 查找特定键值的文档</div><div class="line"></div><div class="line"><span class="selector-tag">db</span><span class="selector-class">.user</span><span class="selector-class">.find</span>(&#123;&#125;,&#123;<span class="attribute">username</span>:<span class="number">1</span>,email:<span class="number">1</span>&#125;) 返回指定的键 默认有_<span class="selector-tag">id</span>，加_<span class="selector-tag">id</span><span class="selector-pseudo">:0</span>剔除</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$lt</td>
+<td>&lt;</td>
+</tr>
+<tr>
+<td>$lte</td>
+<td>&lt;=</td>
+</tr>
+<tr>
+<td>$gt</td>
+<td>&gt;</td>
+</tr>
+<tr>
+<td>$gte</td>
+<td>&gt;=</td>
+</tr>
+<tr>
+<td>$OR</td>
+<td></td>
+</tr>
+<tr>
+<td>$in</td>
+<td></td>
+</tr>
+<tr>
+<td>$not</td>
+<td>元条件句，用在其他条件之上</td>
+</tr>
+<tr>
+<td>$inc</td>
+<td>自增 {$inc:{age:1}} 自增一</td>
+</tr>
+<tr>
+<td>$all</td>
+<td>使用多个元素匹配数组</td>
+</tr>
+<tr>
+<td>$slice</td>
+<td>返回指定位置的数据 {$slice:”10”}</td>
+</tr>
+</tbody>
+</table>
+<h3 id="查询内嵌文档"><a href="#查询内嵌文档" class="headerlink" title="查询内嵌文档"></a>查询内嵌文档</h3><p><code>精确匹配</code> 查询条件与子文档完全匹配</p>
+<p><code>点表示法</code> 进入内嵌文档内部查询 db.people.find({name.first:’joe’,name.last:something})</p>
+<p><code>模糊查找</code> $elemMatch 对内嵌文档使用操作符查找 db.blog.find({comments:{$elemMatch:{author:joe,score:{$gte:5}}}}) </p>
+<h3 id="skip"><a href="#skip" class="headerlink" title="skip"></a>skip</h3><ul>
+<li>当数据量大时，使用skip会很慢，mongo还不支持在索引中保存太多的元数据</li>
+</ul>
+<p><code>利用上次结果来计算下次的查询条件</code></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/11/koa-csrf/" itemprop="url">
                   koa-csrf
                 </a>
@@ -1724,177 +1884,6 @@ node --max-new-space-size=1024 test.js // 单位为KB
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/08/nginx-http模块基本配置/" itemprop="url">
-                  nginx http模块基本配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-07-08T10:20:26+08:00" content="2016-07-08">
-              2016-07-08
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nginx/" itemprop="url" rel="index">
-                    <span itemprop="name">nginx</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/08/nginx-http模块基本配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/08/nginx-http模块基本配置/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="虚拟主机和请求分发"><a href="#虚拟主机和请求分发" class="headerlink" title="虚拟主机和请求分发"></a>虚拟主机和请求分发</h3><ul>
-<li>多个域名对应同一ip时,配置多个server虚拟主机，对应多个域名，server_name对应用户请求的域名</li>
-</ul>
-<h4 id="监听端口"><a href="#监听端口" class="headerlink" title="监听端口"></a>监听端口</h4><ul>
-<li>默认： listen 80;</li>
-<li>配置块： server</li>
-</ul>
-<p>可以加ip、端口、主机名</p>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">listen <span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">8000</span><span class="comment">;</span></div><div class="line">listen <span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span><span class="comment">;//不加端口号，默认监听80</span></div><div class="line">listen *:<span class="number">8000</span><span class="comment">;</span></div><div class="line">listen <span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>  default_server backlog=<span class="number">1024</span><span class="comment">;</span></div></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>parameters</th>
-<th>定义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>default/default_server</td>
-<td>默认server块，不设置就默认第一个server，当请求没能匹配到主机域名时，就选择默认</td>
-</tr>
-<tr>
-<td>backlog=num</td>
-<td>tcp中的backlog队列大小。默认-1，不设置。存放等待建立tcp三次握手连接</td>
-</tr>
-<tr>
-<td>rcvbuf=size</td>
-<td>监听句柄的SO_RCVBUF</td>
-</tr>
-<tr>
-<td>sndbuf=size</td>
-<td>监听句柄的SO_SNDBUF</td>
-</tr>
-<tr>
-<td>accpet_filter</td>
-<td>设置accept过滤器，只对FreeBSD</td>
-</tr>
-<tr>
-<td>deferred</td>
-<td>只有用户发送请求数据，内核在网卡中收到请求数据包，内核才会唤醒worker进程处理，适用于大并发情况，一般不建议使用</td>
-</tr>
-<tr>
-<td>bind</td>
-<td>绑定当前端口/地址对，如127.0.0.1：8000.只有同时对一个端口监听多个地址时有效</td>
-</tr>
-<tr>
-<td>ssl</td>
-<td>监听的端口连接必须基于ssl</td>
-</tr>
-</tbody>
-</table>
-<h4 id="主机域名"><a href="#主机域名" class="headerlink" title="主机域名"></a>主机域名</h4><ul>
-<li>语法： server——name name[…];可以跟多个主机名</li>
-<li>默认： server_name “”; 匹配没有Host的http请求</li>
-<li>配置块： server</li>
-</ul>
-<p>当header的host和多个server匹配，则按匹配优先级</p>
-<ol>
-<li>字符串完全匹配 www.test.com</li>
-<li>通配符在前面的 *.test.com</li>
-<li>通配符在后面的 www.test. *</li>
-<li>使用正则的</li>
-</ol>
-<p>都不匹配就选默认的</p>
-<h4 id="location"><a href="#location" class="headerlink" title="location"></a>location</h4><ul>
-<li>语法： location [=|~|~*|^~|@]</li>
-<li>默认： server_name “”; 匹配没有Host的http请求</li>
-<li>配置块： server</li>
-</ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1941,7 +1930,7 @@ node --max-new-space-size=1024 test.js // 单位为KB
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">68</span>
+              <span class="site-state-item-count">69</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

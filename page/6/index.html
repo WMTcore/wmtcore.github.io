@@ -253,6 +253,125 @@
             
               
                 
+                <a class="post-title-link" href="/2016/01/25/js-编码相关问题持续总结/" itemprop="url">
+                  js 编码相关问题持续总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-25T09:25:23+08:00" content="2016-01-25">
+              2016-01-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/25/js-编码相关问题持续总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/js-编码相关问题持续总结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="关于URL编码的问题"><a href="#关于URL编码的问题" class="headerlink" title="关于URL编码的问题"></a>关于URL编码的问题</h3><p><code>encodeURI，decodeURI</code> :不会对下列字符编码 ASCII字母 数字 ~!@#$&amp;*()=:/,;?+’，适合对整个url</p>
+<p><code>encodeURIComponent decodeURIComponent</code> : 不会对下列字符编码 ASCII字母 数字 ~!*()’,适合对url参数</p>
+<h3 id="content-type"><a href="#content-type" class="headerlink" title="content-type"></a>content-type</h3><p><code>application/x-www-form-urlencoded</code>: body的内容为a=b&amp;c=d,服务端接收时会转为键值对并会<a href="https://www.w3.org/TR/html4/interact/forms.html#h-17.13.4.1" target="_blank" rel="external">把+转成空格</a>,需要对值做encodeURIComponent<br><code>application/json</code>: body的内容为JSON.stringify({a:1}})</p>
+<h3 id="字符串编码"><a href="#字符串编码" class="headerlink" title="字符串编码"></a>字符串编码</h3><p><code>escape unescape</code> :不会对 ASCII 字母、数字和@/*+进行编码,但<code>已不建议使用</code></p>
+<p><strong>escape和encodeURI区别</strong> :<br><code>escape</code>在处理 0xff 之外字符的时候，是直接使用字符的 unicode 在前面加上一个 「%u」<br><code>encodeURI</code> 先进行 UTF-8，再在 UTF-8 的每个字节码前加上一个 「%」</p>
+<h4 id="nodejs-处理编码文件"><a href="#nodejs-处理编码文件" class="headerlink" title="nodejs 处理编码文件"></a>nodejs 处理编码文件</h4><p><code>iconv-lite</code>: 纯js实现，少了c++到js的转换 比node-iconv快 </p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var iconv = require(<span class="symbol">'iconv</span>-lite');</div><div class="line"> </div><div class="line">// Convert from an encoded <span class="keyword">buffer</span> <span class="keyword">to</span> js <span class="built_in">string</span>.</div><div class="line">str = iconv.decode(buf, <span class="symbol">'win1251</span>');</div><div class="line"> </div><div class="line">// Convert from js <span class="built_in">string</span> <span class="keyword">to</span> an encoded <span class="keyword">buffer</span>.</div><div class="line">buf = iconv.encode(<span class="string">"Sample input string"</span>, <span class="symbol">'win1251</span>');</div><div class="line"> </div><div class="line">// Check <span class="keyword">if</span> encoding <span class="keyword">is</span> supported</div><div class="line">iconv.encodingExists(<span class="string">"us-ascii"</span>)</div></pre></td></tr></table></figure>
+<p><code>encoding</code>: 对node-iconv和iconv-lite的再次封装，encoding首先调用node-iconv，如果node-iconv无法解析，则调用iconv-lite作为替代方案.<br>encoding模块就一个方法convert()，使用方法为：encoding.convert(text, toCharset, fromCharset)。</p>
+<ul>
+<li>text: 需要转换的对象，可以为Buffer或者String对象。</li>
+<li>toCharset: 转换后的编码。</li>
+<li>fromCharset: 转换前的编码，缺省为uft8。</li>
+</ul>
+<p>转换后的输入结果为Buffer对象。</p>
+<h3 id="URL、URI、URN"><a href="#URL、URI、URN" class="headerlink" title="URL、URI、URN"></a>URL、URI、URN</h3><p><code>URI</code>:统一资源标识符</p>
+<p><code>URL</code>:统一资源定位器,具体的URI</p>
+<p><code>URN</code>:统一资源命名,如mailto:java-net@java.sun.com</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/01/23/Samba服务器的简单配置和快速搭建/" itemprop="url">
                   最方便的Samba服务器的配置和搭建
                 </a>
@@ -1299,128 +1418,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/22/Sequelize事务实现/" itemprop="url">
-                  Sequelize事务实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-12-22T16:08:37+08:00" content="2015-12-22">
-              2015-12-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/22/Sequelize事务实现/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/22/Sequelize事务实现/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="Managed-transaction-auto-callback"><a href="#Managed-transaction-auto-callback" class="headerlink" title="Managed transaction (auto-callback)"></a>Managed transaction (auto-callback)</h3><ul>
-<li>事务将自动提交</li>
-<li>sequelize.transaction</li>
-</ul>
-<figure class="highlight scilab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span> models.sequelize.transaction(<span class="function"><span class="keyword">function</span><span class="params">(t)</span> &#123;</span></div><div class="line">  <span class="comment">// chain all your queries here. make sure you return them.</span></div><div class="line">  <span class="keyword">return</span> User.create(&#123;</div><div class="line">    firstName: <span class="string">'Abraham'</span>,</div><div class="line">    lastName: <span class="string">'Lincoln'</span></div><div class="line">  &#125;, &#123;</div><div class="line">    transaction: t</div><div class="line">  &#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(user)</span> &#123;</span></div><div class="line">    <span class="keyword">return</span> user.setShooter(&#123;</div><div class="line">      firstName: <span class="string">'John'</span>,</div><div class="line">      lastName: <span class="string">'Boothe'</span></div><div class="line">    &#125;, &#123;</div><div class="line">      transaction: t</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line">&#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(result)</span> &#123;</span></div><div class="line">  <span class="comment">// Transaction has been committed</span></div><div class="line">  <span class="comment">// result is whatever the result of the promise chain returned to the transaction callback</span></div><div class="line">&#125;).<span class="keyword">catch</span>(<span class="function"><span class="keyword">function</span><span class="params">(err)</span> &#123;</span></div><div class="line">  <span class="comment">// Transaction has been rolled back</span></div><div class="line">  <span class="comment">// err is whatever rejected the promise chain returned to the transaction callback</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h3 id="Unmanaged-transaction-then-callback"><a href="#Unmanaged-transaction-then-callback" class="headerlink" title="Unmanaged transaction (then-callback)"></a>Unmanaged transaction (then-callback)</h3><ul>
-<li>非自动提交事务</li>
-<li>sequelize.transaction()</li>
-</ul>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span> sequelize.transaction().<span class="keyword">then</span>(<span class="keyword">function</span> <span class="title"></span>(t) &#123;</div><div class="line">  <span class="keyword">return</span> <span class="type">User.create(&#123;</span></div><div class="line">    firstName: <span class="symbol">'Homer</span>',</div><div class="line">    lastName: <span class="symbol">'Simpson</span>'</div><div class="line">  &#125;, &#123;transaction: t&#125;).<span class="keyword">then</span>(<span class="keyword">function</span> <span class="title"></span>(user) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="type">user.addSibling(&#123;</span></div><div class="line">      firstName: <span class="symbol">'Lisa</span>',</div><div class="line">      lastName: <span class="symbol">'Simpson</span>'</div><div class="line">    &#125;, &#123;transaction: t&#125;);</div><div class="line">  &#125;).<span class="keyword">then</span>(<span class="keyword">function</span> <span class="title"></span>() &#123;</div><div class="line">    t.commit();</div><div class="line">  &#125;).catch(<span class="keyword">function</span> <span class="title"></span>(err) &#123;</div><div class="line">    t.rollback();</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h3 id="Automatically-pass-transactions-to-all-queries"><a href="#Automatically-pass-transactions-to-all-queries" class="headerlink" title="Automatically pass transactions to all queries"></a>Automatically pass transactions to all queries</h3><ul>
-<li>自动添加事务</li>
-<li>无需{ transaction: t }</li>
-<li>require(‘continuation-local-storage’)</li>
-</ul>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cls = require(<span class="string">'continuation-local-storage'</span>),</div><div class="line">    <span class="keyword">namespace</span> = cls.createNamespace(<span class="string">'my-very-own-namespace'</span>);</div><div class="line"></div><div class="line">sequelize.transaction(<span class="function"><span class="keyword">function</span> <span class="params">(t1)</span> </span>&#123;</div><div class="line">  <span class="keyword">namespace</span>.get(<span class="string">'transaction'</span>) === t1; <span class="comment">// true</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">sequelize.transaction(<span class="function"><span class="keyword">function</span> <span class="params">(t2)</span> </span>&#123;</div><div class="line">  <span class="keyword">namespace</span>.get(<span class="string">'transaction'</span>) === t2; <span class="comment">// true</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h3 id="Array-transaction"><a href="#Array-transaction" class="headerlink" title="Array transaction"></a>Array transaction</h3><ul>
-<li>事务并行</li>
-</ul>
-<figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">models.sequelize.transaction(<span class="function"><span class="keyword">function</span><span class="params">(t)</span></span> &#123;</div><div class="line">    <span class="keyword">return</span> models.Products.create(args, &#123;</div><div class="line">        transaction: t</div><div class="line">    &#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(result)</span></span> &#123;</div><div class="line">        <span class="keyword">return</span> Promise.<span class="built_in">all</span>([models.user.create(&#123;</div><div class="line">            <span class="keyword">name</span>: <span class="string">'test'</span></div><div class="line">        &#125;, &#123;</div><div class="line">            transaction: t</div><div class="line">        &#125;), models.address.create(&#123;</div><div class="line">            id: <span class="string">'1'</span></div><div class="line">        &#125;, &#123;</div><div class="line">            transaction: t</div><div class="line">        &#125;)]).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">()</span></span> &#123;&#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h3 id="push-promise-all-实现循环读取、写入"><a href="#push-promise-all-实现循环读取、写入" class="headerlink" title="push + promise.all 实现循环读取、写入"></a>push + promise.all 实现循环读取、写入</h3><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">        models.sequelize.transaction(function(t) &#123;</div><div class="line">            <span class="built_in">var</span> tranArray = [];</div><div class="line">            <span class="keyword">if</span> (!<span class="symbol">_</span>.isUndefined(<span class="built_in">args</span>.categories_id)) &#123;</div><div class="line">                <span class="built_in">var</span> categories_idArray = <span class="built_in">args</span>.categories_id.<span class="built_in">split</span>(',');</div><div class="line">                tranArray.<span class="built_in">push</span>(models.Categories_product.destroy(&#123;</div><div class="line">                    where: &#123;</div><div class="line">                        product_id: product_id</div><div class="line">                    &#125;</div><div class="line">                &#125;, &#123;</div><div class="line">                    transaction: t</div><div class="line">                &#125;));</div><div class="line">                categories_idArray.forEach(function(categories_id) &#123;</div><div class="line">                    tranArray.<span class="built_in">push</span>(models.Categories_product.create(&#123;</div><div class="line">                        product_id: product_id,</div><div class="line">                        categories_id: categories_id</div><div class="line">                    &#125;, &#123;</div><div class="line">                        transaction: t</div><div class="line">                    &#125;));</div><div class="line">                &#125;);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (<span class="symbol">_</span>.isUndefined(areacode)) &#123;</div><div class="line">                tranArray.<span class="built_in">push</span>(models.Products.update(<span class="built_in">args</span>, &#123;</div><div class="line">                    where: &#123;</div><div class="line">                        id: product_id</div><div class="line">                    &#125;</div><div class="line">                &#125;));</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                tranArray.<span class="built_in">push</span>(models.Product_lang_details.update(<span class="built_in">args</span>,</div><div class="line">                    where: &#123;</div><div class="line">                        product_id: product_id,</div><div class="line">                        areacode: areacode</div><div class="line">                    &#125;));</div><div class="line">                tranArray.<span class="built_in">push</span>(models.Product_shipping_to.update(&#123;</div><div class="line">                        freezeTableName: <span class="built_in">args</span>.freezeTableName</div><div class="line">                    &#125;,</div><div class="line">                    where: &#123;</div><div class="line">                        product_id: product_id,</div><div class="line">                        areacode: areacode</div><div class="line">                    &#125;));</div><div class="line">            &#125;</div><div class="line">            <span class="built_in">return</span> Promise.all(tranArray);</div><div class="line">        &#125;).<span class="keyword">then</span>(function() &#123;</div><div class="line">            <span class="built_in">return</span> utils.response(res, <span class="number">200</span>, &#123;</div><div class="line">                'message': 'update <span class="built_in">product</span> successful!'</div><div class="line">            &#125;);</div><div class="line">        &#125;).<span class="built_in">catch</span>(function(<span class="built_in">error</span>) &#123;</div><div class="line">            logger.<span class="built_in">error</span>('<span class="built_in">product</span> update fall', <span class="built_in">error</span>);</div><div class="line">            <span class="built_in">return</span> utils.responseError(res, <span class="number">500</span>, &#123;</div><div class="line">                'message': 'format <span class="built_in">error</span>'</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div><div class="line">        </div><div class="line">###</div></pre></td></tr></table></figure>
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1467,7 +1464,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">68</span>
+              <span class="site-state-item-count">69</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
