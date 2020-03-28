@@ -225,15 +225,159 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/03/28/微服务开发注意事项/" itemprop="url">
+                  微服务开发注意事项
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-03-28T16:38:37+08:00" content="2020-03-28">
+              2020-03-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/方法论/" itemprop="url" rel="index">
+                    <span itemprop="name">方法论</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/03/28/微服务开发注意事项/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/03/28/微服务开发注意事项/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="认识到微服务开发的复杂性"><a href="#认识到微服务开发的复杂性" class="headerlink" title="认识到微服务开发的复杂性"></a>认识到微服务开发的复杂性</h3><ol>
+<li>本地开发要有一个好的开发机器，糟糕的开发机器将会导致糟糕的开发实践</li>
+<li>确保所有服务都使用构建工具，能在一台新机器上构建整个应用程序，而不需要进行太多配置，让开发人员能<strong>轻松地在本地运行应用程序的各个部分</strong></li>
+<li>使用Kubernetes，利用Telepresence以便轻松调试 Kubernetes 集群中的应用程序</li>
+</ol>
+<p>如果对微服务开发的复杂性缺乏理解，那么团队速度将会随着时间的推移而下降</p>
+<h3 id="及时将库和工具更新到最新版"><a href="#及时将库和工具更新到最新版" class="headerlink" title="及时将库和工具更新到最新版"></a>及时将库和工具更新到最新版</h3><p>所有服务的依赖项版本保持同步，<strong>为依赖升级创建技术债务项</strong>，并应作为会议的一部分加以讨论，并定期予以解决，将所有依赖项更新到最新版本</p>
+<p><strong>不止包括升级依赖包的版本，还包括架构修正</strong>，如当引入一个新工具时，可能可以替换掉原先多个工具，有助于降低复杂性</p>
+<p>几年前，许多团队开始将 Spring Cloud Netflix OSS 项目用于微服务。他们使用像 Kubernetes 这样的容器编排工具，但是因为是从 Netflix OSS 开始的，所以他们没有使用 Kubernetes 提供的所有功能。当 Kubernetes 内置了服务发现时，他们仍然使用 Eureka 作为服务发现</p>
+<h3 id="避免使用共享服务来做本地开发"><a href="#避免使用共享服务来做本地开发" class="headerlink" title="避免使用共享服务来做本地开发"></a>避免使用共享服务来做本地开发</h3><p>举例共享数据库</p>
+<ol>
+<li>一个开发人员可以删除其他开发人员为他们工作编写的数据</li>
+<li>开发人员害怕实验，因为他们的工作会影响其他团队成员</li>
+<li>很难单独测试更改。你的集成测试将变得不可靠，从而进一步降低开发速度</li>
+<li>容易出现不一致和不可预测的状态，开发人员希望在表是空的时候测试边缘情况，但其他开发人员需要一个表来记录</li>
+<li>只有共享数据库拥有系统工作所需的所有数据，团队成员失去了更改的可追溯性</li>
+<li>如果未连接到网络，就很难开展工作</li>
+</ol>
+<p>它也可以是消息队列、集中缓存（如 Redis）或任何其他可以发生改变的服务</p>
+<h3 id="代码托管平台的可见性"><a href="#代码托管平台的可见性" class="headerlink" title="代码托管平台的可见性"></a>代码托管平台的可见性</h3><p>在托管平台按产品、服务<strong>对微服务进行分组</strong>，方便了解代码库结构</p>
+<h3 id="服务有明确定义"><a href="#服务有明确定义" class="headerlink" title="服务有明确定义"></a>服务有明确定义</h3><p>避免拆分过多服务，会导致管理成本直线上升，</p>
+<p>应用单一责任原则（Single Responsibility Principle）来了解微服务是否变得过大，做的事情是否过多</p>
+<p><strong>任何服务都不应该直接与其他服务的数据库通信</strong></p>
+<p><strong>服务通信是微服务系统性能低下的首要原因</strong>： 如果两条信息相互依赖，那么它们应该属于同一个服务，服务的自然边界应该是其数据的自然边界</p>
+<h3 id="明确代码重用策略"><a href="#明确代码重用策略" class="headerlink" title="明确代码重用策略"></a>明确代码重用策略</h3><p><strong>对处理相同问题的代码，使用包封装</strong>，发布在包管理平台，并通过构建工具来让依赖的微服务及时更新</p>
+<p>没有适合的工具和自动化的情况下，使用微服务会导致灾难</p>
+<h3 id="多语言编程设计"><a href="#多语言编程设计" class="headerlink" title="多语言编程设计"></a>多语言编程设计</h3><p>如果你的开发人员还不够成熟的话，那么无论你使用什么编程语言，你开发的都将是糟糕的产品</p>
+<p>一个组织可以指定2、3个语言列表，并列出语言的优势</p>
+<p>在选择一门语言前，应该考虑以下一些问题：</p>
+<ol>
+<li>找到成熟的开发人员有多容易</li>
+<li>重新培训开发人员掌握新技术有多容易？我们发现 Java 开发人员可以相对容易地学习 Golang。</li>
+<li>代码的可读、可维护性</li>
+<li>就工具和库的方面而言，生态系统有多成熟？</li>
+</ol>
+<p>不仅仅局限于编程语言，也适用于数据库领域, 要始终考虑使用多种技术的维护和操作方面</p>
+<h3 id="人员的依赖性"><a href="#人员的依赖性" class="headerlink" title="人员的依赖性"></a>人员的依赖性</h3><p>大多数团队专注于他们的特定服务，因此他们并不了解完整的生态系统</p>
+<p>确保所有团队都有一个架构团队的代表，使每个团队与整个架构的路线图和目标保持一致（人月神话中有提过，外科手术团队,只需要协调各团队中的架构师）</p>
+<h3 id="维护文档"><a href="#维护文档" class="headerlink" title="维护文档"></a>维护文档</h3><p>需要维护的文档：</p>
+<ol>
+<li>设计文档</li>
+<li>C4 模型中的上下文和容器图</li>
+<li>以架构决策记录的形式跟踪关键架构决策</li>
+<li>开发人员入门指南</li>
+</ol>
+<p>在Gitlab中维护所有的文档</p>
+<h3 id="功能不要超过平台成熟度"><a href="#功能不要超过平台成熟度" class="headerlink" title="功能不要超过平台成熟度"></a>功能不要超过平台成熟度</h3><p>微服务要比传统的单体式应用更为复杂</p>
+<p>需要考虑分布式跟踪、可观察性、混沌测试、函数调用与网络调用、服务间通信的安全服务、可调试性等等。这需要在构建正确的平台和工具团队方面付出认真的努力和投资</p>
+<h3 id="自动化测试"><a href="#自动化测试" class="headerlink" title="自动化测试"></a>自动化测试</h3><p>微服务架构为测试地点和测试方式提供了更多选择</p>
+<p>微服务测试的金字塔</p>
+<p><img src="/picture/微服务开发注意事项.png" alt="Resize icon"></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1424,128 +1568,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/10/21/服务发现和rpc选择/" itemprop="url">
-                  服务发现和rpc选择
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2019-10-21T17:31:12+08:00" content="2019-10-21">
-              2019-10-21
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/中间件/" itemprop="url" rel="index">
-                    <span itemprop="name">中间件</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2019/10/21/服务发现和rpc选择/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/21/服务发现和rpc选择/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="rpc"><a href="#rpc" class="headerlink" title="rpc"></a>rpc</h3><p>使用rpc的目的： 让远程调用服务就像调本地服务一样简单</p>
-<p>比http的优势：协议传输效率较低</p>
-<h4 id="sofarpc与grpc"><a href="#sofarpc与grpc" class="headerlink" title="sofarpc与grpc"></a>sofarpc与grpc</h4><p>性能: <a href="https://www.sofastack.tech/projects/sofa-rpc/overview" target="_blank" rel="external">sofarpc</a>好，grpc性能一般(单线程 30kqps,小于8k包时)<br>易用性: Http2出现较晚，迁移转换成本高，sofarpc支持的协议多<br>可行性: sofarpc的注册中心目前还没有正式支持SOFAMesh</p>
-<h3 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h3><h4 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h4><ol>
-<li>健康检查依赖TCP长链接活性探测不准确</li>
-<li>需要在服务中集成sdk</li>
-<li>更复杂的服务治理</li>
-</ol>
-<p><a href="https://yq.aliyun.com/articles/599997" target="_blank" rel="external"> 参考 </a></p>
-<p><strong>sofa-rpc-node</strong>: 目前只支持zk</p>
-<h4 id="k8s-service"><a href="#k8s-service" class="headerlink" title="k8s service"></a>k8s service</h4><p>服务注册和发现，转发，负载均衡能力</p>
-<p>缺点: 同一个应用的不同的实例提供了不同的服务会出错,只能在同集群内使用</p>
-<h4 id="istio"><a href="#istio" class="headerlink" title="istio"></a>istio</h4><p>弥补k8s service的不足<br>可配置的服务发现(从k8s获取服务注册表)，由Sidecar保持长连接，转发，负载并提供熔断、限流降级、调用链治理等能力</p>
-<h4 id="SOFAMesh"><a href="#SOFAMesh" class="headerlink" title="SOFAMesh"></a>SOFAMesh</h4><p><a href="https://www.sofastack.tech/projects/sofa-mesh/overview" target="_blank" rel="external"> 基于istio,还在测试中</a></p>
-<p><img src="/picture/sofa-sidecar.png" alt="Resize icon"></p>
-<ul>
-<li>采用 Golang 编写的 MOSN 取代 Envoy(sidecar)</li>
-<li>合并 Mixer 到数据平面以解决性能瓶颈</li>
-<li>增强 Pilot 以实现更灵活的服务发现机制（主动告诉对应的 Sidecar，它需要发布哪些服务，主动告诉对应的 Sidecar，它需要订阅哪些服务），增加数据同步模块，以实现多个服务注册中心之间的数据交换</li>
-</ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1592,14 +1614,14 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">69</span>
+              <span class="site-state-item-count">70</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>

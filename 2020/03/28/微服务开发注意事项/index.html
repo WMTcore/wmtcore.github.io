@@ -37,7 +37,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="mysql," />
+  <meta name="keywords" content="WMTcore" />
 
 
 
@@ -53,25 +53,33 @@
 
 
 
-<meta name="description" content="当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”
-刷脏页的时间第一种是“redo log写满了，要flush脏页” 整个系统就不能再接受更新了，所有的更新都必须堵住。如果你从监控上看，这时候更新数会跌为0
-第二种是“内存不够用了，要先将脏页写到磁盘” 这种情况是常态 
-InnoDB用缓冲池（buffer">
+<meta name="description" content="认识到微服务开发的复杂性
+本地开发要有一个好的开发机器，糟糕的开发机器将会导致糟糕的开发实践
+确保所有服务都使用构建工具，能在一台新机器上构建整个应用程序，而不需要进行太多配置，让开发人员能轻松地在本地运行应用程序的各个部分
+使用Kubernetes，利用Telepresence以便轻松调试 Kubernetes 集群中的应用程序
+
+如果对微服务开发的复杂性缺乏理解，那么团队速度将会随着时间的推移">
 <meta property="og:type" content="article">
-<meta property="og:title" content="脏页">
-<meta property="og:url" content="https://www.wmtcore.com/2019/10/09/脏页/index.html">
+<meta property="og:title" content="微服务开发注意事项">
+<meta property="og:url" content="https://www.wmtcore.com/2020/03/28/微服务开发注意事项/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”
-刷脏页的时间第一种是“redo log写满了，要flush脏页” 整个系统就不能再接受更新了，所有的更新都必须堵住。如果你从监控上看，这时候更新数会跌为0
-第二种是“内存不够用了，要先将脏页写到磁盘” 这种情况是常态 
-InnoDB用缓冲池（buffer">
-<meta property="og:updated_time" content="2019-10-09T09:58:57.000Z">
+<meta property="og:description" content="认识到微服务开发的复杂性
+本地开发要有一个好的开发机器，糟糕的开发机器将会导致糟糕的开发实践
+确保所有服务都使用构建工具，能在一台新机器上构建整个应用程序，而不需要进行太多配置，让开发人员能轻松地在本地运行应用程序的各个部分
+使用Kubernetes，利用Telepresence以便轻松调试 Kubernetes 集群中的应用程序
+
+如果对微服务开发的复杂性缺乏理解，那么团队速度将会随着时间的推移">
+<meta property="og:image" content="https://www.wmtcore.com/picture/微服务开发注意事项.png">
+<meta property="og:updated_time" content="2020-03-28T09:27:43.251Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="脏页">
-<meta name="twitter:description" content="当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”
-刷脏页的时间第一种是“redo log写满了，要flush脏页” 整个系统就不能再接受更新了，所有的更新都必须堵住。如果你从监控上看，这时候更新数会跌为0
-第二种是“内存不够用了，要先将脏页写到磁盘” 这种情况是常态 
-InnoDB用缓冲池（buffer">
+<meta name="twitter:title" content="微服务开发注意事项">
+<meta name="twitter:description" content="认识到微服务开发的复杂性
+本地开发要有一个好的开发机器，糟糕的开发机器将会导致糟糕的开发实践
+确保所有服务都使用构建工具，能在一台新机器上构建整个应用程序，而不需要进行太多配置，让开发人员能轻松地在本地运行应用程序的各个部分
+使用Kubernetes，利用Telepresence以便轻松调试 Kubernetes 集群中的应用程序
+
+如果对微服务开发的复杂性缺乏理解，那么团队速度将会随着时间的推移">
+<meta name="twitter:image" content="https://www.wmtcore.com/picture/微服务开发注意事项.png">
 
 
 
@@ -83,7 +91,7 @@ InnoDB用缓冲池（buffer">
   };
 </script>
 
-  <title> 脏页 | 大碗拉面 </title>
+  <title> 微服务开发注意事项 | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
@@ -249,7 +257,7 @@ InnoDB用缓冲池（buffer">
             
             
               
-                脏页
+                微服务开发注意事项
               
             
           </h1>
@@ -258,8 +266,8 @@ InnoDB用缓冲池（buffer">
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2019-10-09T15:31:22+08:00" content="2019-10-09">
-              2019-10-09
+            <time itemprop="dateCreated" datetime="2020-03-28T16:38:37+08:00" content="2020-03-28">
+              2020-03-28
             </time>
           </span>
 
@@ -268,8 +276,8 @@ InnoDB用缓冲池（buffer">
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/方法论/" itemprop="url" rel="index">
+                    <span itemprop="name">方法论</span>
                   </a>
                 </span>
 
@@ -284,8 +292,8 @@ InnoDB用缓冲池（buffer">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2019/10/09/脏页/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/09/脏页/" itemprop="commentsCount"></span>
+                <a href="/2020/03/28/微服务开发注意事项/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/03/28/微服务开发注意事项/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -304,56 +312,75 @@ InnoDB用缓冲池（buffer">
       
 
       
-        <span itemprop="articleBody"><p>当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”</p>
-<h3 id="刷脏页的时间"><a href="#刷脏页的时间" class="headerlink" title="刷脏页的时间"></a>刷脏页的时间</h3><p><strong>第一种</strong>是“redo log写满了，要flush脏页” 整个系统就不能再接受更新了，所有的更新都必须堵住。如果你从监控上看，这时候更新数会跌为0</p>
-<p><strong>第二种</strong>是“内存不够用了，要先将脏页写到磁盘” 这种情况是常态 </p>
-<p>InnoDB用缓冲池（buffer pool）管理内存，缓冲池中的内存页有三种状态：</p>
-<ol>
-<li>还没有使用的；</li>
-<li>使用了并且是干净页；</li>
-<li>使用了并且是脏页。</li>
+        <span itemprop="articleBody"><h3 id="认识到微服务开发的复杂性"><a href="#认识到微服务开发的复杂性" class="headerlink" title="认识到微服务开发的复杂性"></a>认识到微服务开发的复杂性</h3><ol>
+<li>本地开发要有一个好的开发机器，糟糕的开发机器将会导致糟糕的开发实践</li>
+<li>确保所有服务都使用构建工具，能在一台新机器上构建整个应用程序，而不需要进行太多配置，让开发人员能<strong>轻松地在本地运行应用程序的各个部分</strong></li>
+<li>使用Kubernetes，利用Telepresence以便轻松调试 Kubernetes 集群中的应用程序</li>
 </ol>
-<p>InnoDB的策略是尽量使用内存，因此对于一个长时间运行的库来说，未被使用的页面很少。</p>
-<p><strong>当要读入的数据页没有在内存的时候，就必须到缓冲池中申请一个数据页</strong>。这时候只能把最久不使用的数据页从内存中淘汰掉：如果要淘汰的是一个干净页，就直接释放出来复用；但如果是脏页呢，就必须将脏页先刷到磁盘，变成干净页后才能复用</p>
-<p>一个查询要淘汰的脏页个数太多，会导致查询的响应时间明显变长；</p>
-<p><strong>第三种</strong>是MySQL空闲时</p>
-<p><strong>第四种</strong>是MySQL正常关闭</p>
-<h3 id="刷脏页的控制策略"><a href="#刷脏页的控制策略" class="headerlink" title="刷脏页的控制策略"></a>刷脏页的控制策略</h3><p><code>innodb_io_capacity</code> 它会告诉InnoDB你的磁盘能力 设置成磁盘的IOPS</p>
-<p><code>innodb_max_dirty_pages_pct</code>脏页比例上限，默认值是75% 通过<code>Innodb_buffer_pool_pages_dirty</code>/<code>Innodb_buffer_pool_pages_total</code>得到的</p>
-<p>InnoDB的刷盘速度就是要参考这两个因素：一个是脏页比例，一个是redo log写盘速度</p>
-<h4 id="刷脏页的连坐”机制"><a href="#刷脏页的连坐”机制" class="headerlink" title="刷脏页的连坐”机制"></a>刷脏页的连坐”机制</h4><p>一旦一个查询请求需要在执行过程中先flush掉一个脏页时，这个查询就可能要比平时慢了。而MySQL中的一个机制，可能让你的查询会更慢：在准备刷一个脏页的时候，如果这个数据页旁边的数据页刚好是脏页，就会把这个“邻居”也带着一起刷掉；而且这个把“邻居”拖下水的逻辑还可以继续蔓延，也就是对于每个邻居数据页，如果跟它相邻的数据页也还是脏页的话，也会被放到一起刷</p>
-<p><code>innodb_flush_neighbors</code> 值为1的时候会有上述的“连坐”机制，值为0时表示不找邻居，自己刷自己的</p>
-<p>找“邻居”这个优化在机械硬盘时代是很有意义的，可以减少很多随机IO。机械硬盘的随机IOPS一般只有几百，相同的逻辑操作减少随机IO就意味着系统性能的大幅度提升</p>
-<p>使用的是SSD这类IOPS比较高的设备的话，建议把innodb_flush_neighbors的值设置成0</p>
-<p>在MySQL 8.0中，innodb_flush_neighbors参数的默认值已经是0了</p>
+<p>如果对微服务开发的复杂性缺乏理解，那么团队速度将会随着时间的推移而下降</p>
+<h3 id="及时将库和工具更新到最新版"><a href="#及时将库和工具更新到最新版" class="headerlink" title="及时将库和工具更新到最新版"></a>及时将库和工具更新到最新版</h3><p>所有服务的依赖项版本保持同步，<strong>为依赖升级创建技术债务项</strong>，并应作为会议的一部分加以讨论，并定期予以解决，将所有依赖项更新到最新版本</p>
+<p><strong>不止包括升级依赖包的版本，还包括架构修正</strong>，如当引入一个新工具时，可能可以替换掉原先多个工具，有助于降低复杂性</p>
+<p>几年前，许多团队开始将 Spring Cloud Netflix OSS 项目用于微服务。他们使用像 Kubernetes 这样的容器编排工具，但是因为是从 Netflix OSS 开始的，所以他们没有使用 Kubernetes 提供的所有功能。当 Kubernetes 内置了服务发现时，他们仍然使用 Eureka 作为服务发现</p>
+<h3 id="避免使用共享服务来做本地开发"><a href="#避免使用共享服务来做本地开发" class="headerlink" title="避免使用共享服务来做本地开发"></a>避免使用共享服务来做本地开发</h3><p>举例共享数据库</p>
+<ol>
+<li>一个开发人员可以删除其他开发人员为他们工作编写的数据</li>
+<li>开发人员害怕实验，因为他们的工作会影响其他团队成员</li>
+<li>很难单独测试更改。你的集成测试将变得不可靠，从而进一步降低开发速度</li>
+<li>容易出现不一致和不可预测的状态，开发人员希望在表是空的时候测试边缘情况，但其他开发人员需要一个表来记录</li>
+<li>只有共享数据库拥有系统工作所需的所有数据，团队成员失去了更改的可追溯性</li>
+<li>如果未连接到网络，就很难开展工作</li>
+</ol>
+<p>它也可以是消息队列、集中缓存（如 Redis）或任何其他可以发生改变的服务</p>
+<h3 id="代码托管平台的可见性"><a href="#代码托管平台的可见性" class="headerlink" title="代码托管平台的可见性"></a>代码托管平台的可见性</h3><p>在托管平台按产品、服务<strong>对微服务进行分组</strong>，方便了解代码库结构</p>
+<h3 id="服务有明确定义"><a href="#服务有明确定义" class="headerlink" title="服务有明确定义"></a>服务有明确定义</h3><p>避免拆分过多服务，会导致管理成本直线上升，</p>
+<p>应用单一责任原则（Single Responsibility Principle）来了解微服务是否变得过大，做的事情是否过多</p>
+<p><strong>任何服务都不应该直接与其他服务的数据库通信</strong></p>
+<p><strong>服务通信是微服务系统性能低下的首要原因</strong>： 如果两条信息相互依赖，那么它们应该属于同一个服务，服务的自然边界应该是其数据的自然边界</p>
+<h3 id="明确代码重用策略"><a href="#明确代码重用策略" class="headerlink" title="明确代码重用策略"></a>明确代码重用策略</h3><p><strong>对处理相同问题的代码，使用包封装</strong>，发布在包管理平台，并通过构建工具来让依赖的微服务及时更新</p>
+<p>没有适合的工具和自动化的情况下，使用微服务会导致灾难</p>
+<h3 id="多语言编程设计"><a href="#多语言编程设计" class="headerlink" title="多语言编程设计"></a>多语言编程设计</h3><p>如果你的开发人员还不够成熟的话，那么无论你使用什么编程语言，你开发的都将是糟糕的产品</p>
+<p>一个组织可以指定2、3个语言列表，并列出语言的优势</p>
+<p>在选择一门语言前，应该考虑以下一些问题：</p>
+<ol>
+<li>找到成熟的开发人员有多容易</li>
+<li>重新培训开发人员掌握新技术有多容易？我们发现 Java 开发人员可以相对容易地学习 Golang。</li>
+<li>代码的可读、可维护性</li>
+<li>就工具和库的方面而言，生态系统有多成熟？</li>
+</ol>
+<p>不仅仅局限于编程语言，也适用于数据库领域, 要始终考虑使用多种技术的维护和操作方面</p>
+<h3 id="人员的依赖性"><a href="#人员的依赖性" class="headerlink" title="人员的依赖性"></a>人员的依赖性</h3><p>大多数团队专注于他们的特定服务，因此他们并不了解完整的生态系统</p>
+<p>确保所有团队都有一个架构团队的代表，使每个团队与整个架构的路线图和目标保持一致（人月神话中有提过，外科手术团队,只需要协调各团队中的架构师）</p>
+<h3 id="维护文档"><a href="#维护文档" class="headerlink" title="维护文档"></a>维护文档</h3><p>需要维护的文档：</p>
+<ol>
+<li>设计文档</li>
+<li>C4 模型中的上下文和容器图</li>
+<li>以架构决策记录的形式跟踪关键架构决策</li>
+<li>开发人员入门指南</li>
+</ol>
+<p>在Gitlab中维护所有的文档</p>
+<h3 id="功能不要超过平台成熟度"><a href="#功能不要超过平台成熟度" class="headerlink" title="功能不要超过平台成熟度"></a>功能不要超过平台成熟度</h3><p>微服务要比传统的单体式应用更为复杂</p>
+<p>需要考虑分布式跟踪、可观察性、混沌测试、函数调用与网络调用、服务间通信的安全服务、可调试性等等。这需要在构建正确的平台和工具团队方面付出认真的努力和投资</p>
+<h3 id="自动化测试"><a href="#自动化测试" class="headerlink" title="自动化测试"></a>自动化测试</h3><p>微服务架构为测试地点和测试方式提供了更多选择</p>
+<p>微服务测试的金字塔</p>
+<p><img src="/picture/微服务开发注意事项.png" alt="Resize icon"></p>
 </span>
       
     </div>
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/mysql/" rel="tag">#mysql</a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/01/ons 阿里云 rocketMQ/" rel="next" title="ons 阿里云 rocketMQ">
-                <i class="fa fa-chevron-left"></i> ons 阿里云 rocketMQ
+              <a href="/2020/03/28/为什么巴比伦塔会失败/" rel="next" title="为什么巴比伦塔会失败?(Why Did the Tower of Babel Fail?)">
+                <i class="fa fa-chevron-left"></i> 为什么巴比伦塔会失败?(Why Did the Tower of Babel Fail?)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/10/10/日志模块/" rel="prev" title="日志模块">
-                日志模块 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -380,8 +407,8 @@ InnoDB用缓冲池（buffer">
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2019/10/09/脏页/"
-           data-title="脏页" data-url="https://www.wmtcore.com/2019/10/09/脏页/">
+      <div class="ds-thread" data-thread-key="2020/03/28/微服务开发注意事项/"
+           data-title="微服务开发注意事项" data-url="https://www.wmtcore.com/2020/03/28/微服务开发注意事项/">
       </div>
     
   </div>
@@ -481,7 +508,7 @@ InnoDB用缓冲池（buffer">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#刷脏页的时间"><span class="nav-number">1.</span> <span class="nav-text">刷脏页的时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#刷脏页的控制策略"><span class="nav-number">2.</span> <span class="nav-text">刷脏页的控制策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#刷脏页的连坐”机制"><span class="nav-number">2.1.</span> <span class="nav-text">刷脏页的连坐”机制</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#认识到微服务开发的复杂性"><span class="nav-number">1.</span> <span class="nav-text">认识到微服务开发的复杂性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#及时将库和工具更新到最新版"><span class="nav-number">2.</span> <span class="nav-text">及时将库和工具更新到最新版</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#避免使用共享服务来做本地开发"><span class="nav-number">3.</span> <span class="nav-text">避免使用共享服务来做本地开发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码托管平台的可见性"><span class="nav-number">4.</span> <span class="nav-text">代码托管平台的可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务有明确定义"><span class="nav-number">5.</span> <span class="nav-text">服务有明确定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#明确代码重用策略"><span class="nav-number">6.</span> <span class="nav-text">明确代码重用策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多语言编程设计"><span class="nav-number">7.</span> <span class="nav-text">多语言编程设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#人员的依赖性"><span class="nav-number">8.</span> <span class="nav-text">人员的依赖性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#维护文档"><span class="nav-number">9.</span> <span class="nav-text">维护文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能不要超过平台成熟度"><span class="nav-number">10.</span> <span class="nav-text">功能不要超过平台成熟度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动化测试"><span class="nav-number">11.</span> <span class="nav-text">自动化测试</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

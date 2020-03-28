@@ -253,6 +253,128 @@
             
               
                 
+                <a class="post-title-link" href="/2019/10/21/服务发现和rpc选择/" itemprop="url">
+                  服务发现和rpc选择
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2019-10-21T17:31:12+08:00" content="2019-10-21">
+              2019-10-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/10/21/服务发现和rpc选择/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/21/服务发现和rpc选择/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="rpc"><a href="#rpc" class="headerlink" title="rpc"></a>rpc</h3><p>使用rpc的目的： 让远程调用服务就像调本地服务一样简单</p>
+<p>比http的优势：协议传输效率较低</p>
+<h4 id="sofarpc与grpc"><a href="#sofarpc与grpc" class="headerlink" title="sofarpc与grpc"></a>sofarpc与grpc</h4><p>性能: <a href="https://www.sofastack.tech/projects/sofa-rpc/overview" target="_blank" rel="external">sofarpc</a>好，grpc性能一般(单线程 30kqps,小于8k包时)<br>易用性: Http2出现较晚，迁移转换成本高，sofarpc支持的协议多<br>可行性: sofarpc的注册中心目前还没有正式支持SOFAMesh</p>
+<h3 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h3><h4 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h4><ol>
+<li>健康检查依赖TCP长链接活性探测不准确</li>
+<li>需要在服务中集成sdk</li>
+<li>更复杂的服务治理</li>
+</ol>
+<p><a href="https://yq.aliyun.com/articles/599997" target="_blank" rel="external"> 参考 </a></p>
+<p><strong>sofa-rpc-node</strong>: 目前只支持zk</p>
+<h4 id="k8s-service"><a href="#k8s-service" class="headerlink" title="k8s service"></a>k8s service</h4><p>服务注册和发现，转发，负载均衡能力</p>
+<p>缺点: 同一个应用的不同的实例提供了不同的服务会出错,只能在同集群内使用</p>
+<h4 id="istio"><a href="#istio" class="headerlink" title="istio"></a>istio</h4><p>弥补k8s service的不足<br>可配置的服务发现(从k8s获取服务注册表)，由Sidecar保持长连接，转发，负载并提供熔断、限流降级、调用链治理等能力</p>
+<h4 id="SOFAMesh"><a href="#SOFAMesh" class="headerlink" title="SOFAMesh"></a>SOFAMesh</h4><p><a href="https://www.sofastack.tech/projects/sofa-mesh/overview" target="_blank" rel="external"> 基于istio,还在测试中</a></p>
+<p><img src="/picture/sofa-sidecar.png" alt="Resize icon"></p>
+<ul>
+<li>采用 Golang 编写的 MOSN 取代 Envoy(sidecar)</li>
+<li>合并 Mixer 到数据平面以解决性能瓶颈</li>
+<li>增强 Pilot 以实现更灵活的服务发现机制（主动告诉对应的 Sidecar，它需要发布哪些服务，主动告诉对应的 Sidecar，它需要订阅哪些服务），增加数据同步模块，以实现多个服务注册中心之间的数据交换</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2019/10/10/事务/" itemprop="url">
                   事务
                 </a>
@@ -1298,123 +1420,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/11/22/Docker-image/" itemprop="url">
-                  Docker image
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-11-22T14:24:41+08:00" content="2016-11-22">
-              2016-11-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/运维/" itemprop="url" rel="index">
-                    <span itemprop="name">运维</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/11/22/Docker-image/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/22/Docker-image/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="image概念"><a href="#image概念" class="headerlink" title="image概念"></a>image概念</h3><p><img src="../picture/docker_image_define.jpg" alt="Smaller icon"></p>
-<p><code>Remote docker hub</code> 集中存储镜像的web服务器地址</p>
-<p><code>Namespace</code> 命名空间，存放一类镜像</p>
-<p><code>Repository</code> 一个镜像仓库，使用tag区分</p>
-<p><code>Tag</code> 类似的git中的Tag,表示镜像版本</p>
-<h3 id="使用image"><a href="#使用image" class="headerlink" title="使用image"></a>使用image</h3><ul>
-<li>列出本机镜像：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ docker images</div><div class="line">``` </div><div class="line"></div><div class="line">可以使用--filter过滤结果，例如--filter &quot;dangling=true&quot;选出悬挂镜像(没有对应名称和tag,其上层不会被任何镜像依赖，通常可删除)</div></pre></td></tr></table></figure>
-<p>//删除悬挂镜像<br>$ docker image –filter “dangling=true” -q|xargs docker rmi<br>```</p>
-<h3 id="创建镜像"><a href="#创建镜像" class="headerlink" title="创建镜像"></a>创建镜像</h3><p><code>使用DockerFile built:</code> docker build -t nginx-node:6.9.2 .</p>
-<p><code>将容器commit:</code> 使用docker ps查看容器id,在docker commit id  nginx:version</p>
-<h3 id="导入镜像"><a href="#导入镜像" class="headerlink" title="导入镜像"></a>导入镜像</h3><p><code>下载镜像：</code> docker pull busybox</p>
-<p><code>导出镜像：</code> docker save nginx:version &gt;nginx.tar</p>
-<p><code>导入镜像：</code> docker import(导入包含根文件系统的归档),docker load(一般导入由docker save导出的镜像)</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1461,14 +1466,14 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">69</span>
+              <span class="site-state-item-count">70</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
