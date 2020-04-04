@@ -53,25 +53,27 @@
 
 
 
-<meta name="description" content="之前的问题在做反向计算时，主要涉及到区域数据的比较，通过查出所有子集再循环剔除，
-数据量、大运算慢，频繁根据region_start_id查数据库,返回结果因为展开到商品，对反向涉及到的商品都会带上庞大的区域数据
-插曲深拷贝优化: 展开的授权数据，要从原始授权继承区域，需要深拷贝，直接深拷贝Object太慢，通过immutable做了优化，但涉及到的商品区域数据最后返回时要toJS，速度较慢
-re">
+<meta name="description" content="不变只是愿望，变化才是永恒
+试验性工厂和增大规模开发使用的环境由于规模、量级的限制，导致第一版开发的软件在真实环境运行时易出现各种问题,需要在测试中不断增大规模、模拟真实环境
+把第一版开发的产品发布给顾客，可以获得时间，但是对于用户，使用极度痛苦;对于重新开发的人员，分散了精力;对于产品，影响了声誉，即使最好的再设计也难以挽回名声
+唯一不变的就是变化本身新的系统概念或新技术会不断出现，所以老版的系">
 <meta property="og:type" content="article">
-<meta property="og:title" content="反向授权性能优化">
-<meta property="og:url" content="https://www.wmtcore.com/2020/03/20/反向授权逻辑梳理/index.html">
+<meta property="og:title" content="未雨绸缪(Plan to Throw One Away)">
+<meta property="og:url" content="https://www.wmtcore.com/2020/04/04/胸有成竹(Calling the Shot)/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="之前的问题在做反向计算时，主要涉及到区域数据的比较，通过查出所有子集再循环剔除，
-数据量、大运算慢，频繁根据region_start_id查数据库,返回结果因为展开到商品，对反向涉及到的商品都会带上庞大的区域数据
-插曲深拷贝优化: 展开的授权数据，要从原始授权继承区域，需要深拷贝，直接深拷贝Object太慢，通过immutable做了优化，但涉及到的商品区域数据最后返回时要toJS，速度较慢
-re">
-<meta property="og:updated_time" content="2020-03-24T09:52:42.733Z">
+<meta property="og:description" content="不变只是愿望，变化才是永恒
+试验性工厂和增大规模开发使用的环境由于规模、量级的限制，导致第一版开发的软件在真实环境运行时易出现各种问题,需要在测试中不断增大规模、模拟真实环境
+把第一版开发的产品发布给顾客，可以获得时间，但是对于用户，使用极度痛苦;对于重新开发的人员，分散了精力;对于产品，影响了声誉，即使最好的再设计也难以挽回名声
+唯一不变的就是变化本身新的系统概念或新技术会不断出现，所以老版的系">
+<meta property="og:image" content="https://www.wmtcore.com/picture/未雨绸缪.jpg">
+<meta property="og:updated_time" content="2020-04-04T07:55:27.956Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="反向授权性能优化">
-<meta name="twitter:description" content="之前的问题在做反向计算时，主要涉及到区域数据的比较，通过查出所有子集再循环剔除，
-数据量、大运算慢，频繁根据region_start_id查数据库,返回结果因为展开到商品，对反向涉及到的商品都会带上庞大的区域数据
-插曲深拷贝优化: 展开的授权数据，要从原始授权继承区域，需要深拷贝，直接深拷贝Object太慢，通过immutable做了优化，但涉及到的商品区域数据最后返回时要toJS，速度较慢
-re">
+<meta name="twitter:title" content="未雨绸缪(Plan to Throw One Away)">
+<meta name="twitter:description" content="不变只是愿望，变化才是永恒
+试验性工厂和增大规模开发使用的环境由于规模、量级的限制，导致第一版开发的软件在真实环境运行时易出现各种问题,需要在测试中不断增大规模、模拟真实环境
+把第一版开发的产品发布给顾客，可以获得时间，但是对于用户，使用极度痛苦;对于重新开发的人员，分散了精力;对于产品，影响了声誉，即使最好的再设计也难以挽回名声
+唯一不变的就是变化本身新的系统概念或新技术会不断出现，所以老版的系">
+<meta name="twitter:image" content="https://www.wmtcore.com/picture/未雨绸缪.jpg">
 
 
 
@@ -83,7 +85,7 @@ re">
   };
 </script>
 
-  <title> 反向授权性能优化 | 大碗拉面 </title>
+  <title> 未雨绸缪(Plan to Throw One Away) | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
@@ -249,7 +251,7 @@ re">
             
             
               
-                反向授权性能优化
+                未雨绸缪(Plan to Throw One Away)
               
             
           </h1>
@@ -258,8 +260,8 @@ re">
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2020-03-20T15:28:37+08:00" content="2020-03-20">
-              2020-03-20
+            <time itemprop="dateCreated" datetime="2020-04-04T14:40:30+08:00" content="2020-04-04">
+              2020-04-04
             </time>
           </span>
 
@@ -268,8 +270,8 @@ re">
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/日常坑/" itemprop="url" rel="index">
-                    <span itemprop="name">日常坑</span>
+                  <a href="/categories/人月神话/" itemprop="url" rel="index">
+                    <span itemprop="name">人月神话</span>
                   </a>
                 </span>
 
@@ -284,8 +286,8 @@ re">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2020/03/20/反向授权逻辑梳理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/03/20/反向授权逻辑梳理/" itemprop="commentsCount"></span>
+                <a href="/2020/04/04/胸有成竹(Calling the Shot)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/04/04/胸有成竹(Calling the Shot)/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -304,30 +306,33 @@ re">
       
 
       
-        <span itemprop="articleBody"><h3 id="之前的问题"><a href="#之前的问题" class="headerlink" title="之前的问题"></a>之前的问题</h3><p>在做反向计算时，主要涉及到区域数据的比较，通过查出所有子集再循环剔除，</p>
-<p>数据量、大运算慢，频繁根据region_start_id查数据库,返回结果因为展开到商品，对反向涉及到的商品都会带上庞大的区域数据</p>
-<h4 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h4><p><code>深拷贝优化</code>: 展开的授权数据，要从原始授权继承区域，需要深拷贝，直接深拷贝Object太慢，通过immutable做了优化，但涉及到的商品区域数据最后返回时要toJS，速度较慢</p>
-<p><code>region缓存</code>: <code>region_start_id</code>查数据库，将查询id数组长为1的做了lru,目的是缓存区域层级高、重复多的数据，在原始授权数据很多时有较大的速度提升</p>
-<h3 id="改造"><a href="#改造" class="headerlink" title="改造"></a>改造</h3><h4 id="根本问题"><a href="#根本问题" class="headerlink" title="根本问题"></a>根本问题</h4><p>计算区域时，无法通过regionID直接知道层级，并做层级运算（会有子父级数据的剔除和补充）</p>
-<h4 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h4><p>受树形数据加编号启发，通过一个层级key来表示regionID的层级信息，直接对key做运算</p>
-<p><strong>将原先展开循环的层级运算，变成字符串比较</strong></p>
-<p>缓存: </p>
+        <span itemprop="articleBody"><p>不变只是愿望，变化才是永恒</p>
+<h3 id="试验性工厂和增大规模"><a href="#试验性工厂和增大规模" class="headerlink" title="试验性工厂和增大规模"></a>试验性工厂和增大规模</h3><p>开发使用的环境由于规模、量级的限制，导致第一版开发的软件在真实环境运行时易出现各种问题,需要在测试中不断增大规模、模拟真实环境</p>
+<p>把第一版开发的产品发布给顾客，可以获得时间，但是对于用户，使用极度痛苦;对于重新开发的人员，分散了精力;对于产品，影响了声誉，即使最好的再设计也难以挽回名声</p>
+<h3 id="唯一不变的就是变化本身"><a href="#唯一不变的就是变化本身" class="headerlink" title="唯一不变的就是变化本身"></a>唯一不变的就是变化本身</h3><p>新的系统概念或新技术会不断出现，所以老版的系统必须被抛弃，但即使是最优秀的项目经理，也不能在最开始解决这些问题</p>
 <ul>
-<li>cacheRegionKeyObj key对应region记录</li>
-<li>cacheRegionIdObj regionId对应key</li>
-<li>cacheRegionKeysRank key对应子集keys,同层级数据groupby加列转行</li>
+<li><strong>开发人员交付的是用户满意程度，而不仅仅是实际的产品</strong></li>
+<li>用户的实际需要和用户感觉会随着程序使用而变化</li>
 </ul>
-<p>在做层级运算时，通过字符串运算即可得到上下级key再到缓存里换出子集keys,再对展开结果做排除即可完成层级运算</p>
-<p>优势：</p>
+<p>目标上的变化不可避免，而且设计策略和技术上的变化也不可避免，随着学习的过程更改设计</p>
+<h3 id="前进两步，后退一步"><a href="#前进两步，后退一步" class="headerlink" title="前进两步，后退一步"></a>前进两步，后退一步</h3><p>对于一个广泛使用的程序，其维护总成本通常是开发成本的 40%或更多，该成本受用户数目的严重影响。<strong>用户越多，所发现的错误也越多</strong></p>
+<p><img src="/picture/未雨绸缪.jpg" alt="Resize icon"></p>
+<ul>
+<li>缺陷修复总会以(20-50)%的机率引入新的bug </li>
+</ul>
+<p>原因:</p>
 <ol>
-<li>深拷贝只有层级key数组</li>
-<li>层级运算不涉及数据库</li>
-<li>返回结果只有展开的层级key,前端通过缓存cacheRegionKeyObj换算即可</li>
+<li>看似很轻微的错误，实际却是系统级别的问题，如果没有非常详细的文档，是很难被发现</li>
+<li>维护人员常常不是编写代码的开发人员，而是一些初级程序员或者新手</li>
 </ol>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
-<li>深拷贝处理可以尝试immutable</li>
-<li>对于层级数据的上下计算，考虑转成平铺的形式，同时保留层级信息</li>
-</ol>
+<p>成本: 在每次修复之后，必须重新运行先前所有的测试用例，从而确保系统不会以更隐蔽的方式被破坏</p>
+<p><strong>设计实现的人员越少、接口越少，产生的错误也就越少</strong> 微服务</p>
+<h3 id="前进一步，后退一步"><a href="#前进一步，后退一步" class="headerlink" title="前进一步，后退一步"></a>前进一步，后退一步</h3><ul>
+<li>维护越多系统越混乱，所有修改都倾向于破坏系统的架构，增加了系统的混乱程度</li>
+<li>用在修复原有设计上瑕疵的工作量越来越少，而早期维护造成的漏洞所引起修复工作越来越多</li>
+</ul>
+<p><strong>系统软件开发是减少混乱度(减少熵)的过程，所以它本身是处于亚稳态的。软件维护是提高混乱度(增加熵)的过程，即使是最熟练的软件维护工作，也只是放缓了系统退化到非稳态的进程</strong></p>
+<p>机器在变化，配置在变化，用户的需求在变化，所以现实系统不可能永远可用。<strong>基于原有系统的重新设计是完全必要的</strong></p>
 </span>
       
     </div>
@@ -339,17 +344,13 @@ re">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/24/贯彻执行/" rel="next" title="贯彻执行(Passing the Word)">
-                <i class="fa fa-chevron-left"></i> 贯彻执行(Passing the Word)
+              <a href="/2020/03/28/微服务开发注意事项/" rel="next" title="微服务开发注意事项">
+                <i class="fa fa-chevron-left"></i> 微服务开发注意事项
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/03/28/为什么巴比伦塔会失败/" rel="prev" title="为什么巴比伦塔会失败?(Why Did the Tower of Babel Fail?)">
-                为什么巴比伦塔会失败?(Why Did the Tower of Babel Fail?) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -376,8 +377,8 @@ re">
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2020/03/20/反向授权逻辑梳理/"
-           data-title="反向授权性能优化" data-url="https://www.wmtcore.com/2020/03/20/反向授权逻辑梳理/">
+      <div class="ds-thread" data-thread-key="2020/04/04/胸有成竹(Calling the Shot)/"
+           data-title="未雨绸缪(Plan to Throw One Away)" data-url="https://www.wmtcore.com/2020/04/04/胸有成竹(Calling the Shot)/">
       </div>
     
   </div>
@@ -421,7 +422,7 @@ re">
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">70</span>
+              <span class="site-state-item-count">71</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -477,7 +478,7 @@ re">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#之前的问题"><span class="nav-number">1.</span> <span class="nav-text">之前的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插曲"><span class="nav-number">1.1.</span> <span class="nav-text">插曲</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改造"><span class="nav-number">2.</span> <span class="nav-text">改造</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#根本问题"><span class="nav-number">2.1.</span> <span class="nav-text">根本问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现方案"><span class="nav-number">2.2.</span> <span class="nav-text">实现方案</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#试验性工厂和增大规模"><span class="nav-number">1.</span> <span class="nav-text">试验性工厂和增大规模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#唯一不变的就是变化本身"><span class="nav-number">2.</span> <span class="nav-text">唯一不变的就是变化本身</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前进两步，后退一步"><span class="nav-number">3.</span> <span class="nav-text">前进两步，后退一步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前进一步，后退一步"><span class="nav-number">4.</span> <span class="nav-text">前进一步，后退一步</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
