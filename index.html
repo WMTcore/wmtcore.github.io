@@ -308,7 +308,7 @@
         
           <span itemprop="articleBody">
             
-              <h2 id="高效缓存的使用"><a href="#高效缓存的使用" class="headerlink" title="高效缓存的使用"></a>高效缓存的使用</h2><p><code>使用场景</code>: 对于量级小，常用的基础数据做内存缓存，提高运算速度</p>
+              <p><code>使用场景</code>: 对于量级小，常用的基础数据做内存缓存，提高运算速度</p>
 <p><code>getRegionCache</code>方法不仅对外输出，同时内部计算也会使用，为了保证高效，需要隐性异步，不能直接声明async</p>
 <h3 id="初始化缓存"><a href="#初始化缓存" class="headerlink" title="初始化缓存"></a>初始化缓存</h3><p>返回Promise 同步等待</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRegionCache</span>(<span class="params">key</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!cache) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</div><div class="line">      reflashCache().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        resolve(cache.get(key))</div><div class="line">      &#125;);</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>

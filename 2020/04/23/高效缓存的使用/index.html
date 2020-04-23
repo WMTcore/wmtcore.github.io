@@ -53,25 +53,25 @@
 
 
 
-<meta name="description" content="高效缓存的使用使用场景: 对于量级小，常用的基础数据做内存缓存，提高运算速度
+<meta name="description" content="使用场景: 对于量级小，常用的基础数据做内存缓存，提高运算速度
 getRegionCache方法不仅对外输出，同时内部计算也会使用，为了保证高效，需要隐性异步，不能直接声明async
 初始化缓存返回Promise 同步等待
-123456789function getRegionCache(key) &amp;#123;  if (!cache) &amp;#123;    return new Pr">
+123456789function getRegionCache(key) &amp;#123;  if (!cache) &amp;#123;    return new Promise(r">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在node中实现高效缓存">
 <meta property="og:url" content="https://www.wmtcore.com/2020/04/23/高效缓存的使用/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="高效缓存的使用使用场景: 对于量级小，常用的基础数据做内存缓存，提高运算速度
+<meta property="og:description" content="使用场景: 对于量级小，常用的基础数据做内存缓存，提高运算速度
 getRegionCache方法不仅对外输出，同时内部计算也会使用，为了保证高效，需要隐性异步，不能直接声明async
 初始化缓存返回Promise 同步等待
-123456789function getRegionCache(key) &amp;#123;  if (!cache) &amp;#123;    return new Pr">
-<meta property="og:updated_time" content="2020-04-23T08:10:20.983Z">
+123456789function getRegionCache(key) &amp;#123;  if (!cache) &amp;#123;    return new Promise(r">
+<meta property="og:updated_time" content="2020-04-23T08:10:39.026Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在node中实现高效缓存">
-<meta name="twitter:description" content="高效缓存的使用使用场景: 对于量级小，常用的基础数据做内存缓存，提高运算速度
+<meta name="twitter:description" content="使用场景: 对于量级小，常用的基础数据做内存缓存，提高运算速度
 getRegionCache方法不仅对外输出，同时内部计算也会使用，为了保证高效，需要隐性异步，不能直接声明async
 初始化缓存返回Promise 同步等待
-123456789function getRegionCache(key) &amp;#123;  if (!cache) &amp;#123;    return new Pr">
+123456789function getRegionCache(key) &amp;#123;  if (!cache) &amp;#123;    return new Promise(r">
 
 
 
@@ -304,7 +304,7 @@ getRegionCache方法不仅对外输出，同时内部计算也会使用，为了
       
 
       
-        <span itemprop="articleBody"><h2 id="高效缓存的使用"><a href="#高效缓存的使用" class="headerlink" title="高效缓存的使用"></a>高效缓存的使用</h2><p><code>使用场景</code>: 对于量级小，常用的基础数据做内存缓存，提高运算速度</p>
+        <span itemprop="articleBody"><p><code>使用场景</code>: 对于量级小，常用的基础数据做内存缓存，提高运算速度</p>
 <p><code>getRegionCache</code>方法不仅对外输出，同时内部计算也会使用，为了保证高效，需要隐性异步，不能直接声明async</p>
 <h3 id="初始化缓存"><a href="#初始化缓存" class="headerlink" title="初始化缓存"></a>初始化缓存</h3><p>返回Promise 同步等待</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRegionCache</span>(<span class="params">key</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!cache) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</div><div class="line">      reflashCache().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        resolve(cache.get(key))</div><div class="line">      &#125;);</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -467,7 +467,7 @@ getRegionCache方法不仅对外输出，同时内部计算也会使用，为了
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#高效缓存的使用"><span class="nav-number">1.</span> <span class="nav-text">高效缓存的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化缓存"><span class="nav-number">1.1.</span> <span class="nav-text">初始化缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存异步刷新"><span class="nav-number">1.2.</span> <span class="nav-text">缓存异步刷新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存击穿"><span class="nav-number">1.3.</span> <span class="nav-text">缓存击穿</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化缓存"><span class="nav-number">1.</span> <span class="nav-text">初始化缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存异步刷新"><span class="nav-number">2.</span> <span class="nav-text">缓存异步刷新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存击穿"><span class="nav-number">3.</span> <span class="nav-text">缓存击穿</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
