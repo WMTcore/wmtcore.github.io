@@ -37,7 +37,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="React," />
+  <meta name="keywords" content="WMTcore" />
 
 
 
@@ -53,34 +53,25 @@
 
 
 
-<meta name="description" content="Props
-properties 使用它把数据传给组件
-在挂载组件时设置
-只能实例上调用setProps,不许this.setProps
-使用this.props访问
-
-1234567验证propspropTypes: &amp;#123;    style: View.propTypes.style.isRequired,    elementStyle: View.propTypes.style,">
+<meta name="description" content="高效缓存的使用使用场景: 对于量级小，常用的基础数据做内存缓存，提高运算速度
+getRegionCache方法不仅对外输出，同时内部计算也会使用，为了保证高效，需要隐性异步，不能直接声明async
+初始化缓存返回Promise 同步等待
+123456789function getRegionCache(key) &amp;#123;  if (!cache) &amp;#123;    return new Pr">
 <meta property="og:type" content="article">
-<meta property="og:title" content="React Props与State">
-<meta property="og:url" content="https://www.wmtcore.com/2015/12/28/React-Props与State/index.html">
+<meta property="og:title" content="大碗拉面">
+<meta property="og:url" content="https://www.wmtcore.com/2020/04/23/高效缓存的使用/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="Props
-properties 使用它把数据传给组件
-在挂载组件时设置
-只能实例上调用setProps,不许this.setProps
-使用this.props访问
-
-1234567验证propspropTypes: &amp;#123;    style: View.propTypes.style.isRequired,    elementStyle: View.propTypes.style,">
-<meta property="og:updated_time" content="2016-10-13T06:08:45.000Z">
+<meta property="og:description" content="高效缓存的使用使用场景: 对于量级小，常用的基础数据做内存缓存，提高运算速度
+getRegionCache方法不仅对外输出，同时内部计算也会使用，为了保证高效，需要隐性异步，不能直接声明async
+初始化缓存返回Promise 同步等待
+123456789function getRegionCache(key) &amp;#123;  if (!cache) &amp;#123;    return new Pr">
+<meta property="og:updated_time" content="2020-04-23T08:08:43.985Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="React Props与State">
-<meta name="twitter:description" content="Props
-properties 使用它把数据传给组件
-在挂载组件时设置
-只能实例上调用setProps,不许this.setProps
-使用this.props访问
-
-1234567验证propspropTypes: &amp;#123;    style: View.propTypes.style.isRequired,    elementStyle: View.propTypes.style,">
+<meta name="twitter:title" content="大碗拉面">
+<meta name="twitter:description" content="高效缓存的使用使用场景: 对于量级小，常用的基础数据做内存缓存，提高运算速度
+getRegionCache方法不仅对外输出，同时内部计算也会使用，为了保证高效，需要隐性异步，不能直接声明async
+初始化缓存返回Promise 同步等待
+123456789function getRegionCache(key) &amp;#123;  if (!cache) &amp;#123;    return new Pr">
 
 
 
@@ -92,7 +83,7 @@ properties 使用它把数据传给组件
   };
 </script>
 
-  <title> React Props与State | 大碗拉面 </title>
+  <title>  | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
@@ -258,7 +249,7 @@ properties 使用它把数据传给组件
             
             
               
-                React Props与State
+                
               
             
           </h1>
@@ -267,34 +258,19 @@ properties 使用它把数据传给组件
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2015-12-28T11:40:00+08:00" content="2015-12-28">
-              2015-12-28
+            <time itemprop="dateCreated" datetime="2020-04-23T16:08:43+08:00" content="2020-04-23">
+              2020-04-23
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/React/" itemprop="url" rel="index">
-                    <span itemprop="name">React</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/12/28/React-Props与State/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/28/React-Props与State/" itemprop="commentsCount"></span>
+                <a href="/2020/04/23/高效缓存的使用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/04/23/高效缓存的使用/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -313,45 +289,42 @@ properties 使用它把数据传给组件
       
 
       
-        <span itemprop="articleBody"><h3 id="Props"><a href="#Props" class="headerlink" title="Props"></a>Props</h3><ul>
-<li>properties 使用它把数据传给组件</li>
-<li>在挂载组件时设置</li>
-<li>只能实例上调用setProps,不许this.setProps</li>
-<li>使用this.props访问</li>
+        <span itemprop="articleBody"><h2 id="高效缓存的使用"><a href="#高效缓存的使用" class="headerlink" title="高效缓存的使用"></a>高效缓存的使用</h2><p><code>使用场景</code>: 对于量级小，常用的基础数据做内存缓存，提高运算速度</p>
+<p><code>getRegionCache</code>方法不仅对外输出，同时内部计算也会使用，为了保证高效，需要隐性异步，不能直接声明async</p>
+<h3 id="初始化缓存"><a href="#初始化缓存" class="headerlink" title="初始化缓存"></a>初始化缓存</h3><p>返回Promise 同步等待</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRegionCache</span>(<span class="params">key</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!cache) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</div><div class="line">      reflashCache().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        resolve(cache.get(key))</div><div class="line">      &#125;);</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>调用者拿到的是Promise对象，直接await即可</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">async</span> getRegionCacheAPI(key) &#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">await</span> getRegionCache(key)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="缓存异步刷新"><a href="#缓存异步刷新" class="headerlink" title="缓存异步刷新"></a>缓存异步刷新</h3><ul>
+<li>对于这类基础数据的缓存，低实时性，通过自维护方式失效，类似LRU的实现</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">验证props</div><div class="line">propTypes: &#123;</div><div class="line">    style: View<span class="selector-class">.propTypes</span><span class="selector-class">.style</span><span class="selector-class">.isRequired</span>,</div><div class="line">    elementStyle: View<span class="selector-class">.propTypes</span><span class="selector-class">.style</span>,</div><div class="line">  &#125;</div><div class="line"></div><div class="line"><span class="comment">//isRequired 可选</span></div></pre></td></tr></table></figure>
-<h3 id="State"><a href="#State" class="headerlink" title="State"></a>State</h3><ul>
-<li>组件状态</li>
-<li>this.state 是组件私有的，可以通过调用 this.setState() 来改变它。当状态更新之后，组件重新渲染自己。动态更新的关键点是调用this.setState()，replaceState()使用新对象，替换所有内容</li>
+<p>缓存到失效时间后通过<code>process.nextTick</code>放入微任务队列异步刷新, 同步计算先拿旧数据继续执行</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRegionCache</span>(<span class="params">key</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (overTime) &#123;</div><div class="line">    process.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> reflashCache());</div><div class="line">    updateCacheTime = <span class="built_in">Date</span>.now();</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> cache.get(key);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h3><ul>
+<li>在缓存初始化和失效时，大量并发请求同时触发缓存刷新，严重影响数据库性能</li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> CommentBox = React.createClass(&#123;</div><div class="line">  <span class="attr">getInitialState</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> &#123;<span class="attr">data</span>: []&#125;;</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">componentDidMount</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    $.ajax(&#123;</div><div class="line">      <span class="attr">url</span>: <span class="keyword">this</span>.props.url,</div><div class="line">      <span class="attr">dataType</span>: <span class="string">'json'</span>,</div><div class="line">      <span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.setState(&#123;<span class="attr">data</span>: data&#125;);</div><div class="line">      &#125;.bind(<span class="keyword">this</span>),</div><div class="line">      <span class="attr">error</span>: <span class="function"><span class="keyword">function</span>(<span class="params">xhr, status, err</span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.error(<span class="keyword">this</span>.props.url, status, err.toString());</div><div class="line">      &#125;.bind(<span class="keyword">this</span>)</div><div class="line">    &#125;);</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">render</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">"commentBox"</span>&gt;</span></span></div><div class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Comments<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">CommentList</span> <span class="attr">data</span>=<span class="string">&#123;this.state.data&#125;</span> /&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">CommentForm</span> /&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></span>
+<p>通过设置once事件监听缓存刷新完成,待缓存刷新结束后，依次返回结果，避免并发刷新缓存</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">event</span> = <span class="keyword">new</span> events.EventEmitter();</div><div class="line"><span class="keyword">event</span>.setMaxListeners(<span class="number">100</span>); <span class="comment">//注意设置监听者数量，超过数量会触发leak memory告警</span></div><div class="line"></div><div class="line"><span class="keyword">await</span> reflashCache() &#123;</div><div class="line">  <span class="keyword">await</span> <span class="keyword">new</span> Promise(<span class="keyword">async</span> resolve =&gt; &#123;</div><div class="line">    <span class="keyword">event</span>.once(<span class="string">'finish'</span>, resolve);</div><div class="line">    <span class="keyword">if</span> (eventStatus === <span class="string">'ready'</span>) &#123;</div><div class="line">      eventStatus = <span class="string">'pending'</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">event</span>.emit(<span class="string">'finish'</span>);</div><div class="line">      eventStatus = <span class="string">'ready'</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过将数据库查询任务放入异步队列，避免了运算时同步等待，体现出node的性能优势</p>
+<p>利用事件监听能力，很方便就能处理缓存击穿的问题</p>
+</span>
       
     </div>
 
     <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/React/" rel="tag">#React</a>
-          
-        </div>
       
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/12/26/React-组件生命周期/" rel="next" title="React 组件生命周期">
-                <i class="fa fa-chevron-left"></i> React 组件生命周期
+              <a href="/2020/04/04/胸有成竹(Calling the Shot)/" rel="next" title="未雨绸缪(Plan to Throw One Away)">
+                <i class="fa fa-chevron-left"></i> 未雨绸缪(Plan to Throw One Away)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/12/28/git-常用命令/" rel="prev" title="git 常用命令">
-                git 常用命令 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -378,8 +351,8 @@ properties 使用它把数据传给组件
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/12/28/React-Props与State/"
-           data-title="React Props与State" data-url="https://www.wmtcore.com/2015/12/28/React-Props与State/">
+      <div class="ds-thread" data-thread-key="2020/04/23/高效缓存的使用/"
+           data-title="" data-url="https://www.wmtcore.com/2020/04/23/高效缓存的使用/">
       </div>
     
   </div>
@@ -479,7 +452,7 @@ properties 使用它把数据传给组件
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Props"><span class="nav-number">1.</span> <span class="nav-text">Props</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#State"><span class="nav-number">2.</span> <span class="nav-text">State</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#高效缓存的使用"><span class="nav-number">1.</span> <span class="nav-text">高效缓存的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化缓存"><span class="nav-number">1.1.</span> <span class="nav-text">初始化缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存异步刷新"><span class="nav-number">1.2.</span> <span class="nav-text">缓存异步刷新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存击穿"><span class="nav-number">1.3.</span> <span class="nav-text">缓存击穿</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
