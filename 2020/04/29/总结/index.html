@@ -37,7 +37,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="分布式," />
+  <meta name="keywords" content="WMTcore" />
 
 
 
@@ -53,39 +53,34 @@
 
 
 
-<meta name="description" content="分布式特征
-分布性 分布式系统中的计算机会依据业务或其他需求在空间中随意分布，并且可以灵活变动
-对等性 整个系统中的计算机节点都是对等的，没有物理上的主从之分
-并发性 系统中的多节计算机节点可能会并发操作共享资源
-没有全局时钟 因为多个节点在空间上的随意分布，没有办法设置全局的时钟序列
-故障率 在由大量计算机组成的分布式系统中，故障是无法避免的
-
-CAP定理在一个分布式系统中，Consistenc">
+<meta name="description" content="项目开发回顾重构目的优化授权数据的存储方式，避免原先冗长的缓存计算
+成果无需再做定时的缓存刷新，据实施和客户反馈操作授权速度和流程度比原先有大幅提升
+槽点和败笔
+从目的出发业务基本无改动，完全搬运原先代码,也因此出现了一些纰漏
+过度设计，ra-backend无意义的透传，controller service方法调用，首先侧重代码的清晰、可读性，再考虑其他规范，避免单文件代码量过大
+缺少自测手段
+前">
 <meta property="og:type" content="article">
-<meta property="og:title" content="分布式服务">
-<meta property="og:url" content="https://www.wmtcore.com/2018/05/10/分布式服务/index.html">
+<meta property="og:title" content="授权重构及微服务开发问题总结">
+<meta property="og:url" content="https://www.wmtcore.com/2020/04/29/总结/index.html">
 <meta property="og:site_name" content="大碗拉面">
-<meta property="og:description" content="分布式特征
-分布性 分布式系统中的计算机会依据业务或其他需求在空间中随意分布，并且可以灵活变动
-对等性 整个系统中的计算机节点都是对等的，没有物理上的主从之分
-并发性 系统中的多节计算机节点可能会并发操作共享资源
-没有全局时钟 因为多个节点在空间上的随意分布，没有办法设置全局的时钟序列
-故障率 在由大量计算机组成的分布式系统中，故障是无法避免的
-
-CAP定理在一个分布式系统中，Consistenc">
-<meta property="og:image" content="https://www.wmtcore.com/picture/分布式服务1.jpg">
-<meta property="og:updated_time" content="2019-04-23T10:39:24.000Z">
+<meta property="og:description" content="项目开发回顾重构目的优化授权数据的存储方式，避免原先冗长的缓存计算
+成果无需再做定时的缓存刷新，据实施和客户反馈操作授权速度和流程度比原先有大幅提升
+槽点和败笔
+从目的出发业务基本无改动，完全搬运原先代码,也因此出现了一些纰漏
+过度设计，ra-backend无意义的透传，controller service方法调用，首先侧重代码的清晰、可读性，再考虑其他规范，避免单文件代码量过大
+缺少自测手段
+前">
+<meta property="og:updated_time" content="2020-04-29T09:17:09.006Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分布式服务">
-<meta name="twitter:description" content="分布式特征
-分布性 分布式系统中的计算机会依据业务或其他需求在空间中随意分布，并且可以灵活变动
-对等性 整个系统中的计算机节点都是对等的，没有物理上的主从之分
-并发性 系统中的多节计算机节点可能会并发操作共享资源
-没有全局时钟 因为多个节点在空间上的随意分布，没有办法设置全局的时钟序列
-故障率 在由大量计算机组成的分布式系统中，故障是无法避免的
-
-CAP定理在一个分布式系统中，Consistenc">
-<meta name="twitter:image" content="https://www.wmtcore.com/picture/分布式服务1.jpg">
+<meta name="twitter:title" content="授权重构及微服务开发问题总结">
+<meta name="twitter:description" content="项目开发回顾重构目的优化授权数据的存储方式，避免原先冗长的缓存计算
+成果无需再做定时的缓存刷新，据实施和客户反馈操作授权速度和流程度比原先有大幅提升
+槽点和败笔
+从目的出发业务基本无改动，完全搬运原先代码,也因此出现了一些纰漏
+过度设计，ra-backend无意义的透传，controller service方法调用，首先侧重代码的清晰、可读性，再考虑其他规范，避免单文件代码量过大
+缺少自测手段
+前">
 
 
 
@@ -97,7 +92,7 @@ CAP定理在一个分布式系统中，Consistenc">
   };
 </script>
 
-  <title> 分布式服务 | 大碗拉面 </title>
+  <title> 授权重构及微服务开发问题总结 | 大碗拉面 </title>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
@@ -263,7 +258,7 @@ CAP定理在一个分布式系统中，Consistenc">
             
             
               
-                分布式服务
+                授权重构及微服务开发问题总结
               
             
           </h1>
@@ -272,8 +267,8 @@ CAP定理在一个分布式系统中，Consistenc">
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2018-05-10T14:32:22+08:00" content="2018-05-10">
-              2018-05-10
+            <time itemprop="dateCreated" datetime="2020-04-29T16:38:37+08:00" content="2020-04-29">
+              2020-04-29
             </time>
           </span>
 
@@ -282,8 +277,8 @@ CAP定理在一个分布式系统中，Consistenc">
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/中间件/" itemprop="url" rel="index">
-                    <span itemprop="name">中间件</span>
+                  <a href="/categories/方法论/" itemprop="url" rel="index">
+                    <span itemprop="name">方法论</span>
                   </a>
                 </span>
 
@@ -298,8 +293,8 @@ CAP定理在一个分布式系统中，Consistenc">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2018/05/10/分布式服务/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/10/分布式服务/" itemprop="commentsCount"></span>
+                <a href="/2020/04/29/总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/04/29/总结/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -318,71 +313,86 @@ CAP定理在一个分布式系统中，Consistenc">
       
 
       
-        <span itemprop="articleBody"><h2 id="分布式"><a href="#分布式" class="headerlink" title="分布式"></a>分布式</h2><h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h3><ul>
-<li>分布性 分布式系统中的计算机会依据业务或其他需求在空间中随意分布，并且可以灵活变动</li>
-<li>对等性 整个系统中的计算机节点都是对等的，没有物理上的主从之分</li>
-<li>并发性 系统中的多节计算机节点可能会并发操作共享资源</li>
-<li>没有全局时钟 因为多个节点在空间上的随意分布，没有办法设置全局的时钟序列</li>
-<li>故障率 在由大量计算机组成的分布式系统中，故障是无法避免的</li>
-</ul>
-<h3 id="CAP定理"><a href="#CAP定理" class="headerlink" title="CAP定理"></a>CAP定理</h3><p>在一个分布式系统中，Consistency（一致性）、 Availability（可用性）、Partition tolerance（分区容错性），三者不可得兼</p>
-<ul>
-<li>强一致性 分布式系统会存在多个数据副本，要求所有的用户都可以读到最新的数据</li>
-<li>可用性 系统对用户的每个操作都能在有限的时间内返回正常的结果</li>
-<li>分区容错性 组成分布式系统的子网由于网络故障不能通信，导致整个系统被分成若干孤立的子网，但仍要保证致性和可用性服务</li>
-</ul>
-<h3 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h3><p>对CAP中可用性和一致性权衡的结果，通过牺牲强一致性来获取可用性，核心思想是：每个应用可以根据自身的特点，采用适当的方式达到最终一致性</p>
-<ul>
-<li>基本可用（Basically Available）是当系统出现故障时，可以牺牲部分可用性，如响应时间、功能减少，从而保证系统运行</li>
-<li>软状态（Soft state）允许不同节点的数据副本在同步时存在延迟，并认为该状态不会影响系统整体的可用性；</li>
-<li>最终一致性（Eventually consistent）强调系统所有的数据副本最终能达到一致状态，但不需要实时保证数据一致性，而所有客户端能获取到最新的值</li>
-</ul>
-<h2 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h2><h3 id="2PC-两段提交"><a href="#2PC-两段提交" class="headerlink" title="2PC 两段提交"></a>2PC 两段提交</h3><p>将事务的提交过程分成了两个阶段来进行处理,它对每个事务使用先尝试后提交的方式来处理，是一种强一致性算法。它的优点是原理简单，实现方便，而缺点是同步阻塞，单点问题，数据不一致</p>
-<p><img src="/picture/分布式服务1.jpg" alt="Smaller icon"></p>
-<h4 id="阶段一：提交事务请求"><a href="#阶段一：提交事务请求" class="headerlink" title="阶段一：提交事务请求"></a>阶段一：提交事务请求</h4><ol>
-<li>事务询问：向所有参与者发送事务内容，并询问事务提交是否可以执行，然后等待参与者响应</li>
-<li>执行事务：参与者执行事务，并在日志中记录Undo和Redo信息</li>
-<li>参与者反馈响应：如果参与者成功执行事务操作就反馈Yes,否则反馈No</li>
+        <span itemprop="articleBody"><h3 id="项目开发回顾"><a href="#项目开发回顾" class="headerlink" title="项目开发回顾"></a>项目开发回顾</h3><h4 id="重构目的"><a href="#重构目的" class="headerlink" title="重构目的"></a>重构目的</h4><p>优化授权数据的存储方式，避免原先冗长的缓存计算</p>
+<h4 id="成果"><a href="#成果" class="headerlink" title="成果"></a>成果</h4><p>无需再做定时的缓存刷新，据实施和客户反馈操作授权速度和流程度比原先有大幅提升</p>
+<h4 id="槽点和败笔"><a href="#槽点和败笔" class="headerlink" title="槽点和败笔"></a>槽点和败笔</h4><ol>
+<li>从目的出发业务基本无改动，完全搬运原先代码,也因此出现了一些纰漏</li>
+<li>过度设计，ra-backend无意义的透传，controller service方法调用，首先侧重代码的清晰、可读性，再考虑其他规范，避免单文件代码量过大</li>
+<li>缺少自测手段</li>
+<li>前期在基础组件花费时间过长，缺乏进度管控,后期赶工,代码质量缺少保障</li>
+<li>// 沟通问题</li>
 </ol>
-<h4 id="执行事务提交"><a href="#执行事务提交" class="headerlink" title="执行事务提交"></a>执行事务提交</h4><ol>
-<li>发送提交请求：向参与者发送Commit</li>
-<li>事务提交：参与者收到Commit后，执行事务提交，并在完成之后释放占用的事务资源</li>
-<li>反馈提交结果：参与者完成事务提交后，反馈Ack消息</li>
-<li>完成事务：所有参与者反馈Ack消息，完成事务</li>
+<h3 id="开发体感"><a href="#开发体感" class="headerlink" title="开发体感"></a>开发体感</h3><ol>
+<li>修改依赖授权数据的项目非常痛苦,要去了解原先的业务场景和数据格式以提供接口，在后期测试时，这块花费了很大时间，出了问题难以排除</li>
+<li>本地开发启动很多服务联调</li>
+<li>线上错误信息，因为bff,无法准确知道调用后端的接口和参数（telepresence,log插件优化）</li>
+<li>前后端联通</li>
 </ol>
-<h3 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h3><p>Paxos是一种基于消息传递且具有高度容错性的一致性算法，是解决分布式一致性问题最有效的算法之一，能避免2PC和3PC存在的问题。</p>
-<h3 id="Raft协议"><a href="#Raft协议" class="headerlink" title="Raft协议"></a>Raft协议</h3><ol>
-<li>将一致性协议划分为领导者选举，Log复制和安全性</li>
-<li>将paxos的p2p模式改成Master-slave模式</li>
+<h3 id="工程化问题"><a href="#工程化问题" class="headerlink" title="工程化问题"></a>工程化问题</h3><h4 id="解耦"><a href="#解耦" class="headerlink" title="解耦"></a>解耦</h4><ol>
+<li>服务拆分颗粒度 要公司业务发展趋势相契合，不能生搬硬套教程，做适当整合，基础信息类</li>
+<li>避免ra-backend，只做透传</li>
+<li>传入参数的校验，存在将前端传入参数直接透传查询，需要加以验证和鉴权</li>
 </ol>
+<h4 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h4><ol>
+<li>因为docker构建缓存，私有包不自动更新,增加Jenkins配置或者写明使用包版本</li>
+<li>私有包版本管理，不兼容问题</li>
+</ol>
+<h4 id="质量保证"><a href="#质量保证" class="headerlink" title="质量保证"></a>质量保证</h4><ol>
+<li>最小单元测试 确保不出现语法错误(await、拼写)</li>
+<li>健康检查，考虑开放http来提供健康检查，通过fx-rpc插件实现再调用rpc来自检</li>
+</ol>
+<h4 id="代码风格"><a href="#代码风格" class="headerlink" title="代码风格"></a>代码风格</h4><ol>
+<li>参数传入类型变化 bool contractType</li>
+<li>yield [] Promise.all</li>
+<li>下划线转驼峰</li>
+<li>分类id -1</li>
+<li>mongo查询条件中有undefined不生效</li>
+<li>单文件代码行数,按controller映射service容易出现代码行数过大 需要做适当拆解</li>
+</ol>
+<h4 id="临时发布环境搭建"><a href="#临时发布环境搭建" class="headerlink" title="临时发布环境搭建"></a>临时发布环境搭建</h4><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><h4 id="测试准备"><a href="#测试准备" class="headerlink" title="测试准备"></a>测试准备</h4><ol>
+<li>撤下老的项目，防止再被调用</li>
+</ol>
+<h4 id="自测能力"><a href="#自测能力" class="headerlink" title="自测能力"></a>自测能力</h4><p>对复杂业务场景的自测能力</p>
+<h3 id="沟通"><a href="#沟通" class="headerlink" title="沟通"></a>沟通</h3><h4 id="团队会议"><a href="#团队会议" class="headerlink" title="团队会议"></a>团队会议</h4><ol>
+<li>回顾本周进度，指定下周计划，预发延期或及时做进度调整</li>
+<li>对于有争议的问题由tl做决策避免拖延</li>
+<li>确定任务边界，避免扯皮;回顾、调整目标，确保团队整体方向正确（避免无用功，有争议时从目标出发）</li>
+<li>做好会议记录（记录决策）发给与会者</li>
+</ol>
+<h3 id="下阶段规划"><a href="#下阶段规划" class="headerlink" title="下阶段规划"></a>下阶段规划</h3><h4 id="rpc包更换"><a href="#rpc包更换" class="headerlink" title="rpc包更换"></a>rpc包更换</h4><ol>
+<li>精简rpc包，剔除mq功能</li>
+<li>使用egg agent,支持多worker启动</li>
+</ol>
+<h4 id="mq包更换"><a href="#mq包更换" class="headerlink" title="mq包更换"></a>mq包更换</h4><ol>
+<li>封装http版本的包</li>
+<li>避免一个业务动作批量发送mq的场景（类似多段的分布式事务） 需要由业务侧做拆分</li>
+</ol>
+<h4 id="log"><a href="#log" class="headerlink" title="log"></a>log</h4><ol>
+<li>错误日志输出适配rpc</li>
+</ol>
+<h4 id="减少rpc传输字段"><a href="#减少rpc传输字段" class="headerlink" title="减少rpc传输字段"></a>减少rpc传输字段</h4><ol>
+<li>禁用select * </li>
+</ol>
+<h3 id="技巧分享"><a href="#技巧分享" class="headerlink" title="技巧分享"></a>技巧分享</h3><p>在node中实现高效缓存<br><a href="http://wmtcore.com/2020/04/23/%E9%AB%98%E6%95%88%E7%BC%93%E5%AD%98%E7%9A%84%E4%BD%BF%E7%94%A8/" target="_blank" rel="external">http://wmtcore.com/2020/04/23/%E9%AB%98%E6%95%88%E7%BC%93%E5%AD%98%E7%9A%84%E4%BD%BF%E7%94%A8/</a></p>
+<p>反向授权性能优化<br><a href="http://wmtcore.com/2020/03/20/%E5%8F%8D%E5%90%91%E6%8E%88%E6%9D%83%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" target="_blank" rel="external">http://wmtcore.com/2020/03/20/%E5%8F%8D%E5%90%91%E6%8E%88%E6%9D%83%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</a></p>
 </span>
       
     </div>
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/分布式/" rel="tag">#分布式</a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/16/分布式通信/" rel="next" title="分布式通信">
-                <i class="fa fa-chevron-left"></i> 分布式通信
+              <a href="/2020/04/23/高效缓存的使用/" rel="next" title="在node中实现高效缓存">
+                <i class="fa fa-chevron-left"></i> 在node中实现高效缓存
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/10/ELK_Mapping_conflict/" rel="prev" title="ELK Mapping conflict">
-                ELK Mapping conflict <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -409,8 +419,8 @@ CAP定理在一个分布式系统中，Consistenc">
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2018/05/10/分布式服务/"
-           data-title="分布式服务" data-url="https://www.wmtcore.com/2018/05/10/分布式服务/">
+      <div class="ds-thread" data-thread-key="2020/04/29/总结/"
+           data-title="授权重构及微服务开发问题总结" data-url="https://www.wmtcore.com/2020/04/29/总结/">
       </div>
     
   </div>
@@ -510,7 +520,7 @@ CAP定理在一个分布式系统中，Consistenc">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式"><span class="nav-number">1.</span> <span class="nav-text">分布式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特征"><span class="nav-number">1.1.</span> <span class="nav-text">特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP定理"><span class="nav-number">1.2.</span> <span class="nav-text">CAP定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BASE理论"><span class="nav-number">1.3.</span> <span class="nav-text">BASE理论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一致性协议"><span class="nav-number">2.</span> <span class="nav-text">一致性协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2PC-两段提交"><span class="nav-number">2.1.</span> <span class="nav-text">2PC 两段提交</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#阶段一：提交事务请求"><span class="nav-number">2.1.1.</span> <span class="nav-text">阶段一：提交事务请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行事务提交"><span class="nav-number">2.1.2.</span> <span class="nav-text">执行事务提交</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Paxos算法"><span class="nav-number">2.2.</span> <span class="nav-text">Paxos算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Raft协议"><span class="nav-number">2.3.</span> <span class="nav-text">Raft协议</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目开发回顾"><span class="nav-number">1.</span> <span class="nav-text">项目开发回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#重构目的"><span class="nav-number">1.1.</span> <span class="nav-text">重构目的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#成果"><span class="nav-number">1.2.</span> <span class="nav-text">成果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#槽点和败笔"><span class="nav-number">1.3.</span> <span class="nav-text">槽点和败笔</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发体感"><span class="nav-number">2.</span> <span class="nav-text">开发体感</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工程化问题"><span class="nav-number">3.</span> <span class="nav-text">工程化问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解耦"><span class="nav-number">3.1.</span> <span class="nav-text">解耦</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模块化"><span class="nav-number">3.2.</span> <span class="nav-text">模块化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#质量保证"><span class="nav-number">3.3.</span> <span class="nav-text">质量保证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码风格"><span class="nav-number">3.4.</span> <span class="nav-text">代码风格</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#临时发布环境搭建"><span class="nav-number">3.5.</span> <span class="nav-text">临时发布环境搭建</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-number">4.</span> <span class="nav-text">测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#测试准备"><span class="nav-number">4.1.</span> <span class="nav-text">测试准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自测能力"><span class="nav-number">4.2.</span> <span class="nav-text">自测能力</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#沟通"><span class="nav-number">5.</span> <span class="nav-text">沟通</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#团队会议"><span class="nav-number">5.1.</span> <span class="nav-text">团队会议</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下阶段规划"><span class="nav-number">6.</span> <span class="nav-text">下阶段规划</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#rpc包更换"><span class="nav-number">6.1.</span> <span class="nav-text">rpc包更换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mq包更换"><span class="nav-number">6.2.</span> <span class="nav-text">mq包更换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#log"><span class="nav-number">6.3.</span> <span class="nav-text">log</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#减少rpc传输字段"><span class="nav-number">6.4.</span> <span class="nav-text">减少rpc传输字段</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#技巧分享"><span class="nav-number">7.</span> <span class="nav-text">技巧分享</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
