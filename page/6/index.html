@@ -253,6 +253,633 @@
             
               
                 
+                <a class="post-title-link" href="/2016/03/29/Node异步I-O/" itemprop="url">
+                  Node异步I/O
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-03-29T15:27:32+08:00" content="2016-03-29">
+              2016-03-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/29/Node异步I-O/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/29/Node异步I-O/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p><code>让I/O与CPU计算并行</code></p>
+<p>Node 在*nix平台，通过线程池实现(主线程和I/O线程)，在windows下使用IOCP(调用异步方法，等待I/O完成后通知，执行回调，内部也依靠线程池，但由系统内核管理)，通过libuv层来兼容。</p>
+<p>Node本身是多线程的，但其中的JavaScript是单线程、因为v8的限制，但计算之类的都是在此线程，多线程只是I/O（磁盘，网络等），I/O有另外的线程池</p>
+<h3 id="事件循环"><a href="#事件循环" class="headerlink" title="事件循环"></a>事件循环</h3><ul>
+<li><p>Node自身的执行模型,在libuv中</p>
+</li>
+<li><p>在Node启动时，创建一个类似while(true)的循环，每循环一次成一个Tick,每次Tick查看是否有事件要处理，若有就处理事件和它的相关回调函数。在windows中基于IOCP,在*nix中基于多线程</p>
+</li>
+<li><p>在Tick过程中通过<strong>观察者</strong>判断是否有事件要处理  </p>
+</li>
+<li><p>异步过程中最重要的就是请求对象，所有状态、传入参数、当前方法和回调函数都封装在此，javascript将对象组装好，送入I/O线程池后就结束了，I/O操作在线程池中等待请求对象被执行</p>
+</li>
+<li><p>Tick在执行过程中检查线程池中是否有执行完的请求，并加入<strong>I/O观察者队列</strong>中，然后再从观察者取到可用的请求对象当做事件处理，取出对象中的回调函数执行,若有业务层callback再给js执行</p>
+</li>
+</ul>
+<p><img src="../picture/IO异步.png" alt="Smaller icon"></p>
+<h4 id="事件驱动的高性能服务器"><a href="#事件驱动的高性能服务器" class="headerlink" title="事件驱动的高性能服务器"></a>事件驱动的高性能服务器</h4><p>基于事件驱动的非阻塞I/O模型<br><code>通过主循环加载事件触发的方式来运行程序处理请求，无需为每一个请求创建额外的对应线程</code>：操作系统因为线程少，所以在上下文切换时代价很小，有助系统稳定处理大量请求（但不适合密集运算),但用户代码不能并行执行，I/O可以</p>
+<ul>
+<li>单线程保证运行安全，避免重入</li>
+</ul>
+<p><img src="../picture/高性能服务器.png" alt="Smaller icon"></p>
+<h3 id="另外一些异步api"><a href="#另外一些异步api" class="headerlink" title="另外一些异步api"></a>另外一些异步api</h3><h4 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h4><ul>
+<li>setTimeout()单次定时执行 setInterval()多次定时执行</li>
+</ul>
+<p>原理和异步I/O类似，将创建的定时器放到定时器观察者内部的红黑树，tick执行时，从红黑树中迭代取出定时器对象，检查是否超过定时时间，超过就形成事件并且立刻执行回调函数。</p>
+<p><code>问题</code>：定时不精确，如果某个循环占用时间过多，当再轮到定时器执行时就已经超时了</p>
+<h4 id="process-nextTick"><a href="#process-nextTick" class="headerlink" title="process.nextTick()"></a>process.nextTick()</h4><ul>
+<li>若想立即异步执行一个任务，用这个更高效</li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">setTimeout(<span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123; <span class="comment">// TODO</span>&#125;, <span class="number">0</span>);<span class="comment">// 比较浪费性能</span></div><div class="line"></div><div class="line">process.nextTick=<span class="function"><span class="keyword">function</span><span class="params">(callback)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(process._exiting) <span class="keyword">return</span>;</div><div class="line">	<span class="keyword">if</span>(tickDepth &gt;=process.maxTickDepth)</div><div class="line">	   maxTickWarn();</div><div class="line">	<span class="keyword">var</span> tock=&#123;callback:callback&#125;;</div><div class="line">	<span class="keyword">if</span>(process.domain) tock.domain=process.domain;</div><div class="line">	 nextTickQueue.push(tock);</div><div class="line">	<span class="keyword">if</span>(nextTickQueue.length)&#123;</div><div class="line">	  process._needTickCallback();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>调用process.nextTick(),只会将回调函数放入队列中，在下个Tick取出</code></p>
+<h4 id="setImmediate"><a href="#setImmediate" class="headerlink" title="setImmediate()"></a>setImmediate()</h4><ul>
+<li>类process.nextTick() 将回调函数延时执行，建议使用这个（v0.9.1以后）</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'nextTick延时执行1'</span>)</div><div class="line">&#125;);</div><div class="line">process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'nextTick延时执行2'</span>);</div><div class="line">&#125;);</div><div class="line">setImmdiate(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'setImmdiate延时执行1'</span>);</div><div class="line">	process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'强势插入'</span>);</div><div class="line">	&#125;)</div><div class="line">&#125;);  </div><div class="line">setImmediate(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'setImmediate延时执行2'</span>); </div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'正常执行'</span>);</div><div class="line"></div><div class="line"><span class="comment">//正常执行 </span></div><div class="line"><span class="comment">//nextTick  延时执行1 </span></div><div class="line"><span class="comment">//nextTick  延时执行2 </span></div><div class="line"><span class="comment">//setImmediate  延时执行1  </span></div><div class="line"><span class="comment">//强势插入 </span></div><div class="line"><span class="comment">//setImmediate  延时执行2</span></div></pre></td></tr></table></figure>
+<p><code>process.nextTick()属于idle观察者，setImmediate()属于check观察者，在每轮循环中，idle观察者先于I/O观察者先与check</code></p>
+<p>process.nextTick()的回调函数保存在<strong>数组</strong>中,在每轮循环中会将数组中的回调函数<strong>全部执行</strong>完。setImmediate()保存在<strong>链表</strong>中,在每轮循环中<strong>执行链表的一个</strong>回调函数</p>
+<h3 id="异步并发控制"><a href="#异步并发控制" class="headerlink" title="异步并发控制"></a>异步并发控制</h3><p>并发量过大,下层服务器会吃不消</p>
+<h5 id="bagpipe"><a href="#bagpipe" class="headerlink" title="bagpipe"></a>bagpipe</h5><ol>
+<li>通过队列控制并发量</li>
+<li>在当前活跃的异步调用量小于限定值，从队列中取出执行</li>
+<li>活跃调用达到限定值后，调用暂存在队列中</li>
+<li>每个调用结束时，从队列中取出新的异步调用执行</li>
+</ol>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/15/node的模块加载/" itemprop="url">
+                  node的模块加载
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-03-15T10:53:32+08:00" content="2016-03-15">
+              2016-03-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/15/node的模块加载/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/15/node的模块加载/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="模块实现"><a href="#模块实现" class="headerlink" title="模块实现"></a>模块实现</h3><p>依照CommonJS的模块规范，使用require()引入模块的api,使用exports导出模块的方法、变量；其中module对象代表模块本身，exports是它的属性</p>
+<p><code>优点： 每个模块有独立的空间、不必考虑变量污染</code></p>
+<p>Node引入模块通过路径分析、文件定位、编译执行，会对引入的模块缓<strong>存其编译和执行后的对象</strong>，二次加载时缓存<strong>优先核心模块之后文件模块</strong>。加载自定义模块（第三方包）最慢，要向上逐级递归查找node_modules目录</p>
+<p>因为允许require()中不含文件拓展名，Node会按照<code>.js、.node、.json的次序补足，依次尝试</code>,并且需要调用fs模块同步阻塞判断文件是否存在，会因为Node单线程引起性能问题，<code>对于.node、.json文件带上拓展名能快些</code></p>
+<h4 id="分析目录和包"><a href="#分析目录和包" class="headerlink" title="分析目录和包"></a>分析目录和包</h4><p>require()通过分析文件拓展名后仍然没有查到文件、但取到一个目录，此时Node会将目录当做包来处理。</p>
+<ol>
+<li>在当前目录下查找package.json(CommonJS规定的包描述文件)</li>
+<li>通过JSON.parse()解析，取出main属性指定的文件名，若无拓展名就遍历拓展名</li>
+</ol>
+<p>如果mian属性指定文件名错误、没有package.json文件，Node会把index.当做默认文件名，依次查找、遍历拓展名。</p>
+<p>如果分析目录后没有定位成功，就进入下一个模块路径查找，模块路径都都遍历完了还没找到就抛错。</p>
+<h3 id="模块编译"><a href="#模块编译" class="headerlink" title="模块编译"></a>模块编译</h3><p><code>.js 通过fs同步读取文件后编译执行</code> ,Node对获取的js文件内容进行了头尾包装</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">exports,<span class="built_in">require</span>,<span class="built_in">module</span>,__filename,__dirname</span>)</span>&#123;<span class="comment">//头尾包装</span></div><div class="line">  <span class="keyword">var</span> math=<span class="built_in">require</span>(<span class="string">'math'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>如此每个模块都有作作用域隔离，包装后的代码通过vm原生模块runInThisContext()执行，返回一个function对象，再将当前模块对象的exports属性、require()、module、文件的完整路径和文件目录作为参数传给function()。最后调用方拿到了exports属性</p>
+<p><strong>exports和module.exports的区别</strong> exports对象是以形参形式传入的，直接赋值不会改变作用域外的值。所以需要对module.exports对象赋值，对exports属性赋值则无碍</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> change = <span class="function"><span class="keyword">function</span>(<span class="params">a</span>) </span>&#123;</div><div class="line">	a = <span class="number">100</span>;</div><div class="line">	<span class="built_in">console</span>.log(a); <span class="comment">// =&gt; 100</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> a = <span class="number">10</span>;</div><div class="line">change(a);</div><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// =&gt; 10</span></div></pre></td></tr></table></figure>
+<p><code>.node 这是用c/c++编写的拓展文件，通过dlopen()加载再编译</code> 在windows、*nix有不同的实现，通过libuv兼容层封装,实际不用编译，它是c/c++编译生成的，只要加载、执行，exports对象直接和.node联系，执行效率高</p>
+<p><code>.json 通过fs读取，使用JSON.parse()解析，再赋值给exports</code> ,对于JSON文件直接用require()比fs高效</p>
+<p>将编译后的模块，以文件路径为索引缓存在Module.cache对象上</p>
+<h3 id="核心模块"><a href="#核心模块" class="headerlink" title="核心模块"></a>核心模块</h3><ul>
+<li>将核心模块中纯用c/c++写的称为建内模块，因为通常不被用户调用</li>
+<li>部分模块通过c/c++编写核心部分，js实现包装、导出来提高性能</li>
+</ul>
+<p>Node使用v8的js2c.py将所有内置js转成c++里的数组，生成node_natives.sh头文件，在Node启动时加入内存，然后再根据require()加载、执行;也要经历头尾包装，缓存在NativeModule._cache对象上</p>
+<h3 id="NPM"><a href="#NPM" class="headerlink" title="NPM"></a>NPM</h3><p><code>package.json 包描述文件</code>  dependencies npm根据这个自动加载依赖的包,scripts 用于包管理器来安装、编译、测试和卸载包(钩子命令，preinstall之类的) devDependencies 开发时的依赖包，bin 命令行工具</p>
+<p><code>全局安装 -g</code> 将包变成全局可用的执行命令，不是require()到</p>
+<p><code>其他方式安装包</code> npm install 指定package.json的位置，npm install [pg] –registry=<a href="http://registry.url" target="_blank" rel="external">http://registry.url</a> 或者直接采用镜像源 npm config set registry <a href="http://registry.url" target="_blank" rel="external">http://registry.url</a></p>
+<p><code>局域NPM</code></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/06/mysql事务与锁/" itemprop="url">
+                  mysql事务与锁
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-03-06T14:56:20+08:00" content="2016-03-06">
+              2016-03-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/06/mysql事务与锁/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/06/mysql事务与锁/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="事务定义"><a href="#事务定义" class="headerlink" title="事务定义"></a>事务定义</h3><p><code>一组原子性SQL查询，独立的工作单元</code></p>
+<p>ACID(atomicity-原子性,consistency-一致性,isolation-隔离性,durability-持久性)</p>
+<ul>
+<li>事务不可分割</li>
+<li>从一个一致性状态转到另一个一致性状态</li>
+<li>事务修改提交之前对其他事务不可见</li>
+<li>一旦提交，永远保存</li>
+</ul>
+<p><code>根据业务是否需要事务，选择合适的储存引擎，提升性能</code><br>若存储引擎不支持事务也可以使用<strong>locktable</strong>提供一定保护</p>
+<h4 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h4><ul>
+<li>脏读（dirty read）：事务读取了未提交的数据</li>
+<li>不可重复读（nonrepeatable read）：事务T1读取一行记录，紧接着事务T2修改了T1刚才读取的那一行记录，然后T1又再次读取这行记录，发现与刚才读取的结果不同</li>
+<li>幻像读（phantom read）：当某个事务在读某个范围内的记录时，另一个事务又在该范围内加入了新的记录，当之前的事务再读取该范围的记录时，会产生幻行。InnoDB和XtraDB存储引擎通过MVCC解决了幻像读的问题</li>
+</ul>
+<p><code>READ UNCOMMITTED(未提交读)</code>: 事务的修改即使未提交，对其他事务也可见，性能略好，但有很多问题，不建议使用</p>
+<p><code>READ COMMITTED(提交读)</code>: 事务所做的修改在提交前对其他事务不可见，大多数数据库默认隔离级别</p>
+<p><code>REPEATABLE READ(可重复读)</code>: 同一事务多次读取的记录结果是一致的,Mysql默认级别</p>
+<p><code>SERIALIZABLE(序列化)</code> : 强制事务串行执行，会对读取的每一行数据加锁，会导致大量的超时和锁争用，用在非常需要确保数据的一致性并且可以接受没有并发的情况下</p>
+<table>
+<thead>
+<tr>
+<th>事务的隔离级别</th>
+<th>脏读可能性</th>
+<th>不可重复读可能性</th>
+<th>幻像读可能性</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>READ UNCOMMITTED未提交读</td>
+<td>YES</td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr>
+<td>READ COMMITTED提交读</td>
+<td>No</td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr>
+<td>REPEATABLE READ可重复读</td>
+<td>No</td>
+<td>No</td>
+<td>YES</td>
+<td>Mysql默认级别</td>
+</tr>
+<tr>
+<td>SERIALIZABLE序列化</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>会在读取的每一行数据上都加锁</td>
+</tr>
+</tbody>
+</table>
+<h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h4><p>多个事务在同一资源上互相占用，并请求锁定对方占用的资源，从而导致恶性循环</p>
+<ul>
+<li>多个事务以不同的顺序锁定资源</li>
+<li>多个事务同时锁定同一资源</li>
+</ul>
+<p>解决方式：1. 检测到死锁时，立刻返回错误 2. 当查询的时间达到锁等待超时的设定后放弃锁请求</p>
+<p><code>InnoDB处理方式</code>： 将持有最少行级排他锁的事务进行回滚</p>
+<p>发生死锁后，只有部分或者完全回滚其中一个事务，才能打破死锁。发生死锁无法避免，程序设计时需要考虑如何处理死锁，通常<strong>重新执行因死锁回滚的事务</strong>即可</p>
+<h4 id="事务日志"><a href="#事务日志" class="headerlink" title="事务日志"></a>事务日志</h4><p><code>提高事务的效率</code>：</p>
+<ol>
+<li>存储引擎在修改表的数据时只需要修改其内存拷贝，再把该修改行为记录到持久在硬盘上的事务日志中，而不用将修改的数据本身持久到磁盘。</li>
+<li>事务日志采用的是追加的方式，写日志的操作是在磁盘上的一小块顺序I/O，不像随机I/O需要在多次移动磁头。</li>
+</ol>
+<p>事务日志持久后，内存被修改的数据在后台慢慢刷回到磁盘。称为预写式日志（Write-Ahead Logging），<strong>修改数据需要写两次磁盘</strong>.</p>
+<p>若数据的修改已经记录到日志并持久化，即使内存的修改没及时写到磁盘，也可以在存储引擎重启时自动恢复</p>
+<h3 id="MySQL事务"><a href="#MySQL事务" class="headerlink" title="MySQL事务"></a>MySQL事务</h3><p>官方提供的事务存储引擎：InnoDB和NDB Cluster<br>             第三方：XtraDB和PBXT</p>
+<h4 id="自动提交"><a href="#自动提交" class="headerlink" title="自动提交"></a>自动提交</h4><p>mysql默认会启用自动提交，每个查询都会被当作一个事务执行提交操作，在当前连接中可以设置AUTOCOMMIT 1/ON或0/OFF。</p>
+<p><strong>导致大量数据改变的操作ALTER TABLE,还有LOCK TABLES等也会导致自动提交</strong></p>
+<h4 id="事务中混合使用存储引擎"><a href="#事务中混合使用存储引擎" class="headerlink" title="事务中混合使用存储引擎"></a>事务中混合使用存储引擎</h4><ul>
+<li>在非事务型的表上，回滚操作无效，且不会报错，只会有警告信息</li>
+</ul>
+<p>为每张表选择合适的存储引擎</p>
+<h4 id="隐式、显式锁定"><a href="#隐式、显式锁定" class="headerlink" title="隐式、显式锁定"></a>隐式、显式锁定</h4><ul>
+<li>InnoDB使用两段锁定协议，事务执行时，可随时执行锁定，只要到COMMIT或ROLLBACK时才会同时释放所有锁，InnoDB会根据隔离级别自动加锁（隐式）</li>
+<li>SELECT … LOCK IN SHARE MODE和 SELECT … FOR UPDATE 显式锁定，但不建议使用</li>
+</ul>
+<p><code>LOCK TABLES、UNLOCK TABLES</code>服务器层实现，不能代替事务，且影响性能</p>
+<h4 id="MVCC多版本并发控制"><a href="#MVCC多版本并发控制" class="headerlink" title="MVCC多版本并发控制"></a>MVCC多版本并发控制</h4><ul>
+<li>行级锁变种 能尽量避免加锁 开销低</li>
+<li></li>
+</ul>
+<p>此处介绍InnoDB对MVVC的实现</p>
+<p><code>实现原理</code>： 在每行记录后保存两个隐藏的列，一个保存行创建时间，一个保存过期（删除）时间，此处的时间指的是系统版本号，它会在创建事务时递增，</p>
+<p><code>具体操作</code>：</p>
+<ul>
+<li>SElECT<ul>
+<li>只查找版本号小号或等于当前事务的版本号，确保读取的行，或是在事务开始之前，或是事务自己插入的</li>
+<li>行的删除版本要么未定义，要么大于当前事务版本号，确保事务读到行在事务开始之前未被删除</li>
+</ul>
+</li>
+<li>INSERT<ul>
+<li>插入的每一行保存当前系统版本号作为行版本号</li>
+</ul>
+</li>
+<li>DELETE<ul>
+<li>插入的每一行保存当前系统版本号作为行版本号   </li>
+</ul>
+</li>
+<li>UPDATE<ul>
+<li>为插入的新记录保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为行删除标识</li>
+</ul>
+</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/02/24/angularjs-布局模板和路由/" itemprop="url">
+                  angularjs 布局模板和路由
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-02-24T14:54:28+08:00" content="2016-02-24">
+              2016-02-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/24/angularjs-布局模板和路由/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/24/angularjs-布局模板和路由/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p><strong>将视图（页面）分解成布局和模板视图，再根据当前URL展示对应视图</strong></p>
+<h3 id="布局模板"><a href="#布局模板" class="headerlink" title="布局模板"></a>布局模板</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt; header&gt;<span class="xml"><span class="tag">&lt; <span class="attr">h1</span>&gt;</span>Header<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">header</span>&gt;</span></span></div><div class="line">&lt; div <span class="class"><span class="keyword">class</span></span>=<span class="string">"content"</span> &gt;</div><div class="line">   <span class="xml"><span class="tag">&lt; <span class="attr">div</span> <span class="attr">ng-view</span>&gt;</span><span class="tag">&lt; /<span class="attr">div</span>&gt;</span></span><span class="xml"><span class="tag">&lt; /<span class="attr">div</span> &gt;</span></span></div></pre></td></tr></table></figure>
+<p>ng-view 由ngRoute模块提供的一个特殊指令, 在HTML中给$route对应的视图内容占位。优先级1000</p>
+<ul>
+<li>每次触发$routeChangeSuccess事件, 视图会更新 </li>
+<li>如果某个模板同当前的路由关联<ul>
+<li>创建新作用域</li>
+<li>移除上一视图和作用域</li>
+<li>将新作用域与当前模板关联</li>
+<li>如果路由中控制器定义，则与当前作用域关联</li>
+<li>触发$viewContentLoaded </li>
+<li>如果提供onload属性,调用所指定的函数     </li>
+</ul>
+</li>
+</ul>
+<h3 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h3><ul>
+<li>使用$routeProvider的when和otherwise</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">angular.module(<span class="string">'myApp'</span>, []).config(<span class="function"><span class="keyword">function</span><span class="params">($routeProvider)</span> </span>&#123;</div><div class="line">   $routeProvider</div><div class="line">       .when(<span class="string">'/'</span>,&#123;</div><div class="line">          <span class="comment">//  controller、template、templateURL、resolve、redirectTo、reloadOnSearch和css</span></div><div class="line">       &#125;)</div><div class="line">   &#125;）</div></pre></td></tr></table></figure>
+<p><code>controller</code> 字符串或函数</p>
+<p><code>template</code> html模板,<code>templateURL</code>模板链接</p>
+<p><code>resolve</code> 将resolve对象里的值注入到控制器中</p>
+<p><code>redirectTo</code> 路由替换，字符串或者函数，在调用函数时会传入：从当前路径中提取的路由参数，当前路径，当前URL中的查询串</p>
+<p><code>reloadOnSearch</code> true时， $location.search()变化时会重新加载路由</p>
+<h4 id="路由模式"><a href="#路由模式" class="headerlink" title="路由模式"></a>路由模式</h4><ul>
+<li>标签模式</li>
+</ul>
+<h3 id="location服务"><a href="#location服务" class="headerlink" title="$location服务"></a>$location服务</h3><p>类window.location,能修改路径和内部跳转，不能刷新整个页面</p>
+<ul>
+<li>$location.path() 获取或修改路径，并且与HTML5的历史api交互，提供用户后退的功能,加replace()，就不能后退</li>
+<li>absUrl() 获取编码后完整的URL</li>
+<li>hash() 获取URL中的hash片段  </li>
+<li>host() 获取URL中的主机，port()端口号，</li>
+<li>protocol() 获取URL中的协议</li>
+<li>search() 获取URL中的查询串，也可以用对象、字符串设置查询</li>
+<li>url() 获取或修改当前的URL</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/02/19/angularjs初步-三/" itemprop="url">
                   angularjs初步(三)
                 </a>
@@ -983,459 +1610,6 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/01/22/mac-导入iso文件到u盘/" itemprop="url">
-                  mac 导入iso文件到u盘
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-01-22T13:21:33+08:00" content="2016-01-22">
-              2016-01-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Mac/" itemprop="url" rel="index">
-                    <span itemprop="name">Mac</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/22/mac-导入iso文件到u盘/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/22/mac-导入iso文件到u盘/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="diskutil-list"><a href="#diskutil-list" class="headerlink" title="diskutil list"></a>diskutil list</h3><ul>
-<li>查看U盘位置 如：/dev/disk1</li>
-</ul>
-<h3 id="diskutil-unmountDisk-dev-disk2"><a href="#diskutil-unmountDisk-dev-disk2" class="headerlink" title="diskutil unmountDisk /dev/disk2"></a>diskutil unmountDisk /dev/disk2</h3><ul>
-<li>取消挂载</li>
-</ul>
-<h3 id="sudo-dd-if-iso-of-dev-rdisk1-bs-1m-sync"><a href="#sudo-dd-if-iso-of-dev-rdisk1-bs-1m-sync" class="headerlink" title="sudo dd if=**.iso of=/dev/rdisk1 bs=1m;sync"></a>sudo dd if=**.iso of=/dev/rdisk1 bs=1m;sync</h3><ul>
-<li>写入文件</li>
-</ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/01/14/http-request传参，取值/" itemprop="url">
-                  http request传参，取值
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-01-14T13:56:09+08:00" content="2016-01-14">
-              2016-01-14
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/14/http-request传参，取值/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/14/http-request传参，取值/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="basic"><a href="#basic" class="headerlink" title="basic"></a>basic</h3><p><code>/blog/id?name=b</code>: req.params/req.params?req.query.name<br><code>sendDate</code> : req.body</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/01/05/webpack热加载React-webpack-dev-server/" itemprop="url">
-                  webpack热加载React webpack-dev-server
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-01-05T09:25:22+08:00" content="2016-01-05">
-              2016-01-05
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/05/webpack热加载React-webpack-dev-server/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/05/webpack热加载React-webpack-dev-server/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="Webpack开发服务器（webpack-dev-server）"><a href="#Webpack开发服务器（webpack-dev-server）" class="headerlink" title="Webpack开发服务器（webpack-dev-server）"></a>Webpack开发服务器（webpack-dev-server）</h3><ul>
-<li>npm install -g webpack-dev-server</li>
-<li>静态资源Web服务器</li>
-<li>基于Node.js Express</li>
-<li>内容实时打包和推送</li>
-</ul>
-<h3 id="react-hot-loader"><a href="#react-hot-loader" class="headerlink" title="react-hot-loader"></a>react-hot-loader</h3><ul>
-<li>npm install —save-dev react-hot-loader</li>
-<li>React组件的热替换</li>
-</ul>
-<p><code>创建一个server.js文件,用于启动webpack-dev-server</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</div><div class="line"><span class="keyword">var</span> WebpackDevServer = <span class="built_in">require</span>(<span class="string">'webpack-dev-server'</span>);</div><div class="line"><span class="keyword">var</span> config = <span class="built_in">require</span>(<span class="string">'../webpack.config'</span>);</div><div class="line"><span class="keyword">new</span> WebpackDevServer(webpack(config), &#123;</div><div class="line">  <span class="attr">publicPath</span>: config.output.publicPath,</div><div class="line">  <span class="attr">hot</span>: <span class="literal">true</span>,<span class="comment">//开启Hot Module Replacement (HMR)</span></div><div class="line">  noInfo: <span class="literal">false</span>,</div><div class="line">  <span class="attr">historyApiFallback</span>: <span class="literal">true</span></div><div class="line">&#125;).listen(<span class="number">3000</span>, <span class="string">'127.0.0.1'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, result</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (err) &#123;</div><div class="line">    <span class="built_in">console</span>.log(err);</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Listening at localhost:3000'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p><code>修改webpack.config.js</code></p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">entry: [</div><div class="line">  <span class="string">'webpack-dev-server/client?http://127.0.0.1:3000'</span>, <span class="comment">// WebpackDevServer host and port,资源服务器地址,打包生成的文件从client?http://127.0.0.1:3000去获取动态的代码更新</span></div><div class="line">  <span class="string">'webpack/hot/only-dev-server'</span>,</div><div class="line">  <span class="string">'./scripts/index.js'</span> <span class="comment">// Your appʼs entry point</span></div><div class="line">]</div><div class="line"></div><div class="line"></div><div class="line">loaders: [&#123;</div><div class="line">    test: <span class="regexp">/\.js$/</span>,</div><div class="line">    <span class="keyword">exclude</span>: <span class="regexp">/node_modules/</span>,</div><div class="line">    loader: <span class="string">'react-hot!jsx-loader?harmony'</span><span class="comment">//让Webpack用react-hot-loader去加载React组件,harmony启动es6</span></div><div class="line">  &#125;]</div></pre></td></tr></table></figure>
-<p>之后启动node server.js</p>
-<h3 id="前端服务器调用"><a href="#前端服务器调用" class="headerlink" title="前端服务器调用"></a>前端服务器调用</h3><p><code>载入打包文件时指定完整的URL地址</code></p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://127.0.0.1:3000/assets/bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>建立Socket IO来动态加载模块</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/01/04/webpack-初步/" itemprop="url">
-                  webpack 初步
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-01-04T15:20:48+08:00" content="2016-01-04">
-              2016-01-04
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/04/webpack-初步/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/04/webpack-初步/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="这是啥"><a href="#这是啥" class="headerlink" title="这是啥"></a>这是啥</h3><ul>
-<li>模块加载器兼打包工具</li>
-<li>可以使用 require(XXX)来引入各模块</li>
-<li>加载器（loader）编译（JSX、sass、、、）</li>
-<li>以 commonJS 形式书写</li>
-<li>能打包、压缩混淆、图片转base64等</li>
-<li>扩展性强，插件机制完善，支持 React 热插拔</li>
-</ul>
-<h3 id="安装，配置"><a href="#安装，配置" class="headerlink" title="安装，配置"></a>安装，配置</h3><ul>
-<li>npm init,npm install webpack –save</li>
-<li>webpack.config.js配置文件</li>
-</ul>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">var webpack = require(<span class="string">'webpack'</span>);</div><div class="line"></div><div class="line">module.exports = &#123;</div><div class="line">    <span class="comment">//入口文件配置</span></div><div class="line"><span class="symbol">    entry:</span> &#123;</div><div class="line"><span class="symbol">        a:</span> <span class="string">"./a"</span>, <span class="string">b:</span> <span class="string">"./b"</span> </div><div class="line">    &#125;,</div><div class="line">    <span class="comment">//出口文件输出配置</span></div><div class="line"><span class="symbol">    output:</span> &#123;</div><div class="line"><span class="symbol">        path:</span> <span class="string">'dist/js/page'</span>,<span class="comment">//打包文件存放的绝对路径</span></div><div class="line"><span class="symbol">        filename:</span> <span class="string">'[name].js'</span>，<span class="comment">//打包后的文件名</span></div><div class="line">        publicPath：“<span class="regexp">/js” /</span>/网站运行时的访问路径</div><div class="line">    &#125;,</div><div class="line"><span class="symbol">   module:</span> &#123;</div><div class="line">        <span class="comment">//加载器配置，需要npm install *-loader</span></div><div class="line"><span class="symbol">        loaders:</span> [</div><div class="line">            <span class="comment">//.css 文件使用 style-loader 和 css-loader 来处理</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.css$/</span>, <span class="string">loader:</span> <span class="string">'style-loader!css-loader'</span> &#125;,</div><div class="line">            <span class="comment">//.js 文件使用 jsx-loader 来编译处理</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.js$/</span>, <span class="string">loader:</span> <span class="string">'jsx-loader?harmony'</span>,<span class="string">exclude:</span> <span class="regexp">/node_modules/</span> &#125;,<span class="comment">//exclude排除</span></div><div class="line">            <span class="comment">//.scss 文件使用 style-loader、css-loader 和 sass-loader 来编译处理</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.scss$/</span>, <span class="string">loader:</span> <span class="string">'style!css!sass?sourceMap'</span>&#125;,</div><div class="line">            <span class="comment">//图片文件使用 url-loader 来处理，小于8kb的直接转为base64</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.(png|jpg)$/</span>, <span class="string">loader:</span> <span class="string">'url-loader?limit=8192'</span>&#125;,</div><div class="line">            &#123;<span class="string">test:</span> <span class="regexp">/\.json$/</span>,<span class="string">loader:</span> <span class="string">'json'</span>&#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//插件项</span></div><div class="line"><span class="symbol">    plugins:</span> [<span class="keyword">new</span> webpack.CommonsChunkPlugin(<span class="string">"init.js"</span>) ],<span class="comment">//这个插件可以将多个打包后的资源中的公共部分打包成单独的文件，这里指定公共文件输出为“init.js” 生成文件：init.js,a.js,b.js</span></div><div class="line">    <span class="comment">//其它解决方案配置</span></div><div class="line"><span class="string">resolve:</span> &#123;</div><div class="line">        <span class="comment">//查找module的话从这里开始查找</span></div><div class="line"><span class="symbol">        root:</span> <span class="string">'E:/github/flux-example/src'</span>, <span class="comment">//绝对路径</span></div><div class="line">        <span class="comment">//自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名</span></div><div class="line"><span class="symbol">        extensions:</span> [<span class="string">''</span>, <span class="string">'.js'</span>, <span class="string">'.json'</span>, <span class="string">'.scss'</span>],</div><div class="line">        <span class="comment">//模块别名定义，方便后续直接引用别名，无须多写长长的地址</span></div><div class="line"><span class="symbol">        alias:</span> &#123;</div><div class="line">            <span class="string">AppStore :</span> <span class="string">'js/stores/AppStores.js'</span>,<span class="comment">//后续直接 require('AppStore') 即可</span></div><div class="line">            <span class="string">ActionType :</span> <span class="string">'js/actions/ActionType.js'</span>,</div><div class="line">            <span class="string">AppAction :</span> <span class="string">'js/actions/AppAction.js'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h3 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h3><p><code>CommonsChunkPlugin</code> 提取多个页面之间的公共模块</p>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">var CommonsChunkPlugin = require(<span class="string">"webpack/lib/optimize/CommonsChunkPlugin"</span>);</div><div class="line">module.exports = &#123;</div><div class="line"><span class="symbol">    entry:</span> &#123;</div><div class="line"><span class="symbol">        p1:</span> <span class="string">"./page1"</span>,</div><div class="line"><span class="symbol">        p2:</span> <span class="string">"./page2"</span>,</div><div class="line"><span class="symbol">        p3:</span> <span class="string">"./page3"</span>,</div><div class="line"><span class="symbol">        ap1:</span> <span class="string">"./admin/page1"</span>,</div><div class="line"><span class="symbol">        ap2:</span> <span class="string">"./admin/page2"</span></div><div class="line">    &#125;,</div><div class="line"><span class="symbol">    output:</span> &#123;</div><div class="line"><span class="symbol">        filename:</span> <span class="string">"[name].js"</span></div><div class="line">    &#125;,</div><div class="line"><span class="symbol">    plugins:</span> [</div><div class="line">        new CommonsChunkPlugin(<span class="string">"admin-commons.js"</span>, [<span class="string">"ap1"</span>, <span class="string">"ap2"</span>]),</div><div class="line">        new CommonsChunkPlugin(<span class="string">"commons.js"</span>, [<span class="string">"p1"</span>, <span class="string">"p2"</span>, <span class="string">"admin-commons.js"</span>])</div><div class="line">    ]</div><div class="line">&#125;;</div><div class="line"><span class="comment">// &lt;script&gt;s required:</span></div><div class="line"><span class="comment">// page1.html: commons.js, p1.js</span></div><div class="line"><span class="comment">// page2.html: commons.js, p2.js</span></div><div class="line"><span class="comment">// page3.html: p3.js</span></div><div class="line"><span class="comment">// admin-page1.html: commons.js, admin-commons.js, ap1.js</span></div><div class="line"><span class="comment">// admin-page2.html: commons.js, admin-commons.js, ap2.js</span></div></pre></td></tr></table></figure>
-<p><code>extract-text-webpack-plugin</code> 独立打包</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</div><div class="line">    <span class="keyword">var</span> commonsPlugin = <span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(<span class="string">'common.js'</span>);</div><div class="line">    <span class="keyword">var</span> ExtractTextPlugin = <span class="built_in">require</span>(<span class="string">"extract-text-webpack-plugin"</span>);</div><div class="line">    <span class="built_in">module</span>.exports = &#123;</div><div class="line">        <span class="attr">plugins</span>: [commonsPlugin, <span class="keyword">new</span> ExtractTextPlugin(<span class="string">"[name].css"</span>)],</div><div class="line">        <span class="attr">entry</span>: &#123;&#125;;</div><div class="line">     &#125;</div></pre></td></tr></table></figure>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1482,14 +1656,14 @@ Controller(控制器), 即 JavaScript 函数，可以添加或修改属性。
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">73</span>
+              <span class="site-state-item-count">77</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>

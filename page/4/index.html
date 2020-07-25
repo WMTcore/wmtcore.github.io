@@ -253,6 +253,686 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/31/nodejs-web应用-三/" itemprop="url">
+                  nodejs web应用 三
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-08-31T17:32:44+08:00" content="2016-08-31">
+              2016-08-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/31/nodejs-web应用-三/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/31/nodejs-web应用-三/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h3><ul>
+<li>封装底层细节，为上层提供更方便的服务</li>
+</ul>
+<p>node的http模块提供了应用层协议网络的封装，需要中间件来处理http请求的细节。因为node异步，所以需要在当前中间件处理完后通知下一中间件执行，例如Connect的尾触发next()</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/23/nodejs多进程/" itemprop="url">
+                  nodejs多进程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-08-23T11:38:19+08:00" content="2016-08-23">
+              2016-08-23
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/23/nodejs多进程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/23/nodejs多进程/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="多进程架构"><a href="#多进程架构" class="headerlink" title="多进程架构"></a>多进程架构</h3><p>依靠node提供的child_process模块，创建工作线程，实现多核cpu的利用</p>
+<ul>
+<li>主从模式</li>
+</ul>
+<p>主进程和工作进程，在分布式架构中用于并行处理业务的模式，主进程负责调度和管理工作进程，工作进程负责业务处理</p>
+<p>创建worker.js：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;</div><div class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></div><div class="line">	&#125;);</div><div class="line">	res.end(<span class="string">'Hello World\n'</span>);</div><div class="line">&#125;).listen(<span class="built_in">Math</span>.round((<span class="number">1</span> + <span class="built_in">Math</span>.random()) * <span class="number">1000</span>), <span class="string">'127.0.0.1'</span>);</div></pre></td></tr></table></figure>
+<p>创建master.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fork = <span class="built_in">require</span>(<span class="string">'child_process'</span>).fork;</div><div class="line"><span class="keyword">var</span> cpus = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus();</div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; cpus.length; i++) &#123;</div><div class="line">	fork(<span class="string">'./worker.js'</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>fork()复制的进程都是独立的进程，有独立的v8，但fork()过程比较长、内存占用多（至少10mb），多进程目的是充分使用cpu资源</p>
+<h4 id="创建工作线程"><a href="#创建工作线程" class="headerlink" title="创建工作线程"></a>创建工作线程</h4><p>child_process模块提供了4个方法创建工作线程</p>
+<ol>
+<li>spawn() 启动一个工作线程执行命令</li>
+<li>exec() 启动一个工作线程并且<strong>包含回调函数</strong> 可以设置超时时间</li>
+<li>execFile() 启动一个工作线程来执行可执行文件 可以设置超时时间</li>
+<li>fork() 指定js文件来创建工作线程</li>
+</ol>
+<p>后面三个方法都是spawn()的延伸</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cp = <span class="built_in">require</span>(<span class="string">'child_process'</span>);</div><div class="line">cp.spawn(<span class="string">'node'</span>, [<span class="string">'worker.js'</span>]);</div><div class="line">cp.exec(<span class="string">'node worker.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, stdout, stderr</span>) </span>&#123;</div><div class="line">	<span class="comment">// some code </span></div><div class="line">&#125;);</div><div class="line">cp.execFile(<span class="string">'worker.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, stdout, stderr</span>) </span>&#123;</div><div class="line">	<span class="comment">// some code</span></div><div class="line">&#125;);</div><div class="line">cp.fork(<span class="string">'./worker.js'</span>);</div></pre></td></tr></table></figure>
+<p><img src="/picture/node_child_process.png" alt="Smaller icon"></p>
+<p>通过execFile()执行的js文件，需要在首行加入： #!/usr/bin/env node</p>
+<h4 id="进程通信"><a href="#进程通信" class="headerlink" title="进程通信"></a>进程通信</h4><ul>
+<li>IPC Inter-Process Communication 进程间通信</li>
+<li>node使用libuv提供的管道(pipe)实现IPC,在window中使用named pipe,*nix使用Unix Domain Socket实现</li>
+<li>文件描述符：内核（kernel）利用文件描述符（file descriptor）来访问文件。文件描述符是非负整数。打开现存文件或新建文件时，内核会返回一个文件描述符，读写文件也需要使用文件描述符来指定待读写的文件。它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表</li>
+</ul>
+<p>在创建工作线程之前会<strong>先创建IPC通道并监听</strong>，然后通过环境变量（NODE_CHANNEL_FD）告诉工作线程这个IPC通道的文件描述符，工作线程会根据它连接IPC通道完成进程连接。</p>
+<p>IPC通道类似socket属于双向通信，直接在系统内核中完成更高效，<strong>IPC被node抽象为stream对象</strong>，在调用send()时(类似write())发送数据，接收到消息会通过message事件(类似data)触发</p>
+<h4 id="句柄传递"><a href="#句柄传递" class="headerlink" title="句柄传递"></a>句柄传递</h4><ul>
+<li>句柄是一种可以用来标识资源的引用，包含了指向对象的文件描述符，可以表示一个服务端socket对象，客户端socket对象等</li>
+</ul>
+<p>主进程接受到socket请求后，将socket直接发送给工作进程，不用重新与工作进程建立新的socket连接</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// parent.js</span></div><div class="line"><span class="keyword">var</span> cp = <span class="built_in">require</span>(<span class="string">'child_process'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> child1 = cp.fork(<span class="string">'child.js'</span>);</div><div class="line"><span class="keyword">var</span> child2 = cp.fork(<span class="string">'child.js'</span>);</div><div class="line"><span class="comment">// Open up the server object and send the handle </span></div><div class="line"><span class="keyword">var</span> server = <span class="built_in">require</span>(<span class="string">'net'</span>).createServer();</div><div class="line">server.listen(<span class="number">1337</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">//主进程发送完句柄后关闭了监听</span></div><div class="line">	child1.send(<span class="string">'server'</span>, server);</div><div class="line">	child2.send(<span class="string">'server'</span>, server); </div><div class="line">	server.close();</div><div class="line">&#125;);</div><div class="line"><span class="comment">// child.js</span></div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;</div><div class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></div><div class="line">	&#125;);</div><div class="line">	res.end(<span class="string">'handled by child, pid is '</span> + process.pid + <span class="string">'\n'</span>);</div><div class="line">&#125;);</div><div class="line">process.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">m, tcp</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (m === <span class="string">'server'</span>) &#123;</div><div class="line">		tcp.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</div><div class="line">			server.emit(<span class="string">'connection'</span>, socket);</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">&#125;);</div><div class="line"><span class="comment">//多个工作线程同时监听相同端口</span></div></pre></td></tr></table></figure>
+<p>child_process().fork.send()可以发送的句柄有：</p>
+<ol>
+<li>net.Socket tcp套接字</li>
+<li>net.Server tcp服务器 建立在tcp服务上的应用层服务都可以</li>
+<li>net.Native C++层面的tcp套接字或IPC管道</li>
+<li>dgarm.Socket UDP套接字</li>
+<li>dgram.Native c++层面的UDP套接字</li>
+</ol>
+<p>send()方法在将消息发送到IPC前，会组装成两个对象 一个是handle 一个是message：<br>{<br>    cmd: ‘NODE_HANDLE’,<br>    type: ‘net.Server’,<br>    msg: message<br>}</p>
+<p><img src="/picture/child_process_message.png" alt="Smaller icon"></p>
+<p>message会先JSON.stringify()序列化再写入IPC管道（IPC通道只接受字符串），子线程再解析还原为对象，然后触发message事件，这其中还要进行过滤，如果message.cmd的值以NODE_为前缀，就会响应internalMessage事件，例如为NODE_HANDLE，就会取出message.type和得到的文件描述符一起还原</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//此处为接受到tcp服务器句柄后工作线程的还原过程</span></div><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(message, handle, emit)</span> </span>&#123;</div><div class="line">	<span class="keyword">var</span> self = <span class="keyword">this</span>;</div><div class="line">	<span class="keyword">var</span> server = <span class="keyword">new</span> net.Server();</div><div class="line">	server.listen(handle, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">		emit(server);</div><div class="line">	&#125;);</div><div class="line">&#125; </div><div class="line"><span class="comment">// 子进程根据message.type创建对应TCP服务对象,然后监听到文件描述符</span></div><div class="line">上</div></pre></td></tr></table></figure>
+<p>node进程之间只有消息传递，没有实例对象传递</p>
+<h5 id="端口共同监听"><a href="#端口共同监听" class="headerlink" title="端口共同监听"></a>端口共同监听</h5><ul>
+<li>多进程使用相同的文件描述符</li>
+</ul>
+<p>node底层对每个端口监听都设置了SO_REUSEADDR，可以让不同进程对相同的网卡和端口监听，即服务端套接字可以被多进程服用</p>
+<p>setsockopt(tcp-&gt;io_watcher.fd, SOL_SOCKET, SO_REUSEADDR, &amp;on, sizeof(on));</p>
+<p>当独立启动进程时，多个tcp服务器socket套接字的文件描述符互不相同，所以在监听相同端口时会报错。但send()发送句柄再启动的服务，它们引用了相同的文件描述符，并且<strong>文件描述符同一时间只能被一个进程使用，所以当网络请求来时，会出现抢占式服务</strong></p>
+<h3 id="集群稳定"><a href="#集群稳定" class="headerlink" title="集群稳定"></a>集群稳定</h3><h4 id="进程事件"><a href="#进程事件" class="headerlink" title="进程事件"></a>进程事件</h4><ul>
+<li>error 当工作线程无法被复制创建、杀死、无法发送消息时触发</li>
+<li>exit 工作线程退出时触发 ，若正常退出，则第一个参数为退出码，若是kill()的，则第二个参数为杀死进程信号（第一个为null）</li>
+<li>close 工作线程的标准输入输出流中止时触发 参数与exit相同</li>
+<li>disconnect 父进程、工作线程调用disconnect()方法时触发 将关闭监听IPC</li>
+</ul>
+<p>父进程也可以用kill()发送信号 Node提供了kill -l列出的信号对应的事件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">process.on(<span class="string">'SIGTERM'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'Got a SIGTERM, exiting...'</span>);</div><div class="line">	process.exit(<span class="number">1</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'sever running with PID:'</span>,process.pid);</div><div class="line">process.kill(process.pid,<span class="string">'SIGTERM'</span>);</div></pre></td></tr></table></figure>
+<h4 id="自动重启"><a href="#自动重启" class="headerlink" title="自动重启"></a>自动重启</h4><ul>
+<li>当工作线程退出时 启动新的工作进程来服务</li>
+</ul>
+<p><strong>给 process 对象添加 uncaughtException 事件绑定能够避免发生异常时进程直接退出</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// master.js</span></div><div class="line"><span class="keyword">var</span> fork = <span class="built_in">require</span>(<span class="string">'child_process'</span>).fork;</div><div class="line"><span class="keyword">var</span> cpus = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus();</div><div class="line"></div><div class="line"><span class="keyword">var</span> server = <span class="built_in">require</span>(<span class="string">'net'</span>).createServer();</div><div class="line">server.listen(<span class="number">1337</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> workers = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> createWorker = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> worker = fork(__dirname + <span class="string">'/worker.js'</span>);</div><div class="line">	<span class="comment">// 退出时重新启动新的进程</span></div><div class="line">	worker.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'Worker '</span> + worker.pid + <span class="string">' exited.'</span>);</div><div class="line">		<span class="keyword">delete</span> workers[worker.pid];</div><div class="line">		createWorker();</div><div class="line">	&#125;);</div><div class="line">	<span class="comment">// 句柄转发</span></div><div class="line">	worker.send(<span class="string">'server'</span>, server);</div><div class="line">	workers[worker.pid] = worker;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'Create worker. pid: '</span> + worker.pid);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; cpus.length; i++) &#123;</div><div class="line">	createWorker();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//主进程自己退出时，让所有工作进程退出 </span></div><div class="line">process.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">var</span> pid <span class="keyword">in</span> workers) &#123;</div><div class="line">		workers[pid].kill();</div><div class="line">	&#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>当工作线程出现未捕获的异常，就立刻停止接受新的连接，在所有连接断开后退出，主进程帧听到exit后启动新的进程服务</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// worker.js</span></div><div class="line"><span class="keyword">var</span> http = <span class="keyword">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>, &#123;</div><div class="line">		<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span></div><div class="line">	&#125;);</div><div class="line">	res.end(<span class="string">'handled by child, pid is '</span> + process.pid + <span class="string">'\n'</span>);</div><div class="line">&#125;);</div><div class="line"><span class="keyword">var</span> worker;</div><div class="line">process.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span><span class="params">(m, tcp)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (m === <span class="string">'server'</span>) &#123;</div><div class="line">		worker = tcp;</div><div class="line">		worker.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span><span class="params">(socket)</span> </span>&#123;</div><div class="line">			server.emit(<span class="string">'connection'</span>, socket);</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">&#125;);</div><div class="line">process.on(<span class="string">'uncaughtException'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="comment">//停止接收新的连接 </span></div><div class="line">	worker.close(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="comment">// 所有已有的连接断开后，退出进程</span></div><div class="line">		process.<span class="keyword">exit</span>(<span class="number">1</span>);</div><div class="line">	&#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h5 id="自杀信号"><a href="#自杀信号" class="headerlink" title="自杀信号"></a>自杀信号</h5><ul>
+<li>当子工作线程因为意外要退出时 先发送自杀信号 再开始退出</li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="regexp">//</span> worker.js</div><div class="line">process.on(<span class="string">'uncaughtException'</span>, <span class="keyword">function</span>(err) &#123;</div><div class="line">	<span class="regexp">//</span>记录日志</div><div class="line">	logger.error(err);</div><div class="line">	<span class="regexp">//</span> 发送自杀信号</div><div class="line">	process.send(&#123;</div><div class="line">		act: <span class="string">'suicide'</span></div><div class="line">	&#125;);</div><div class="line">	<span class="regexp">//</span> 停止接收新的连接 </div><div class="line">	worker.close(<span class="keyword">function</span>() &#123;</div><div class="line">		<span class="regexp">//</span> 所有已有连接断开后，退出进程</div><div class="line">		process.<span class="keyword">exit</span>(<span class="number">1</span>);</div><div class="line">	&#125;);		</div><div class="line">	<span class="regexp">//</span> <span class="number">5</span>秒后退出进程 此处不graceful</div><div class="line">	setTimeout(<span class="keyword">function</span>() &#123;</div><div class="line">		process.<span class="keyword">exit</span>(<span class="number">1</span>);</div><div class="line">	&#125;, <span class="number">5000</span>);</div><div class="line">&#125;);</div><div class="line"><span class="regexp">//</span>原本在<span class="keyword">exit</span>重启新进程的，改为在message事件中</div><div class="line">var createWorker = <span class="keyword">function</span>() &#123;</div><div class="line">	var worker = fork(__dirname + <span class="string">'/worker.js'</span>); </div><div class="line">	<span class="regexp">//</span> 启动新的进程</div><div class="line">	worker.on(<span class="string">'message'</span>, <span class="keyword">function</span>(message) &#123;</div><div class="line">		<span class="keyword">if</span> (message.act === <span class="string">'suicide'</span>) &#123;</div><div class="line">			createWorker();</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">	worker.on(<span class="string">'exit'</span>, <span class="keyword">function</span>() &#123;</div><div class="line">		console.log(<span class="string">'Worker '</span> + worker.pid + <span class="string">' exited.'</span>);</div><div class="line">		<span class="keyword">delete</span> workers[worker.pid];</div><div class="line">	&#125;);</div><div class="line">	worker.send(<span class="string">'server'</span>, server);</div><div class="line">	workers[worker.pid] = worker;</div><div class="line">	console.log(<span class="string">'Create worker. pid: '</span> + worker.pid);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h5 id="限量重启"><a href="#限量重启" class="headerlink" title="限量重启"></a>限量重启</h5><ul>
+<li>避免因为在启动过程就出现错误 导致进程一直被重启</li>
+</ul>
+<p>限制单位时间内重启次数，超过限制就触发giveup事件，并且<strong>对于此事件要着重加日志</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 重启次数 </span></div><div class="line"><span class="keyword">var</span> limit = <span class="number">10</span>;</div><div class="line"><span class="comment">// 时间单位</span></div><div class="line"><span class="keyword">var</span> during = <span class="number">60000</span>;</div><div class="line"><span class="keyword">var</span> restart = [];</div><div class="line"><span class="keyword">var</span> isTooFrequently = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">// 记录重启时间</span></div><div class="line">	<span class="keyword">var</span> time = <span class="built_in">Date</span>.now();</div><div class="line">	<span class="keyword">var</span> length = restart.push(time);</div><div class="line">	<span class="keyword">if</span> (length &gt; limit) &#123;</div><div class="line">		<span class="comment">// 取出最后10次记录</span></div><div class="line">		restart = restart.slice(limit * <span class="number">-1</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">// 最后一次重启到前10次重启之间的时间间隔 </span></div><div class="line">	<span class="keyword">return</span> restart.length &gt;= limit &amp;&amp; restart[restart.length - <span class="number">1</span>] - restart[<span class="number">0</span>] &lt; during;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> workers = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> createWorker = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">// 检查是否太过频繁 </span></div><div class="line">	<span class="keyword">if</span> (isTooFrequently()) &#123;</div><div class="line">		<span class="comment">// 触发giveup事件后，不再重启 </span></div><div class="line">		process.emit(<span class="string">'giveup'</span>, length, during);</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">var</span> worker = fork(__dirname + <span class="string">'/worker.js'</span>);</div><div class="line">	worker.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'Worker '</span> + worker.pid + <span class="string">' exited.'</span>);</div><div class="line">		<span class="keyword">delete</span> workers[worker.pid];</div><div class="line">	&#125;);</div><div class="line">	<span class="comment">// 重新启动新的进程</span></div><div class="line">	worker.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">message</span>) </span>&#123;</div><div class="line">		<span class="keyword">if</span> (message.act === <span class="string">'suicide'</span>) &#123;</div><div class="line">			createWorker();</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">	<span class="comment">// 句柄转发</span></div><div class="line">	worker.send(<span class="string">'server'</span>, server);</div><div class="line">	workers[worker.pid] = worker;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'Create worker. pid: '</span> + worker.pid);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h4 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h4><ul>
+<li>Round-Robin 轮叫调度</li>
+</ul>
+<p>对于Node而言，它繁忙部分有CPU和I/O，影响抢占的是CPU的繁忙度，所以使用抢占式服务可能会导致负载不均衡。</p>
+<p>多线程/多进程等待同一个 socket 事件，当这个事件发生时，这些线程/进程被同时唤醒，就是<strong>惊群</strong>。可以想见，效率很低下，许多进程被内核重新调度唤醒，同时去响应这一个事件，当然只有一个进程能处理事件成功，其他的进程在处理该事件失败后重新休眠（也有其他选择）。这种性能浪费现象就是惊群。</p>
+<p>轮叫调度是由主线程接受连接，将它依次分发给工作线程，分发策略为：在N个工作线程中，每次选择第i=(i+1)mod n个进程来发送连接</p>
+<p>可以在cluster模块中启用：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 启用Round-Robin</span></div><div class="line">cluster<span class="selector-class">.schedulingPolicy</span> = cluster<span class="selector-class">.SCHED_RR</span> </div><div class="line"><span class="comment">// 不启用Round-Robin</span></div><div class="line">cluster<span class="selector-class">.schedulingPolicy</span> = cluster<span class="selector-class">.SCHED_NONE</span></div><div class="line"></div><div class="line">或者者在环境变量中设置NODE_CLUSTER_SCHED_POLICY的值    </div><div class="line">export NODE_CLUSTER_SCHED_POLICY=rr</div><div class="line">export NODE_CLUSTER_SCHED_POLICY=<span class="attribute">none</span></div></pre></td></tr></table></figure>
+<p>Round-Robin也可以通过代理服务器实现</p>
+<h4 id="状态共享"><a href="#状态共享" class="headerlink" title="状态共享"></a>状态共享</h4><ul>
+<li>在多个进程中共享数据</li>
+</ul>
+<p>将数据放到数据库、文件、缓存，在进程启动时读取进内存。但在数据改变时，需要通知各个工作线程，使它们及时同步状态</p>
+<p><code>定时轮询</code>各个工作线程向第三方定时轮询。但轮询时间设定比较麻烦，过短会有并发处理，且增加性能损耗，过长则会导致数据更新不及时</p>
+<p><code>主动通知</code> 新建通知进程(服务)，由它来轮询获取数据更新，并通知工作线程.为了能跨服务器使用，可以使用TCP,UDP来通信。进程在启动时，主动将进程信息注册到通知服务，通知服务依次来通知</p>
+<p><img src="/picture/node_process_notify.png" alt="Smaller icon"></p>
+<h3 id="Cluster模块"><a href="#Cluster模块" class="headerlink" title="Cluster模块"></a>Cluster模块</h3><ul>
+<li>child_process和net模块的组合 </li>
+<li>提供完善的API,但没有child_process灵活</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cluster = <span class="built_in">require</span>(<span class="string">'cluster'</span>);</div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> numCPUs = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus().length;</div><div class="line"><span class="keyword">if</span> (cluster.isMaster) &#123;</div><div class="line">	<span class="comment">// Fork workers</span></div><div class="line">	<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; numCPUs; i++) &#123;</div><div class="line">		cluster.fork();</div><div class="line">	&#125;</div><div class="line">	cluster.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">worker, code, signal</span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'worker '</span> + worker.process.pid + <span class="string">' died'</span>);</div><div class="line">	&#125;);</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">	<span class="comment">// Workers can share any TCP connection</span></div><div class="line">	<span class="comment">// In this case its a HTTP server </span></div><div class="line">	http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">		res.writeHead(<span class="number">200</span>);</div><div class="line">		res.end(<span class="string">"hello world\n"</span>);</div><div class="line">	&#125;).listen(<span class="number">8000</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在进程中判断是主进程还是工作进程：主要通过环境变量的NODE_UNIQUE_ID</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">cluster</span>.isWorker = (<span class="string">'NODE_UNIQUE_ID'</span> <span class="keyword">in</span> process.<span class="keyword">env</span>); </div><div class="line"><span class="keyword">cluster</span>.isMaster = (<span class="keyword">cluster</span>.isWorker === false);</div><div class="line"><span class="comment">//使用cluster.setupMaster()设置主进程</span></div></pre></td></tr></table></figure>
+<p>Cluster会在内部启动TCP服务器，在fork()工作线程时，将tcp服务器的socket文件描述符发送给工作线程，并行该工作线程的环境变量里存在NODE_UNIQUE_ID。<strong>如果工作线程有listen()帧听端口，就会拿到文件描述符</strong>，通过SO_REUSEADDR设置实现端口共享。</p>
+<p>使用cluster模块后，无法主动指定要共享的socket文件描述符，所以<strong>主进程只能管理一组工作进程</strong>。而使用child_process则<strong>可以创建多个tcp服务器</strong>，共享多个socket</p>
+<h4 id="Cluster事件"><a href="#Cluster事件" class="headerlink" title="Cluster事件"></a>Cluster事件</h4><ul>
+<li>fork  复制一个工作线程后触发</li>
+<li>online 复制工作线程完成后，工作线程主动发送online消息给主进程，主进程收到消息后触发</li>
+<li>listening 工作线程调用listen()后，会发送listening消息给主进程，主进程收到消息后触发</li>
+<li>disconnect 主进程和工作线程的IPC通道断开后触发</li>
+<li>exit 工作线程退出时触发</li>
+<li>setup cluster.setupMaster()执行后触发</li>
+</ul>
+<p>上面的事件大都和child_process相关，是在进程间消息传递的基础上封装完成的</p>
+<h3 id="graceful"><a href="#graceful" class="headerlink" title="graceful"></a>graceful</h3><ul>
+<li>优雅退出进程</li>
+</ul>
+<p>在调用http.createServer().close()关闭server时，它会停止接收新的连接，但对于keepalive的连接，它依然会继续接受，导致close()无法完成</p>
+<p>解决方案：</p>
+<ul>
+<li>记录所有连接 在关闭时全部销毁</li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">enableDestroy</span><span class="params">(server)</span> </span>&#123;</div><div class="line">  <span class="keyword">var</span> connections = &#123;&#125;</div><div class="line"></div><div class="line">  server.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span><span class="params">(conn)</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> key = conn.remoteAddress + <span class="string">':'</span> + conn.remotePort;</div><div class="line">    connections[key] = conn;</div><div class="line">    conn.on(<span class="string">'close'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">      <span class="keyword">delete</span> connections[key];</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  server.destroy = <span class="function"><span class="keyword">function</span><span class="params">(cb)</span> </span>&#123;</div><div class="line">    server.close(cb);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> connections)</div><div class="line">      connections[key].destroy();</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>但是太浪费内存了</p>
+<p>req.socket.destroy()</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/19/nodejs-web应用-二/" itemprop="url">
+                  nodejs web应用(二)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-08-19T17:13:16+08:00" content="2016-08-19">
+              2016-08-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/19/nodejs-web应用-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/19/nodejs-web应用-二/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="数据上传"><a href="#数据上传" class="headerlink" title="数据上传"></a>数据上传</h3><p>node的http模块(HTTP_Parse)只对http头部进行解析，内容部分通过data事件触发，以buffer方式处理</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> hasBody = <span class="function"><span class="keyword">function</span><span class="params">(req)</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="string">'transfer-encoding'</span> <span class="keyword">in</span> req.headers || <span class="string">'content-length'</span> <span class="keyword">in</span> req.headers;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (hasBody(req)) &#123;</div><div class="line">		<span class="keyword">var</span> buffers = [];</div><div class="line">		req.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span><span class="params">(chunk)</span> </span>&#123;</div><div class="line">			buffers.push(chunk);</div><div class="line">		&#125;);</div><div class="line">		req.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">			req.rawBody = Buffer.concat(buffers).toString();<span class="comment">//buffer.toString()转换成字符串 默认utf-8</span></div><div class="line">			handle(req, res);</div><div class="line">		&#125;);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		handle(req, res);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h4><p><code>表单数据</code>:Content-Type: application/x-www-form-urlencoded，内容格式和查询字符串相同,foo=bar&amp;baz=val</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (req.headers[<span class="string">'content-type'</span>] === <span class="string">'application/x-www-form-urlencoded'</span>) &#123;</div><div class="line">		req.body = querystring.parse(req.rawBody);</div><div class="line">	&#125;</div><div class="line">	todo(req, res);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><code>json数据</code>:Content-Type: application/json; charset=utf-8 可能附带编码信息</p>
+<pre><code>var mime = function(req) {
+    var str = req.headers[&apos;content-type&apos;] || &apos;&apos;;
+    return str.split(&apos;;&apos;)[0];
+};
+</code></pre><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (mime(req) === <span class="string">'application/json'</span>) &#123;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			req.body = <span class="built_in">JSON</span>.parse(req.rawBody);</div><div class="line">		&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">			<span class="comment">// 异常内容 响应Bad request </span></div><div class="line">			res.writeHead(<span class="number">400</span>);</div><div class="line">			res.end(<span class="string">'Invalid JSON'</span>);</div><div class="line">			<span class="keyword">return</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	todo(req, res);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><code>xml数据</code>:Content-Type：application/xml</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xml2js = <span class="built_in">require</span>(<span class="string">'xml2js'</span>);</div><div class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (mime(req) === <span class="string">'application/xml'</span>) &#123;</div><div class="line">		xml2js.parseString(req.rawBody, <span class="function"><span class="keyword">function</span>(<span class="params">err, xml</span>) </span>&#123;</div><div class="line">			<span class="keyword">if</span> (err) &#123;</div><div class="line">				<span class="comment">// 异常内容 响应Bad request </span></div><div class="line">				res.writeHead(<span class="number">400</span>); </div><div class="line">				res.end(<span class="string">'Invalid XML'</span>); </div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;</div><div class="line">			req.body = xml;</div><div class="line">			todo(req, res);</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h4 id="附件上传"><a href="#附件上传" class="headerlink" title="附件上传"></a>附件上传</h4><ul>
+<li>特殊表单，包含file控件</li>
+<li>指定表单属性enctype=”multipart/form-data”</li>
+</ul>
+<p>Content-Type: multipart/form-data; boundary=AaB03x Content-Length: 18231<br>内容可能是由多部分组成，boundary指定每部分内容分界符</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (hasBody(req)) &#123;</div><div class="line">		<span class="keyword">var</span> done = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">			handle(req, res);</div><div class="line">		&#125;;</div><div class="line">		<span class="keyword">if</span> (mime(req) === <span class="string">'application/json'</span>) &#123;</div><div class="line">			parseJSON(req, done);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (mime(req) === <span class="string">'application/xml'</span>) &#123;</div><div class="line">			parseXML(req, done);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (mime(req) === <span class="string">'multipart/form-data'</span>) &#123;</div><div class="line">			parseMultipart(req, done);</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		handle(req, res);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//或者使用模块</span></div><div class="line"><span class="keyword">var</span> formidable = <span class="built_in">require</span>(<span class="string">'formidable'</span>);</div><div class="line"><span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (hasBody(req)) &#123;</div><div class="line">		<span class="keyword">if</span> (mime(req) === <span class="string">'multipart/form-data'</span>) &#123;</div><div class="line">			<span class="keyword">var</span> form = <span class="keyword">new</span> formidable.IncomingForm();</div><div class="line">			form.parse(req, <span class="function"><span class="keyword">function</span>(<span class="params">err, fields, files</span>) </span>&#123;</div><div class="line">				req.body = fields;</div><div class="line">				req.files = files;</div><div class="line">				handle(req, res);</div><div class="line">			&#125;);</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		handle(req, res);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="数据上传与安全"><a href="#数据上传与安全" class="headerlink" title="数据上传与安全"></a>数据上传与安全</h4><h5 id="内存限制"><a href="#内存限制" class="headerlink" title="内存限制"></a>内存限制</h5><ul>
+<li>限制上传内容大小，超过限制就不接受并发返回400</li>
+<li>流式处理，将数据流保存在磁盘，node只保存文件路径</li>
+</ul>
+<p>通常node会先保存用户提交的数据，但提交数据过大时，会导致内存占光</p>
+<p>Connect对上传数据量的限制方式</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> received = <span class="number">0</span>,</div><div class="line">		<span class="keyword">var</span> len = req.headers[<span class="string">'content-length'</span>] ? <span class="built_in">parseInt</span>(req.headers[<span class="string">'content-length'</span>], <span class="number">10</span>) : <span class="literal">null</span>;</div><div class="line">	<span class="comment">// 如果内超过长度限制，返回请求实体过长的状态码 </span></div><div class="line">	<span class="keyword">if</span> (len &amp;&amp; len &gt; bytes) &#123;</div><div class="line">		res.writeHead(<span class="number">413</span>);</div><div class="line">		res.end();</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="comment">// limit</span></div><div class="line">	req.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>) </span>&#123;</div><div class="line">		received += chunk.length;</div><div class="line">		<span class="keyword">if</span> (received &gt; bytes) &#123;</div><div class="line">			<span class="comment">//停止接收数据，触发end()</span></div><div class="line">			req.destroy();</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">	handle(req, res);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h5 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h5><ul>
+<li>Cross-Site Request Forgery 跨站请求伪造</li>
+</ul>
+<p>虽然用户通过浏览器访问服务器的Session ID不能被第三方知道，但攻击者可<strong>以在另外的网站上构造请求</strong>，然后浏览器会根据路由匹配取出cookie并提交到想攻击的服务器</p>
+<p><code>解决方法</code>：添加随机值 在请求时携带</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">为每个请求的用户在session中赋予随机值，并在response中告知,然后在请求时返回</div><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	<span class="keyword">var</span> token = req.session._csrf || (req.session._csrf = generateRandom(<span class="number">24</span>));</div><div class="line">	<span class="keyword">var</span> _csrf = req.body._csrf;</div><div class="line">	<span class="keyword">if</span> (token !== _csrf) &#123;</div><div class="line">		res.writeHead(<span class="number">403</span>);</div><div class="line">		res.end(<span class="string">"禁止访问"</span>);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		handle(req, res);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><a href="https://www.npmjs.com/package/csurf" target="_blank">express的解决方案</a></p>
+<h3 id="路由解析"><a href="#路由解析" class="headerlink" title="路由解析"></a>路由解析</h3><h4 id="文件路径型"><a href="#文件路径型" class="headerlink" title="文件路径型"></a>文件路径型</h4><p><code>静态文件</code>： url的路径和网站目录路径一致</p>
+<p><code>动态文件</code>： 服务器根据url路径找到对应的文件，再根据后缀找到脚步的解释器</p>
+<h4 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h4><ul>
+<li>控制器 Controller 行为集合，根据url找到对应的控制器和行为</li>
+<li>模型 Model 数据操作封装</li>
+<li>视图 View 视图渲染，调用视图和相关数据进行页面渲染，输出到客户端</li>
+</ul>
+<h5 id="手工映射"><a href="#手工映射" class="headerlink" title="手工映射"></a>手工映射</h5><p>需要手工配置路由，但url格式灵活</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//完全匹配，配置映射</span></div><div class="line"><span class="keyword">var</span> routes = [];</div><div class="line"><span class="keyword">var</span> <span class="keyword">use</span> = <span class="function"><span class="keyword">function</span> <span class="params">(path, action)</span> </span>&#123; routes.push([path, action]);&#125;;</div><div class="line"></div><div class="line"><span class="keyword">use</span>(<span class="string">'/user/setting'</span>, exports.setting); </div><div class="line"><span class="keyword">use</span>(<span class="string">'/setting/user'</span>, exports.setting);</div></pre></td></tr></table></figure>
+<ul>
+<li>正则匹配</li>
+</ul>
+<p>在注册路由时将路径转为一个正则表达式，然后用它来匹配</p>
+<figure class="highlight qml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> pathRegexp = <span class="function"><span class="keyword">function</span>(<span class="params">path</span>) </span>&#123;</div><div class="line">	<span class="built_in">var</span> keys = [];</div><div class="line">	path = path</div><div class="line">		.concat(strict ? <span class="string">''</span> : <span class="string">'/?'</span>)</div><div class="line">		.replace(<span class="regexp">/\/\(/g</span>, <span class="string">'(?:/'</span>)</div><div class="line">		.replace(<span class="regexp">/(\/)?(\.)?:(\w+)(?:(\(.*?\)))?(\?)?(\*)?/g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">_, slash, format, key, capture,</span></span></div><div class="line">			optional, star) &#123;</div><div class="line">			<span class="comment">// 将匹配到的键值保存   </span></div><div class="line">			keys.push(key);</div><div class="line">			slash = slash || <span class="string">''</span>;</div><div class="line">			<span class="keyword">return</span> <span class="string">''</span> + (optional ? <span class="string">''</span> : slash) + <span class="string">'(?:'</span></div><div class="line">			+ (optional ? <span class="attribute">slash</span> : <span class="string">''</span>) + (format || <span class="string">''</span>) </div><div class="line">			+ (capture || (format &amp;&amp; <span class="string">'([^/.]+?)'</span> || <span class="string">'([^/]+?)'</span>)) + <span class="string">')'</span> </div><div class="line">			+ (optional || <span class="string">''</span>) + (star ? <span class="string">'(/*)?'</span> : <span class="string">''</span>);</div><div class="line">		&#125;)</div><div class="line">		.replace(<span class="regexp">/([\/.])/g</span>, <span class="string">'\\$1'</span>)</div><div class="line">		.replace(<span class="regexp">/\*/g</span>, <span class="string">'(.*)'</span>);</div><div class="line">	<span class="keyword">return</span> &#123;</div><div class="line">		<span class="attribute">keys</span>: keys,</div><div class="line">		<span class="attribute">regexp</span>: <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">'^'</span> + path + <span class="string">'$'</span>)</div><div class="line">	&#125;;</div><div class="line">&#125;</div><div class="line"><span class="comment">//修改路由注册</span></div><div class="line"><span class="built_in">var</span> use = <span class="function"><span class="keyword">function</span> (<span class="params">path, action</span>) </span>&#123; routes.push([pathRegexp(path), action]);&#125;;</div><div class="line"><span class="comment">//匹配</span></div><div class="line"><span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	<span class="built_in">var</span> pathname = <span class="built_in">url</span>.parse(req.url).pathname;</div><div class="line">	<span class="keyword">for</span> (<span class="built_in">var</span> i = <span class="number">0</span>; i &lt; routes.length; i++) &#123;</div><div class="line">		<span class="built_in">var</span> route = routes[i];</div><div class="line">		<span class="comment">// 正则匹配</span></div><div class="line">		<span class="built_in">var</span> reg = route[<span class="number">0</span>].regexp;</div><div class="line">		<span class="built_in">var</span> keys = route[<span class="number">0</span>].keys;</div><div class="line">		<span class="built_in">var</span> matched = reg.exec(pathname);</div><div class="line">		<span class="keyword">if</span> (matched) &#123;</div><div class="line">			<span class="comment">// 将参数内容抽取设置到req.params </span></div><div class="line">			<span class="built_in">var</span> params = &#123;&#125;;</div><div class="line">			<span class="keyword">for</span> (<span class="built_in">var</span> i = <span class="number">0</span>, l = keys.length; i &lt; l; i++) &#123;</div><div class="line">				<span class="built_in">var</span> value = matched[i + <span class="number">1</span>];c</div><div class="line">				<span class="keyword">if</span> (value) &#123;</div><div class="line">					params[keys[i]] = value;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			req.params = params;</div><div class="line">			<span class="built_in">var</span> action = route[<span class="number">1</span>];</div><div class="line">			action(req, res);</div><div class="line">			<span class="keyword">return</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="comment">// 处理404请求</span></div><div class="line">	handle404(req, res);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="自然映射"><a href="#自然映射" class="headerlink" title="自然映射"></a>自然映射</h5><ul>
+<li>按照约定的方式去查找</li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">/controller/action/param1/param2/param3</div><div class="line"></div><div class="line">exports.setting = <span class="function"><span class="keyword">function</span> <span class="params">(req, res, month, year)</span> </span>&#123;</div><div class="line"><span class="comment">// 如路径为/user/setting/12/1987  那么month为12 year为1987 </span></div><div class="line"><span class="comment">// TODO</span></div><div class="line"> &#125;;</div></pre></td></tr></table></figure>
+<h4 id="RESTful"><a href="#RESTful" class="headerlink" title="RESTful"></a>RESTful</h4><ul>
+<li>Representational State Transfer (资源)表现层状态转化</li>
+<li>将服务器提供的内容看做有个资源，每一个URI代表一种资源</li>
+<li>客户端通过四个HTTP动词，对服务器端资源进行操作，实现对资源的操作</li>
+<li>无状态 客户端和服务器交互的过程中是无状态，即服务器不保存用户状态信息（无session）</li>
+</ul>
+<p>对服务器上的资源可以用URI（统一资源定位符）指向它，然后通过URI与资源互动，就是http的四个动作：GET、POST、PUT、DELETE</p>
+<p>RESTful架构的状态包含两个，<strong>一是应用状态，二是资源状态</strong>。应用状态是与某一请求相关的状态信息；资源状态是服务器资源在某一时刻的特定状态，任何请求<strong>在同一时刻</strong>都会获得这一状态。RESTful的无状态是不保存应用状态，需要由请求方在请求时提高</p>
+<p><strong>应用无状态的服务器，可以自由调度请求，更好的实现负载均衡，分布式，并减少宕机带来的风险。</strong></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/02/nodejs-web应用-一/" itemprop="url">
+                  nodejs web应用(一)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-08-02T17:50:42+08:00" content="2016-08-02">
+              2016-08-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/02/nodejs-web应用-一/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/02/nodejs-web应用-一/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="请求解析"><a href="#请求解析" class="headerlink" title="请求解析"></a>请求解析</h3><p>请求方法在报文的第一行，路径在其后</p>
+<pre><code>&gt; GET /path?foo=bar HTTP/1.1
+&gt; User-Agent: curl/7.24.0 (x86_64-apple-darwin12.0) libcurl/7.24.0 OpenSSL/0.9.8r zlib/1.2.5
+&gt; Host: 127.0.0.1:1337 
+&gt; Accept: */*
+</code></pre><p>HTTP_Parser在解析时，把报文头的方法取出来设置为req.method，把路径设置为req.url.根据路径进行业务处理的通常有静态文件服务器，选择控制器（/controller/action/a/b/c）</p>
+<p><code>查询字符串</code>：位于路径?之后，可用node提供的querystring处理，也可用url模块，url.parse(req.url,true).query<br>如果查询字符串的键出现多次，它的值会变成数组</p>
+<h3 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h3><ul>
+<li>记录状态</li>
+<li>服务端先向客户端发送cookie，浏览器保存，之后每次请求都会带上它</li>
+</ul>
+<h4 id="构造cookie"><a href="#构造cookie" class="headerlink" title="构造cookie"></a>构造cookie</h4><figure class="highlight 1c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//curl构造cookie字段</span></div><div class="line">curl -v -H <span class="string">"Cookie: foo=bar; baz=val"</span> <span class="string">"http://127.0.0.1:1337/path?foo=bar&amp;foo=baz"</span></div></pre></td></tr></table></figure>
+<p>HTTP_Parser会把cookie解析到req.headers.cookie上，格式为key=value;keys=value2</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> parseCookie = <span class="function"><span class="keyword">function</span><span class="params">(cookie)</span> </span>&#123;</div><div class="line">	<span class="keyword">var</span> cookies = &#123;&#125;;</div><div class="line">	<span class="keyword">if</span> (!cookie) &#123;</div><div class="line">		<span class="keyword">return</span> cookies;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">var</span> <span class="keyword">list</span> = cookie.split(<span class="string">';'</span>);</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">list</span>.length; i++) &#123;</div><div class="line">		<span class="keyword">var</span> pair = <span class="keyword">list</span>[i].split(<span class="string">'='</span>);</div><div class="line">		cookies[pair[<span class="number">0</span>].trim()] = pair[<span class="number">1</span>];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> cookies;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>发送cookie通过<strong>响应报文</strong>：Set-Cookie: name=value; Path=/; Expires=Sun, 23-Apr-23 09:01:35 GMT; Domain=.domain.com;</p>
+<ul>
+<li>path cookie使用的路径，路径不满足不会发送</li>
+<li>Expires 过期时间 Max-Age 多久后过期 不设置的话关闭浏览器cookie就丢失</li>
+<li>HttpOnly 不可过脚本document.cookie修改</li>
+<li>secure 只对https生效</li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">// cookie序列规范化</div><div class="line"><span class="symbol">var</span> serialize = <span class="meta">function</span>(name, val, <span class="meta">opt</span>) &#123;</div><div class="line">	var pairs = [name + <span class="string">'='</span> + encode(val)]<span class="comment">;</span></div><div class="line">	<span class="meta">opt</span> = <span class="meta">opt</span> <span class="title">||</span> &#123;&#125;<span class="comment">;</span></div><div class="line">	<span class="meta">if</span> (<span class="meta">opt</span>.maxAge) pairs.<span class="keyword">push('Max-Age=' </span>+ <span class="meta">opt</span>.maxAge)<span class="comment">;</span></div><div class="line">	<span class="meta">if</span> (<span class="meta">opt</span>.domain) pairs.<span class="keyword">push('Domain=' </span>+ <span class="meta">opt</span>.domain)<span class="comment">;</span></div><div class="line">	<span class="meta">if</span> (<span class="meta">opt</span>.path) pairs.<span class="keyword">push('Path=' </span>+ <span class="meta">opt</span>.path)<span class="comment">;</span></div><div class="line">	<span class="meta">if</span> (<span class="meta">opt</span>.expires) pairs.<span class="keyword">push('Expires=' </span>+ <span class="meta">opt</span>.expires.toUTCString())<span class="comment">;</span></div><div class="line">	<span class="meta">if</span> (<span class="meta">opt</span>.httpOnly) pairs.<span class="keyword">push('HttpOnly');</span></div><div class="line">	<span class="meta">if</span> (<span class="meta">opt</span>.secure) pairs.<span class="keyword">push('Secure');</span></div><div class="line">	return pairs.join(<span class="string">'; '</span>)<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>res.setHeader的第二个参数可以是数组以设置多个字段 res.setHeader(‘Set-Cookie’, [serialize(‘foo’, ‘bar’), serialize(‘baz’, ‘val’)]);并且在头部形参两条Set-Cookie</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Set-Cookie: <span class="attr">foo=bar;</span> <span class="attr">Path=/;</span> <span class="attr">Expires=Sun,</span> <span class="number">23</span>-Apr-<span class="number">23</span> <span class="number">09</span>:<span class="number">01</span>:<span class="number">35</span> GMT; <span class="attr">Domain=.domain.com;</span> </div><div class="line">Set-Cookie: <span class="attr">baz=val;</span> <span class="attr">Path=/;</span> <span class="attr">Expires=Sun,</span> <span class="number">23</span>-Apr-<span class="number">23</span> <span class="number">09</span>:<span class="number">01</span>:<span class="number">35</span> GMT; <span class="attr">Domain=.domain.com;</span></div></pre></td></tr></table></figure>
+<h4 id="cookie对性能的影响"><a href="#cookie对性能的影响" class="headerlink" title="cookie对性能的影响"></a>cookie对性能的影响</h4><ul>
+<li>客户端每次请求都会带上服务端发给它cookie，只要路径匹配</li>
+</ul>
+<ol>
+<li>减少cookie的大小</li>
+<li>为静态组件使用不同的域名 静态文件一般不关心状态，用不到cookie,不同的域名cookie不匹配就不会发送，同时也可突破浏览器下载线程数限制</li>
+<li>减少DNS查询 上面的修改会增加dns查询，但浏览器有dns缓存</li>
+</ol>
+<h3 id="session"><a href="#session" class="headerlink" title="session"></a>session</h3><p>因为cookie会被前端修改，不安全并且体积大影响性能。而session的数据只保存在服务端，保障数据安全性，也不用每次传递。session会设置有效期且较短，通常20分钟，即此时间内客户端会与服务端交换，session就删掉了</p>
+<p>需要解决将用户和服务器的session对应</p>
+<h4 id="基于cookie实现用户和数据映射"><a href="#基于cookie实现用户和数据映射" class="headerlink" title="基于cookie实现用户和数据映射"></a>基于cookie实现用户和数据映射</h4><ul>
+<li>将口令（session_id）放在cookie与服务端数据映射</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//生成session</span></div><div class="line"><span class="keyword">var</span> sessions = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> key = 'session_id';</div><div class="line"><span class="keyword">var</span> EXPIRES = <span class="number">20</span> * <span class="number">60</span> * <span class="number">1000</span>;</div><div class="line"><span class="keyword">var</span> <span class="keyword">generate</span> = <span class="keyword">function</span>() &#123;</div><div class="line">	<span class="keyword">var</span> session = &#123;&#125;;</div><div class="line">	session<span class="variable">.id</span> = (<span class="keyword">new</span> Date())<span class="variable">.getTime</span>() + Math<span class="variable">.random</span>();</div><div class="line">	session<span class="variable">.cookie</span> = &#123;</div><div class="line">		expire: (<span class="keyword">new</span> Date())<span class="variable">.getTime</span>() + EXPIRES</div><div class="line">	&#125;;</div><div class="line">	sessions[session<span class="variable">.id</span>] = session;</div><div class="line">	<span class="keyword">return</span> session;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//检查cookie的口令和服务端数据，过期了就重新生成</span></div><div class="line"><span class="keyword">function</span>(req, res) &#123;</div><div class="line">	<span class="keyword">var</span> id = req<span class="variable">.cookies</span>[key];</div><div class="line">	<span class="keyword">if</span> (!id) &#123;</div><div class="line">		req<span class="variable">.session</span> = <span class="keyword">generate</span>();</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">var</span> session = sessions[id];</div><div class="line">		<span class="keyword">if</span> (session) &#123;</div><div class="line">			<span class="keyword">if</span> (session<span class="variable">.cookie</span><span class="variable">.expire</span> &gt; (<span class="keyword">new</span> Date())<span class="variable">.getTime</span>()) &#123;</div><div class="line">				<span class="comment">//更新超时时间</span></div><div class="line">				session<span class="variable">.cookie</span><span class="variable">.expire</span> = (<span class="keyword">new</span> Date())<span class="variable">.getTime</span>() + EXPIRES;</div><div class="line">				req<span class="variable">.session</span> = session;</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">//超时了，删除数据，重新生成</span></div><div class="line">				delete sessions[id];</div><div class="line">				req<span class="variable">.session</span> = <span class="keyword">generate</span>();</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="comment">// 如果session过期或口令不对，重新生成</span></div><div class="line">			req<span class="variable">.session</span> = <span class="keyword">generate</span>();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	handle(req, res);</div><div class="line">&#125;</div><div class="line"><span class="comment">//将口令注入cookie并响应给客户端</span></div><div class="line"><span class="keyword">var</span> writeHead = res<span class="variable">.writeHead</span>;</div><div class="line">res<span class="variable">.writeHead</span> = <span class="keyword">function</span>() &#123;</div><div class="line">	<span class="keyword">var</span> cookies = res<span class="variable">.getHeader</span>('Set-Cookie');</div><div class="line">	<span class="keyword">var</span> session = serialize('Set-Cookie', req<span class="variable">.session</span><span class="variable">.id</span>);</div><div class="line">	cookies = Array<span class="variable">.isArray</span>(cookies) ? cookies<span class="variable">.concat</span>(session) : [cookies, session]; <span class="comment">//array.push()一样</span></div><div class="line">	res<span class="variable">.setHeader</span>('Set-Cookie', cookies);</div><div class="line">	<span class="keyword">return</span> writeHead<span class="variable">.apply</span>(<span class="keyword">this</span>, arguments);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<ul>
+<li>通过查询字符串来让客户端和服务端对应(链接带key)</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//生成带key的url</span></div><div class="line"><span class="keyword">var</span> getURL = <span class="keyword">function</span>(<span class="number">_</span>url, key, value) &#123;</div><div class="line">	<span class="keyword">var</span> obj = url<span class="variable">.parse</span>(<span class="number">_</span>url, true);</div><div class="line">	obj<span class="variable">.query</span>[key] = value;</div><div class="line">	<span class="keyword">return</span> url<span class="variable">.format</span>(obj);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">function</span>(req, res) &#123;</div><div class="line">	<span class="keyword">var</span> redirect = <span class="keyword">function</span>(url) &#123;</div><div class="line">		res<span class="variable">.setHeader</span>('Location', url);</div><div class="line">		res<span class="variable">.writeHead</span>(<span class="number">302</span>);<span class="comment">//让浏览器重定向</span></div><div class="line">		res<span class="variable">.end</span>();</div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">var</span> id = req<span class="variable">.query</span>[key];</div><div class="line">	<span class="keyword">if</span> (!id) &#123;</div><div class="line">		<span class="keyword">var</span> session = <span class="keyword">generate</span>();</div><div class="line">		redirect(getURL(req<span class="variable">.url</span>, key, session<span class="variable">.id</span>));</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">var</span> session = sessions[id];</div><div class="line">		<span class="keyword">if</span> (session) &#123;</div><div class="line">			<span class="keyword">if</span> (session<span class="variable">.cookie</span><span class="variable">.expire</span> &gt; (<span class="keyword">new</span> Date())<span class="variable">.getTime</span>()) &#123;</div><div class="line">				<span class="comment">//更新超时时间</span></div><div class="line">				session<span class="variable">.cookie</span><span class="variable">.expire</span> = (<span class="keyword">new</span> Date())<span class="variable">.getTime</span>() + EXPIRES;</div><div class="line">				req<span class="variable">.session</span> = session;</div><div class="line">				handle(req, res);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">//超时删除旧数据，重新生成</span></div><div class="line">				delete sessions[id];</div><div class="line">				<span class="keyword">var</span> session = <span class="keyword">generate</span>();</div><div class="line">				redirect(getURL(req<span class="variable">.url</span>, key, session<span class="variable">.id</span>));</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="comment">//如果session过期或者口令不对，重新生成session </span></div><div class="line">			<span class="keyword">var</span> session = <span class="keyword">generate</span>(); redirect(getURL(req<span class="variable">.url</span>, key, session<span class="variable">.id</span>));</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="session与安全"><a href="#session与安全" class="headerlink" title="session与安全"></a>session与安全</h4><h5 id="对session用私钥加密"><a href="#对session用私钥加密" class="headerlink" title="对session用私钥加密"></a>对session用私钥加密</h5><ul>
+<li>随机产生口令值可能被命中，并用此套用服务端数据</li>
+</ul>
+<p>在服务端设定私钥，用私钥对口令加密</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 将值通过私钥签名，由.分割原值和签名 </span></div><div class="line"><span class="keyword">var</span> sign = function (<span class="keyword">val</span>, secret) &#123;</div><div class="line"><span class="keyword">return</span> <span class="keyword">val</span> + <span class="string">'.'</span> + crypto.createHmac(<span class="string">'sha256'</span>, secret).update(<span class="keyword">val</span>).digest(<span class="string">'base64'</span>).replace(/\=+$/, <span class="string">''</span>);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//在响应时，设置session值到cookie或跳转url</span></div><div class="line"><span class="keyword">var</span> <span class="keyword">val</span> = sign(req.sessionID, secret); </div><div class="line">res.setHeader(<span class="string">'Set-Cookie'</span>, cookie.serialize(key, <span class="keyword">val</span>));</div><div class="line"></div><div class="line"><span class="comment">//接受请求时取出口令再签名，经行对比</span></div><div class="line"><span class="keyword">var</span> unsign = function(<span class="keyword">val</span>, secret) &#123;</div><div class="line">	<span class="keyword">var</span> str = <span class="keyword">val</span>.slice(<span class="number">0</span>, <span class="keyword">val</span>.lastIndexOf(<span class="string">'.'</span>));</div><div class="line">	<span class="keyword">return</span> sign(str, secret) == <span class="keyword">val</span> ? str : <span class="literal">false</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h5 id="xxs漏洞"><a href="#xxs漏洞" class="headerlink" title="xxs漏洞"></a>xxs漏洞</h5><ul>
+<li>跨站脚本攻击 Access-Control-Allow-Origin</li>
+</ul>
+<p>这个前端脚本会获取页面的url,$(‘#box’).html(location.hash.replace(‘#’, ‘’));攻击者可以把脚本藏在链接后<a href="http://a.com/pathname#" target="_blank" rel="external">http://a.com/pathname#</a><script src="http://b.com/c.js"></script>，再对url压缩。用户打开后脚本会执行，攻击者可以用此获取cookie来伪装用户甚至管理员</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><ul>
+<li>让浏览器缓存静态资源</li>
+<li>通常只适应于get请求</li>
+</ul>
+<p><img src="../picture/get缓存流程.png" alt="Smaller icon"></p>
+<p>一开始本地没有文件，浏览器直接请求服务端并将文件缓存，二次请求时若不能确定是否可用，会发起条件请求，在get中附带If-Modified-Since字段</p>
+<h4 id="使用时间戳"><a href="#使用时间戳" class="headerlink" title="使用时间戳"></a>使用时间戳</h4><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//get报文附带<span class="keyword">If</span>-Modified-Since/<span class="keyword">Last</span>-Modified字段</div><div class="line"><span class="keyword">If</span>-Modified-Since: Sun, <span class="number">03</span> Feb <span class="number">2013</span> <span class="number">06</span>:<span class="number">01</span>:<span class="number">12</span> GMT</div></pre></td></tr></table></figure>
+<p>服务端如果没有新版本就只需要响应<strong>304</strong>，浏览器就会使用本地文件；若更新就发送新文件，让浏览器更新缓存</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	fs.stat(filename, <span class="function"><span class="keyword">function</span><span class="params">(err, stat)</span> </span>&#123;</div><div class="line">		<span class="keyword">var</span> lastModified = stat.mtime.toUTCString();</div><div class="line">		<span class="keyword">if</span> (lastModified === req.headers[<span class="string">'if-modified-since'</span>]) &#123;</div><div class="line">			res.writeHead(<span class="number">304</span>, <span class="string">"Not Modified"</span>);</div><div class="line">			res.end();</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			fs.readFile(filename, <span class="function"><span class="keyword">function</span><span class="params">(err, file)</span> </span>&#123;</div><div class="line">				<span class="keyword">var</span> lastModified = stat.mtime.toUTCString();</div><div class="line">				res.setHeader(<span class="string">"Last-Modified"</span>, lastModified);</div><div class="line">				res.writeHead(<span class="number">200</span>, <span class="string">"Ok"</span>);</div><div class="line">				res.end(file);</div><div class="line">			&#125;);</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>缺点：时间戳改动内容不一定改，只能精确到秒，更新频繁的内容可能不生效</p>
+<h4 id="ETag（Entity-Tag）"><a href="#ETag（Entity-Tag）" class="headerlink" title="ETag（Entity Tag）"></a>ETag（Entity Tag）</h4><ul>
+<li>服务端确定生成规则生成</li>
+<li>请求字段为If-None-Match/ETag</li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//生成文件hash</span></div><div class="line"><span class="keyword">var</span> getHash = <span class="function"><span class="keyword">function</span><span class="params">(str)</span> </span>&#123;</div><div class="line">	<span class="keyword">var</span> shasum = crypto.createHash(<span class="string">'sha1'</span>);</div><div class="line">	<span class="keyword">return</span> shasum.update(str).digest(<span class="string">'base64'</span>);</div><div class="line">&#125;;</div><div class="line"><span class="comment">//请求</span></div><div class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	fs.readFile(filename, <span class="function"><span class="keyword">function</span><span class="params">(err, file)</span> </span>&#123;</div><div class="line">		<span class="keyword">var</span> hash = getHash(file);</div><div class="line">		<span class="keyword">var</span> noneMatch = req.headers[<span class="string">'if-none-match'</span>];</div><div class="line">		<span class="keyword">if</span> (hash === noneMatch) &#123;</div><div class="line">			res.writeHead(<span class="number">304</span>, <span class="string">"Not Modified"</span>);</div><div class="line">			res.end();</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			res.setHeader(<span class="string">"ETag"</span>, hash);</div><div class="line">			res.writeHead(<span class="number">200</span>, <span class="string">"Ok"</span>);</div><div class="line">			res.end(file);</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h4 id="Expires，Cache-Control"><a href="#Expires，Cache-Control" class="headerlink" title="Expires，Cache-Control"></a>Expires，Cache-Control</h4><ul>
+<li>让浏览器明确缓存</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//Expires 设置一个过期时间，可能出现时间不同步，文件提前更新等问题</span></div><div class="line"><span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	fs.readFile(filename, <span class="function"><span class="keyword">function</span>(<span class="params">err, file</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> expires = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">		expires.setTime(expires.getTime() + <span class="number">10</span> * <span class="number">365</span> * <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>);</div><div class="line">		res.setHeader(<span class="string">"Expires"</span>, expires.toUTCString());</div><div class="line">		res.writeHead(<span class="number">200</span>, <span class="string">"Ok"</span>);</div><div class="line">		res.end(file);</div><div class="line">	&#125;);</div><div class="line">&#125;;</div><div class="line"><span class="comment">//Cache-Control 可设置更多选项，使用max-age倒计时</span></div><div class="line"> <span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line"> 	fs.readFile(filename, <span class="function"><span class="keyword">function</span>(<span class="params">err, file</span>) </span>&#123;</div><div class="line"> 		res.setHeader(<span class="string">"Cache-Control"</span>, <span class="string">"max-age="</span> + <span class="number">10</span> * <span class="number">365</span> * <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>);</div><div class="line"> 		res.writeHead(<span class="number">200</span>, <span class="string">"Ok"</span>);</div><div class="line"> 		res.end(file);</div><div class="line"> 	&#125;);</div><div class="line"> &#125;;</div></pre></td></tr></table></figure>
+<p>http1.0不支持max-age，所以要同时设置Expires，Cache-Control，在浏览器中max-age优先级高于Expires</p>
+<h4 id="清除缓存"><a href="#清除缓存" class="headerlink" title="清除缓存"></a>清除缓存</h4><ul>
+<li>浏览器是根据url进行缓存的，内容更新时可以让浏览器发起新的url缓存</li>
+</ul>
+<p>每次发布在路径中跟随文件内容的hash,<a href="http://url.com/?hash=afadfadwe.这样能避免无意义的更新" target="_blank" rel="external">http://url.com/?hash=afadfadwe.这样能避免无意义的更新</a></p>
+<h3 id="Basic认证"><a href="#Basic认证" class="headerlink" title="Basic认证"></a>Basic认证</h3><ul>
+<li>通过用户名和密码实现的身份认证</li>
+</ul>
+<p>当页面需要Basic认证时，会检查请求头部的Authorization字段，它的值由认证方式和加密值构成</p>
+<pre><code>$ curl -v &quot;http://user:pass@www.baidu.com/&quot;
+&gt; GET / HTTP/1.1
+&gt; Authorization: Basic dXNlcjpwYXNz
+&gt; User-Agent: curl/7.24.0 (x86_64-apple-darwin12.0) libcurl/7.24.0 OpenSSL/0.9.8r zlib/1.2.5 
+&gt; Host: www.baidu.com
+&gt; Accept: */*
+</code></pre><p>它会将用户名和密码组合，再Base64编码</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> encode = <span class="function"><span class="keyword">function</span><span class="params">(username, password)</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">new</span> Buffer(username + <span class="string">':'</span> + password).toString(<span class="string">'base64'</span>);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//每次请求都要带上Authorization，对于没有带认证的请求会返回401</span></div><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> </span>&#123;</div><div class="line">	<span class="keyword">var</span> auth = req.headers[<span class="string">'authorization'</span>] || <span class="string">''</span>;</div><div class="line">	<span class="keyword">var</span> parts = auth.split(<span class="string">' '</span>);</div><div class="line">	<span class="keyword">var</span> method = parts[<span class="number">0</span>] || <span class="string">''</span>; <span class="comment">// Basic</span></div><div class="line">	<span class="keyword">var</span> encoded = parts[<span class="number">1</span>] || <span class="string">''</span>; <span class="comment">// dXNlcjpwYXNz，密码字段</span></div><div class="line">	<span class="keyword">var</span> decoded = <span class="keyword">new</span> Buffer(encoded, <span class="string">'base64'</span>).toString(<span class="string">'utf-8'</span>).split(<span class="string">":"</span>);</div><div class="line">	<span class="keyword">var</span> user = decoded[<span class="number">0</span>]; <span class="comment">// user</span></div><div class="line">	<span class="keyword">var</span> pass = decoded[<span class="number">1</span>]; <span class="comment">// pass</span></div><div class="line">	<span class="keyword">if</span> (!checkUser(user, pass)) &#123;</div><div class="line">		res.setHeader(<span class="string">'WWW-Authenticate'</span>, <span class="string">'Basic realm="Secure Area"'</span>);</div><div class="line">		res.writeHead(<span class="number">401</span>);</div><div class="line">		res.end();</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		handle(req, res);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>缺点</code>： 对于密码字段没有加密，只能在https下才能用，但几乎所有浏览器都支持。RFC 2069对它做了改进</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/07/29/nodejs-网络-二/" itemprop="url">
                   nodejs 网络(二)
                 </a>
@@ -1334,646 +2014,6 @@ node --max-new-space-size=1024 test.js // 单位为KB
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/01/pm2介绍/" itemprop="url">
-                  pm2
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-07-01T15:15:27+08:00" content="2016-07-01">
-              2016-07-01
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/01/pm2介绍/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/01/pm2介绍/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <ul>
-<li>pm2 是一个带有负载均衡功能的Node应用的进程管理器</li>
-<li>内建负载均衡（使用Node cluster 集群模块）</li>
-<li>后台运行</li>
-<li>0秒停机重载，热升级</li>
-<li>具有Ubuntu和CentOS 的启动脚本</li>
-<li>停止不稳定的进程（避免无限循环）</li>
-<li>控制台检测</li>
-<li>提供 HTTP API</li>
-<li>远程控制和实时的接口API ( Nodejs 模块,允许和PM2进程管理器交互 )</li>
-<li><a href="https://github.com/Unitech/pm2" target="_blank">github</a></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>command</th>
-<th>explain</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$ pm2 restart .pm2.yml  –only ra</td>
-<td>根据配置文件重启一个服务</td>
-</tr>
-<tr>
-<td>$ npm install pm2 -g</td>
-<td># Install PM2</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js</td>
-<td># Start, Daemonize and auto restart application</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js -i 4</td>
-<td># Start 4 instances of application in cluster mode it will load balance network queries to each app</td>
-</tr>
-<tr>
-<td><strong>$ pm2 start app.js –name=”api”</strong></td>
-<td># Start application and name it “api”</td>
-</tr>
-<tr>
-<td>$ pm2 start app.js –watch</td>
-<td># Restart application on file change</td>
-</tr>
-<tr>
-<td>$ pm2 start script.sh</td>
-<td># Start bash script</td>
-</tr>
-<tr>
-<td>$ pm2 list</td>
-<td># List all processes started with PM2</td>
-</tr>
-<tr>
-<td><strong>$ pm2 monit</strong></td>
-<td># Display memory and cpu usage of each app</td>
-</tr>
-<tr>
-<td>$ pm2 show [app-name]</td>
-<td># Show all informations about application</td>
-</tr>
-<tr>
-<td><strong>$ pm2 logs</strong></td>
-<td># Display logs of all apps</td>
-</tr>
-<tr>
-<td>$ pm2 logs [app-name]</td>
-<td># Display logs for a specific app</td>
-</tr>
-<tr>
-<td>$ pm2 flush</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>$ pm2 stop all</strong></td>
-<td># Stop all apps</td>
-</tr>
-<tr>
-<td>$ pm2 stop 0</td>
-<td># Stop process with id 0</td>
-</tr>
-<tr>
-<td><strong>$ pm2 restart all</strong></td>
-<td># Restart all apps</td>
-</tr>
-<tr>
-<td><strong>$ pm2 reload all</strong></td>
-<td># Reload all apps in cluster mode</td>
-</tr>
-<tr>
-<td>$ pm2 gracefulReload all</td>
-<td># Graceful reload all apps in cluster mode</td>
-</tr>
-<tr>
-<td>$ pm2 delete all</td>
-<td># Kill and delete all apps</td>
-</tr>
-<tr>
-<td>$ pm2 delete 0</td>
-<td># Delete app with id 0</td>
-</tr>
-<tr>
-<td>$ pm2 scale api 10</td>
-<td># Scale app with name api to 10 instances</td>
-</tr>
-<tr>
-<td>$ pm2 reset [app-name]</td>
-<td># Reset number of restart for [app-name]</td>
-</tr>
-<tr>
-<td>$ pm2 startup</td>
-<td># Generate a startup script to respawn PM2 on boot</td>
-</tr>
-<tr>
-<td>$ pm2 save</td>
-<td># Save current process list</td>
-</tr>
-<tr>
-<td>$ pm2 resurrect</td>
-<td># Restore previously save processes</td>
-</tr>
-<tr>
-<td>$ pm2 update</td>
-<td># Save processes, kill PM2 and restore processes</td>
-</tr>
-<tr>
-<td>$ pm2 generate</td>
-<td># Generate a sample json configuration file</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod setup</td>
-<td># Setup “prod” remote server</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod</td>
-<td># Update “prod” remote server</td>
-</tr>
-<tr>
-<td>$ pm2 deploy app.json prod revert 2</td>
-<td># Revert “prod” remote server by 2</td>
-</tr>
-<tr>
-<td>$ pm2 module:generate [name]</td>
-<td># Generate sample module with name [name]</td>
-</tr>
-<tr>
-<td>$ pm2 install pm2-logrotate</td>
-<td># Install module (here a log rotation system)</td>
-</tr>
-<tr>
-<td>$ pm2 uninstall pm2-logrotate</td>
-<td># Uninstall module</td>
-</tr>
-<tr>
-<td>$ pm2 publish</td>
-<td># Increment version, git push and npm publish</td>
-</tr>
-</tbody>
-</table>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/08/redux-学习笔记（1）/" itemprop="url">
-                  redux 学习笔记（1）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-06-08T10:24:46+08:00" content="2016-06-08">
-              2016-06-08
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/React/" itemprop="url" rel="index">
-                    <span itemprop="name">React</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/08/redux-学习笔记（1）/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/08/redux-学习笔记（1）/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="redux的作用"><a href="#redux的作用" class="headerlink" title="redux的作用"></a>redux的作用</h3><p><img src="../picture/redux流程.png" alt="Smaller icon"></p>
-<p>Redux 主要分为三个部分 Action、Reducer、及 Store</p>
-<h4 id="action"><a href="#action" class="headerlink" title="action"></a>action</h4><ul>
-<li>action用来传递操作 State 的信息,以 Javascript Plain Object 的形式存在，形如</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attribute">type</span>: <span class="string">'ADD_FILM'</span>,</div><div class="line">  name: <span class="string">'Mission: Impossible'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>type 属性是必要的，用来表达处理 state 数据的方式，其他属性任意，建议简单</p>
-<p>但为了方便组织，可以创建函数来生产 action，即Action Creator</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="title">addFilm</span>(name) &#123;</div><div class="line">  <span class="keyword">return</span> <span class="type">&#123;</span> <span class="keyword">type</span>: <span class="symbol">'ADD_FILM</span>', name: name &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="Reducer"><a href="#Reducer" class="headerlink" title="Reducer"></a>Reducer</h4><ul>
-<li>处理action传达需要操作的信息</li>
-<li>通过传入旧的 state 和指示操作的 action 来更新 state</li>
-</ul>
-<p>Reducer 根据传入的<strong> action.type</strong> 来匹配 case 进行不同的 state 更新</p>
-<figure class="highlight pf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">function films(<span class="keyword">state</span> = initialState, action) &#123;</div><div class="line">  switch (action.type) &#123;</div><div class="line"> </div><div class="line">  case 'ADD_FILM':</div><div class="line">    // 更新 <span class="keyword">state</span> 中的 films 字段</div><div class="line">    return [&#123;</div><div class="line">      id: <span class="keyword">state</span>.films.reduce((<span class="keyword">max</span>Id, film) =&gt; Math.<span class="keyword">max</span>(film.id, <span class="keyword">max</span>Id), -<span class="number">1</span>) + <span class="number">1</span>,</div><div class="line">      name: action.name</div><div class="line">    &#125;, ...<span class="keyword">state</span>];</div><div class="line"> </div><div class="line">  case 'DELETE_FILM':</div><div class="line">    return <span class="keyword">state</span>.films.filter(film =&gt;</div><div class="line">        film.id !== action.id</div><div class="line">    );</div><div class="line"> </div><div class="line">  case 'SHOW_ALL_FILM':</div><div class="line">    return Object.assign(&#123;&#125;, <span class="keyword">state</span>, &#123;</div><div class="line">        visibilityFilter: action.filter</div><div class="line">      &#125;);</div><div class="line"> //不要修改原先<span class="keyword">state</span>(redux会比较前后两份<span class="keyword">state</span>的引用，相同就直接return不做更新)。 使用 Object.assign() 新建了一个副本</div><div class="line">  <span class="keyword">default</span>:</div><div class="line">    return <span class="keyword">state</span>;</div><div class="line">    //在 <span class="keyword">default</span> 情况下返回旧的 <span class="keyword">state</span>。遇到未知的 action 时，一定要返回旧的 <span class="keyword">state</span>。</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-<p>当 action.type变多时，可以按照功能拆分，在通过组合函数合并</p>
-<figure class="highlight pf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">function rootReducer(<span class="keyword">state</span> = &#123;&#125;, action) &#123;</div><div class="line">  return &#123;</div><div class="line">    films: filmReducer(<span class="keyword">state</span>.films, action),</div><div class="line">    filter: filterReducer(<span class="keyword">state</span>.filter, action)</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line"> // rootReducer 将不同部分的 <span class="keyword">state</span> 传给对应的 reducer 处理，最终合并所有 reducer 的返回值，组成整个<span class="keyword">state</span>。</div><div class="line"> </div><div class="line"> //使用Redux 提供的 combineReducers() 方法</div><div class="line">import &#123; combineReducers &#125; <span class="keyword">from</span> 'redux'</div><div class="line"></div><div class="line">var rootReducer = combineReducers(&#123;</div><div class="line">    films: filmReducer,</div><div class="line">    filter: filterReducer</div><div class="line">  &#125;);</div><div class="line">  </div><div class="line"> //combineReducers() 将调用一系列 reducer，并根据对应的 key 来筛选出 <span class="keyword">state</span> 中的一部分数据给相应的 reducer，这样也意味着每一个小的 reducer 将只能处理 <span class="keyword">state</span> 的一部分数据</div></pre></td></tr></table></figure>
-<h4 id="Store"><a href="#Store" class="headerlink" title="Store"></a>Store</h4><ul>
-<li>衔接action和reducer</li>
-</ul>
-<p>Store 是单一的,维护着一个全局的 State，并且根<strong>据 Action 来进行事件分发处理 State</strong>,Store 是一个把 Action 和 Reducer 结合起来的对象。</p>
-<p>生成store</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123;createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> store = createStore(rootReducer);</div></pre></td></tr></table></figure>
-<p>store 对象可以简单的理解为如下形式</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createStore</span>(<span class="params">reducer, initialState</span>) </span>&#123;</div><div class="line">    <span class="comment">//闭包私有变量 </span></div><div class="line">    <span class="keyword">var</span> currentReducer = reducer;</div><div class="line">    <span class="keyword">var</span> currentState = initialState;</div><div class="line">    <span class="keyword">var</span> listeners = [];</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getState</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> currentState;</div><div class="line">    &#125;    </div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">subscribe</span>(<span class="params">listener</span>) </span>&#123;</div><div class="line">      listeners.push(listener);</div><div class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">unsubscribe</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> index = listeners.indexOf(listener);</div><div class="line">        listeners.splice(index, <span class="number">1</span>);</div><div class="line">      &#125;;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span>(<span class="params">action</span>) </span>&#123;</div><div class="line">        currentState = currentReducer(currentState, action);</div><div class="line">        listeners.slice().forEach(<span class="function"><span class="params">listener</span> =&gt;</span> listener());</div><div class="line">        <span class="keyword">return</span> action;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//返回一个包含可访问闭包变量的公有方法</span></div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">      dispatch,</div><div class="line">      subscribe,</div><div class="line">      getState</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>store.getState() 用来获取 state 数据。<br>store.subscribe(listener) 用于注册监听函数。每当 state 数据更新时，将会触发监听函数。<br>store.dispatch(action) 是用于将一个 action 对象发送给 reducer 进行处理</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">store</span><span class="selector-class">.dispatch</span>(&#123;</div><div class="line">  <span class="attribute">type</span>: <span class="string">'ADD_FILM'</span>,</div><div class="line">  name: <span class="string">'Mission: Impossible'</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h4 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h4><ul>
-<li>Connect 组件主要为 React 组件提供 store 中的部分 state 数据 及 dispatch 方法</li>
-</ul>
-<p>通过<strong>import { connect } from ‘react-redux’</strong>将state的值和action绑定到组件的props上</p>
-<figure class="highlight pf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">import &#123; connect &#125; <span class="keyword">from</span> 'react-redux'</div><div class="line">import Counter <span class="keyword">from</span> '../components/Counter' //一个组件</div><div class="line">import * as CounterActions <span class="keyword">from</span> '../actions/counter'</div><div class="line"></div><div class="line">//将<span class="keyword">state</span>.counter绑定到props的counter</div><div class="line">// <span class="keyword">state</span> 将由 store 提供</div><div class="line">function mapStateToProps(<span class="keyword">state</span>) &#123;</div><div class="line">  return &#123;</div><div class="line">    counter: <span class="keyword">state</span>.counter</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//将action的所有方法绑定到props上</div><div class="line">function mapDispatchToProps(dispatch) &#123;</div><div class="line">  return bindActionCreators(CounterActions, dispatch)</div><div class="line">&#125;</div><div class="line"></div><div class="line">//通过react-redux提供的connect方法将我们需要的<span class="keyword">state</span>中的数据和actions中的方法绑定到props上</div><div class="line">export <span class="keyword">default</span> connect(mapStateToProps, CounterActions)(Counter)</div></pre></td></tr></table></figure>
-<h4 id="saga"><a href="#saga" class="headerlink" title="saga"></a>saga</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123;</div><div class="line">  takeEvery</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'redux-saga'</span></div><div class="line"><span class="keyword">import</span> &#123;</div><div class="line">  call,</div><div class="line">  put,</div><div class="line">  fork,</div><div class="line">  take,</div><div class="line">  cancel</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span></div><div class="line"><span class="keyword">import</span> &#123;</div><div class="line">  GET_LOGINED_REQUEST,</div><div class="line">  LOGIN_REQUEST</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'./login.js'</span></div><div class="line"><span class="keyword">import</span> &#123;</div><div class="line">  loginAPI,</div><div class="line">  loginedAPI</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'../../../api'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">watchRequestLogined</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">yield</span> takeEvery(GET_LOGINED_REQUEST, queryFlow)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">queryFlow</span>(<span class="params">action</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> task = <span class="keyword">yield</span> fork(logined)</div><div class="line">  <span class="keyword">yield</span> take(LOGIN_CANCEL)</div><div class="line">  <span class="keyword">yield</span> cancel(task)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">logined</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">const</span> response = <span class="keyword">yield</span> call(loginedAPI)</div><div class="line">    <span class="keyword">yield</span> put(&#123;</div><div class="line">      <span class="attr">type</span>: LOGIN_SUCCESS,</div><div class="line">      response</div><div class="line">    &#125;)</div><div class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</div><div class="line">    <span class="keyword">yield</span> put(&#123;</div><div class="line">      <span class="attr">type</span>: LOGIN_CANCEL,</div><div class="line">      error</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">watchRequestLogin</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">yield</span> takeEvery(LOGIN_REQUEST, loginFlow)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">authorize</span>(<span class="params">&#123;account, password&#125;</span>)</span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">const</span> response = <span class="keyword">yield</span> call(loginAPI, &#123;</div><div class="line">      account,</div><div class="line">      password</div><div class="line">    &#125;)</div><div class="line">    <span class="keyword">yield</span> put(&#123;</div><div class="line">      <span class="attr">type</span>: LOGIN_SUCCESS,</div><div class="line">      response</div><div class="line">    &#125;)</div><div class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</div><div class="line">    <span class="keyword">yield</span> put(&#123;</div><div class="line">      <span class="attr">type</span>: LOGIN_ERROR,</div><div class="line">      error</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span>* <span class="title">loginFlow</span>(<span class="params">action</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> &#123; account, password &#125; = action.payload</div><div class="line">  <span class="keyword">const</span> task = <span class="keyword">yield</span> fork(authorize, &#123; account, password &#125;)</div><div class="line">  <span class="keyword">yield</span> take(LOGIN_CANCEL)</div><div class="line">  <span class="keyword">yield</span> cancel(task)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/01/Flux/" itemprop="url">
-                  Flux
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-06-01T16:03:51+08:00" content="2016-06-01">
-              2016-06-01
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/01/Flux/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/01/Flux/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ul>
-<li>单向的数据流动</li>
-<li>Flux应用主要包括三部分：dispatcher、store和views（React components）</li>
-</ul>
-<p><img src="../picture/flux-flow.png" alt="Resize icon"></p>
-<h3 id="dispatcher（调度者）"><a href="#dispatcher（调度者）" class="headerlink" title="dispatcher（调度者）"></a>dispatcher（调度者）</h3><ul>
-<li>管理所有的数据流</li>
-<li>本质store callback 的注册表，用来向stores分发action，可以指定注册的callback的执行顺序来管理store之间的依赖</li>
-</ul>
-<h3 id="store-仓库"><a href="#store-仓库" class="headerlink" title="store(仓库)"></a>store(仓库)</h3><ul>
-<li>包含应用的状态和逻辑，管理多个对象状态</li>
-<li>在dispatcher注册，并提供相应的回调</li>
-<li>更新后向应用广播change事件，view响应并重新获取数据</li>
-</ul>
-<h3 id="action"><a href="#action" class="headerlink" title="action"></a>action</h3><ul>
-<li>dispatcher提供了一个可以允许我们向store中触发分发的方法</li>
-</ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/13/支付宝notify-异步通知与https的问题/" itemprop="url">
-                  支付宝notify 异步通知与https的问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-05-13T15:36:49+08:00" content="2016-05-13">
-              2016-05-13
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/13/支付宝notify-异步通知与https的问题/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/13/支付宝notify-异步通知与https的问题/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="问题和解决方法"><a href="#问题和解决方法" class="headerlink" title="问题和解决方法"></a>问题和解决方法</h3><p>在对接支付宝时，发生了这样的问题,使用http链接时，支付宝notify是没有问题的，但换成https后便通知不到了</p>
-<p>最可能的问题便是<strong>ssl证书出错</strong>了,注意支付宝不支持自签名证书（<a href="https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1）" target="_blank" rel="external">https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1）</a></p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">去这个网站检测下你的CSR吧</div><div class="line">https:<span class="regexp">//</span>cryptoreport.websecurity.symantec.com<span class="regexp">/checker/</span>views<span class="regexp">/csrCheck.jsp</span></div></pre></td></tr></table></figure>
-<h3 id="事情经过"><a href="#事情经过" class="headerlink" title="事情经过"></a>事情经过</h3><p>某天，同事们偷偷给网站加了安全套接字，把http换成了https,于是我负责的支付模块就出错了。</p>
-<p>一开始，我就简单改了config,提交给支付宝的notify_url改成了https。本以为就没问题了，但在我又付出了￥0.01的巨款后，发现支付宝还是没有通知过来。。然后就懵逼了</p>
-<p><img src="../picture/懵逼.jpg" alt="Smaller icon"></p>
-<p>懵逼了大概7.8秒后，我就去百度了一下、、、我居然去百度了一下。有人说原因是:</p>
-<blockquote>
-<p>支付宝对ssl证书也有检查，而那种免费的ssl证书通不过检查。后来没办法就只好改成http notify了 </p>
-</blockquote>
-<p>好吧。。。这种解决方法，这尼玛根本就不是个解决方案、</p>
-<p>注：俺们公司用的CA是GeoTrust,不是他们说的免费证书。顺带感叹下做CA真赚钱</p>
-<p>于是又去问支付宝客服，给了他交易号，让他帮我查了下日志,就是这样的<br><img src="../picture/alipaylog.png" alt="Smaller icon"></p>
-<p>http状态码是0耶。看来支付宝确实没有去访问我们的服务器嘛。看来确实在ssl证书检查这块了，但还不清楚是什么问题，还是问问Google吧~（推荐翻墙工具：<a href="http://www.ishadowsocks.net）" target="_blank" rel="external">http://www.ishadowsocks.net）</a></p>
-<p>Google帮我搜到了支付宝的这个<a href="https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1页面(别问我为什么之前没看到。。支付宝文档太多了，我有点眼花),其中对异步通知是这么说的：" target="_blank" rel="external">https://doc.open.alipay.com/doc2/detail?treeId=66&amp;articleId=104422&amp;docType=1页面(别问我为什么之前没看到。。支付宝文档太多了，我有点眼花),其中对异步通知是这么说的：</a></p>
-<blockquote>
-<p>需确认页面是http还是https，如果是https，那么需要安装ssl证书，证书要求有如下：<br>要求“正规的证书机构签发，不支持自签名”，如果不理解请咨询证书供应商。<br>域名证书检测地址参考：<a href="https://cryptoreport.websecurity.symantec.com/checker/" target="_blank" rel="external">https://cryptoreport.websecurity.symantec.com/checker/</a></p>
-</blockquote>
-<p>然后就拿着csr去检测了。。靠，果然有鬼（毕竟不是我写的）~~然后改好重新部署</p>
-<p>再付出巨款做测试，终于等来支付宝敲门啦</p>
-<h3 id="事故总结"><a href="#事故总结" class="headerlink" title="事故总结"></a>事故总结</h3><p>不能说是事故，，因为网站还在测试阶段。。否则，我就该引咎辞职了（宝宝心里苦啊、、）</p>
-<ol>
-<li>仔细看文档 </li>
-<li>不要用百度</li>
-</ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -2020,14 +2060,14 @@ node --max-new-space-size=1024 test.js // 单位为KB
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">73</span>
+              <span class="site-state-item-count">77</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>

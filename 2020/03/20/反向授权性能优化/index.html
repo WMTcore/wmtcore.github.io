@@ -65,7 +65,7 @@ re">
 数据量、大运算慢，频繁根据region_start_id查数据库,返回结果因为展开到商品，对反向涉及到的商品都会带上庞大的区域数据
 插曲深拷贝优化: 展开的授权数据，要从原始授权继承区域，需要深拷贝，直接深拷贝Object太慢，通过immutable做了优化，但涉及到的商品区域数据最后返回时要toJS，速度较慢
 re">
-<meta property="og:updated_time" content="2020-04-02T08:49:35.077Z">
+<meta property="og:updated_time" content="2020-05-30T04:16:35.369Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="反向授权性能优化">
 <meta name="twitter:description" content="之前的问题在做反向计算时，主要涉及到区域数据的比较，通过查出所有子集再循环剔除，
@@ -268,8 +268,8 @@ re">
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/日常坑/" itemprop="url" rel="index">
-                    <span itemprop="name">日常坑</span>
+                  <a href="/categories/工作日常/" itemprop="url" rel="index">
+                    <span itemprop="name">工作日常</span>
                   </a>
                 </span>
 
@@ -326,7 +326,7 @@ re">
 </ol>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
 <li>深拷贝处理可以尝试immutable</li>
-<li>对于层级数据的上下计算，考虑转成平铺的形式，同时保留层级信息,需要将数据缓存在本地计算，适合数据量较小的场景</li>
+<li>对于树形数据的层级计算，考虑转成平铺的形式，同时保留层级信息,需要将数据缓存在本地计算，适合数据量较小的场景</li>
 </ol>
 </span>
       
@@ -421,14 +421,14 @@ re">
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">73</span>
+              <span class="site-state-item-count">77</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>

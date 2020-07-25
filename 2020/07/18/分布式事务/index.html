@@ -1,0 +1,767 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="SoMgkf0fOF" />
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="WMTcore" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="分布式事务是指是指事务的发起者、参与者、数据资源服务器以及事务管理器分别位于分布式系统的不同节点之上参与者通过网络通信来达到分布式一致性，网络通信不可避免出现失败、超时的情况
+XA Specification基于资源层的底层分布式事务解决方案，对业务的入侵度较低
+有些数据分片框架或者中间件也支持XA协议，兼容性、普遍性好 但并发性能比较差， 基于XA的分布式事务如果要严格保证ACID，实际需要事务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式事务">
+<meta property="og:url" content="https://www.wmtcore.com/2020/07/18/分布式事务/index.html">
+<meta property="og:site_name" content="大碗拉面">
+<meta property="og:description" content="分布式事务是指是指事务的发起者、参与者、数据资源服务器以及事务管理器分别位于分布式系统的不同节点之上参与者通过网络通信来达到分布式一致性，网络通信不可避免出现失败、超时的情况
+XA Specification基于资源层的底层分布式事务解决方案，对业务的入侵度较低
+有些数据分片框架或者中间件也支持XA协议，兼容性、普遍性好 但并发性能比较差， 基于XA的分布式事务如果要严格保证ACID，实际需要事务">
+<meta property="og:updated_time" content="2020-07-25T06:10:20.442Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分布式事务">
+<meta name="twitter:description" content="分布式事务是指是指事务的发起者、参与者、数据资源服务器以及事务管理器分别位于分布式系统的不同节点之上参与者通过网络通信来达到分布式一致性，网络通信不可避免出现失败、超时的情况
+XA Specification基于资源层的底层分布式事务解决方案，对业务的入侵度较低
+有些数据分片框架或者中间件也支持XA协议，兼容性、普遍性好 但并发性能比较差， 基于XA的分布式事务如果要严格保证ACID，实际需要事务">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> 分布式事务 | 大碗拉面 </title>
+</head>
+
+<body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="https://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="https://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?fd1a09a8302af22bf35f067279757d54";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="https://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大碗拉面</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'hXvPsMvt_RLywgyzUhtE','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                分布式事务
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-07-18T17:48:49+08:00" content="2020-07-18">
+              2020-07-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/07/18/分布式事务/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/07/18/分布式事务/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>分布式事务是指是指事务的发起者、参与者、数据资源服务器以及事务管理器分别位于分布式系统的不同节点之上<br>参与者通过网络通信来达到分布式一致性，网络通信不可避免出现失败、超时的情况</p>
+<h3 id="XA-Specification"><a href="#XA-Specification" class="headerlink" title="XA Specification"></a>XA Specification</h3><p>基于资源层的底层分布式事务解决方案，对业务的入侵度较低</p>
+<p>有些数据分片框架或者中间件也支持XA协议，兼容性、普遍性好 但<strong>并发性能比较差</strong>， 基于XA的分布式事务如果要严格保证ACID，实际需要事务隔离级别为<strong>SERLALIZABLE</strong></p>
+<h3 id="基于消息的分布式事务"><a href="#基于消息的分布式事务" class="headerlink" title="基于消息的分布式事务"></a>基于消息的分布式事务</h3><p>通过消息系统来通知其他事务参与方自己事务的执行状态，有效的将事务参与方解耦，各个参与方可以异步执行</p>
+<p><code>难点</code>: 解决本地事务执行和消息发送的一致性：两者要同时执行成功或者同时取消执行</p>
+<p><code>场景</code>: 原则上只接受下游分支事务的成功，不接受事务的回滚，如果失败就要一直重试，适用于对最终一致性敏感度较低的业务场景</p>
+<p>可能会因为接收方的消息堆积导致长时间的数据不一致</p>
+<h4 id="基于事务消息"><a href="#基于事务消息" class="headerlink" title="基于事务消息"></a>基于事务消息</h4><p>事务消息发送成功后，处于 prepared 状态，不能被订阅者消费，等到事务消息的状态更改为可消费状态后，下游订阅者才可以监听到次消息。支持事务消息的 MQ 系统有一个定时扫描逻辑，扫描出状态仍然是“待发送”状态的消息，并向消息的发送方发起询问，询问这条事务消息的最终状态如何并根据结果更新事务消息的状态。</p>
+<p>提供事务消息状态查询接口</p>
+<h4 id="基于本地消息"><a href="#基于本地消息" class="headerlink" title="基于本地消息"></a>基于本地消息</h4><p>如果<strong>所依赖的 MQ 系统不支持事务消息</strong>，那么可以采用本地消息的分布式模式</p>
+<p>事务的发起方维护一个本地消息表，业务执行和本地消息表的执行处在同一个本地事务中。业务执行成功，则同时记录一条“待发送”状态的消息到本地消息表中。系统中启动一个定时任务定时扫描本地消息表中状态为“待发送”的记录，并将其发送到 MQ 系统中，如果发送失败或者超时，则一直发送，知道发送成功后，从本地消息表中删除该记录</p>
+<h4 id="最大努力通知型分布式事务"><a href="#最大努力通知型分布式事务" class="headerlink" title="最大努力通知型分布式事务"></a>最大努力通知型分布式事务</h4><p>基于 MQ 系统的一种解决方案，但是不要求 MQ 消息可靠（如支付宝支付成功通知），通过引入定期校验机制来对最终一致性做兜底，对业务侵入性较低、对 MQ 系统要求较低，实现比较简单，适合于对最终一致性敏感度比较低、业务链路较短的场景，比如跨平台、跨企业的系统间的业务交互</p>
+<h3 id="基于补偿的事务"><a href="#基于补偿的事务" class="headerlink" title="基于补偿的事务"></a>基于补偿的事务</h3><p>事务补偿机制 ： 在事务链中的任何一个正向事务操作，都必须存在一个完全符合回滚规则的可逆事务</p>
+<h4 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h4><p>将资源层的二阶段提交协议转换到业务层，成为业务模型中的一部分,核心思想是通过对资源的预留，尽早释放对资源的加锁，如果事务可以提交，则完成对预留资源的确认，如果事务要回滚，则释放预留的资源</p>
+<p>业务设计和代码都会变复杂（需要业务方把功能的实现上由一个接口拆分为三个），但性能、隔离性都很好 </p>
+<p>业务方在设计实现上要遵循三个策略（网络中的通信失败或超时）</p>
+<ol>
+<li>允许空回滚：try 失败或者没有执行 try 操作的参与方收到 cancel 请求时，要进行空回滚操作</li>
+<li>保持幂等性：重复调用参与方的 confirm/cancel 方法，因此需要这两个方法实现上保证幂等性</li>
+<li>防止资源悬挂：参与方侧 try 请求比 cancel 请求更晚到达的情况，cancel 会执行空回滚而确保事务的正确性，但是此时 try 方法也不可以再被执行</li>
+</ol>
+<p>支持 TCC 事务的开源框架有：ByteTCC、Himly、TCC-transaction。</p>
+<h4 id="Saga模式"><a href="#Saga模式" class="headerlink" title="Saga模式"></a>Saga模式</h4><p>Saga 和 TCC 一样，也是一种补偿事务，但是它没有 try 阶段，而是把分布式事务看作一组本地事务构成的事务链</p>
+<p>事务链中的<strong>每一个正向事务操作，都对应一个可逆的事务操作</strong>。Saga 事务协调器负责按照<strong>顺序执行事务链中的分支事务</strong>，分支事务执行完毕，即释放资源。如果某个分支事务失败了，则按照反方向执行事务补偿操作。<strong>如果补偿失败了，就一直重试，补偿操作可以优化为并行执行</strong></p>
+<p><strong>不保证事务隔离性</strong>，本地事务提交后变更就对其他事务可见了。其他事务如果更改了已经提交成功的数据，可能会导致补偿操作失败。比如扣款失败，但是钱已经花掉了，<strong>业务设计上需要考虑这种场景并从业务设计上规避这种问题</strong></p>
+<p><strong>不完美补偿</strong>，补偿操作会留下之前原始事务操作的痕迹，需要考虑对业务上的影响</p>
+<p>要求业务设计实现上遵循三个策略：</p>
+<ol>
+<li>允许空补偿：网络异常导致事务的参与方只收到了补偿操作指令，因为没有执行过正常操作，因此要进行空补偿</li>
+<li>保持幂等性：事务的正向操作和补偿操作都可能被重复触发，因此要保证操作的幂等性</li>
+<li>防止资源悬挂：网络异常导致事务的正向操作指令晚于补偿操作指令到达，则要丢弃本次正常操作，否则会出现资源悬挂问题</li>
+</ol>
+<p><strong>适合于业务流程长的长事务的场景，实现上对业务侵入低，所以非常适合微服务架构的场景</strong>。同时 Saga 采用的是一阶段提交模式，不会对资源长时间加锁，不存在“木桶效应”，所以采用这种模式架构的<strong>系统性能高、吞吐高</strong></p>
+<h3 id="阿里云分布式事务相关工具"><a href="#阿里云分布式事务相关工具" class="headerlink" title="阿里云分布式事务相关工具"></a>阿里云分布式事务相关工具</h3><p>DRDS 基于MySQL的XA实现，使用方便，但并发性能低 </p>
+<p>GTS 全局事务服务 就提了个本地事务和mq能在一起提交</p>
+<h4 id="seata"><a href="#seata" class="headerlink" title="seata"></a>seata</h4><p>通过全局锁实现了写隔离与读隔离</p>
+<ul>
+<li>一阶段本地事务提交前，需要确保先拿到 全局锁</li>
+<li>拿不到 全局锁 ，不能提交本地事务。</li>
+<li>拿 全局锁 的尝试被限制在一定范围内，超出范围将放弃，并回滚本地事务，释放本地锁</li>
+</ul>
+<p>开启本地事务，拿到本地锁，更新操作，本地事务提交前，先拿到该记录的 全局锁 ，本地提交释放本地锁。第二阶段提交释放 全局锁 </p>
+<p>全局锁相当于写锁，但比由数据库实现性能好一些，<br>Seata（AT 模式）的<strong>默认全局隔离级别是 读未提交，会出现脏读，要拿读已提交需要全局锁</strong>，可以按业务做调整，但性能会好一些。全局锁会额外增加死锁的风险，但如果出现死锁，会不断进行重试，最后靠等待全局锁超时 </p>
+<p>性能比XA好一点，第一阶段的提交会释放本地锁，但还存在全局锁，会阻塞写，但不影响默认的读未提交<br>XA的prepare是数据库实现的锁，而且要求事务串行执行</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/30/削足适履(Ten Pounds in a Five-Pound Sack)/" rel="next" title="削足适履(Ten Pounds in a Five-Pound Sack)">
+                <i class="fa fa-chevron-left"></i> 削足适履(Ten Pounds in a Five-Pound Sack)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2020/07/18/分布式事务/"
+           data-title="分布式事务" data-url="https://www.wmtcore.com/2020/07/18/分布式事务/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="https://schema.org/Person">
+          <img class="site-author-image" src="http://wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">WMT</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">不扯犊子 -NOT ALONE</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">77</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/WMTcore" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#XA-Specification"><span class="nav-number">1.</span> <span class="nav-text">XA Specification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于消息的分布式事务"><span class="nav-number">2.</span> <span class="nav-text">基于消息的分布式事务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于事务消息"><span class="nav-number">2.1.</span> <span class="nav-text">基于事务消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于本地消息"><span class="nav-number">2.2.</span> <span class="nav-text">基于本地消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最大努力通知型分布式事务"><span class="nav-number">2.3.</span> <span class="nav-text">最大努力通知型分布式事务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于补偿的事务"><span class="nav-number">3.</span> <span class="nav-text">基于补偿的事务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCC"><span class="nav-number">3.1.</span> <span class="nav-text">TCC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Saga模式"><span class="nav-number">3.2.</span> <span class="nav-text">Saga模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#阿里云分布式事务相关工具"><span class="nav-number">4.</span> <span class="nav-text">阿里云分布式事务相关工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#seata"><span class="nav-number">4.1.</span> <span class="nav-text">seata</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015-12 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMT</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wmtcore"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+     
+  	  <script type="text/javascript">
+  		var duoshuo_user_ID = 6224283662221837000
+      var duoshuo_admin_nickname="作者"
+  	  </script>
+     
+  	<script src="/js/ua-parser.min.js"></script>
+  	<script src="/js/hook-duoshuo.js"></script>
+  
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>

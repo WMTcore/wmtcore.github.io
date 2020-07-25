@@ -253,6 +253,547 @@
             
               
                 
+                <a class="post-title-link" href="/2020/02/24/贯彻执行/" itemprop="url">
+                  贯彻执行(Passing the Word)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-02-24T19:08:37+08:00" content="2020-02-24">
+              2020-02-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/人月神话/" itemprop="url" rel="index">
+                    <span itemprop="name">人月神话</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/02/24/贯彻执行/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/02/24/贯彻执行/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="文档化的规格说明——手册"><a href="#文档化的规格说明——手册" class="headerlink" title="文档化的规格说明——手册"></a>文档化的规格说明——手册</h3><ul>
+<li>产品的外部规格说明，它描述和规定了用户所见的每一个细节，也是结构师主要的工作产物</li>
+</ul>
+<p>随着系统的使用和反馈，规格说明中难以使用的地方也不断地被修改，对实现人员而言，<strong>修改需要阶段化</strong>，有进度时间表和版本</p>
+<p>实现人员的设计和创造不应该被手册限制，手册要<strong>避免描述内部实现</strong></p>
+<p>体系结构设计人员必须<strong>为自己描述的特性准备一种实现方法</strong>，但是他不应该试图支配具体的实现过程。</p>
+<h4 id="规格说明的风格"><a href="#规格说明的风格" class="headerlink" title="规格说明的风格"></a>规格说明的风格</h4><ul>
+<li>清晰、完整和准确，每条说明都必须<strong>重复所有的基本要素</strong>，所有文字都要相互一致</li>
+<li>由一两个人将结论转换成书面规格说明，保持文字和产品之间的<strong>一致性</strong></li>
+</ul>
+<h3 id="形式化定义"><a href="#形式化定义" class="headerlink" title="形式化定义"></a>形式化定义</h3><ul>
+<li>使用形式化标记方法达到所定义需要的精确程度</li>
+</ul>
+<p><code>优缺点</code> 精确完整,差异得更加明显，可以更快地完成。缺点是不易理解 需要记叙性文字的辅助，才能使内容易于领会和讲授</p>
+<p><code>决不要携带两个时钟出海，带一个或三个</code> 如果同时使用形式化和记叙性定义，则必须以一种作为标准，另一种作为 辅助描述，并照此明确地进行划分</p>
+<p><code>形式化定义仅仅用于外部功能说明它们是什么</code> 有时会通过一段实现该功能的程序来定义，但只是说明功能，不能限定体系结构</p>
+<h4 id="设计实现可以作为一种形式化定义的方法"><a href="#设计实现可以作为一种形式化定义的方法" class="headerlink" title="设计实现可以作为一种形式化定义的方法"></a>设计实现可以作为一种形式化定义的方法</h4><p><code>优点</code>所有问题可以通过试验清晰地得到答案，从来不需要争辩和商讨，回答是快捷迅速的<br><code>缺点</code> 可能过度地规定了外部功能。有时会给出未在计划中的意外答案;特别容易引起混淆,当实现充当标准时，还必须防止对实现的任何修改</p>
+<h3 id="周会和大会"><a href="#周会和大会" class="headerlink" title="周会和大会"></a>周会和大会</h3><h4 id="周会"><a href="#周会" class="headerlink" title="周会"></a>周会</h4><p>每周半天的会议，所有的结构师，加上硬件和软件实现人员代表和市场计划人员参与，由首席系统结构师主持</p>
+<p>在会议之前分发建议、会议内容，解决方案会被传递给结构师并做记录，当决策没有达成共识时由首席结构师来决定</p>
+<p><code>周会优势</code>： 相同小组每周交流，对相关内容比较了解，不需要安排额外时间培训；深刻理解所面对的问题，并且与产品密切相关；正式的书面建议集中了注意力，强制了决策的制订，避免了会议草稿纪要方式的不一致;清晰地授予首席结构师决策的权力，避免了妥协和拖延</p>
+<h4 id="大会"><a href="#大会" class="headerlink" title="大会"></a>大会</h4><p>随着时间的推移，一些决定、一些小事情并没有被某个参与者真正地 接受。对于这些问题，有时周例会没有重新考虑，慢慢地， 很多小要求、公开问题或者不愉快会堆积起来。通过年度大会解决这些堆积起来的问题</p>
+<p>大多数条目的规模很小，每个不同的声音都有机会得到表达。然后会制订出决策，每个人都在倾听、参与，每个人对复杂约束和决策之间的相互关系有了更透彻的理解，使决策更容易被接受</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/02/24/分布式任务调度/" itemprop="url">
+                  分布式任务调度
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-02-24T16:40:37+08:00" content="2020-02-24">
+              2020-02-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/02/24/分布式任务调度/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/02/24/分布式任务调度/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ol>
+<li>存在一些耗时较长的运算，需要从web服务中移出，比如缓存计算、报表导出</li>
+<li>管控力度：原先的运算集群采用mq通信方式，master对worker的管控力度不够，会出现一个任务重复失败拖垮集群的现象</li>
+<li>worker之前不能区分，原因还是没有直接由master派发任务，也无法做跨语言调度</li>
+</ol>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><h4 id="master"><a href="#master" class="headerlink" title="master"></a>master</h4><ol>
+<li>稳定、高可用，不执行具体运算</li>
+<li>接收、记录待执行的任务，按任务优先级派发，记录任务执行结果，支持超时、重试、失败状态</li>
+<li>能管控worker生命,知道它的运行状态和任务进度，根据worker状态派发任务</li>
+<li>向业务方通知运行结果</li>
+</ol>
+<h4 id="worker"><a href="#worker" class="headerlink" title="worker"></a>worker</h4><ol>
+<li>启动时向master注册自己的环境和算力</li>
+<li>定时汇报自己的运行状态</li>
+<li>支持多语言</li>
+</ol>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="通信"><a href="#通信" class="headerlink" title="通信"></a>通信</h4><p>基于grpc的stream方式通信，worker端目前采用重启方式重连，master端可通过end事件清除失效worker</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">service</span> Greeter &#123;</div><div class="line">  rpc Command (<span class="keyword">stream </span><span class="keyword">body) </span>returns (<span class="keyword">stream </span><span class="keyword">body) </span>&#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="symbol">message</span> <span class="keyword">body </span>&#123;</div><div class="line">  <span class="keyword">string </span><span class="keyword">body </span>= <span class="number">1</span><span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="master和worker的结构"><a href="#master和worker的结构" class="headerlink" title="master和worker的结构"></a>master和worker的结构</h4><ul>
+<li>基于egg，风格结构与后端业务框架基本相同</li>
+<li>主要分为job和life_cycle，分管任务和生命周期</li>
+</ul>
+<p><img src="/picture/分布式任务调度.jpg" alt="Resize icon"></p>
+<h5 id="master-1"><a href="#master-1" class="headerlink" title="master"></a>master</h5><ul>
+<li>通过mq记录任务，并定期读取任务到缓存,按优先级排序，</li>
+<li>处理worker连接,定期检查连接情况</li>
+<li>派发任务，只在新worker连接和任务完成时执行，定期检查任务执行状态</li>
+</ul>
+<h5 id="worker-1"><a href="#worker-1" class="headerlink" title="worker"></a>worker</h5><ul>
+<li>接受master派发的任务调用本地service/method执行,在表中记录执行结果</li>
+<li>定期自检健康发送心跳给master</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="任务代码的编写"><a href="#任务代码的编写" class="headerlink" title="任务代码的编写"></a>任务代码的编写</h4><ul>
+<li>在worker端实现</li>
+<li>代码位置在service文件夹</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// app/service/authorization.js</span></div><div class="line"><span class="keyword">const</span> Service = <span class="built_in">require</span>(<span class="string">'@fgrid/egg'</span>).Service;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AuthorizationService</span> <span class="keyword">extends</span> <span class="title">Service</span> </span>&#123;</div><div class="line">	<span class="keyword">async</span> deleteAuthorization()&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>代码结构与业务框架一致，业务数据通过rpc获取，原则上不直连业务数据库</p>
+<h4 id="业务服务调用任务"><a href="#业务服务调用任务" class="headerlink" title="业务服务调用任务"></a>业务服务调用任务</h4><ul>
+<li>sdk直接写在fgrid-middleware</li>
+</ul>
+<p>调用方式和rpc调用类似</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 通过mifStart来调用分布式任务，后面接serviceName.methodName</span></div><div class="line">this<span class="selector-class">.ctx</span><span class="selector-class">.mifStart</span><span class="selector-class">.authorization</span><span class="selector-class">.deleteAuthorization</span>()</div></pre></td></tr></table></figure>
+<h3 id="计划实现功能"><a href="#计划实现功能" class="headerlink" title="计划实现功能"></a>计划实现功能</h3><ol>
+<li>master高可用</li>
+<li>worker多语言版和算力等属性</li>
+<li>定时任务</li>
+</ol>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/02/23/ 画蛇添足/" itemprop="url">
+                  画蛇添足(The Second-System Effect)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-02-23T20:08:37+08:00" content="2020-02-23">
+              2020-02-23
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/人月神话/" itemprop="url" rel="index">
+                    <span itemprop="name">人月神话</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/02/23/ 画蛇添足/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/02/23/ 画蛇添足/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="结构师的交互准则和机制"><a href="#结构师的交互准则和机制" class="headerlink" title="结构师的交互准则和机制"></a>结构师的交互准则和机制</h3><h4 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h4><ul>
+<li>结构师能在设计早期从开发那得到成本</li>
+<li>开发可以增高或降低估的计成本，来反映对设计的好恶</li>
+</ul>
+<p><strong>尽早交流和持续的与开发沟通</strong>能使结构师有较好的<strong>成本意识</strong>，以及使开发人员获得<strong>对设计的信心</strong>，并且不会混淆各自的<strong>责任分工</strong>。</p>
+<h5 id="成本过高时的处理"><a href="#成本过高时的处理" class="headerlink" title="成本过高时的处理"></a>成本过高时的处理</h5><ul>
+<li>削减设计</li>
+<li>跟开发建议成本更低的实现方法(挑战估算的结果)</li>
+</ul>
+<p>第二个是结构师固有的主观感性反应，是在向开发人员的做事方式提出挑战</p>
+<ol>
+<li>开发承担创造性和发明性的实现责任，结构师只能建议，而不能支配</li>
+<li>为所指定的说明<strong>提供实现方法</strong>，并对改方法保持低调和平静，并接受其他任何能达到目标的方法</li>
+<li>准备放弃坚持所作的改进建议</li>
+</ol>
+<p>一般开发人员会反对体系结构上的修改建议，通常他是对的——当正在实现产品时， <strong>某些特性的修改会造成意料不到的成本开销</strong>。</p>
+<h3 id="自律——开发第二个系统所带来的后果"><a href="#自律——开发第二个系统所带来的后果" class="headerlink" title="自律——开发第二个系统所带来的后果"></a>自律——开发第二个系统所带来的后果</h3><ul>
+<li>第二个系统是设计师们所设计的最危险的系统</li>
+</ul>
+<p><code>开发第一个系统时</code>，结构师倾向于精炼和简洁。知道自己对正在进行的任务不够了解，所以会谨慎仔细地工作，修饰功能和想法被小心谨慎地推迟,导致过分地设计第二个系统</p>
+<p><code>着手第三、第四个系统时</code>，通过之前的经验得到此类系统通用特性的判断，而且系统之间的差异会帮助他识别出经验中不够通用的部分</p>
+<p>开发第二个系统的后果(second-system effect)与纯粹的功能修饰和增强明显不同，由于技术、设计的变化，可能会<strong>对已经落后技术进行细化、精炼</strong></p>
+<ol>
+<li>关注系统的特殊危险，<strong>避免功能上的修饰</strong>;根据系统<strong>基本理念及目的</strong>，舍弃一些功能</li>
+<li>每个小功能分配一个值: <strong>每次改进，有一个数据指标</strong>，比如功能 x 不超 过 m 字节的内存和 n 微秒。能作为决策的向导，在物理实现期间充当指南和对所有人的警示.例如facebook的Messenger,为每个功能设置了代码大小预算,要求工程师负责遵守预算约束，作为功能接受标准的一部分（构建一个系统来计算每个功能的二进制大小权重）</li>
+</ol>
+<p><code>项目经理如何避免画蛇添足</code>(second-system effect)拥有<strong>两个系统以上经验的结构师的决定</strong>。同时，保持对特殊诱惑的警觉，不断<strong>提出正确的问题</strong>，确保<strong>原则上的概念和目标在详细设计中被完整实现</strong></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/02/12/贵族专制、民主政治和系统设计/" itemprop="url">
+                  贵族专制、民主政治和系统设计(Aristocracy, Democracy, and System Design)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-02-12T21:08:37+08:00" content="2020-02-12">
+              2020-02-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/人月神话/" itemprop="url" rel="index">
+                    <span itemprop="name">人月神话</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/02/12/贵族专制、民主政治和系统设计/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/02/12/贵族专制、民主政治和系统设计/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="概念一致性"><a href="#概念一致性" class="headerlink" title="概念一致性"></a>概念一致性</h3><ul>
+<li>在系统设计中，概念完整性应该是最重要的考虑因素</li>
+</ul>
+<p><code>大多数统体现出的概念差异和不一致性的原因</code>: 并不是因为它由不同的设计师们开发，是由于设计被分成了由若干人完成的若干任务</p>
+<p><code>概念的完整性要求</code>: 系统只反映唯一的设计理念，用户所见的技术说明<strong>来自少数人的思想</strong></p>
+<p>为了连贯的设计思路，宁可省略一些不规则的特性和改进，也不提倡独立和无法整合的系统，哪怕包含着许多很好的设计</p>
+<h3 id="获得概念的完整性"><a href="#获得概念的完整性" class="headerlink" title="获得概念的完整性"></a>获得概念的完整性</h3><ul>
+<li>系统的实现目标：功能性，易用性，<strong>功能与理解上复杂程度的比值才是系统设计的最终测试标准</strong></li>
+<li>简洁和直白来自概念的完整性</li>
+<li><strong>易用性需要设计的一致性和概念上的完整性</strong></li>
+</ul>
+<p>每个部分必须反映相同的原理、原则和一致的折衷机制。在语法上， 每个部分应使用相同的技巧;在语义上，应具有同样的相似性</p>
+<h3 id="贵族专制统治和民主政治"><a href="#贵族专制统治和民主政治" class="headerlink" title="贵族专制统治和民主政治"></a>贵族专制统治和民主政治</h3><h4 id="系统的概念完整性"><a href="#系统的概念完整性" class="headerlink" title="系统的概念完整性"></a>系统的概念完整性</h4><ul>
+<li>要求<strong>设计必须由一个人，或者非常少数互有默契的人员来实现</strong></li>
+<li>决定了使用的容易程度</li>
+</ul>
+<p><strong>不能与系统基本概念进行整合的想法和特色，最好放到一边不予考虑</strong>。如果出现了很多非常重要但不兼容的构想，就应该抛弃原来的设计，对不同基本概念进行合并，在合并后的系统上重新开始</p>
+<h4 id="系统的结构师-产品"><a href="#系统的结构师-产品" class="headerlink" title="系统的结构师(产品)"></a>系统的结构师(产品)</h4><ul>
+<li>用户的代理人，支持用户的真正利益，而不是维护销售人员所鼓吹的利益</li>
+<li>易用性很大程度上依赖结构师</li>
+</ul>
+<p>结构师工作产物的生命周期比那些实现人员的产物要长，并且结构师一直处在解决用户问题，实现用户利益的核心地位。如果要得到系统概念上的完整性，那么<strong>必须控制这些概念</strong></p>
+<h4 id="实现人员"><a href="#实现人员" class="headerlink" title="实现人员"></a>实现人员</h4><ul>
+<li>产品的成本性能比很大程度上依靠实现人员</li>
+</ul>
+<p>在给定体系结构下的设计实现，同样需要创造性、同样新的思路和卓越的才华</p>
+<h4 id="纪律和规则"><a href="#纪律和规则" class="headerlink" title="纪律和规则"></a>纪律和规则</h4><ul>
+<li>最差的建筑往往是那些预算远远超过起始目标的项目</li>
+<li>外部的体系结构规定实际上是增强，而不是限制实现小组的创造性</li>
+<li>创造性活动会因为规范化而得到增强</li>
+</ul>
+<p><strong>一旦将注意力集中在没有人解决过的问题上，创意就开始奔涌而出</strong>。在毫无限制的实现小组中，在进行结构上的决策时，会出现大量的想法和争议，对具体实现的关注反而会比较少</p>
+<h3 id="在等待时，实现人员应该做什么"><a href="#在等待时，实现人员应该做什么" class="headerlink" title="在等待时，实现人员应该做什么"></a>在等待时，实现人员应该做什么</h3><ul>
+<li>不能让实现队伍来负责产品设计： 进度推迟，质量更加低劣: 概念完整性的缺乏导致系统开发和 修改上要付出更昂贵的代价</li>
+</ul>
+<p>工作的垂直划分(工作被划分成体系结构、设计实现和物理实现)从根本上大大减少了劳动量，结果是使交流彻底地简化，概念完整性得到大幅提高</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2020/02/06/外科手术队伍/" itemprop="url">
                   外科手术队伍(The Surgical Team)
                 </a>
@@ -970,502 +1511,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/10/09/脏页/" itemprop="url">
-                  脏页
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2019-10-09T15:31:22+08:00" content="2019-10-09">
-              2019-10-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2019/10/09/脏页/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/09/脏页/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”</p>
-<h3 id="刷脏页的时间"><a href="#刷脏页的时间" class="headerlink" title="刷脏页的时间"></a>刷脏页的时间</h3><p><strong>第一种</strong>是“redo log写满了，要flush脏页” 整个系统就不能再接受更新了，所有的更新都必须堵住。如果你从监控上看，这时候更新数会跌为0</p>
-<p><strong>第二种</strong>是“内存不够用了，要先将脏页写到磁盘” 这种情况是常态 </p>
-<p>InnoDB用缓冲池（buffer pool）管理内存，缓冲池中的内存页有三种状态：</p>
-<ol>
-<li>还没有使用的；</li>
-<li>使用了并且是干净页；</li>
-<li>使用了并且是脏页。</li>
-</ol>
-<p>InnoDB的策略是尽量使用内存，因此对于一个长时间运行的库来说，未被使用的页面很少。</p>
-<p><strong>当要读入的数据页没有在内存的时候，就必须到缓冲池中申请一个数据页</strong>。这时候只能把最久不使用的数据页从内存中淘汰掉：如果要淘汰的是一个干净页，就直接释放出来复用；但如果是脏页呢，就必须将脏页先刷到磁盘，变成干净页后才能复用</p>
-<p>一个查询要淘汰的脏页个数太多，会导致查询的响应时间明显变长；</p>
-<p><strong>第三种</strong>是MySQL空闲时</p>
-<p><strong>第四种</strong>是MySQL正常关闭</p>
-<h3 id="刷脏页的控制策略"><a href="#刷脏页的控制策略" class="headerlink" title="刷脏页的控制策略"></a>刷脏页的控制策略</h3><p><code>innodb_io_capacity</code> 它会告诉InnoDB你的磁盘能力 设置成磁盘的IOPS</p>
-<p><code>innodb_max_dirty_pages_pct</code>脏页比例上限，默认值是75% 通过<code>Innodb_buffer_pool_pages_dirty</code>/<code>Innodb_buffer_pool_pages_total</code>得到的</p>
-<p>InnoDB的刷盘速度就是要参考这两个因素：一个是脏页比例，一个是redo log写盘速度</p>
-<h4 id="刷脏页的连坐”机制"><a href="#刷脏页的连坐”机制" class="headerlink" title="刷脏页的连坐”机制"></a>刷脏页的连坐”机制</h4><p>一旦一个查询请求需要在执行过程中先flush掉一个脏页时，这个查询就可能要比平时慢了。而MySQL中的一个机制，可能让你的查询会更慢：在准备刷一个脏页的时候，如果这个数据页旁边的数据页刚好是脏页，就会把这个“邻居”也带着一起刷掉；而且这个把“邻居”拖下水的逻辑还可以继续蔓延，也就是对于每个邻居数据页，如果跟它相邻的数据页也还是脏页的话，也会被放到一起刷</p>
-<p><code>innodb_flush_neighbors</code> 值为1的时候会有上述的“连坐”机制，值为0时表示不找邻居，自己刷自己的</p>
-<p>找“邻居”这个优化在机械硬盘时代是很有意义的，可以减少很多随机IO。机械硬盘的随机IOPS一般只有几百，相同的逻辑操作减少随机IO就意味着系统性能的大幅度提升</p>
-<p>使用的是SSD这类IOPS比较高的设备的话，建议把innodb_flush_neighbors的值设置成0</p>
-<p>在MySQL 8.0中，innodb_flush_neighbors参数的默认值已经是0了</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/04/01/ons 阿里云 rocketMQ/" itemprop="url">
-                  ons 阿里云 rocketMQ
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2019-04-01T16:15:37+08:00" content="2019-04-01">
-              2019-04-01
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/中间件/" itemprop="url" rel="index">
-                    <span itemprop="name">中间件</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2019/04/01/ons 阿里云 rocketMQ/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/04/01/ons 阿里云 rocketMQ/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="broker"><a href="#broker" class="headerlink" title="broker"></a>broker</h3><p>ons 默认有两个brokerName组,分别有0-7共16个队列 </p>
-<p>还有两个死信队列 topic是 %RETRY%+tag<br><!--可能不存在主从关系，每个broker都可读写--></p>
-<p>consumer15分钟消费超时，broker会重发消息</p>
-<h3 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a>Producer</h3><p> 轮询发送到broker队列</p>
-<p> 如果发送失败会换个队列</p>
-<h4 id="defaultTopicQueueNums"><a href="#defaultTopicQueueNums" class="headerlink" title="defaultTopicQueueNums"></a>defaultTopicQueueNums</h4><p>自动创建topic时设置队列数量<br>ons不允许自动创建topic，也不允许修改队列数量</p>
-<h3 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h3><h4 id="AllocateMessageQueueAveragely"><a href="#AllocateMessageQueueAveragely" class="headerlink" title="AllocateMessageQueueAveragely"></a>AllocateMessageQueueAveragely</h4><ul>
-<li>默认 集群消费</li>
-</ul>
-<p>平均分配可消费的 Broker 对应的消息队列 c1对应b1,b2,b3 c2对应d1,d2,d3</p>
-<h4 id="AllocateMessageQueueAveragelyByCircle"><a href="#AllocateMessageQueueAveragelyByCircle" class="headerlink" title="AllocateMessageQueueAveragelyByCircle"></a>AllocateMessageQueueAveragelyByCircle</h4><p>以环状轮流分Broker</p>
-<h4 id="广播消费"><a href="#广播消费" class="headerlink" title="广播消费"></a>广播消费</h4><p>每个Consume都订阅每个Broker</p>
-<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><ol>
-<li>刚启动时，broker分配还没有完成，会导致消息重复消费</li>
-<li>但是可能会存在同样的消息有两个不同 msgId的情况(有多种原因)，这种情况可能会使业务上重复消费，建议最好使用消息内容中的唯一标识字段去重</li>
-</ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/05/10/ELK_Mapping_conflict/" itemprop="url">
-                  ELK Mapping conflict
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2018-05-10T14:32:22+08:00" content="2018-05-10">
-              2018-05-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/运维/" itemprop="url" rel="index">
-                    <span itemprop="name">运维</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2018/05/10/ELK_Mapping_conflict/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/10/ELK_Mapping_conflict/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>由filebeat导入的default template导致</p>
-<h3 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h3><p>先创建个新的索引：</p>
-<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">PUT</span> /my_index</div></pre></td></tr></table></figure>
-<p>然后查下是否有default mapping</p>
-<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">GET /my_index</div><div class="line"></div><div class="line">//像这样</div><div class="line">&#123;</div><div class="line">    <span class="string">"mappings"</span>: &#123;</div><div class="line">        <span class="string">"_default_"</span>: &#123;&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>比较下和之前数据的mapping有没有冲突</p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>首先查看es中存在的模板 /_template, 是否存在名为filebeat，存在就执行</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">DELETE</span> <span class="regexp">/_template/</span>filebeat</div></pre></td></tr></table></figure>
-<p>在日志系统中通常直接由es按天生成索引，这样就简单了，直接把使用错误索引的数据删掉重新导入就好了。</p>
-<p>但在使用自己的索引时，就需要做重索引，可以尝试通过<strong>索引别名</strong>的方式切换</p>
-<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>在尝试新的日志格式时，启动了其他版本的filebeat并让它直接output到es,忘记设置 template.enabled: false 导致它导入default模板</p>
-<p>在第二天生成新索引时发现kibana报warning shards failed,才发现mapping conflict</p>
-<p>填完一坑，继续logstash挖坑</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/05/10/分布式服务/" itemprop="url">
-                  分布式服务
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2018-05-10T14:32:22+08:00" content="2018-05-10">
-              2018-05-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/中间件/" itemprop="url" rel="index">
-                    <span itemprop="name">中间件</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2018/05/10/分布式服务/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/10/分布式服务/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h2 id="分布式"><a href="#分布式" class="headerlink" title="分布式"></a>分布式</h2><h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h3><ul>
-<li>分布性 分布式系统中的计算机会依据业务或其他需求在空间中随意分布，并且可以灵活变动</li>
-<li>对等性 整个系统中的计算机节点都是对等的，没有物理上的主从之分</li>
-<li>并发性 系统中的多节计算机节点可能会并发操作共享资源</li>
-<li>没有全局时钟 因为多个节点在空间上的随意分布，没有办法设置全局的时钟序列</li>
-<li>故障率 在由大量计算机组成的分布式系统中，故障是无法避免的</li>
-</ul>
-<h3 id="CAP定理"><a href="#CAP定理" class="headerlink" title="CAP定理"></a>CAP定理</h3><p>在一个分布式系统中，Consistency（一致性）、 Availability（可用性）、Partition tolerance（分区容错性），三者不可得兼</p>
-<ul>
-<li>强一致性 分布式系统会存在多个数据副本，要求所有的用户都可以读到最新的数据</li>
-<li>可用性 系统对用户的每个操作都能在有限的时间内返回正常的结果</li>
-<li>分区容错性 组成分布式系统的子网由于网络故障不能通信，导致整个系统被分成若干孤立的子网，但仍要保证致性和可用性服务</li>
-</ul>
-<h3 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h3><p>对CAP中可用性和一致性权衡的结果，通过牺牲强一致性来获取可用性，核心思想是：每个应用可以根据自身的特点，采用适当的方式达到最终一致性</p>
-<ul>
-<li>基本可用（Basically Available）是当系统出现故障时，可以牺牲部分可用性，如响应时间、功能减少，从而保证系统运行</li>
-<li>软状态（Soft state）允许不同节点的数据副本在同步时存在延迟，并认为该状态不会影响系统整体的可用性；</li>
-<li>最终一致性（Eventually consistent）强调系统所有的数据副本最终能达到一致状态，但不需要实时保证数据一致性，而所有客户端能获取到最新的值</li>
-</ul>
-<h2 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h2><h3 id="2PC-两段提交"><a href="#2PC-两段提交" class="headerlink" title="2PC 两段提交"></a>2PC 两段提交</h3><p>将事务的提交过程分成了两个阶段来进行处理,它对每个事务使用先尝试后提交的方式来处理，是一种强一致性算法。它的优点是原理简单，实现方便，而缺点是同步阻塞，单点问题，数据不一致</p>
-<p><img src="/picture/分布式服务1.jpg" alt="Smaller icon"></p>
-<h4 id="阶段一：提交事务请求"><a href="#阶段一：提交事务请求" class="headerlink" title="阶段一：提交事务请求"></a>阶段一：提交事务请求</h4><ol>
-<li>事务询问：向所有参与者发送事务内容，并询问事务提交是否可以执行，然后等待参与者响应</li>
-<li>执行事务：参与者执行事务，并在日志中记录Undo和Redo信息</li>
-<li>参与者反馈响应：如果参与者成功执行事务操作就反馈Yes,否则反馈No</li>
-</ol>
-<h4 id="执行事务提交"><a href="#执行事务提交" class="headerlink" title="执行事务提交"></a>执行事务提交</h4><ol>
-<li>发送提交请求：向参与者发送Commit</li>
-<li>事务提交：参与者收到Commit后，执行事务提交，并在完成之后释放占用的事务资源</li>
-<li>反馈提交结果：参与者完成事务提交后，反馈Ack消息</li>
-<li>完成事务：所有参与者反馈Ack消息，完成事务</li>
-</ol>
-<h3 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h3><p>Paxos是一种基于消息传递且具有高度容错性的一致性算法，是解决分布式一致性问题最有效的算法之一，能避免2PC和3PC存在的问题。</p>
-<h3 id="Raft协议"><a href="#Raft协议" class="headerlink" title="Raft协议"></a>Raft协议</h3><ol>
-<li>将一致性协议划分为领导者选举，Log复制和安全性</li>
-<li>将paxos的p2p模式改成Master-slave模式</li>
-</ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1512,14 +1557,14 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">73</span>
+              <span class="site-state-item-count">77</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>

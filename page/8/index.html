@@ -253,6 +253,590 @@
             
               
                 
+                <a class="post-title-link" href="/2015/12/14/es6-Promise/" itemprop="url">
+                  es6 Promise
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-14T14:51:57+08:00" content="2015-12-14">
+              2015-12-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/14/es6-Promise/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/14/es6-Promise/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h1 id="Promise含义"><a href="#Promise含义" class="headerlink" title="Promise含义"></a>Promise含义</h1><ul>
+<li>Promise 对象，用来传递异步操作的消息。代表了某个未来才会知道结果的事件（通常是一个异步操作）。这个事件提供统一的API，可供进一步处理</li>
+<li>可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。此外，Promise对象提供统一的接口，使得控制异步操作更加容易</li>
+<li>无法取消Promise。如果不设置回调函数，Promise内部抛出的错误，不会反应到外部。当处于Pending状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。</li>
+</ul>
+<h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><p>Promise实例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">  <span class="comment">// ... some code</span></div><div class="line"></div><div class="line">  <span class="keyword">if</span> (<span class="comment">/* 异步操作成功 */</span>)&#123;</div><div class="line">    resolve(value);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    reject(error);</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>resolve和reject是两个函数，由JavaScript引擎提供</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">object</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">  	<span class="comment">//resolve("success");</span></div><div class="line">  	reject(<span class="string">"error"</span>);</div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">test().then(<span class="function">(<span class="params">value</span>) =&gt;</span> &#123;</div><div class="line">	<span class="comment">//resolve</span></div><div class="line">  <span class="built_in">console</span>.log(value);</div><div class="line">&#125;,<span class="function"><span class="keyword">function</span>(<span class="params">value</span>)</span>&#123;</div><div class="line">	<span class="comment">//reject</span></div><div class="line">	<span class="built_in">console</span>.log(value);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="then-–Promise-prototype-then"><a href="#then-–Promise-prototype-then" class="headerlink" title="then()–Promise.prototype.then()"></a>then()–Promise.prototype.then()</h2><ul>
+<li>Promise实例有then方法，then方法定义在原型对象Promise.prototype上.返回的是一个新的Promise实例</li>
+<li>可以采用链式(chain)写法，即then方法后面再调用另一个then方法,后一个then的回调函数，会等待新Promise对象的状态发生变化，才会被调用</li>
+</ul>
+<figure class="highlight scilab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">getJSON(<span class="string">"/post/1.json"</span>).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(post)</span> &#123;</span></div><div class="line">  <span class="keyword">return</span> getJSON(post.commentURL);</div><div class="line">&#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span> <span class="title">funcA</span><span class="params">(comments)</span> &#123;</span></div><div class="line">  console.<span class="built_in">log</span>(<span class="string">"Resolved: "</span>, comments);</div><div class="line">&#125;, <span class="function"><span class="keyword">function</span> <span class="title">funcB</span><span class="params">(err)</span>&#123;</span></div><div class="line">  console.<span class="built_in">log</span>(<span class="string">"Rejected: "</span>, err);</div><div class="line">&#125;);</div><div class="line"><span class="comment">// 第二个then的回调函数，会等待这个新的Promise对象状态发生变化。如果变为Resolved，就调用funcA</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(post)</span> &#123;</span></div><div class="line">  <span class="keyword">return</span> getJSON(post.commentURL);</div><div class="line">&#125;</div><div class="line"><span class="comment">//等于</span></div><div class="line">post =&gt; getJSON(post.commentURL)</div></pre></td></tr></table></figure>
+<h2 id="catch-–Promise-prototype-catch"><a href="#catch-–Promise-prototype-catch" class="headerlink" title="catch()–Promise.prototype.catch()"></a>catch()–Promise.prototype.catch()</h2><p><strong>建议总是使用catch方法，而不使用then方法的第二个参数</strong></p>
+<figure class="highlight scilab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line">promise</div><div class="line">  .<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(data)</span> &#123;</span></div><div class="line">    <span class="comment">// success</span></div><div class="line">  &#125;, <span class="function"><span class="keyword">function</span><span class="params">(err)</span> &#123;</span></div><div class="line">    <span class="comment">// error</span></div><div class="line">  &#125;);</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line">promise</div><div class="line">  .<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(data)</span> &#123; //<span class="title">cb</span></span></div><div class="line">    <span class="comment">// success</span></div><div class="line">  &#125;)</div><div class="line">  .<span class="keyword">catch</span>(<span class="function"><span class="keyword">function</span><span class="params">(err)</span> &#123;</span></div><div class="line">    <span class="comment">// error</span></div><div class="line">  &#125;);</div></pre></td></tr></table></figure>
+<p>catch方法返回的还是一个Promise对象，因此后面还可以接着调用then方法。</p>
+<p><code>如果没有使用catch方法指定错误处理的回调函数，Promise对象抛出的错误不会传递到外层代码，即不会有任何反应</code></p>
+<p><strong>有必要时，可以在回调链最后加done(),保证抛出任何可能出现的错误</strong></p>
+<h2 id="Promise-all"><a href="#Promise-all" class="headerlink" title="Promise.all()"></a>Promise.all()</h2><p>用于将多个Promise实例，包装成一个新的Promise实例。适合用于事务</p>
+<p>p的状态由p1、p2、p3决定，分成两种情况。</p>
+<p>（1）只有p1、p2、p3的状态都变成fulfilled，p的状态才会变成fulfilled，此时<strong>p1、p2、p3的返回值组成一个数组</strong>，传递给p的回调函数。</p>
+<p>（2）只要p1、p2、p3之中有一个被rejected，p的状态就变成rejected，此时第一个被reject的实例的返回值，会传递给p的回调函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 生成一个Promise对象的数组</span></div><div class="line"><span class="keyword">var</span> promises = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>].map(<span class="function"><span class="keyword">function</span>(<span class="params">id</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> getJSON(<span class="string">"/post/"</span> + id + <span class="string">".json"</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">Promise</span>.all(promises).then(<span class="function"><span class="keyword">function</span>(<span class="params">posts</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">reason</span>)</span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="Promise-race"><a href="#Promise-race" class="headerlink" title="Promise.race()"></a>Promise.race()</h2><p>同样是将多个Promise实例，包装成一个新的Promise实例。可用于超时判断 setTimeout<br>超时判断可用bluebird的.timeout(<br>    int ms,<br>    [String message=”operation timed out”]<br>) -&gt; Promise</p>
+<p>只要p1、p2、p3之中有一个实例率先改变状态，p的状态就跟着改变。那个率先改变的Promise实例的返回值，就传递给p的回调函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> p = <span class="built_in">Promise</span>.race([</div><div class="line">  fetch(<span class="string">'/resource-that-may-take-a-while'</span>),</div><div class="line">  <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'request timeout'</span>)), <span class="number">5000</span>)</div><div class="line">  &#125;)</div><div class="line">])</div><div class="line">p.then(<span class="function"><span class="params">response</span> =&gt;</span> <span class="built_in">console</span>.log(response))</div><div class="line">p.catch(<span class="function"><span class="params">error</span> =&gt;</span> <span class="built_in">console</span>.log(error))</div></pre></td></tr></table></figure>
+<ul>
+<li>bluebird  Promise.some 可以传入count，来确定返回几个，promise.any则返回一个</li>
+</ul>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Promise.<span class="keyword">some</span>([</div><div class="line">    ping(<span class="string">"ns1.example.com"</span>),</div><div class="line">    ping(<span class="string">"ns2.example.com"</span>),</div><div class="line">    ping(<span class="string">"ns3.example.com"</span>),</div><div class="line">    ping(<span class="string">"ns4.example.com"</span>)</div><div class="line">], <span class="number">2</span>).spread(function(<span class="keyword">first</span>, <span class="keyword">second</span>) &#123;</div><div class="line">    console.<span class="built_in">log</span>(<span class="keyword">first</span>, <span class="keyword">second</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="Promise-resolve"><a href="#Promise-resolve" class="headerlink" title="Promise.resolve()"></a>Promise.resolve()</h2><p>将现有对象转为Promise对象</p>
+<p><code>参数是一个Promise实例</code>,将不做变动的返回</p>
+<p><code>参数是thenable对象</code> 将这个对象转为Promise对象，然后就立即执行thenable对象的then方法</p>
+<p><code>参数是一个原始值，或者是一个不具有then方法的对象</code> 返回一个新的Promise对象，状态为Resolved</p>
+<p><code>不带有任何参数</code> 直接返回一个Resolved状态的Promise对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'three'</span>);</div><div class="line">&#125;, <span class="number">0</span>);</div><div class="line"></div><div class="line"><span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'two'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'one'</span>);</div><div class="line"></div><div class="line"><span class="comment">// one</span></div><div class="line"><span class="comment">// two</span></div><div class="line"><span class="comment">// three</span></div></pre></td></tr></table></figure>
+<p>Promise.resolve()在本轮“事件循环”（event loop）结束时执行,setTimeout(fn, 0)在下一轮“事件循环”开始时执行</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//无论执行失败还是成功 最后都会回调，依照nodejs回调规范，第一个参数error，第二个成功结果。</span></div><div class="line">bluebird .asCallback(</div><div class="line">    [<span class="function"><span class="keyword">function</span>(<span class="params"><span class="built_in">any</span> error, <span class="built_in">any</span> value</span>) <span class="title">callback</span>],</span></div><div class="line">    [<span class="title">Object</span> &#123;spread: <span class="built_in">boolean</span>=<span class="literal">false</span>&#125; options]</div><div class="line">) -&gt; <span class="keyword">this</span></div><div class="line"></div><div class="line"><span class="comment">//spread 用于遍历拆分数组</span></div><div class="line">Promise.resolve([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).asCallback(<span class="function"><span class="keyword">function</span>(<span class="params">err, a, b, c</span>) </span>&#123;</div><div class="line">    <span class="comment">// err == null</span></div><div class="line">    <span class="comment">// a == 1</span></div><div class="line">    <span class="comment">// b == 2</span></div><div class="line">    <span class="comment">// c == 3</span></div><div class="line">&#125;, &#123;spread: <span class="literal">true</span>&#125;);</div></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/08/Nova体系结构/" itemprop="url">
+                  Nova体系结构
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-08T13:36:25+08:00" content="2015-12-08">
+              2015-12-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/openstack/" itemprop="url" rel="index">
+                    <span itemprop="name">openstack</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/08/Nova体系结构/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/08/Nova体系结构/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h4 id="Nova的四个核心服务："><a href="#Nova的四个核心服务：" class="headerlink" title="Nova的四个核心服务："></a>Nova的四个核心服务：</h4><ol>
+<li>API       —&gt; 进入Nova的HTTP接口 有Policy保护 可以直接操作数据库</li>
+<li>Compute   —&gt; 与VMM交互运行和管理虚拟机 </li>
+<li>Conductor —&gt; 为数据库访问提供安全保障 建议数据库操作都通过Condutor</li>
+<li>Scheduler —&gt; 负责挑选合适的计算节点创建虚拟机实例 只读取数据库</li>
+</ol>
+<h4 id="创建虚拟机的流程"><a href="#创建虚拟机的流程" class="headerlink" title="创建虚拟机的流程"></a>创建虚拟机的流程</h4><ul>
+<li>用户通过执行·client提供的命令，创建虚拟机。client,对原生RESTful Nova API封装、简化用户使用，将用户请求转换成HTTP请求</li>
+<li>API监听HTTP请求，并将其转换成AMQP消息 然后通过消息队列调用Conductor</li>
+<li>Conductor汇总参数，再、通过消息队列通知Scheduler去选择一个合适的计算节点，等拿到Scheduler提供的节点后，通知Compute创建虚拟机</li>
+</ul>
+<h4 id="删除虚拟机"><a href="#删除虚拟机" class="headerlink" title="删除虚拟机"></a>删除虚拟机</h4><ul>
+<li>不需要Scheduler,API通过消息队列通知Compute删除指定虚拟机，Compute通过Condutor更新数据库</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/04/smtp-fibjs-nodejs/" itemprop="url">
+                  smtp fibjs nodejs
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-04T17:30:35+08:00" content="2015-12-04">
+              2015-12-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/snippets/" itemprop="url" rel="index">
+                    <span itemprop="name">snippets</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/04/smtp-fibjs-nodejs/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/04/smtp-fibjs-nodejs/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="string">"use strict"</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> net = require(<span class="string">'net'</span>);</div><div class="line"><span class="keyword">var</span> fs = require(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> name = <span class="string">""</span>,<span class="comment">//send-email-address</span></div><div class="line">    pwd = <span class="string">""</span>,<span class="comment">//email-password</span></div><div class="line">    host = <span class="string">"smtp.exmail.qq.com"</span>,</div><div class="line">    port = <span class="number">25</span>,</div><div class="line">    to = <span class="string">""</span>;to-email-address</div><div class="line"></div><div class="line"><span class="keyword">var</span> argx = &#123;</div><div class="line">    title: <span class="string">"test"</span>,</div><div class="line">    attachment: [&#123;</div><div class="line">        name: <span class="string">"1.png"</span>,</div><div class="line">        path: <span class="string">"1.png"</span></div><div class="line">    &#125;, &#123;</div><div class="line">        name: <span class="string">"2.txt"</span>,</div><div class="line">        path: <span class="string">"2.txt"</span></div><div class="line">    &#125;],</div><div class="line">    content: <span class="string">'内容'</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">send(argx)</div><div class="line"></div><div class="line">function send(arg) &#123;</div><div class="line">    <span class="keyword">var</span> title = <span class="string">"test"</span>;</div><div class="line">    <span class="keyword">var</span> f = fs.<span class="keyword">open</span>(<span class="string">"1.png"</span>);</div><div class="line">    <span class="keyword">var</span> buffer = f.readAll();</div><div class="line">    <span class="keyword">var</span> content = buffer.base64();</div><div class="line">    <span class="keyword">var</span> f1 = fs.<span class="keyword">open</span>(<span class="string">"2.txt"</span>);</div><div class="line">    <span class="keyword">var</span> content1 = f1.readAll().base64();</div><div class="line"></div><div class="line">    <span class="keyword">var</span> _smtp = new net.Smtp();</div><div class="line">    _smtp.connect(host, port);</div><div class="line">    _smtp.hello();</div><div class="line">    _smtp.login(name, pwd);</div><div class="line">    _smtp.from(name);</div><div class="line"></div><div class="line">    <span class="keyword">var</span> <span class="keyword">data</span> = <span class="string">"from:"</span> + name + <span class="string">"\r\n"</span>;</div><div class="line">    <span class="keyword">data</span> += <span class="string">"to:"</span> + to + <span class="string">"\r\n"</span>;</div><div class="line">    <span class="keyword">data</span> += <span class="string">"subject:"</span> + arg.title + <span class="string">"\r\n"</span>;</div><div class="line">    <span class="keyword">data</span> += <span class="string">"MIME-Version: 1.0 \r\nContent-Type: multipart/mixed;\r\n "</span></div><div class="line">    <span class="keyword">data</span> += <span class="string">"boundary=#qwertyuiop#;\r\n"</span></div><div class="line"></div><div class="line">    <span class="keyword">data</span> += <span class="string">"\r\n--#qwertyuiop#\r\n"</span></div><div class="line">    <span class="keyword">data</span> += <span class="string">"Content-Type: text/plain;charset=utf8\r\nContend˙t-Transfer-Encoding:7bit\r\n"</span></div><div class="line">    <span class="keyword">data</span> += <span class="string">"\r\n"</span> + arg.content + <span class="string">"\r\n"</span></div><div class="line"></div><div class="line">    arg.attachment.forEach(function(o) &#123;</div><div class="line">        <span class="keyword">data</span> += <span class="string">"\r\n--#qwertyuiop#\r\n"</span></div><div class="line">        <span class="keyword">data</span> += <span class="string">"Content-Type: application/octet-stream;"</span></div><div class="line">        <span class="keyword">data</span> += <span class="string">"name="</span> + o.name + <span class="string">"\r\n"</span></div><div class="line">        <span class="keyword">data</span> += <span class="string">"Content-Transfer-Encoding: base64\r\n"</span></div><div class="line">        <span class="keyword">data</span> += <span class="string">"\r\n"</span> + fs.<span class="keyword">open</span>(o.path).readAll().base64()</div><div class="line">    &#125;)</div><div class="line">    <span class="keyword">data</span> += <span class="string">"\r\n--#qwertyuiop#\r\n"</span></div><div class="line"></div><div class="line">    f.dispose();</div><div class="line">    _smtp.to(to);</div><div class="line">    _smtp.<span class="keyword">data</span>(<span class="keyword">data</span>);</div><div class="line">    _smtp.quit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/04/shell编程总结1-0/" itemprop="url">
+                  shell编程总结1.0
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-04T15:43:23+08:00" content="2015-12-04">
+              2015-12-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/shell/" itemprop="url" rel="index">
+                    <span itemprop="name">shell</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/04/shell编程总结1-0/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/04/shell编程总结1-0/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <ol>
+<li>chmod +x ./test.sh  #使脚本具有执行权限</li>
+<li>变量名和等号之间不能有空格</li>
+<li>$ 表示当前Shell进程的ID，即pid     $echo $$</li>
+<li>$<em> 和 $@ 都表示传递给函数或脚本的所有参数,当它们被双引号(“ “)包含时，”$</em>“ 会将所有的参数作为一个整体，以”$1 $2 … $n”的形式输出所有参数；”$@” 会将各个参数分开，以”$1” “$2” … “$n” 的形式输出所有参数。</li>
+<li><p>-e 表示对转义字符进行替换 echo -e “Value of a is $a \n”1；</p>
+</li>
+<li><p>使用 echo 命令的 -E 选项禁止转义，默认也是不转义的；使用 -n 选项可以禁止插入换行符。  </p>
+</li>
+<li>命令替换是指Shell可以先执行命令 DATE=<code>date</code></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$0</td>
+<td>当前脚本的文件名</td>
+</tr>
+<tr>
+<td>$n</td>
+<td>传递给脚本或函数的参数。n 是一个数字，表示第几个参数。例如，第一个参数是$1，第二个参数是$2。</td>
+</tr>
+<tr>
+<td>$#</td>
+<td>传递给脚本或函数的参数个数。</td>
+</tr>
+<tr>
+<td>$*</td>
+<td>传递给脚本或函数的所有参数。</td>
+</tr>
+<tr>
+<td>$@</td>
+<td>传递给脚本或函数的所有参数。被双引号(“ “)包含时，与 $* 稍有不同，下面将会讲到。</td>
+</tr>
+<tr>
+<td>$?</td>
+<td>上个命令的退出状态，或函数的返回值。</td>
+</tr>
+<tr>
+<td>$$</td>
+<td>当前Shell进程ID。对于 Shell 脚本，就是这些脚本所在的进程ID。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">    <span class="comment">#!/bin/bash</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"File Name: <span class="variable">$0</span>"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"First Parameter : <span class="variable">$1</span>"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"First Parameter : <span class="variable">$2</span>"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Quoted Values: <span class="variable">$@</span>"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Quoted Values: $*"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Total Number of Parameters : <span class="variable">$#</span>"</span></div><div class="line">$./test.sh Zara Ali</div><div class="line">File Name : ./test.sh</div><div class="line">First Parameter : Zara</div><div class="line">Second Parameter : Ali</div><div class="line">Quoted Values: Zara Ali</div><div class="line">Quoted Values: Zara Ali</div><div class="line">Total Number of Parameters : 2</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>转义</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\</td>
+<td>反斜杠</td>
+</tr>
+<tr>
+<td>\a</td>
+<td>警报，响铃</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>退格（删除键）</td>
+</tr>
+<tr>
+<td>\f</td>
+<td>换页(FF)，将当前位置移到下页开头</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>回车</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>水平制表符（tab键） </td>
+</tr>
+<tr>
+<td>\v</td>
+<td>垂直制表符</td>
+</tr>
+</tbody>
+</table>
+<p>变量替换：</p>
+<table>
+<thead>
+<tr>
+<th>形式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>${var}</td>
+<td>变量本来的值</td>
+</tr>
+<tr>
+<td>${var:-word}</td>
+<td>如果变量 var 为空或已被删除(unset)，那么返回 word，但不改变 var 的值。</td>
+</tr>
+<tr>
+<td>${var:=word}</td>
+<td>如果变量 var 为空或已被删除(unset)，那么返回 word，并将 var 的值设置为 word。</td>
+</tr>
+<tr>
+<td>${var:?message}</td>
+<td>如果变量 var 为空或已被删除(unset)，那么将消息 message 送到标准错误输出，可以用来检测变量 var 是否可以被正常赋值。若此替换出现在Shell脚本中，那么脚本将停止运行。</td>
+</tr>
+<tr>
+<td>${var:+word}</td>
+<td>如果变量 var 被定义，那么返回 word，但不改变 var 的值。</td>
+</tr>
+</tbody>
+</table>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/12/04/虚拟化实现方式/" itemprop="url">
                   虚拟化实现方式
                 </a>
@@ -670,14 +1254,14 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">73</span>
+              <span class="site-state-item-count">77</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
