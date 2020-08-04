@@ -225,6 +225,15 @@
 
     
     
+      
+      
+        
+        
+        
+      
+
+      
+    
 
     
       
@@ -696,172 +705,6 @@
 <h5 id="传输格式"><a href="#传输格式" class="headerlink" title="传输格式"></a>传输格式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line"></div><div class="line">package fgrid;</div><div class="line"></div><div class="line">service Call &#123;</div><div class="line">  rpc Call (body) returns (body) &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">message body &#123;</div><div class="line">  string body = 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="middle"><a href="#middle" class="headerlink" title="middle"></a>middle</h4><p>client发送rpc请求，格式参考部分JSON-RPC</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attribute">method</span>: targetArgs.<span class="built_in">join</span>(<span class="string">'.'</span>),</div><div class="line">  param: [ ...args, ctx.rpcCtx ],</div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/04/29/总结/" itemprop="url">
-                  授权重构及微服务开发问题总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2020-04-29T16:38:37+08:00" content="2020-04-29">
-              2020-04-29
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/方法论/" itemprop="url" rel="index">
-                    <span itemprop="name">方法论</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2020/04/29/总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/04/29/总结/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="项目回顾"><a href="#项目回顾" class="headerlink" title="项目回顾"></a>项目回顾</h3><h4 id="重构目的"><a href="#重构目的" class="headerlink" title="重构目的"></a>重构目的</h4><p>优化授权数据的存储方式，避免原先冗长的缓存计算</p>
-<h4 id="成果"><a href="#成果" class="headerlink" title="成果"></a>成果</h4><p>无需再做定时的缓存刷新，据实施和客户反馈操作授权速度和流程度比原先有大幅提升</p>
-<h4 id="槽点和败笔"><a href="#槽点和败笔" class="headerlink" title="槽点和败笔"></a>槽点和败笔</h4><ol>
-<li>从目的出发业务基本无改动，完全搬运原先代码,也因此出现了一些纰漏</li>
-<li>过度设计，ra-backend无意义的透传，首先侧重代码的清晰、可读性，再考虑其他规范，避免形式主义</li>
-<li>缺少自测手段,过度依赖测试团队,效率很低</li>
-<li>前期在基础组件花费时间过长，缺乏进度管控,后期赶工,代码质量缺少保障</li>
-<li>// 沟通问题</li>
-</ol>
-<h3 id="开发体感"><a href="#开发体感" class="headerlink" title="开发体感"></a>开发体感</h3><h4 id="业务代码"><a href="#业务代码" class="headerlink" title="业务代码"></a>业务代码</h4><ol>
-<li>修改依赖授权数据的项目非常痛苦,要去了解原先的业务场景和数据格式后再设计接口，在后期测试时，这块花费了很大时间，出了bug难以排查</li>
-<li>原先项目参数定义比较奇怪，使用-1表示否定，mongo支持undefined为查询条件</li>
-</ol>
-<h4 id="基础组件"><a href="#基础组件" class="headerlink" title="基础组件"></a>基础组件</h4><ol>
-<li>缺少服务地址组件： 本地开发启动多服务联调比较麻烦，连接线上服务也需要不断修改配置文件</li>
-<li>log插件：线上报错信息不完整，没有显示具体的调用信息</li>
-</ol>
-<h3 id="工程化"><a href="#工程化" class="headerlink" title="工程化"></a>工程化</h3><h4 id="解耦"><a href="#解耦" class="headerlink" title="解耦"></a>解耦</h4><ol>
-<li>服务拆分颗粒度 要与公司业务发展趋势相契合，不能生搬硬套教程，做适当整合(基础信息类)</li>
-<li>避免类似ra-backend只做透传的项目</li>
-<li>传入参数的校验，存在将前端传入参数直接透传查询的情况，需要加以验证和鉴权</li>
-</ol>
-<h4 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h4><ol>
-<li>因为docker构建缓存，私有包不自动更新,增加Jenkins配置或者写明使用包版本</li>
-<li>私有包版本管理，不兼容问题</li>
-</ol>
-<h4 id="质量保证"><a href="#质量保证" class="headerlink" title="质量保证"></a>质量保证</h4><ol>
-<li>最小单元测试 确保不出现语法错误(await、拼写)</li>
-<li>健康检查，考虑开放http来提供健康检查，通过fx-rpc插件实现再调用rpc来自检</li>
-</ol>
-<h4 id="代码风格"><a href="#代码风格" class="headerlink" title="代码风格"></a>代码风格</h4><ol>
-<li>下划线转驼峰</li>
-<li>单文件代码行数,按controller映射service容易出现代码行数过大 需要做适当拆解</li>
-</ol>
-<h4 id="临时发布环境搭建"><a href="#临时发布环境搭建" class="headerlink" title="临时发布环境搭建"></a>临时发布环境搭建</h4><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><h4 id="测试准备"><a href="#测试准备" class="headerlink" title="测试准备"></a>测试准备</h4><ol>
-<li>撤下老的项目，防止再被调用</li>
-</ol>
-<h4 id="自测能力"><a href="#自测能力" class="headerlink" title="自测能力"></a>自测能力</h4><p>对复杂业务场景的自测能力</p>
-<h3 id="沟通"><a href="#沟通" class="headerlink" title="沟通"></a>沟通</h3><h4 id="团队会议"><a href="#团队会议" class="headerlink" title="团队会议"></a>团队会议</h4><ol>
-<li>回顾本周进度，指定下周计划，预防延期或及时做进度调整</li>
-<li>对于有争议的问题由tl做决策避免拖延</li>
-<li>确定责任边界，避免扯皮;回顾、调整目标，确保团队整体方向正确（避免无用功，有争议时从目标出发）</li>
-<li>做好会议记录（记录决策）发给与会者</li>
-</ol>
-<h3 id="下阶段计划"><a href="#下阶段计划" class="headerlink" title="下阶段计划"></a>下阶段计划</h3><h4 id="rpc包更换"><a href="#rpc包更换" class="headerlink" title="rpc包更换"></a>rpc包更换</h4><ol>
-<li>精简rpc包，剔除mq功能</li>
-<li>使用egg agent,支持多worker启动</li>
-</ol>
-<h4 id="mq包更换"><a href="#mq包更换" class="headerlink" title="mq包更换"></a>mq包更换</h4><ol>
-<li>封装http版本的包</li>
-<li>避免一个业务动作批量发送mq的场景（类似多段的分布式事务） 需要由业务侧做拆分</li>
-</ol>
-<h4 id="log"><a href="#log" class="headerlink" title="log"></a>log</h4><ol>
-<li>错误日志输出适配rpc，打印调用参数和traceId</li>
-</ol>
-<h4 id="减少rpc传输字段"><a href="#减少rpc传输字段" class="headerlink" title="减少rpc传输字段"></a>减少rpc传输字段</h4><ol>
-<li>禁用select * ,自协调参数输出</li>
-</ol>
-<h4 id="服务地址组件"><a href="#服务地址组件" class="headerlink" title="服务地址组件"></a>服务地址组件</h4><ol>
-<li>暂定在本地开发使用，线上运行不依赖它</li>
-<li>通过简单的声明即可获取服务地址，包括测试、预发、生产</li>
-</ol>
-<h3 id="技巧分享"><a href="#技巧分享" class="headerlink" title="技巧分享"></a>技巧分享</h3><p>在node中实现高效缓存<br><a href="http://wmtcore.com/2020/04/23/%E9%AB%98%E6%95%88%E7%BC%93%E5%AD%98%E7%9A%84%E4%BD%BF%E7%94%A8/" target="_blank" rel="external">http://wmtcore.com/2020/04/23/%E9%AB%98%E6%95%88%E7%BC%93%E5%AD%98%E7%9A%84%E4%BD%BF%E7%94%A8/</a></p>
-<p>反向授权性能优化<br><a href="http://wmtcore.com/2020/03/20/%E5%8F%8D%E5%90%91%E6%8E%88%E6%9D%83%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" target="_blank" rel="external">http://wmtcore.com/2020/03/20/%E5%8F%8D%E5%90%91%E6%8E%88%E6%9D%83%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</a></p>
 
             
           </span>
