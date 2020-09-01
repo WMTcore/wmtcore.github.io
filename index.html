@@ -225,15 +225,380 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/09/01/es数据被黑事件记录和处理/" itemprop="url">
+                  es数据被黑事件记录和处理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-09-01T18:44:00+08:00" content="2020-09-01">
+              2020-09-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/工作日常/" itemprop="url" rel="index">
+                    <span itemprop="name">工作日常</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/09/01/es数据被黑事件记录和处理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/09/01/es数据被黑事件记录和处理/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h3><p><code>时间</code>: 2020年8月30日 4点10分</p>
+<p>es中所有open的日志全被删掉，包括系统日志，只留下一个read_me</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="string">"read_me"</span>: &#123;</div><div class="line">    <span class="string">"aliases"</span>: &#123;&#125;,</div><div class="line">    <span class="string">"mappings"</span>: &#123;</div><div class="line">      <span class="string">"_doc"</span>: &#123;</div><div class="line">        <span class="string">"properties"</span>: &#123;</div><div class="line">          <span class="string">"@timestamp"</span>: &#123;</div><div class="line">            <span class="string">"type"</span>: <span class="string">"date"</span></div><div class="line">          &#125;,</div><div class="line">          <span class="string">"message"</span>: &#123;</div><div class="line">            <span class="string">"type"</span>: <span class="string">"text"</span>,</div><div class="line">            <span class="string">"fields"</span>: &#123;</div><div class="line">              <span class="string">"keyword"</span>: &#123;</div><div class="line">                <span class="string">"type"</span>: <span class="string">"keyword"</span>,</div><div class="line">                <span class="string">"ignore_above"</span>: <span class="number">256</span></div><div class="line">              &#125;</div><div class="line">            &#125;</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="string">"settings"</span>: &#123;</div><div class="line">      <span class="string">"index"</span>: &#123;</div><div class="line">        <span class="string">"creation_date"</span>: <span class="string">"1598760619467"</span>,</div><div class="line">        <span class="string">"number_of_shards"</span>: <span class="string">"5"</span>,</div><div class="line">        <span class="string">"number_of_replicas"</span>: <span class="string">"1"</span>,</div><div class="line">        <span class="string">"uuid"</span>: <span class="string">"cL_kgJ_XQqe2lSgOrN4VUw"</span>,</div><div class="line">        <span class="string">"version"</span>: &#123;</div><div class="line">          <span class="string">"created"</span>: <span class="string">"6030299"</span></div><div class="line">        &#125;,</div><div class="line">        <span class="string">"provided_name"</span>: <span class="string">"read_me"</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="string">"message"</span>: <span class="string">"SEND 0.015 BTC TO THIS WALLET: 1BJxnAYaaWNbQcL9o9GS768v3VqVMNDusD IF YOU WANT RECOVER YOUR DATABASE! SEND TO THIS EMAIL YOUR SERVER IP AFTER SENDING THE BITCOINS getbase@cock.li"</span></div></pre></td></tr></table></figure>
+<p>网络i/o没有突增，所以数据并没有被移走，而是直接被删掉了</p>
+<h4 id="影响"><a href="#影响" class="headerlink" title="影响"></a>影响</h4><p><code>数据丢失</code>：es所在云盘有快照备份，可以从28号早上五点的恢复，丢失数据即28，29号和30号一部分，周末基本无日志，所以主要<strong>损失28号当前的请求日志</strong></p>
+<p><code>修复成本</code>: 导出30号之后的日志，然后回滚磁盘，操作简单但耗时较长，预计影响时间3小时，后期考虑是否更换云盘类型，提高备份和回滚速度</p>
+<h3 id="漏洞查找"><a href="#漏洞查找" class="headerlink" title="漏洞查找"></a>漏洞查找</h3><ul>
+<li>es没有密码保护</li>
+</ul>
+<p>操作es有三种个途径，一是ip直接访问，二是通过内网slb访问，三是使用kibana</p>
+<p>这三者都在内网中<strong>需要ecs安全组访问白名单</strong>，检查不存在大范围的ip授权，除了阿里云自动添加的ip段较大（到24位），但平时<code>添加公司ip过期没有及时删除</code></p>
+<p>检索slb中与发生时间相近的日志，条件过滤<code>request_method: DELETE</code>,查到了大量删除请求,再根据<code>http_user_agent: python-requests/2.18.4</code>为条件过滤得到了完整的攻击请求</p>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">08<span class="string">-28</span> 23:38:25</div><div class="line">client_ip:  195.54.161.252</div><div class="line">client_port:  60516</div><div class="line">http_host:   *.*.*.*:9200</div><div class="line">http_user_agent:  python-requests/2.18.4</div><div class="line">request_method:  HEAD</div><div class="line">request_uri:  /</div><div class="line">slb_vport:  9200</div><div class="line"><span class="keyword">time:</span>  2020<span class="string">-08</span><span class="string">-28</span>T23:38:25<span class="string">+08</span>:00</div><div class="line">upstream_addr:  *.*.*.*:32101</div><div class="line">vip_addr:   *.*.*.*</div><div class="line"></div><div class="line">08<span class="string">-28</span> 23:38:28</div><div class="line">client_ip:  195.54.161.252</div><div class="line">client_port:  39732</div><div class="line">http_host:  *.*.*.*:9200</div><div class="line">http_user_agent:  python-requests/2.18.4</div><div class="line">request_method:  GET</div><div class="line">request_uri:  /_all/</div><div class="line">slb_vport:  9200</div><div class="line"><span class="keyword">time:</span>  2020<span class="string">-08</span><span class="string">-30</span>T12:10:19<span class="string">+08</span>:00</div><div class="line">upstream_addr: *.*.*.*</div><div class="line">vip_addr:  *.*.*.*</div><div class="line"></div><div class="line">08<span class="string">-28</span> 23:38:36</div><div class="line">client_ip:  195.54.161.252</div><div class="line">client_port:  32844</div><div class="line">http_host:  *.*.*.*:9200</div><div class="line">http_user_agent:  python-requests/2.18.4</div><div class="line">request_method:  DELETE</div><div class="line">request_uri:  /log_saas_develop<span class="string">-2020</span>.07.21/</div><div class="line">slb_vport:  9200</div><div class="line"><span class="keyword">time:</span>  2020<span class="string">-08</span><span class="string">-28</span>T23:38:36<span class="string">+08</span>:00</div><div class="line">upstream_addr:  *.*.*.*:32101</div><div class="line">vip_addr:  *.*.*.*</div><div class="line"></div><div class="line">...</div></pre></td></tr></table></figure>
+<p>一共发起了<strong>两次攻击</strong>，第一次发生在<code>08-28 23:38:25</code>,第二次是在<code>08-30 12:10:19</code></p>
+<p><code>http_host</code>是一个公网ip，一开始在slb和ecs中都没查到，后来发现是我使用的阿里云子账号权限不够看不到EIP =_=||</p>
+<p>漏洞: <strong>内网slb绑定了公网eip，没有访问控制，也没有改es默认端口</strong>,被暴利扫描的脚本发现</p>
+<h3 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h3><p><code>出现问题的原因</code>: 原先es绑定的内网slb是单纯为es使用<strong>端口设为默认9200</strong>，方便内网中其他服务通过域名访问到es，后被<strong>合并到slb ops-k8s-cluster</strong>，但该slb是绑定在k8s上并<strong>提供了EIP给k8s的api server</strong>，导致es暴露到公网中，没有访问控制且未修改端口</p>
+<p><code>处理方法</code>: <strong>增加访问控制</strong>，采用和ecs相同的方式刷白名单，<strong>不使用默认端口9200</strong></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>未被保护的资产暴露到公网被暴力扫描脚本攻击</p>
+<h4 id="发现问题与自检"><a href="#发现问题与自检" class="headerlink" title="发现问题与自检"></a>发现问题与自检</h4><ol>
+<li>暴露公网ip的服务（slb,ecs,rds）<strong>必须配置访问控制</strong></li>
+<li>自建的公共服务（es,redis,gitlab,jenkins,spinnaker等）<strong>禁止使用默认端口</strong></li>
+<li>自建服务<strong>只能通过域名访问</strong>，避免无访问记录</li>
+<li>云盘快照备份中只备份工作日的配置不合理，原先是周一到周五，需改为周二到周六</li>
+<li>定期更换服务密码</li>
+</ol>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/08/27/分布式任务平台设计概要/" itemprop="url">
+                  分布式任务平台设计概要
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-08-27T15:45:36+08:00" content="2020-08-27">
+              2020-08-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/工作日常/" itemprop="url" rel="index">
+                    <span itemprop="name">工作日常</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/08/27/分布式任务平台设计概要/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/08/27/分布式任务平台设计概要/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="任务"><a href="#任务" class="headerlink" title="任务"></a>任务</h3><h4 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h4><p>从mq获取任务，再记录到job表,记录的信息有 funcName，args，createUser，priority，serviceName</p>
+<h4 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h4><p>从job表读取任务</p>
+<p><code>限流</code>: 当待执行队列长度超<strong>missionQueueSize</strong>则等待<strong>readTimeDelayMillsWhenFlowControl</strong>后重新执行</p>
+<p><code>限频</code>: 每隔<strong>readInterval</strong>读取任务</p>
+<h4 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h4><p>从待执行队列中取出任务发送给worker</p>
+<p><code>并发</code>：根据<strong>parallelConsumeLimit</strong>限制，同时发送任务</p>
+<p>当无任务时等待<strong>get_new_mission</strong>事件触发</p>
+<p>发送任务时不等待结果，然后修改job表中任务状态为<strong>E</strong></p>
+<h4 id="完成"><a href="#完成" class="headerlink" title="完成"></a>完成</h4><p>监听etcd完成任务的信息写入</p>
+<p>按执行结果修改job表中任务状态，从<strong>missionInProcessMap</strong>中删除该任务</p>
+<h4 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h4><p>定期检查执行中的任务状态，主要是执行时间</p>
+<p>对于执行<strong>missionOutT重试超过限制ime</strong>超时的任务重新加入任务队列，重试超次数<strong>retryTimes</strong>的任务则在job表中标记为<strong>F</strong>,失败原因为重试超过限制</p>
+<h3 id="master"><a href="#master" class="headerlink" title="master"></a>master</h3><h4 id="etcd"><a href="#etcd" class="headerlink" title="etcd"></a>etcd</h4><p>将任务完成信息同步到etcd中<br>优势：</p>
+<ol>
+<li>主动通知任务完成，实现方便，无需master等待完成结果</li>
+<li>避免进度丢失，单点问题</li>
+</ol>
+<h5 id="master选举"><a href="#master选举" class="headerlink" title="master选举"></a>master选举</h5><p>key为/mif/schedule/leader,当版本为0时创建并设置ttl,其他scheduler监听该key，当失效时重新选举</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>service/job/init</p>
+<ol>
+<li>读取etcd中已存在的任务（已完成master未处理）</li>
+<li>从job表载入正在执行的任务，加入missionInProcessMap</li>
+<li>启动监听etcd任务完成put事件</li>
+<li>执行<a href="#检查">任务检查</a></li>
+<li>执行<a href="#完成">任务完成</a></li>
+<li>开始循环读取任务,检查任务,执行任务</li>
+</ol>
+<h4 id="发送任务"><a href="#发送任务" class="headerlink" title="发送任务"></a>发送任务</h4><p>通过http post触发部署在函数计算中的worker</p>
+<ul>
+<li>fc判断服务启动完成存在问题，在启动未完成时接受请求返回502</li>
+</ul>
+<p>当请求返回此错误时，采取重试</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (response.data.errorMessage.indexOf(<span class="string">'Process exited unexpectedly before completing request'</span>) !== <span class="number">-1</span>) &#123;</div><div class="line">  <span class="keyword">const</span> &#123; missionId, serviceName, funcName, args &#125; = data;</div><div class="line">  app.logger.error(error);</div><div class="line">  <span class="keyword">return</span> app.send(missionId, serviceName, funcName, args);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="worker"><a href="#worker" class="headerlink" title="worker"></a>worker</h3><p>部署在函数计算，节省资源，方便扩容，无需健康检查</p>
+<p>接收任务与rpc处理逻辑类似不再重复</p>
+<h4 id="中间件finishMission"><a href="#中间件finishMission" class="headerlink" title="中间件finishMission"></a>中间件finishMission</h4><p>待执行完成后向etcd插入结果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">await</span> next();</div><div class="line"><span class="keyword">if</span> (!ctx.missionId) <span class="keyword">return</span>;</div><div class="line"><span class="keyword">await</span> ctx.app.etcdMission.put(<span class="string">'finish/'</span> + ctx.missionId).value(<span class="built_in">JSON</span>.stringify(&#123;</div><div class="line">  <span class="attr">missionId</span>: ctx.missionId,</div><div class="line">  <span class="attr">time</span>: <span class="built_in">Date</span>.now(),</div><div class="line">  <span class="attr">status</span>: <span class="string">'S'</span>,</div><div class="line">&#125;));</div></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/08/19/SaaS工程编译/" itemprop="url">
+                  未命名
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-08-19T17:59:31+08:00" content="2020-08-19">
+              2020-08-19
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/08/19/SaaS工程编译/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/08/19/SaaS工程编译/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="SaaS工程编译"><a href="#SaaS工程编译" class="headerlink" title="SaaS工程编译"></a>SaaS工程编译</h2><h3 id="webpack配置"><a href="#webpack配置" class="headerlink" title="webpack配置"></a>webpack配置</h3><ul>
+<li>将工程打包到一个文件中</li>
+</ul>
+<p>工程中使用<code>app-module-path</code>设置src为根路径，所以在打包时需要对src做替换</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="attr">entry</span>: <span class="string">'./index.js'</span>,</div><div class="line">  <span class="attr">target</span>: <span class="string">'node'</span>,</div><div class="line">  <span class="attr">output</span>: &#123;</div><div class="line">    <span class="attr">filename</span>: <span class="string">'bundle.js'</span>,</div><div class="line">    <span class="attr">path</span>: __dirname</div><div class="line">  &#125;,</div><div class="line">  <span class="comment">// devtool: 'inline-source-map',</span></div><div class="line">  externals: _externals(),</div><div class="line">  <span class="attr">resolve</span>:&#123;</div><div class="line">    <span class="attr">alias</span>: &#123;</div><div class="line">      <span class="attr">config</span>: path.resolve(__dirname, <span class="string">'config.js'</span>),</div><div class="line">      <span class="string">'src'</span>: path.resolve(__dirname, <span class="string">'./src'</span>),</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">_externals</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> manifest = <span class="built_in">require</span>(<span class="string">'./package.json'</span>);</div><div class="line">  <span class="keyword">let</span> dependencies = manifest.dependencies;</div><div class="line">  <span class="keyword">let</span> externals = &#123;&#125;;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> p <span class="keyword">in</span> dependencies) &#123;</div><div class="line">    externals[p] = <span class="string">'commonjs '</span> + p;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> externals;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="动态引用转为静态引用脚本"><a href="#动态引用转为静态引用脚本" class="headerlink" title="动态引用转为静态引用脚本"></a>动态引用转为静态引用脚本</h3><p>工程通过读取目标来实现动态引用，只在执行时触发，导致两个问题：</p>
+<ol>
+<li>动态路径无法被webpack打包</li>
+<li>转成静态引用后出现循环调用问题</li>
+</ol>
+<h4 id="生成静态引用脚本"><a href="#生成静态引用脚本" class="headerlink" title="生成静态引用脚本"></a>生成静态引用脚本</h4><p>生成对应目录</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> dir = dirname(__dirname)+<span class="string">'/src/routes'</span>;</div><div class="line"></div><div class="line"><span class="keyword">let</span> requireString=<span class="string">`'use strict';</span></div><div class="line"></div><div class="line">`</div><div class="line"></div><div class="line">fs.readdirSync(dir).filter(<span class="function"><span class="keyword">function</span> (<span class="params">file</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> (file.indexOf(<span class="string">'.'</span>) !== <span class="number">0</span>) &amp;&amp; (file !== <span class="string">'index.js'</span>) &amp;&amp; (file.slice(<span class="number">-3</span>) === <span class="string">'.js'</span>);</div><div class="line">  &#125;)</div><div class="line">  .forEach(<span class="function"><span class="keyword">function</span> (<span class="params">file</span>) </span>&#123;</div><div class="line">    requireString += <span class="string">`require('./<span class="subst">$&#123;basename(file)&#125;</span>');\n`</span></div><div class="line">  &#125;);</div><div class="line"></div><div class="line">fs.writeFileSync(dir+<span class="string">'/index.js'</span>,requireString)</div></pre></td></tr></table></figure>
+<h4 id="循环调用"><a href="#循环调用" class="headerlink" title="循环调用"></a>循环调用</h4><p>工程service文件夹内部有相互调用，但直接引用index.js文件，转成静态引用后出现循环调用导致报错</p>
+<p>通过Proxy来处理循环引用，原理是在init时只给个proxy对象，在正真调用时返回require对应的文件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="keyword">new</span> <span class="built_in">Proxy</span>(&#123;&#125;, &#123;</div><div class="line">  <span class="attr">get</span>: <span class="function">(<span class="params">target, value</span>) =&gt;</span> &#123;</div><div class="line">  	<span class="comment">// 有些地方在init时就要获取具体的service (like, &#123;foo&#125; = service),所以需要多返回一层Proxy</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Proxy</span>(&#123;</div><div class="line">      <span class="attr">service</span>: value</div><div class="line">    &#125;, &#123;</div><div class="line">      <span class="attr">get</span>: <span class="function">(<span class="params">target, value</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">return</span> requireObj[target.service][value]</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="env文件处理"><a href="#env文件处理" class="headerlink" title=".env文件处理"></a>.env文件处理</h3><p>增加另外的启动文件run.js,加.env加到环境变量中</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span>;</div><div class="line"></div><div class="line"><span class="built_in">require</span>(<span class="string">'dotenv'</span>).config(&#123;<span class="attr">path</span>:__dirname+<span class="string">'/.env'</span>&#125;)</div><div class="line"></div><div class="line">process.env.APP_HOME = __dirname;</div><div class="line">process.env.pkg = <span class="number">1</span>;</div><div class="line"></div><div class="line"><span class="built_in">require</span>(<span class="string">'./bundle.js'</span>);</div></pre></td></tr></table></figure>
+<h3 id="pkg编译"><a href="#pkg编译" class="headerlink" title="pkg编译"></a>pkg编译</h3><p>将<strong>run.js</strong>设为编译入口，再引入.env和grpc.proto，node_modules也会打包编译进去</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// package.json</span></div><div class="line">  </div><div class="line">  <span class="string">"bin"</span>: <span class="string">"run.js"</span>,</div><div class="line">  <span class="string">"pkg"</span>:&#123;</div><div class="line">    <span class="string">"assets"</span>: [<span class="string">".env"</span>,<span class="string">"grpc.proto"</span>]</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>最后生成saas的执行文件</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -747,6 +1112,172 @@
             
               
                 
+                <a class="post-title-link" href="/2020/04/29/授权重构及微服务开发问题总结/" itemprop="url">
+                  授权重构及微服务开发问题总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-04-29T16:38:37+08:00" content="2020-04-29">
+              2020-04-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/工作日常/" itemprop="url" rel="index">
+                    <span itemprop="name">工作日常</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/04/29/授权重构及微服务开发问题总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/04/29/授权重构及微服务开发问题总结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="项目回顾"><a href="#项目回顾" class="headerlink" title="项目回顾"></a>项目回顾</h3><h4 id="重构目的"><a href="#重构目的" class="headerlink" title="重构目的"></a>重构目的</h4><p>优化授权数据的存储方式，避免原先冗长的缓存计算</p>
+<h4 id="成果"><a href="#成果" class="headerlink" title="成果"></a>成果</h4><p>无需再做定时的缓存刷新，据实施和客户反馈操作授权速度和流程度比原先有大幅提升</p>
+<h4 id="槽点和败笔"><a href="#槽点和败笔" class="headerlink" title="槽点和败笔"></a>槽点和败笔</h4><ol>
+<li>从目的出发业务基本无改动，完全搬运原先代码,也因此出现了一些纰漏</li>
+<li>过度设计，ra-backend无意义的透传，首先侧重代码的清晰、可读性，再考虑其他规范，避免形式主义</li>
+<li>缺少自测手段,过度依赖测试团队,效率很低</li>
+<li>前期在基础组件花费时间过长，缺乏进度管控,后期赶工,代码质量缺少保障</li>
+<li>// 沟通问题</li>
+</ol>
+<h3 id="开发体感"><a href="#开发体感" class="headerlink" title="开发体感"></a>开发体感</h3><h4 id="业务代码"><a href="#业务代码" class="headerlink" title="业务代码"></a>业务代码</h4><ol>
+<li>修改依赖授权数据的项目非常痛苦,要去了解原先的业务场景和数据格式后再设计接口，在后期测试时，这块花费了很大时间，出了bug难以排查</li>
+<li>原先项目参数定义比较奇怪，使用-1表示否定，mongo支持undefined为查询条件</li>
+</ol>
+<h4 id="基础组件"><a href="#基础组件" class="headerlink" title="基础组件"></a>基础组件</h4><ol>
+<li>缺少服务地址组件： 本地开发启动多服务联调比较麻烦，连接线上服务也需要不断修改配置文件</li>
+<li>log插件：线上报错信息不完整，没有显示具体的调用信息</li>
+</ol>
+<h3 id="工程化"><a href="#工程化" class="headerlink" title="工程化"></a>工程化</h3><h4 id="解耦"><a href="#解耦" class="headerlink" title="解耦"></a>解耦</h4><ol>
+<li>服务拆分颗粒度 要与公司业务发展趋势相契合，不能生搬硬套教程，做适当整合(基础信息类)</li>
+<li>避免类似ra-backend只做透传的项目</li>
+<li>传入参数的校验，存在将前端传入参数直接透传查询的情况，需要加以验证和鉴权</li>
+</ol>
+<h4 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h4><ol>
+<li>因为docker构建缓存，私有包不自动更新,增加Jenkins配置或者写明使用包版本</li>
+<li>私有包版本管理，不兼容问题</li>
+</ol>
+<h4 id="质量保证"><a href="#质量保证" class="headerlink" title="质量保证"></a>质量保证</h4><ol>
+<li>最小单元测试 确保不出现语法错误(await、拼写)</li>
+<li>健康检查，考虑开放http来提供健康检查，通过fx-rpc插件实现再调用rpc来自检</li>
+</ol>
+<h4 id="代码风格"><a href="#代码风格" class="headerlink" title="代码风格"></a>代码风格</h4><ol>
+<li>下划线转驼峰</li>
+<li>单文件代码行数,按controller映射service容易出现代码行数过大 需要做适当拆解</li>
+</ol>
+<h4 id="临时发布环境搭建"><a href="#临时发布环境搭建" class="headerlink" title="临时发布环境搭建"></a>临时发布环境搭建</h4><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><h4 id="测试准备"><a href="#测试准备" class="headerlink" title="测试准备"></a>测试准备</h4><ol>
+<li>撤下老的项目，防止再被调用</li>
+</ol>
+<h4 id="自测能力"><a href="#自测能力" class="headerlink" title="自测能力"></a>自测能力</h4><p>对复杂业务场景的自测能力</p>
+<h3 id="沟通"><a href="#沟通" class="headerlink" title="沟通"></a>沟通</h3><h4 id="团队会议"><a href="#团队会议" class="headerlink" title="团队会议"></a>团队会议</h4><ol>
+<li>回顾本周进度，指定下周计划，预防延期或及时做进度调整</li>
+<li>对于有争议的问题由tl做决策避免拖延</li>
+<li>确定责任边界，避免扯皮;回顾、调整目标，确保团队整体方向正确（避免无用功，有争议时从目标出发）</li>
+<li>做好会议记录（记录决策）发给与会者</li>
+</ol>
+<h3 id="下阶段计划"><a href="#下阶段计划" class="headerlink" title="下阶段计划"></a>下阶段计划</h3><h4 id="rpc包更换"><a href="#rpc包更换" class="headerlink" title="rpc包更换"></a>rpc包更换</h4><ol>
+<li>精简rpc包，剔除mq功能</li>
+<li>使用egg agent,支持多worker启动</li>
+</ol>
+<h4 id="mq包更换"><a href="#mq包更换" class="headerlink" title="mq包更换"></a>mq包更换</h4><ol>
+<li>封装http版本的包</li>
+<li>避免一个业务动作批量发送mq的场景（类似多段的分布式事务） 需要由业务侧做拆分</li>
+</ol>
+<h4 id="log"><a href="#log" class="headerlink" title="log"></a>log</h4><ol>
+<li>错误日志输出适配rpc，打印调用参数和traceId</li>
+</ol>
+<h4 id="减少rpc传输字段"><a href="#减少rpc传输字段" class="headerlink" title="减少rpc传输字段"></a>减少rpc传输字段</h4><ol>
+<li>禁用select * ,自协调参数输出</li>
+</ol>
+<h4 id="服务地址组件"><a href="#服务地址组件" class="headerlink" title="服务地址组件"></a>服务地址组件</h4><ol>
+<li>暂定在本地开发使用，线上运行不依赖它</li>
+<li>通过简单的声明即可获取服务地址，包括测试、预发、生产</li>
+</ol>
+<h3 id="技巧分享"><a href="#技巧分享" class="headerlink" title="技巧分享"></a>技巧分享</h3><p>在node中实现高效缓存<br><a href="http://wmtcore.com/2020/04/23/%E9%AB%98%E6%95%88%E7%BC%93%E5%AD%98%E7%9A%84%E4%BD%BF%E7%94%A8/" target="_blank" rel="external">http://wmtcore.com/2020/04/23/%E9%AB%98%E6%95%88%E7%BC%93%E5%AD%98%E7%9A%84%E4%BD%BF%E7%94%A8/</a></p>
+<p>反向授权性能优化<br><a href="http://wmtcore.com/2020/03/20/%E5%8F%8D%E5%90%91%E6%8E%88%E6%9D%83%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" target="_blank" rel="external">http://wmtcore.com/2020/03/20/%E5%8F%8D%E5%90%91%E6%8E%88%E6%9D%83%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</a></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2020/04/23/高效缓存的使用/" itemprop="url">
                   在node中实现高效缓存
                 </a>
@@ -975,437 +1506,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/03/28/微服务开发注意事项/" itemprop="url">
-                  微服务开发注意事项
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2020-03-28T16:38:37+08:00" content="2020-03-28">
-              2020-03-28
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/方法论/" itemprop="url" rel="index">
-                    <span itemprop="name">方法论</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2020/03/28/微服务开发注意事项/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/03/28/微服务开发注意事项/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="认识到微服务开发的复杂性"><a href="#认识到微服务开发的复杂性" class="headerlink" title="认识到微服务开发的复杂性"></a>认识到微服务开发的复杂性</h3><ol>
-<li>本地开发要有一个好的开发机器，糟糕的开发机器将会导致糟糕的开发实践</li>
-<li>确保所有服务都使用构建工具，能在一台新机器上构建整个应用程序，而不需要进行太多配置，让开发人员能<strong>轻松地在本地运行应用程序的各个部分</strong></li>
-<li>使用Kubernetes，利用Telepresence以便轻松调试 Kubernetes 集群中的应用程序</li>
-</ol>
-<p>如果对微服务开发的复杂性缺乏理解，那么团队速度将会随着时间的推移而下降</p>
-<h3 id="及时将库和工具更新到最新版"><a href="#及时将库和工具更新到最新版" class="headerlink" title="及时将库和工具更新到最新版"></a>及时将库和工具更新到最新版</h3><p>所有服务的依赖项版本保持同步，<strong>为依赖升级创建技术债务项</strong>，并应作为会议的一部分加以讨论，并定期予以解决，将所有依赖项更新到最新版本</p>
-<p><strong>不止包括升级依赖包的版本，还包括架构修正</strong>，如当引入一个新工具时，可能可以替换掉原先多个工具，有助于降低复杂性</p>
-<p>几年前，许多团队开始将 Spring Cloud Netflix OSS 项目用于微服务。他们使用像 Kubernetes 这样的容器编排工具，但是因为是从 Netflix OSS 开始的，所以他们没有使用 Kubernetes 提供的所有功能。当 Kubernetes 内置了服务发现时，他们仍然使用 Eureka 作为服务发现</p>
-<h3 id="避免使用共享服务来做本地开发"><a href="#避免使用共享服务来做本地开发" class="headerlink" title="避免使用共享服务来做本地开发"></a>避免使用共享服务来做本地开发</h3><p>举例共享数据库</p>
-<ol>
-<li>一个开发人员可以删除其他开发人员为他们工作编写的数据</li>
-<li>开发人员害怕实验，因为他们的工作会影响其他团队成员</li>
-<li>很难单独测试更改。你的集成测试将变得不可靠，从而进一步降低开发速度</li>
-<li>容易出现不一致和不可预测的状态，开发人员希望在表是空的时候测试边缘情况，但其他开发人员需要一个表来记录</li>
-<li>只有共享数据库拥有系统工作所需的所有数据，团队成员失去了更改的可追溯性</li>
-<li>如果未连接到网络，就很难开展工作</li>
-</ol>
-<p>它也可以是消息队列、集中缓存（如 Redis）或任何其他可以发生改变的服务</p>
-<h3 id="代码托管平台的可见性"><a href="#代码托管平台的可见性" class="headerlink" title="代码托管平台的可见性"></a>代码托管平台的可见性</h3><p>在托管平台按产品、服务<strong>对微服务进行分组</strong>，方便了解代码库结构</p>
-<h3 id="服务有明确定义"><a href="#服务有明确定义" class="headerlink" title="服务有明确定义"></a>服务有明确定义</h3><p>避免拆分过多服务，会导致管理成本直线上升，</p>
-<p>应用单一责任原则（Single Responsibility Principle）来了解微服务是否变得过大，做的事情是否过多</p>
-<p><strong>任何服务都不应该直接与其他服务的数据库通信</strong></p>
-<p><strong>服务通信是微服务系统性能低下的首要原因</strong>： 如果两条信息相互依赖，那么它们应该属于同一个服务，服务的自然边界应该是其数据的自然边界</p>
-<h3 id="明确代码重用策略"><a href="#明确代码重用策略" class="headerlink" title="明确代码重用策略"></a>明确代码重用策略</h3><p><strong>对处理相同问题的代码，使用包封装</strong>，发布在包管理平台，并通过构建工具来让依赖的微服务及时更新</p>
-<p>没有适合的工具和自动化的情况下，使用微服务会导致灾难</p>
-<h3 id="多语言编程设计"><a href="#多语言编程设计" class="headerlink" title="多语言编程设计"></a>多语言编程设计</h3><p>如果你的开发人员还不够成熟的话，那么无论你使用什么编程语言，你开发的都将是糟糕的产品</p>
-<p>一个组织可以指定2、3个语言列表，并列出语言的优势</p>
-<p>在选择一门语言前，应该考虑以下一些问题：</p>
-<ol>
-<li>找到成熟的开发人员有多容易</li>
-<li>重新培训开发人员掌握新技术有多容易？我们发现 Java 开发人员可以相对容易地学习 Golang。</li>
-<li>代码的可读、可维护性</li>
-<li>就工具和库的方面而言，生态系统有多成熟？</li>
-</ol>
-<p>不仅仅局限于编程语言，也适用于数据库领域, 要始终考虑使用多种技术的维护和操作方面</p>
-<h3 id="人员的依赖性"><a href="#人员的依赖性" class="headerlink" title="人员的依赖性"></a>人员的依赖性</h3><p>大多数团队专注于他们的特定服务，因此他们并不了解完整的生态系统</p>
-<p>确保所有团队都有一个架构团队的代表，使每个团队与整个架构的路线图和目标保持一致（人月神话中有提过，外科手术团队,只需要协调各团队中的架构师）</p>
-<h3 id="维护文档"><a href="#维护文档" class="headerlink" title="维护文档"></a>维护文档</h3><p>需要维护的文档：</p>
-<ol>
-<li>设计文档</li>
-<li>C4 模型中的上下文和容器图</li>
-<li>以架构决策记录的形式跟踪关键架构决策</li>
-<li>开发人员入门指南</li>
-</ol>
-<p>在Gitlab中维护所有的文档</p>
-<h3 id="功能不要超过平台成熟度"><a href="#功能不要超过平台成熟度" class="headerlink" title="功能不要超过平台成熟度"></a>功能不要超过平台成熟度</h3><p>微服务要比传统的单体式应用更为复杂</p>
-<p>需要考虑分布式跟踪、可观察性、混沌测试、函数调用与网络调用、服务间通信的安全服务、可调试性等等。这需要在构建正确的平台和工具团队方面付出认真的努力和投资</p>
-<h3 id="自动化测试"><a href="#自动化测试" class="headerlink" title="自动化测试"></a>自动化测试</h3><p>微服务架构为测试地点和测试方式提供了更多选择</p>
-<p>微服务测试的金字塔</p>
-<p><img src="/picture/微服务开发注意事项.png" alt="Resize icon"></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/03/28/为什么巴比伦塔会失败/" itemprop="url">
-                  为什么巴比伦塔会失败?(Why Did the Tower of Babel Fail?)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2020-03-28T14:08:11+08:00" content="2020-03-28">
-              2020-03-28
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/人月神话/" itemprop="url" rel="index">
-                    <span itemprop="name">人月神话</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2020/03/28/为什么巴比伦塔会失败/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/03/28/为什么巴比伦塔会失败/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>交流的缺乏导致了争辩、沮丧和群体猜忌。很快，部落开始分裂——大家选择了孤立，而不是互相争吵</p>
-<p>缺少相互沟通会导致进度灾难、功能的不合理和系统缺陷</p>
-<p>对程序功能的修改要从系统角度来考虑和衡量，及时做公开，告知</p>
-<h3 id="项目工作手册"><a href="#项目工作手册" class="headerlink" title="项目工作手册"></a>项目工作手册</h3><p>是项目文档的集合，包括目的、外部规格说明、接口说明、 技术标准、内部说明和管理备忘录，帮助后来者了解产品设计</p>
-<p>事先将项目工作手册设计好，能保证文档的结构本身是规范的</p>
-<p>控制信息发布：确保信息能到达所有需要它的人的手中，对所有的备忘录编号或者树状的索引结构</p>
-<p><strong>记录修订日期记录和标记变更标识条</strong></p>
-<p>编程人员仅了 解自己负责的部分，而不是整个系统的开发细节时，工作效率最高，先决条件是 精确和完整地定义所有接口</p>
-<h3 id="大型编程项目的组织架构"><a href="#大型编程项目的组织架构" class="headerlink" title="大型编程项目的组织架构"></a>大型编程项目的组织架构</h3><p>团队组织的目的是减少不必要交流和合作的数量</p>
-<p>减少交流的方法是人力划分和限定职责范围</p>
-<p>树状组织架构:</p>
-<ol>
-<li>任务(a mission)</li>
-<li>产品负责人(a producer)</li>
-<li>技术主管和结构师(a technical director or architect)</li>
-<li>进度(a schedule)</li>
-<li>人力的划分(a division of labor)</li>
-<li>各部分之间的接口定义(interface definitions among the parts)</li>
-</ol>
-<p>产品负责人:</p>
-<ol>
-<li>主要的工作是<strong>与团队外部，向上和水平地沟通</strong>，建立团队内部 的沟通和报告方式</li>
-<li>组建团队，划分工作及制订进度表，要求资源，确保进度目标的实现，根据环境的变化调整资源和团队的构架</li>
-</ol>
-<p>技术主管:</p>
-<ol>
-<li>提供整个设计的一致性和概念完整性,控制系统的复杂程度</li>
-<li>对设计进行构思，确定内部结构。</li>
-<li>提供技术问题的解决方案，或者根据需要调整系统设计。</li>
-<li>他的沟通交流在团队中是首要的。他的<strong>工作几乎完全是技术性的</strong></li>
-</ol>
-<h4 id="产品负责人和技术主管的组合方式"><a href="#产品负责人和技术主管的组合方式" class="headerlink" title="产品负责人和技术主管的组合方式"></a>产品负责人和技术主管的组合方式</h4><p>产品负责人和技术主管是同一个人: </p>
-<ol>
-<li>只适用于几个人的小团队开发</li>
-<li>同时具有管理技能和技术技能的人很难找到，大型项目中，每个角色都必须全职工作无法保证还能抽空做别的</li>
-</ol>
-<p>产品负责人作为总指挥，技术主管充当其左右手：</p>
-<ol>
-<li>实现难度在<strong>建立技术决策上的权威</strong></li>
-<li>必须对技术主管的技术才能表现出尊重，支持他的技术决定</li>
-<li>在主要的技术问题出现之前，私下讨论它们,达到<strong>在基本的技术理论上具有相似观点</strong></li>
-<li>一些技巧 通过一些微妙状态特征暗示来(如，办公室的大小、地毯、装修、复印机等等)体现技术主管的威信</li>
-<li>这种组合可以使工作很有效 项目经理可以使用并不很擅长管理的技术天才来完成工作</li>
-</ol>
-<p>技术主管作为总指挥，产品负责人充当其左右手：</p>
-<ol>
-<li><strong>小型的团队是最好的选择</strong></li>
-<li>参考 外科手术队伍</li>
-</ol>
-<p>对于真正大型项目中的一些开发队伍，产品负责人作为管理者是更合适的安排</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/03/20/反向授权性能优化/" itemprop="url">
-                  反向授权性能优化
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2020-03-20T15:28:37+08:00" content="2020-03-20">
-              2020-03-20
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/工作日常/" itemprop="url" rel="index">
-                    <span itemprop="name">工作日常</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2020/03/20/反向授权性能优化/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/03/20/反向授权性能优化/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="之前的问题"><a href="#之前的问题" class="headerlink" title="之前的问题"></a>之前的问题</h3><p>在做反向计算时，主要涉及到区域数据的比较，通过查出所有子集再循环剔除，</p>
-<p>数据量、大运算慢，频繁根据region_start_id查数据库,返回结果因为展开到商品，对反向涉及到的商品都会带上庞大的区域数据</p>
-<h4 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h4><p><code>深拷贝优化</code>: 展开的授权数据，要从原始授权继承区域，需要深拷贝，直接深拷贝Object太慢，通过immutable做了优化，但涉及到的商品区域数据最后返回时要toJS，速度较慢</p>
-<p><code>region缓存</code>: <code>region_start_id</code>查数据库，将查询id数组长为1的做了lru,目的是缓存区域层级高、重复多的数据，在原始授权数据很多时有较大的速度提升</p>
-<h3 id="改造"><a href="#改造" class="headerlink" title="改造"></a>改造</h3><h4 id="根本问题"><a href="#根本问题" class="headerlink" title="根本问题"></a>根本问题</h4><p>计算区域时，无法通过regionID直接知道层级，并做层级运算（会有子父级数据的剔除和补充）</p>
-<h4 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h4><p>受树形数据加编号启发，通过一个层级key来表示regionID的层级信息，直接对key做运算</p>
-<p><strong>将原先展开循环的层级运算，变成字符串比较</strong></p>
-<p>缓存: </p>
-<ul>
-<li>cacheRegionKeyObj key对应region记录</li>
-<li>cacheRegionIdObj regionId对应key</li>
-<li>cacheRegionKeysRank key对应子集keys,同层级数据groupby加列转行</li>
-</ul>
-<p>在做层级运算时，通过字符串运算即可得到上下级key再到缓存里换出子集keys,再对展开结果做排除即可完成层级运算</p>
-<p>优势：</p>
-<ol>
-<li>深拷贝只有层级key数组</li>
-<li>层级运算不涉及数据库</li>
-<li>返回结果只有展开的层级key,前端通过缓存cacheRegionKeyObj换算即可</li>
-</ol>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
-<li>深拷贝处理可以尝试immutable</li>
-<li>对于树形数据的层级计算，考虑转成平铺的形式，同时保留层级信息,需要将数据缓存在本地计算，适合数据量较小的场景</li>
-</ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1452,7 +1552,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">77</span>
+              <span class="site-state-item-count">80</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

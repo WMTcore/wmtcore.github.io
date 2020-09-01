@@ -253,6 +253,548 @@
             
               
                 
+                <a class="post-title-link" href="/2015/12/24/json-web-token/" itemprop="url">
+                  json web token
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-24T16:16:50+08:00" content="2015-12-24">
+              2015-12-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/24/json-web-token/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/24/json-web-token/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="由来"><a href="#由来" class="headerlink" title="由来"></a>由来</h3><ul>
+<li>Cookie+Session的方式,在用户登录通过验证后，服务端将 数据加密后 通过在响应头（Header）保存到客户端浏览器的Cookie(包含sid或token)中，同时服务器保留相对应的Session（文件或DB）。用户之后发起的请求（Request）都会携带Cookie信息，服 务端需要根据Cookie寻回对应的Session，从而完成验证，确认这是之前登陆过的用户。</li>
+<li>API应该被设计成<strong>无状态</strong>的（Stateless）。这意味着没有登陆，注销的方法，也没有sessions，API的设计者同样也不能依赖Cookie，因为不能保证这些request是由浏览器所发出的</li>
+</ul>
+<h3 id="JWT介绍"><a href="#JWT介绍" class="headerlink" title="JWT介绍"></a>JWT介绍</h3><ul>
+<li>分为三段，通过解码可以得到：</li>
+</ul>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 1. Headers</span></div><div class="line"><span class="comment">// 包括类别（typ）、加密算法（alg）；</span></div><div class="line">&#123;</div><div class="line">  <span class="string">"alg"</span>: <span class="string">"HS256"</span>,</div><div class="line">  <span class="string">"typ"</span>: <span class="string">"JWT"</span></div><div class="line">&#125;</div><div class="line"><span class="comment">// 2. Claims</span></div><div class="line"><span class="comment">// 包括需要传递的用户信息；</span></div><div class="line">&#123;</div><div class="line">  <span class="string">"sub"</span>: <span class="string">"1234567890"</span>,</div><div class="line">  <span class="string">"name"</span>: <span class="string">"John Doe"</span>,</div><div class="line">  <span class="string">"admin"</span>: <span class="literal">true</span></div><div class="line">&#125;</div><div class="line"><span class="comment">// 3. Signature</span></div><div class="line"><span class="comment">// 根据alg算法与私有秘钥进行加密得到的签名字串；</span></div><div class="line"><span class="comment">// 这一段是最重要的敏感信息，只能在服务端解密；</span></div><div class="line">HMACSHA256(  </div><div class="line">    base64UrlEncode(<span class="keyword">header</span>) + <span class="string">"."</span> +</div><div class="line">    base64UrlEncode(payload),</div><div class="line">    SECREATE_KEY</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>在使用过程中，服务端通过用户登录验证之后，将Header+Claim信息加密后得到第三段签名，然后将三段签名合并后返回给客户端。客户端获取到token后，应该在每次向服务器请求数据时附带这个token，然后服务端验证token。</p>
+<ul>
+<li><p>因此JWT是用来取代服务端的Session而非客户端Cookie的方案.对于客户端本地存储,不同的选择更多是出于安全性的考虑</p>
+</li>
+<li><p>客户端在与服务器第一次通信时，通过一些可靠信息（用户名、密码）和服务器交换取token，这个token作为客服端再次请求的权限钥匙。Token通常比密码更加长而且复杂。JWTs通常会长达150个字符。一旦获得了token，在每次调用API的时候都要附加上它。把token想象成一个安全的护照。你在一个安全的前台验证你的身份（通过你的用户名和密码），如果你成功验证了自己，你就可以取得这个。当你走进大楼的时候（试图从调用API获取资源），你会被要求验证你的护照，而不是在前台重新验证。</p>
+</li>
+</ul>
+<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><ul>
+<li>client 头部值部分使用Bearer<token> Authorization: Bearer <token></token></token></li>
+<li>.set(‘Authorization’, ‘Bearer ‘ + token)</li>
+</ul>
+<h3 id="encoded"><a href="#encoded" class="headerlink" title="encoded"></a>encoded</h3><ul>
+<li><a href="https://github.com/auth0/node-jsonwebtoken" target="_blank" rel="external">https://github.com/auth0/node-jsonwebtoken</a></li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">jwt</span><span class="selector-class">.sign</span>(<span class="selector-tag">payload</span>, <span class="selector-tag">secretOrPrivateKey</span>, <span class="selector-tag">options</span>, <span class="selector-attr">[callback]</span>);</div></pre></td></tr></table></figure>
+<p><code>payload</code> Claims,即传递的用户信息，could be an object literal, buffer or string.if not,it will be coerced into a string using <code>JSON.stringify</code>.</p>
+<p><code>secretOrPrivateKey</code> is a string or buffer containing either the secret for HMAC algorithms, or the PEM encoded private key for RSA and ECDSA.字符串，或着fs.readFileSync读取的证书</p>
+<p><code>options</code>:</p>
+<ul>
+<li><code>algorithm</code> (default: <code>HS256</code>) 加密算法</li>
+<li><code>expiresIn</code>: expressed in seconds or an string describing a time span <a href="https://github.com/rauchg/ms.js" target="_blank" rel="external">rauchg/ms</a>. Eg: <code>60</code>, <code>&quot;2 days&quot;</code>, <code>&quot;10h&quot;</code>, <code>&quot;7d&quot;</code> 有效期/分钟</li>
+<li><code>audience</code></li>
+<li><code>subject</code></li>
+<li><code>issuer</code></li>
+<li><code>noTimestamp</code></li>
+<li><code>headers</code></li>
+</ul>
+<p>Example</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// sign with default (HMAC SHA256)</span></div><div class="line"><span class="keyword">var</span> jwt = <span class="built_in">require</span>(<span class="string">'jsonwebtoken'</span>);</div><div class="line"><span class="keyword">var</span> token = jwt.sign(&#123; <span class="attr">foo</span>: <span class="string">'bar'</span> &#125;, <span class="string">'shhhhh'</span>);</div><div class="line"></div><div class="line"><span class="comment">// sign with RSA SHA256</span></div><div class="line"><span class="keyword">var</span> cert = fs.readFileSync(<span class="string">'private.key'</span>);  <span class="comment">// get private key</span></div><div class="line"><span class="keyword">var</span> token = jwt.sign(&#123; <span class="attr">foo</span>: <span class="string">'bar'</span> &#125;, cert, &#123; <span class="attr">algorithm</span>: <span class="string">'RS256'</span>&#125;);</div></pre></td></tr></table></figure>
+<h3 id="decoded"><a href="#decoded" class="headerlink" title="decoded"></a>decoded</h3><ul>
+<li><a href="https://github.com/auth0/express-jwt" target="_blank" rel="external">https://github.com/auth0/express-jwt</a></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> jwt = <span class="built_in">require</span>(<span class="string">'express-jwt'</span>);</div><div class="line"></div><div class="line">app.get(<span class="string">'/protected'</span>,</div><div class="line">  jwt(&#123;<span class="attr">secret</span>: <span class="string">'shhhhhhared-secret'</span>&#125;),</div><div class="line">  <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!req.user.admin) <span class="keyword">return</span> res.sendStatus(<span class="number">401</span>);</div><div class="line">    res.sendStatus(<span class="number">200</span>);            </div><div class="line">  &#125;);</div></pre></td></tr></table></figure>
+<p>you can make some paths unprotected as follows:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//设置路由/token 不验证</span></div><div class="line"><span class="selector-tag">app</span><span class="selector-class">.use</span>(jwt(&#123; <span class="attribute">secret</span>: <span class="string">'shhhhhhared-secret'</span>&#125;).unless(&#123;<span class="attribute">path</span>: [<span class="string">'/token'</span>]&#125;));</div></pre></td></tr></table></figure>
+<p>By default, the decoded token is attached to req.user but can be configured with the requestProperty option.<br>默认解密后的token Claim内容加到req.user </p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//将解密后的token加到req.auth</span></div><div class="line">jwt(&#123; <span class="string">secret:</span> publicKey, <span class="string">requestProperty:</span> <span class="string">'auth'</span> &#125;);</div></pre></td></tr></table></figure>
+<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><ul>
+<li>XSS 主要原因是对用户输入信息不加过滤，导致用户 （被误导）恶意输入的Js代码在访问该网页时被执行，而Js可以读取当前网站域名下保存的Cookie信息.<code>对用户输入的所有信息进行过滤即可</code>,CDN服务也有可能引入不安全的Js脚本</li>
+<li>CSRF,跨站请求伪造 主要利用Cookie是按照域名存储，同时访问某域名时浏览器会自动携带该域名所保存的Cookie信息这一特征.如果执意要将JWT存储在Cookie中，服务端则需要额外验证请求来源.将JWT保存在localStorage中，即将JWT放入Request Header中的Authorization位。</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/22/Sequelize事务实现/" itemprop="url">
+                  Sequelize事务实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-22T16:08:37+08:00" content="2015-12-22">
+              2015-12-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/22/Sequelize事务实现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/22/Sequelize事务实现/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="Managed-transaction-auto-callback"><a href="#Managed-transaction-auto-callback" class="headerlink" title="Managed transaction (auto-callback)"></a>Managed transaction (auto-callback)</h3><ul>
+<li>事务将自动提交</li>
+<li>sequelize.transaction</li>
+</ul>
+<figure class="highlight scilab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span> models.sequelize.transaction(<span class="function"><span class="keyword">function</span><span class="params">(t)</span> &#123;</span></div><div class="line">  <span class="comment">// chain all your queries here. make sure you return them.</span></div><div class="line">  <span class="keyword">return</span> User.create(&#123;</div><div class="line">    firstName: <span class="string">'Abraham'</span>,</div><div class="line">    lastName: <span class="string">'Lincoln'</span></div><div class="line">  &#125;, &#123;</div><div class="line">    transaction: t</div><div class="line">  &#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(user)</span> &#123;</span></div><div class="line">    <span class="keyword">return</span> user.setShooter(&#123;</div><div class="line">      firstName: <span class="string">'John'</span>,</div><div class="line">      lastName: <span class="string">'Boothe'</span></div><div class="line">    &#125;, &#123;</div><div class="line">      transaction: t</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line">&#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(result)</span> &#123;</span></div><div class="line">  <span class="comment">// Transaction has been committed</span></div><div class="line">  <span class="comment">// result is whatever the result of the promise chain returned to the transaction callback</span></div><div class="line">&#125;).<span class="keyword">catch</span>(<span class="function"><span class="keyword">function</span><span class="params">(err)</span> &#123;</span></div><div class="line">  <span class="comment">// Transaction has been rolled back</span></div><div class="line">  <span class="comment">// err is whatever rejected the promise chain returned to the transaction callback</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="Unmanaged-transaction-then-callback"><a href="#Unmanaged-transaction-then-callback" class="headerlink" title="Unmanaged transaction (then-callback)"></a>Unmanaged transaction (then-callback)</h3><ul>
+<li>非自动提交事务</li>
+<li>sequelize.transaction()</li>
+</ul>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span> sequelize.transaction().<span class="keyword">then</span>(<span class="keyword">function</span> <span class="title"></span>(t) &#123;</div><div class="line">  <span class="keyword">return</span> <span class="type">User.create(&#123;</span></div><div class="line">    firstName: <span class="symbol">'Homer</span>',</div><div class="line">    lastName: <span class="symbol">'Simpson</span>'</div><div class="line">  &#125;, &#123;transaction: t&#125;).<span class="keyword">then</span>(<span class="keyword">function</span> <span class="title"></span>(user) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="type">user.addSibling(&#123;</span></div><div class="line">      firstName: <span class="symbol">'Lisa</span>',</div><div class="line">      lastName: <span class="symbol">'Simpson</span>'</div><div class="line">    &#125;, &#123;transaction: t&#125;);</div><div class="line">  &#125;).<span class="keyword">then</span>(<span class="keyword">function</span> <span class="title"></span>() &#123;</div><div class="line">    t.commit();</div><div class="line">  &#125;).catch(<span class="keyword">function</span> <span class="title"></span>(err) &#123;</div><div class="line">    t.rollback();</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="Automatically-pass-transactions-to-all-queries"><a href="#Automatically-pass-transactions-to-all-queries" class="headerlink" title="Automatically pass transactions to all queries"></a>Automatically pass transactions to all queries</h3><ul>
+<li>自动添加事务</li>
+<li>无需{ transaction: t }</li>
+<li>require(‘continuation-local-storage’)</li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cls = require(<span class="string">'continuation-local-storage'</span>),</div><div class="line">    <span class="keyword">namespace</span> = cls.createNamespace(<span class="string">'my-very-own-namespace'</span>);</div><div class="line"></div><div class="line">sequelize.transaction(<span class="function"><span class="keyword">function</span> <span class="params">(t1)</span> </span>&#123;</div><div class="line">  <span class="keyword">namespace</span>.get(<span class="string">'transaction'</span>) === t1; <span class="comment">// true</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">sequelize.transaction(<span class="function"><span class="keyword">function</span> <span class="params">(t2)</span> </span>&#123;</div><div class="line">  <span class="keyword">namespace</span>.get(<span class="string">'transaction'</span>) === t2; <span class="comment">// true</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="Array-transaction"><a href="#Array-transaction" class="headerlink" title="Array transaction"></a>Array transaction</h3><ul>
+<li>事务并行</li>
+</ul>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">models.sequelize.transaction(<span class="function"><span class="keyword">function</span><span class="params">(t)</span></span> &#123;</div><div class="line">    <span class="keyword">return</span> models.Products.create(args, &#123;</div><div class="line">        transaction: t</div><div class="line">    &#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(result)</span></span> &#123;</div><div class="line">        <span class="keyword">return</span> Promise.<span class="built_in">all</span>([models.user.create(&#123;</div><div class="line">            <span class="keyword">name</span>: <span class="string">'test'</span></div><div class="line">        &#125;, &#123;</div><div class="line">            transaction: t</div><div class="line">        &#125;), models.address.create(&#123;</div><div class="line">            id: <span class="string">'1'</span></div><div class="line">        &#125;, &#123;</div><div class="line">            transaction: t</div><div class="line">        &#125;)]).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">()</span></span> &#123;&#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="push-promise-all-实现循环读取、写入"><a href="#push-promise-all-实现循环读取、写入" class="headerlink" title="push + promise.all 实现循环读取、写入"></a>push + promise.all 实现循环读取、写入</h3><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">        models.sequelize.transaction(function(t) &#123;</div><div class="line">            <span class="built_in">var</span> tranArray = [];</div><div class="line">            <span class="keyword">if</span> (!<span class="symbol">_</span>.isUndefined(<span class="built_in">args</span>.categories_id)) &#123;</div><div class="line">                <span class="built_in">var</span> categories_idArray = <span class="built_in">args</span>.categories_id.<span class="built_in">split</span>(',');</div><div class="line">                tranArray.<span class="built_in">push</span>(models.Categories_product.destroy(&#123;</div><div class="line">                    where: &#123;</div><div class="line">                        product_id: product_id</div><div class="line">                    &#125;</div><div class="line">                &#125;, &#123;</div><div class="line">                    transaction: t</div><div class="line">                &#125;));</div><div class="line">                categories_idArray.forEach(function(categories_id) &#123;</div><div class="line">                    tranArray.<span class="built_in">push</span>(models.Categories_product.create(&#123;</div><div class="line">                        product_id: product_id,</div><div class="line">                        categories_id: categories_id</div><div class="line">                    &#125;, &#123;</div><div class="line">                        transaction: t</div><div class="line">                    &#125;));</div><div class="line">                &#125;);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (<span class="symbol">_</span>.isUndefined(areacode)) &#123;</div><div class="line">                tranArray.<span class="built_in">push</span>(models.Products.update(<span class="built_in">args</span>, &#123;</div><div class="line">                    where: &#123;</div><div class="line">                        id: product_id</div><div class="line">                    &#125;</div><div class="line">                &#125;));</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                tranArray.<span class="built_in">push</span>(models.Product_lang_details.update(<span class="built_in">args</span>,</div><div class="line">                    where: &#123;</div><div class="line">                        product_id: product_id,</div><div class="line">                        areacode: areacode</div><div class="line">                    &#125;));</div><div class="line">                tranArray.<span class="built_in">push</span>(models.Product_shipping_to.update(&#123;</div><div class="line">                        freezeTableName: <span class="built_in">args</span>.freezeTableName</div><div class="line">                    &#125;,</div><div class="line">                    where: &#123;</div><div class="line">                        product_id: product_id,</div><div class="line">                        areacode: areacode</div><div class="line">                    &#125;));</div><div class="line">            &#125;</div><div class="line">            <span class="built_in">return</span> Promise.all(tranArray);</div><div class="line">        &#125;).<span class="keyword">then</span>(function() &#123;</div><div class="line">            <span class="built_in">return</span> utils.response(res, <span class="number">200</span>, &#123;</div><div class="line">                'message': 'update <span class="built_in">product</span> successful!'</div><div class="line">            &#125;);</div><div class="line">        &#125;).<span class="built_in">catch</span>(function(<span class="built_in">error</span>) &#123;</div><div class="line">            logger.<span class="built_in">error</span>('<span class="built_in">product</span> update fall', <span class="built_in">error</span>);</div><div class="line">            <span class="built_in">return</span> utils.responseError(res, <span class="number">500</span>, &#123;</div><div class="line">                'message': 'format <span class="built_in">error</span>'</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div><div class="line">        </div><div class="line">###</div></pre></td></tr></table></figure>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/18/Sequelize-基本sql语句/" itemprop="url">
+                  Sequelize 基本sql语句
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-18T10:18:59+08:00" content="2015-12-18">
+              2015-12-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/18/Sequelize-基本sql语句/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/18/Sequelize-基本sql语句/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h4 id="SELECT、DELETE、UPDATE"><a href="#SELECT、DELETE、UPDATE" class="headerlink" title="SELECT、DELETE、UPDATE"></a>SELECT、DELETE、UPDATE</h4><table>
+<thead>
+<tr>
+<th>sql</th>
+<th>orm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>select</td>
+<td>findAll,findOne,findById,findOrCreate,findAndCountAll</td>
+</tr>
+<tr>
+<td>delete</td>
+<td>destroy</td>
+</tr>
+<tr>
+<td>update</td>
+<td>update</td>
+</tr>
+<tr>
+<td>insert</td>
+<td>create</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>sql</th>
+<th>orm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT foo, bar …</td>
+<td>Model.findAll({attributes: [‘foo’, ‘bar’]});</td>
+</tr>
+<tr>
+<td>SELECT foo, bar AS baz …</td>
+<td>Model.findAll({attributes: [‘foo’, <strong>[‘bar’, ‘baz’]</strong>]});</td>
+</tr>
+<tr>
+<td>SELECT COUNT(hats) AS no_hats …</td>
+<td>Model.findAll({attributes: [[<strong>sequelize.fn(‘COUNT’, sequelize.col(‘hats’))</strong>, ‘no_hats’]]});</td>
+</tr>
+<tr>
+<td>SELECT id, foo, bar, quz …</td>
+<td>Model.findAll({attributes: {<strong>exclude</strong>: [‘baz’] }});</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">Model</span><span class="selector-class">.findAll</span>(&#123;</div><div class="line">  <span class="attribute">attributes</span>: [<span class="string">'id'</span>, <span class="string">'foo'</span>, <span class="string">'bar'</span>, <span class="string">'baz'</span>, <span class="string">'quz'</span>, [sequelize.fn(<span class="string">'COUNT'</span>, sequelize.col(<span class="string">'hats'</span>)), <span class="string">'no_hats'</span>]]</div><div class="line">&#125;);</div><div class="line"><span class="comment">//等于</span></div><div class="line"><span class="selector-tag">Model</span><span class="selector-class">.findAll</span>(&#123;</div><div class="line">  <span class="attribute">attributes</span>: &#123; <span class="attribute">include</span>: [[sequelize.fn(<span class="string">'COUNT'</span>, sequelize.col(<span class="string">'hats'</span>)), <span class="string">'no_hats'</span>]] &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="selector-tag">SELECT</span> <span class="selector-tag">id</span>, <span class="selector-tag">foo</span>, <span class="selector-tag">bar</span>, <span class="selector-tag">baz</span>, <span class="selector-tag">quz</span>, <span class="selector-tag">COUNT</span>(hats) <span class="selector-tag">AS</span> <span class="selector-tag">no_hats</span> ...</div></pre></td></tr></table></figure>
+<h4 id="WHERE"><a href="#WHERE" class="headerlink" title="WHERE"></a>WHERE</h4><table>
+<thead>
+<tr>
+<th>sql</th>
+<th>orm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> SELECT * FROM post WHERE authorId = 12 AND status = ‘active’</td>
+<td>Post.findAll({where: { authorId: 2,status: ‘active’}});</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Operators"><a href="#Operators" class="headerlink" title="Operators"></a>Operators</h4><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">Post.<span class="keyword">update</span>(&#123;</div><div class="line">  updatedAt: null,</div><div class="line">&#125;, &#123;</div><div class="line">  where: &#123;</div><div class="line">    deletedAt: &#123;</div><div class="line">      $ne: null</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line">// UPDATE post SET updatedAt = null WHERE deletedAt NOT NULL;</div><div class="line"></div><div class="line">Post.findAll(&#123;</div><div class="line">  where: sequelize.where(sequelize.fn(<span class="string">'char_length'</span>, sequelize.col(<span class="string">'status'</span>)), <span class="number">6</span>)</div><div class="line">&#125;);</div><div class="line">// SELECT * FROM post WHERE char_length(status) = <span class="number">6</span>;</div><div class="line"></div><div class="line">&#123;</div><div class="line">  rank: &#123;</div><div class="line">    $or: &#123;</div><div class="line">      $lt: <span class="number">1000</span>,</div><div class="line">      $eq: null</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">// rank &lt; <span class="number">1000</span> OR rank IS NULL</div><div class="line"></div><div class="line">&#123;</div><div class="line">  createdAt: &#123;</div><div class="line">    $lt: new Date(),</div><div class="line">    $gt: new Date(new Date() - <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">// createdAt &lt; [timestamp] AND createdAt &gt; [timestamp]</div><div class="line"></div><div class="line">&#123;</div><div class="line">  $or: [</div><div class="line">    &#123;</div><div class="line">      title: &#123;</div><div class="line">        $like: <span class="string">'Boat%'</span></div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">      description: &#123;</div><div class="line">        $like: <span class="string">'%boat%'</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  ]</div><div class="line">&#125;</div><div class="line">// title LIKE <span class="string">'Boat%'</span> OR description LIKE <span class="string">'%boat%'</span></div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>op</th>
+<th>define</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$and: {a: 5}</td>
+<td>AND (a = 5)</td>
+</tr>
+<tr>
+<td>$or: [{a: 5}, {a: 6}]</td>
+<td>(a = 5 OR a = 6)</td>
+</tr>
+<tr>
+<td>$gt: 6,</td>
+<td>&gt; 6</td>
+</tr>
+<tr>
+<td>$gte: 6,</td>
+<td>&gt;= 6</td>
+</tr>
+<tr>
+<td>$lt: 10,</td>
+<td>&lt; 10</td>
+</tr>
+<tr>
+<td>$lte: 10,</td>
+<td>&lt;= 10</td>
+</tr>
+<tr>
+<td>$ne: 20,</td>
+<td>!= 20</td>
+</tr>
+<tr>
+<td>$between: [6, 10],</td>
+<td>BETWEEN 6 AND 10</td>
+</tr>
+<tr>
+<td>$notBetween: [11, 15],</td>
+<td>NOT BETWEEN 11 AND 15</td>
+</tr>
+<tr>
+<td>$in: [1, 2],</td>
+<td>IN [1, 2]</td>
+</tr>
+<tr>
+<td>$notIn: [1, 2],</td>
+<td>NOT IN [1, 2]</td>
+</tr>
+<tr>
+<td>$like: ‘%hat’,</td>
+<td>LIKE ‘%hat’</td>
+</tr>
+<tr>
+<td>$notLike: ‘%hat’</td>
+<td>NOT LIKE ‘%hat’</td>
+</tr>
+<tr>
+<td>$iLike: ‘%hat’</td>
+<td>ILIKE ‘%hat’ (case insensitive) (PG only)</td>
+</tr>
+<tr>
+<td>$notILike: ‘%hat’</td>
+<td>NOT ILIKE ‘%hat’  (PG only)</td>
+</tr>
+<tr>
+<td>$like: { $any: [‘cat’, ‘hat’]}</td>
+<td>LIKE ANY ARRAY[‘cat’, ‘hat’] - also works for iLike and notLike</td>
+</tr>
+<tr>
+<td>$overlap: [1, 2]</td>
+<td>&amp;&amp; [1, 2] (PG array overlap operator)</td>
+</tr>
+<tr>
+<td>$contains: [1, 2]</td>
+<td>@&gt; [1, 2] (PG array contains operator)</td>
+</tr>
+<tr>
+<td>$contained: [1, 2]</td>
+<td>&lt;@ [1, 2] (PG array contained by operator)</td>
+</tr>
+<tr>
+<td>$any: [2,3]</td>
+<td>ANY ARRAY[2, 3]::INTEGER (PG only)</td>
+</tr>
+<tr>
+<td>$col: ‘user.organization_id’</td>
+<td>“user”.”organization_id”, with dialect specific column identifiers, PG in this example  –$col取表的字段</td>
+</tr>
+</tbody>
+</table>
+<h4 id="WARNING"><a href="#WARNING" class="headerlink" title="WARNING"></a>WARNING</h4><p><code>tabel need primarykey</code>:如果没有，Sequlize会自己加个自增主键，可能引起错误</p>
+<h4 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h4><p><code>findOrCreate</code>: 查到一个，查不到就新建</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> <span class="selector-tag">models</span><span class="selector-class">.BrandReview</span><span class="selector-class">.findOrCreate</span>(&#123;</div><div class="line">     <span class="attribute">where</span>: &#123;</div><div class="line">         <span class="attribute">mem_id</span>: mem_id,</div><div class="line">         <span class="attribute">brand_id</span>: brand_id</div><div class="line">     &#125;,</div><div class="line">     <span class="attribute">defaults</span>: &#123;</div><div class="line">         <span class="attribute">score</span>: score <span class="comment">//新建的数据</span></div><div class="line">     &#125;</div><div class="line"> &#125;)</div><div class="line"><span class="comment">//返回值为数组，[json,created] 第一位是查询或创建的数据，第二位标识是否新建</span></div></pre></td></tr></table></figure>
+<p><code>update</code>:返回值为数据，[2],数字代码改动记录数</p>
+<p><code>destroy</code>:返回数字，代表删除记录数</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/12/14/es6-Promise/" itemprop="url">
                   es6 Promise
                 </a>
@@ -1254,7 +1796,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">77</span>
+              <span class="site-state-item-count">80</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

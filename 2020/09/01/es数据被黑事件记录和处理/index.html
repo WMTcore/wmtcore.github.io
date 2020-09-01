@@ -1,0 +1,749 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="SoMgkf0fOF" />
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="WMTcore" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="现象时间: 2020年8月30日 4点10分
+es中所有open的日志全被删掉，包括系统日志，只留下一个read_me
+12345678910111213141516171819202122232425262728293031323334353637&amp;#123;  &quot;read_me&quot;: &amp;#123;    &quot;aliases&quot;: &amp;#123;&amp;#125;,    &quot;mappings&quot;: &amp;#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="es数据被黑事件记录和处理">
+<meta property="og:url" content="https://www.wmtcore.com/2020/09/01/es数据被黑事件记录和处理/index.html">
+<meta property="og:site_name" content="大碗拉面">
+<meta property="og:description" content="现象时间: 2020年8月30日 4点10分
+es中所有open的日志全被删掉，包括系统日志，只留下一个read_me
+12345678910111213141516171819202122232425262728293031323334353637&amp;#123;  &quot;read_me&quot;: &amp;#123;    &quot;aliases&quot;: &amp;#123;&amp;#125;,    &quot;mappings&quot;: &amp;#123;">
+<meta property="og:updated_time" content="2020-09-01T10:46:23.332Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="es数据被黑事件记录和处理">
+<meta name="twitter:description" content="现象时间: 2020年8月30日 4点10分
+es中所有open的日志全被删掉，包括系统日志，只留下一个read_me
+12345678910111213141516171819202122232425262728293031323334353637&amp;#123;  &quot;read_me&quot;: &amp;#123;    &quot;aliases&quot;: &amp;#123;&amp;#125;,    &quot;mappings&quot;: &amp;#123;">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> es数据被黑事件记录和处理 | 大碗拉面 </title>
+</head>
+
+<body itemscope itemtype="https://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="https://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="https://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?fd1a09a8302af22bf35f067279757d54";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="https://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大碗拉面</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'hXvPsMvt_RLywgyzUhtE','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                es数据被黑事件记录和处理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-09-01T18:44:00+08:00" content="2020-09-01">
+              2020-09-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/工作日常/" itemprop="url" rel="index">
+                    <span itemprop="name">工作日常</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/09/01/es数据被黑事件记录和处理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/09/01/es数据被黑事件记录和处理/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h3 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h3><p><code>时间</code>: 2020年8月30日 4点10分</p>
+<p>es中所有open的日志全被删掉，包括系统日志，只留下一个read_me</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="string">"read_me"</span>: &#123;</div><div class="line">    <span class="string">"aliases"</span>: &#123;&#125;,</div><div class="line">    <span class="string">"mappings"</span>: &#123;</div><div class="line">      <span class="string">"_doc"</span>: &#123;</div><div class="line">        <span class="string">"properties"</span>: &#123;</div><div class="line">          <span class="string">"@timestamp"</span>: &#123;</div><div class="line">            <span class="string">"type"</span>: <span class="string">"date"</span></div><div class="line">          &#125;,</div><div class="line">          <span class="string">"message"</span>: &#123;</div><div class="line">            <span class="string">"type"</span>: <span class="string">"text"</span>,</div><div class="line">            <span class="string">"fields"</span>: &#123;</div><div class="line">              <span class="string">"keyword"</span>: &#123;</div><div class="line">                <span class="string">"type"</span>: <span class="string">"keyword"</span>,</div><div class="line">                <span class="string">"ignore_above"</span>: <span class="number">256</span></div><div class="line">              &#125;</div><div class="line">            &#125;</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="string">"settings"</span>: &#123;</div><div class="line">      <span class="string">"index"</span>: &#123;</div><div class="line">        <span class="string">"creation_date"</span>: <span class="string">"1598760619467"</span>,</div><div class="line">        <span class="string">"number_of_shards"</span>: <span class="string">"5"</span>,</div><div class="line">        <span class="string">"number_of_replicas"</span>: <span class="string">"1"</span>,</div><div class="line">        <span class="string">"uuid"</span>: <span class="string">"cL_kgJ_XQqe2lSgOrN4VUw"</span>,</div><div class="line">        <span class="string">"version"</span>: &#123;</div><div class="line">          <span class="string">"created"</span>: <span class="string">"6030299"</span></div><div class="line">        &#125;,</div><div class="line">        <span class="string">"provided_name"</span>: <span class="string">"read_me"</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="string">"message"</span>: <span class="string">"SEND 0.015 BTC TO THIS WALLET: 1BJxnAYaaWNbQcL9o9GS768v3VqVMNDusD IF YOU WANT RECOVER YOUR DATABASE! SEND TO THIS EMAIL YOUR SERVER IP AFTER SENDING THE BITCOINS getbase@cock.li"</span></div></pre></td></tr></table></figure>
+<p>网络i/o没有突增，所以数据并没有被移走，而是直接被删掉了</p>
+<h4 id="影响"><a href="#影响" class="headerlink" title="影响"></a>影响</h4><p><code>数据丢失</code>：es所在云盘有快照备份，可以从28号早上五点的恢复，丢失数据即28，29号和30号一部分，周末基本无日志，所以主要<strong>损失28号当前的请求日志</strong></p>
+<p><code>修复成本</code>: 导出30号之后的日志，然后回滚磁盘，操作简单但耗时较长，预计影响时间3小时，后期考虑是否更换云盘类型，提高备份和回滚速度</p>
+<h3 id="漏洞查找"><a href="#漏洞查找" class="headerlink" title="漏洞查找"></a>漏洞查找</h3><ul>
+<li>es没有密码保护</li>
+</ul>
+<p>操作es有三种个途径，一是ip直接访问，二是通过内网slb访问，三是使用kibana</p>
+<p>这三者都在内网中<strong>需要ecs安全组访问白名单</strong>，检查不存在大范围的ip授权，除了阿里云自动添加的ip段较大（到24位），但平时<code>添加公司ip过期没有及时删除</code></p>
+<p>检索slb中与发生时间相近的日志，条件过滤<code>request_method: DELETE</code>,查到了大量删除请求,再根据<code>http_user_agent: python-requests/2.18.4</code>为条件过滤得到了完整的攻击请求</p>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">08<span class="string">-28</span> 23:38:25</div><div class="line">client_ip:  195.54.161.252</div><div class="line">client_port:  60516</div><div class="line">http_host:   *.*.*.*:9200</div><div class="line">http_user_agent:  python-requests/2.18.4</div><div class="line">request_method:  HEAD</div><div class="line">request_uri:  /</div><div class="line">slb_vport:  9200</div><div class="line"><span class="keyword">time:</span>  2020<span class="string">-08</span><span class="string">-28</span>T23:38:25<span class="string">+08</span>:00</div><div class="line">upstream_addr:  *.*.*.*:32101</div><div class="line">vip_addr:   *.*.*.*</div><div class="line"></div><div class="line">08<span class="string">-28</span> 23:38:28</div><div class="line">client_ip:  195.54.161.252</div><div class="line">client_port:  39732</div><div class="line">http_host:  *.*.*.*:9200</div><div class="line">http_user_agent:  python-requests/2.18.4</div><div class="line">request_method:  GET</div><div class="line">request_uri:  /_all/</div><div class="line">slb_vport:  9200</div><div class="line"><span class="keyword">time:</span>  2020<span class="string">-08</span><span class="string">-30</span>T12:10:19<span class="string">+08</span>:00</div><div class="line">upstream_addr: *.*.*.*</div><div class="line">vip_addr:  *.*.*.*</div><div class="line"></div><div class="line">08<span class="string">-28</span> 23:38:36</div><div class="line">client_ip:  195.54.161.252</div><div class="line">client_port:  32844</div><div class="line">http_host:  *.*.*.*:9200</div><div class="line">http_user_agent:  python-requests/2.18.4</div><div class="line">request_method:  DELETE</div><div class="line">request_uri:  /log_saas_develop<span class="string">-2020</span>.07.21/</div><div class="line">slb_vport:  9200</div><div class="line"><span class="keyword">time:</span>  2020<span class="string">-08</span><span class="string">-28</span>T23:38:36<span class="string">+08</span>:00</div><div class="line">upstream_addr:  *.*.*.*:32101</div><div class="line">vip_addr:  *.*.*.*</div><div class="line"></div><div class="line">...</div></pre></td></tr></table></figure>
+<p>一共发起了<strong>两次攻击</strong>，第一次发生在<code>08-28 23:38:25</code>,第二次是在<code>08-30 12:10:19</code></p>
+<p><code>http_host</code>是一个公网ip，一开始在slb和ecs中都没查到，后来发现是我使用的阿里云子账号权限不够看不到EIP =_=||</p>
+<p>漏洞: <strong>内网slb绑定了公网eip，没有访问控制，也没有改es默认端口</strong>,被暴利扫描的脚本发现</p>
+<h3 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h3><p><code>出现问题的原因</code>: 原先es绑定的内网slb是单纯为es使用<strong>端口设为默认9200</strong>，方便内网中其他服务通过域名访问到es，后被<strong>合并到slb ops-k8s-cluster</strong>，但该slb是绑定在k8s上并<strong>提供了EIP给k8s的api server</strong>，导致es暴露到公网中，没有访问控制且未修改端口</p>
+<p><code>处理方法</code>: <strong>增加访问控制</strong>，采用和ecs相同的方式刷白名单，<strong>不使用默认端口9200</strong></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>未被保护的资产暴露到公网被暴力扫描脚本攻击</p>
+<h4 id="发现问题与自检"><a href="#发现问题与自检" class="headerlink" title="发现问题与自检"></a>发现问题与自检</h4><ol>
+<li>暴露公网ip的服务（slb,ecs,rds）<strong>必须配置访问控制</strong></li>
+<li>自建的公共服务（es,redis,gitlab,jenkins,spinnaker等）<strong>禁止使用默认端口</strong></li>
+<li>自建服务<strong>只能通过域名访问</strong>，避免无访问记录</li>
+<li>云盘快照备份中只备份工作日的配置不合理，原先是周一到周五，需改为周二到周六</li>
+<li>定期更换服务密码</li>
+</ol>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/27/分布式任务平台设计概要/" rel="next" title="分布式任务平台设计概要">
+                <i class="fa fa-chevron-left"></i> 分布式任务平台设计概要
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2020/09/01/es数据被黑事件记录和处理/"
+           data-title="es数据被黑事件记录和处理" data-url="https://www.wmtcore.com/2020/09/01/es数据被黑事件记录和处理/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="https://schema.org/Person">
+          <img class="site-author-image" src="http://wmtcore.com/uploads/avatar.png" alt="WMT" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">WMT</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">不扯犊子 -NOT ALONE</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/WMTcore" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#现象"><span class="nav-number">1.</span> <span class="nav-text">现象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#影响"><span class="nav-number">1.1.</span> <span class="nav-text">影响</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞查找"><span class="nav-number">2.</span> <span class="nav-text">漏洞查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题处理"><span class="nav-number">3.</span> <span class="nav-text">问题处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#发现问题与自检"><span class="nav-number">4.1.</span> <span class="nav-text">发现问题与自检</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015-12 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMT</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wmtcore"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+     
+  	  <script type="text/javascript">
+  		var duoshuo_user_ID = 6224283662221837000
+      var duoshuo_admin_nickname="作者"
+  	  </script>
+     
+  	<script src="/js/ua-parser.min.js"></script>
+  	<script src="/js/hook-duoshuo.js"></script>
+  
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>
