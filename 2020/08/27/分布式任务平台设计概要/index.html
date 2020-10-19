@@ -67,7 +67,7 @@
 限流: 当待执行队列长度超missionQueueSize则等待readTimeDelayMillsWhenFlowControl后重新执行
 限频: 每隔readInterval读取任务
 执行从待执行队列中取出任务发送给work">
-<meta property="og:updated_time" content="2020-08-27T08:28:20.917Z">
+<meta property="og:updated_time" content="2020-09-08T10:19:54.379Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式任务平台设计概要">
 <meta name="twitter:description" content="任务记录从mq获取任务，再记录到job表,记录的信息有 funcName，args，createUser，priority，serviceName
@@ -323,6 +323,8 @@
 <ol>
 <li>主动通知任务完成，实现方便，无需master等待完成结果</li>
 <li>避免进度丢失，单点问题</li>
+<li>可以查询记录</li>
+<li>master选举</li>
 </ol>
 <h5 id="master选举"><a href="#master选举" class="headerlink" title="master选举"></a>master选举</h5><p>key为/mif/schedule/leader,当版本为0时创建并设置ttl,其他scheduler监听该key，当失效时重新选举</p>
 <h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>service/job/init</p>
@@ -341,7 +343,7 @@
 <p>当请求返回此错误时，采取重试</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (response.data.errorMessage.indexOf(<span class="string">'Process exited unexpectedly before completing request'</span>) !== <span class="number">-1</span>) &#123;</div><div class="line">  <span class="keyword">const</span> &#123; missionId, serviceName, funcName, args &#125; = data;</div><div class="line">  app.logger.error(error);</div><div class="line">  <span class="keyword">return</span> app.send(missionId, serviceName, funcName, args);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="worker"><a href="#worker" class="headerlink" title="worker"></a>worker</h3><p>部署在函数计算，节省资源，方便扩容，无需健康检查</p>
-<p>接收任务与rpc处理逻辑类似不再重复</p>
+<p>接收任务与rpc处理逻辑类似不再重复<br>·</p>
 <h4 id="中间件finishMission"><a href="#中间件finishMission" class="headerlink" title="中间件finishMission"></a>中间件finishMission</h4><p>待执行完成后向etcd插入结果</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">await</span> next();</div><div class="line"><span class="keyword">if</span> (!ctx.missionId) <span class="keyword">return</span>;</div><div class="line"><span class="keyword">await</span> ctx.app.etcdMission.put(<span class="string">'finish/'</span> + ctx.missionId).value(<span class="built_in">JSON</span>.stringify(&#123;</div><div class="line">  <span class="attr">missionId</span>: ctx.missionId,</div><div class="line">  <span class="attr">time</span>: <span class="built_in">Date</span>.now(),</div><div class="line">  <span class="attr">status</span>: <span class="string">'S'</span>,</div><div class="line">&#125;));</div></pre></td></tr></table></figure>
 </span>
@@ -355,8 +357,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/08/19/SaaS工程编译/" rel="next" title="">
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2020/08/19/SaaS工程编译/" rel="next" title="SaaS工程编译">
+                <i class="fa fa-chevron-left"></i> SaaS工程编译
               </a>
             
           </div>
@@ -437,7 +439,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-count">82</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

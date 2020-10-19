@@ -253,6 +253,255 @@
             
               
                 
+                <a class="post-title-link" href="/2020/04/23/高效缓存的使用/" itemprop="url">
+                  在node中实现高效缓存
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-04-23T16:10:21+08:00" content="2020-04-23">
+              2020-04-23
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/04/23/高效缓存的使用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/04/23/高效缓存的使用/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p><code>使用场景</code>: 对于量级小，常用的基础数据做内存缓存，提高运算速度</p>
+<p><code>getRegionCache</code>方法不仅对外输出，同时内部计算也会使用，为了保证高效，需要隐性异步，不能直接声明async</p>
+<h3 id="初始化缓存"><a href="#初始化缓存" class="headerlink" title="初始化缓存"></a>初始化缓存</h3><p>返回Promise 同步等待</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRegionCache</span>(<span class="params">key</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!cache) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</div><div class="line">      reflashCache().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        resolve(cache.get(key))</div><div class="line">      &#125;);</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>调用者拿到的是Promise对象，直接await即可</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">async</span> getRegionCacheAPI(key) &#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">await</span> getRegionCache(key)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="缓存异步刷新"><a href="#缓存异步刷新" class="headerlink" title="缓存异步刷新"></a>缓存异步刷新</h3><ul>
+<li>对于这类基础数据的缓存，低实时性，通过自维护方式失效，类似LRU的实现</li>
+</ul>
+<p>缓存到失效时间后通过<code>process.nextTick</code>放入微任务队列异步刷新, 同步计算先拿旧数据继续执行</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRegionCache</span>(<span class="params">key</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (overTime) &#123;</div><div class="line">    process.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> reflashCache());</div><div class="line">    updateCacheTime = <span class="built_in">Date</span>.now();</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> cache.get(key);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h3><ul>
+<li>在缓存初始化和失效时，大量并发请求同时触发缓存刷新，严重影响数据库性能</li>
+</ul>
+<p>通过设置once事件监听缓存刷新完成,待缓存刷新结束后，依次返回结果，避免并发刷新缓存</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">event</span> = <span class="keyword">new</span> events.EventEmitter();</div><div class="line"><span class="keyword">event</span>.setMaxListeners(<span class="number">100</span>); <span class="comment">//注意设置监听者数量，超过数量会触发leak memory告警</span></div><div class="line"></div><div class="line"><span class="keyword">await</span> reflashCache() &#123;</div><div class="line">  <span class="keyword">await</span> <span class="keyword">new</span> Promise(<span class="keyword">async</span> resolve =&gt; &#123;</div><div class="line">    <span class="keyword">event</span>.once(<span class="string">'finish'</span>, resolve);</div><div class="line">    <span class="keyword">if</span> (eventStatus === <span class="string">'ready'</span>) &#123;</div><div class="line">      eventStatus = <span class="string">'pending'</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">event</span>.emit(<span class="string">'finish'</span>);</div><div class="line">      eventStatus = <span class="string">'ready'</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过将数据库查询任务放入异步队列，避免了运算时同步等待，体现出node的性能优势</p>
+<p>利用事件监听能力，很方便就能处理缓存击穿的问题</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/04/04/胸有成竹(Calling the Shot)/" itemprop="url">
+                  未雨绸缪(Plan to Throw One Away)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-04-04T14:40:30+08:00" content="2020-04-04">
+              2020-04-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/人月神话/" itemprop="url" rel="index">
+                    <span itemprop="name">人月神话</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/04/04/胸有成竹(Calling the Shot)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/04/04/胸有成竹(Calling the Shot)/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>不变只是愿望，变化才是永恒</p>
+<h3 id="试验性工厂和增大规模"><a href="#试验性工厂和增大规模" class="headerlink" title="试验性工厂和增大规模"></a>试验性工厂和增大规模</h3><p>开发使用的环境由于规模、量级的限制，导致第一版开发的软件在真实环境运行时易出现各种问题,需要在测试中不断增大规模、模拟真实环境</p>
+<p>把第一版开发的产品发布给顾客，可以获得时间，但是对于用户，使用极度痛苦;对于重新开发的人员，分散了精力;对于产品，影响了声誉，即使最好的再设计也难以挽回名声</p>
+<h3 id="唯一不变的就是变化本身"><a href="#唯一不变的就是变化本身" class="headerlink" title="唯一不变的就是变化本身"></a>唯一不变的就是变化本身</h3><p>新的系统概念或新技术会不断出现，所以老版的系统必须被抛弃，但即使是最优秀的项目经理，也不能在最开始解决这些问题</p>
+<ul>
+<li><strong>开发人员交付的是用户满意程度，而不仅仅是实际的产品</strong></li>
+<li>用户的实际需要和用户感觉会随着程序使用而变化</li>
+</ul>
+<p>目标上的变化不可避免，而且设计策略和技术上的变化也不可避免，随着学习的过程更改设计</p>
+<h3 id="前进两步，后退一步"><a href="#前进两步，后退一步" class="headerlink" title="前进两步，后退一步"></a>前进两步，后退一步</h3><p>对于一个广泛使用的程序，其维护总成本通常是开发成本的 40%或更多，该成本受用户数目的严重影响。<strong>用户越多，所发现的错误也越多</strong></p>
+<p><img src="/picture/未雨绸缪.jpg" alt="Resize icon"></p>
+<ul>
+<li>缺陷修复总会以(20-50)%的机率引入新的bug </li>
+</ul>
+<p>原因:</p>
+<ol>
+<li>看似很轻微的错误，实际却是系统级别的问题，如果没有非常详细的文档，是很难被发现</li>
+<li>维护人员常常不是编写代码的开发人员，而是一些初级程序员或者新手</li>
+</ol>
+<p>成本: 在每次修复之后，必须重新运行先前所有的测试用例，从而确保系统不会以更隐蔽的方式被破坏</p>
+<p><strong>设计实现的人员越少、接口越少，产生的错误也就越少</strong> 微服务</p>
+<h3 id="前进一步，后退一步"><a href="#前进一步，后退一步" class="headerlink" title="前进一步，后退一步"></a>前进一步，后退一步</h3><ul>
+<li>维护越多系统越混乱，所有修改都倾向于破坏系统的架构，增加了系统的混乱程度</li>
+<li>用在修复原有设计上瑕疵的工作量越来越少，而早期维护造成的漏洞所引起修复工作越来越多</li>
+</ul>
+<p><strong>系统软件开发是减少混乱度(减少熵)的过程，所以它本身是处于亚稳态的。软件维护是提高混乱度(增加熵)的过程，即使是最熟练的软件维护工作，也只是放缓了系统退化到非稳态的进程</strong></p>
+<p>机器在变化，配置在变化，用户的需求在变化，所以现实系统不可能永远可用。<strong>基于原有系统的重新设计是完全必要的</strong></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2020/03/28/微服务开发注意事项/" itemprop="url">
                   微服务开发注意事项
                 </a>
@@ -1325,260 +1574,12 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/02/02/人月神话/" itemprop="url">
-                  人月神话
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2020-02-02T19:08:37+08:00" content="2020-02-02">
-              2020-02-02
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/人月神话/" itemprop="url" rel="index">
-                    <span itemprop="name">人月神话</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2020/02/02/人月神话/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/02/02/人月神话/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="乐观主义"><a href="#乐观主义" class="headerlink" title="乐观主义"></a>乐观主义</h3><p>创造性活动分为三个阶段: 构思、实现和交流</p>
-<p>只有在实现的过程中，才能发现构思的不完整性和不一致性</p>
-<p>由于编程的高可控性，我们会认为实现很顺利，因此造成了乐观主义的弥漫,而<strong>构思是有缺陷的，因此总会有bug</strong></p>
-<p>大型的编程工作，或多或少包含了很多任务，某些任务间还具有前后的次序，从而一切正常的概率变得非常小，甚至接近于无</p>
-<h3 id="人月"><a href="#人月" class="headerlink" title="人月"></a>人月</h3><p><strong>用人月作为衡量一项工作的规模是一个危险和带有欺骗性的神话</strong></p>
-<p>编程中近乎不可能存在人员数量和时间可以相互替换</p>
-<ul>
-<li>任务次序上的限制不能分解</li>
-</ul>
-<p><img src="/picture/无法分解的任务.png" alt="Resize icon"></p>
-<ul>
-<li>子任务之间需要相互沟通和交流的任务，沟通所增加的负担由两个部分组成，培训和相互交流，<strong>培训随人员的数量呈线性变化，相互之间交流按照 n(n-1)/2 递增</strong></li>
-</ul>
-<p><img src="/picture/关系错综复杂的任务.png" alt="Resize icon"></p>
-<p>所增加的用于沟通的工作量可能会完全抵消对原有任务分解所产生的作用,甚至会导致延长</p>
-<h3 id="系统测试"><a href="#系统测试" class="headerlink" title="系统测试"></a>系统测试</h3><p>项目排期占比</p>
-<ul>
-<li>1/3 计划</li>
-<li>1/6 编码</li>
-<li>1/4 构件测试和早期系统测试</li>
-<li>1/4 系统测试，所有的构件已完成</li>
-</ul>
-<p>很少项目允许为测试分配一半的时间，但大多数项目的测试实际上是花费了进度中一半的时间</p>
-<p><strong>不为系统测试安排足够的时间简直就是一场灾难</strong>因为延迟会发生在项目快完成的时候，坏消息没有任何预兆，很晚才出现，此时的延迟具有不寻常的、严重的财务和心理上的反应，甚至会导致活动延误，付出相当高的商业代价，远远高于其他开销。因此，在早期进度策划时，<strong>允许充分的系统测试时间是非常重要的</strong></p>
-<h3 id="空泛的估算"><a href="#空泛的估算" class="headerlink" title="空泛的估算"></a>空泛的估算</h3><p>现状: 受限于顾客要求的紧迫程度,非阶段化方法的采用，少得可怜的数据支持，加上完全借助软件经理的直觉</p>
-<p>解决方案：</p>
-<ul>
-<li>开发并推行生产率图表、缺陷率、估算规则等</li>
-<li>在基于可靠基础的估算出现之前，项目经理需要挺直腰杆，坚持他们的估计， 确信自己的经验和直觉总比从期望派生出的结果要强得多</li>
-</ul>
-<h3 id="重复产生的进度灾难"><a href="#重复产生的进度灾难" class="headerlink" title="重复产生的进度灾难"></a>重复产生的进度灾难</h3><p><strong>避免小的偏差(Take no small slips)</strong> 在新的进度安排中分配充分的时间，以确保工作能仔细、彻底地完成，从而无需重新确定时间进度表</p>
-<p><strong>重复生成的工作量</strong> 不论在多短的时间内，聘请到多么能干的n个新员工，都需要接受一位有经验的职员的培训。如果培训需要一个月的时间，那么n+1个人月会投入到原有进度安排以外的工作中。原先划分的任务要重新拆分<strong>某些已经完成的工作必定会丢失，系统测试必须被延长</strong></p>
-<p><strong>向进度落后的项目中增加人手，只会使进度更加落后。(Adding manpower to a late software project makes it later)</strong></p>
-<p><strong>项目的时间估算</strong> 任务顺序和子任务的数量产生的人员数量，推算出进度时间表，该表安排的人员较少，花费的时间较长(唯一的风险是产品可能会过时)。<strong>分派较多的人手，计划较短的时间，将无法得到可行的进度表</strong></p>
-<p>在众多软件项目中，<strong>缺乏合理的时间进度是造成项目滞后的最主要原因</strong>，它比其他所有因素加起来的影响还要大</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/01/30/人月神话 - 焦油坑（The Tar Pit）/" itemprop="url">
-                  焦油坑
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2020-01-30T16:08:37+08:00" content="2020-01-30">
-              2020-01-30
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/人月神话/" itemprop="url" rel="index">
-                    <span itemprop="name">人月神话</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2020/01/30/人月神话 - 焦油坑（The Tar Pit）/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/01/30/人月神话 - 焦油坑（The Tar Pit）/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>一个问题单独看起来很没有困难，但是当它们相互纠缠和累积在一起的时候，团队的行动就会变得越来越慢</p>
-<p><img src="/picture/编程系统产品的演进.png" alt="Resize icon"></p>
-<h3 id="职业的苦恼"><a href="#职业的苦恼" class="headerlink" title="职业的苦恼"></a>职业的苦恼</h3><ol>
-<li>学习编程的最困难部分，是将做事的方式往<strong>追求完美</strong>的方向调整</li>
-<li><strong>由他人来设定目标</strong>，供给资源，提供信息，很少能控制工作环境和目标。个人的权威和他所承担的责任是不相配的</li>
-<li><strong>依赖他人的程序是一件非常痛苦的事情</strong>。往往这些程序设计得并不合理，实现拙劣，发布不完整（没有源代码或测试用例）， 或者文档记录得很糟</li>
-<li><strong>寻找琐碎的 bug</strong>，调试和查错往往是线性收敛的，甚至具有二次方的复杂度。寻找最后一个错误比第一个错误将花费更多的时间</li>
-<li>产品陈旧问题，实现落后与否的判断应根据其它已有的系统，而不是未实现的概念。<strong>在现有的时间和有效的资源范围内，寻找解决实际问题的切实可行方案</strong></li>
-</ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1619,7 +1620,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-count">82</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

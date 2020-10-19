@@ -248,6 +248,438 @@
             
               
                 
+                <a class="post-title-link" href="/2020/09/08/问题排查与系统优化/" itemprop="url">
+                  问题排查与系统优化
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-09-08T13:40:53+08:00" content="2020-09-08">
+              2020-09-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/方法论/" itemprop="url" rel="index">
+                    <span itemprop="name">方法论</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/09/08/问题排查与系统优化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/09/08/问题排查与系统优化/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h2 id="问题排查"><a href="#问题排查" class="headerlink" title="问题排查"></a>问题排查</h2><h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><ul>
+<li>逻辑缺陷：e.g. NPE、死循环、边界情况未覆盖。、</li>
+<li>性能瓶颈：e.g. 接口 RT 陡增、吞吐率上不去。</li>
+<li>内存异常：e.g. GC 卡顿、频繁 FGC、内存泄露、OOM</li>
+<li>并发/分布式：e.g. 存在竞争条件、时钟不同步。</li>
+<li>数据问题：e.g. 出现脏数据、序列化失败。</li>
+<li>安全问题：e.g. DDoS 攻击、数据泄露。</li>
+<li>环境故障：e.g. 宿主机宕机、网络不通、丢包。</li>
+<li>操作失误：e.g. 配置推错、删库跑路（危险动作，请勿尝试..）。</li>
+</ul>
+<h3 id="排查流程"><a href="#排查流程" class="headerlink" title="排查流程"></a>排查流程</h3><h4 id="快速修复"><a href="#快速修复" class="headerlink" title="快速修复"></a>快速修复</h4><ul>
+<li>发布期间开始报错，且发布前一切正常？ 先回滚再说，恢复正常后再慢慢排查</li>
+<li>应用已经稳定运行很长一段时间，突然开始出现进程退出现象？很可能是内存泄露，默默上重启大法吧</li>
+<li>只有少数固定机器报错？试试隔离这部分机器（关闭流量入口）。</li>
+<li>单用户流量突增导致服务不稳定？如果不是惹不起的金主爸爸，请勇敢推送限流规则。</li>
+<li>下游依赖挂了导致服务雪崩？还想什么呢，降级预案走起。</li>
+</ul>
+<h4 id="保留现场"><a href="#保留现场" class="headerlink" title="保留现场"></a>保留现场</h4><ul>
+<li>隔离一两台机器：将这部分机器入口流量关闭，让它们静静等待你的检阅。</li>
+<li>Dump 应用快照：常用的快照类型一般就是线程堆栈和堆内存映射。</li>
+</ul>
+<p>所有机器都回滚了，咋办？别慌，如果你的应用监控运维体系足够健全，那么你还有多维度的历史数据可以回溯：应用日志、中间件日志、GC 日志、内核日志、Metrics 指标等。</p>
+<h4 id="定位原因"><a href="#定位原因" class="headerlink" title="定位原因"></a>定位原因</h4><ul>
+<li><p>关联近期变更：90% 以上的线上问题都是由变更引发，这也是为什么集团安全生产的重点一直是在管控“变更”。所以，先不要急着否认（“肯定不是我刚加的那行代码问题！”），相信统计学概率，好好 review 下近期的变更历史（从近至远）。</p>
+</li>
+<li><p>全链路追踪分析：微服务和中台化盛行的当下，一次业务请求不经过十个八个应用处理一遍，都不好意思说自己是写 Java 的。所以，不要只盯着自己的应用不放，你需要把排查 scope 放大到全链路。</p>
+</li>
+<li><p>还原事件时间线：请把自己想象成福尔摩斯（柯南也行），摆在你面前的就是一个案发现场，你需要做的是把不同时间点的所有事件线索都串起来，重建和还原整个案发过程。要相信，时间戳是不会骗人的。</p>
+</li>
+<li><p>找到 Root Cause：排查问题多了你会发现，很多疑似原因往往只是另一个更深层次原因的表象结果之一。作为福尔摩斯，你最需要找到的是幕后凶手，而不是雇佣的杀人犯 —— 否则 TA 还会雇人再来一次。</p>
+</li>
+<li><p>尝试复现问题：千辛万苦推导出了根因，也不要就急着开始修 bug 了。如果可以，最好能把问题稳定复现出来，这样才更有说服力。这里提醒一点：可千万别在生产环境干这事（除非你真的 know what you’re doing），否则搞不好就是二次伤害（你：哈哈哈，你看，这把刀当时就是从这个角度捅进去的，轨迹完全一样。用户：…）。</p>
+</li>
+</ul>
+<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><ul>
+<li><p>修复也是一种变更，需要经过完整的回归测试、灰度发布；切忌火急火燎上线了 bugfix，结果引发更多的 bugs to fix。</p>
+</li>
+<li><p>修复发布后，一定要做线上验证，并且保持观察一段时间，确保是真的真的修复了。</p>
+</li>
+<li><p>最后，如果问题已经上升到了故障这个程度，那就拉上大伙好好做个故障复盘吧。整个处理过程一定还有提升空间，你的经验教训对其他同学来说也是一次很好的输入和自查机会：幸福总是相似的，故障也是。</p>
+</li>
+</ul>
+<h3 id="排查⼯具"><a href="#排查⼯具" class="headerlink" title="排查⼯具"></a>排查⼯具</h3><p>日志（Logging）、监控（Metrics）、追踪（Tracing）</p>
+<h2 id="系统优化"><a href="#系统优化" class="headerlink" title="系统优化"></a>系统优化</h2><ul>
+<li>系统优化的三个基本方向：性能（Performance）、稳定性（Stability）、可维护性（Maintainability）。三者之间并不是完全独立的，而是存在着复杂的相互作用关系，有时甚至会此消彼长。</li>
+</ul>
+<h3 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h3><h4 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h4><p>指标（Indicators）是衡量一件事物好坏的科学量化手段。对于性能而言，一般会使用如下指标评估：</p>
+<ul>
+<li><p>吞吐率（Throughput）：系统单位时间内能处理的工作负载，例如：在线 Web 系统 - QPS/TPS，离线数据分析系统 - 每秒处理的数据量。</p>
+</li>
+<li><p>响应时间（Response Time）：以  Web 请求处理为例，响应时间（RT）即请求从发出到收到的往返时间，一般会由网络传输延迟、排队延迟和实际处理耗时几个部分共同组成。</p>
+</li>
+<li><p>可伸缩性（Scalability）：系统通过增加机器资源（垂直/水平）来承载更多工作负载的能力；投入产出比越高（理想情况是线性伸缩），则说明系统的可伸缩性越好。</p>
+</li>
+</ul>
+<p>此外，同一个系统的吞吐率与响应时间，一般还会存在如下关联关系：吞吐率小于某个临界值时，响应时间几乎不变；一旦超出这个临界值，系统将进入超载状态（overloaded），响应时间开始线性增长。对于一个有稳定性要求的系统，需要在做性能压测和容量规划时充分考虑这个临界值的大小。</p>
+<h4 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h4><p>坚持 2/8 原则：优先分析和优化系统瓶颈，即当前对系统性能影响最大的原子操作；他们很可能就是 ROI 最高的优化点。</p>
+<p>系统层面：tsar、top、iostat、vmstat<br>网络层面：iftop、tcpdump、wireshark<br>数据库层面：SQL explain、CloudDBA<br>应用代码层面：JProfiler、Arthas、jstack</p>
+<p>其中很多工具也是问题排查时常用的诊断工具；毕竟，无论是性能分析还是诊断分析，目的都是去理解一个系统和他所处的环境，所需要做的事情都是相似的。</p>
+<h4 id="优化原则"><a href="#优化原则" class="headerlink" title="优化原则"></a>优化原则</h4><p>性能优化与做功能需求一样，都是为业务服务的，因此优化时千万不要忙着自嗨，一定要结合目标需求和应用场景 —— 也许这块你想做的优化，压根线上就碰不到；也许那块很难做的优化，可以根据流量特征做非通用的定制优化</p>
+<p>你不应该做的：即老生常谈的提前优化（Premature-optimization）与过度优化（Over-optimization） —— 通常而言（并不绝对），性能优化都不是免费的午餐，优化做的越多，往往可维护性也会越差。</p>
+<h5 id="优化手段"><a href="#优化手段" class="headerlink" title="优化手段"></a>优化手段</h5><h6 id="简化"><a href="#简化" class="headerlink" title="简化"></a>简化</h6><ul>
+<li>业务层面：e.g. 流程精简、需求简化。</li>
+<li>编码层面：e.g. 循环内减少高开销操作。</li>
+<li>架构层面：e.g. 减少没必要的抽象/分层。</li>
+<li>数据层面：e.g. 数据清洗、提取、聚合。</li>
+</ul>
+<h6 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h6><p>方式：单机并行（多线程）、多机并行（分布式）。</p>
+<p>优点：充分利用机器资源（多核、集群）。</p>
+<p>缺点：同步开销、线程开销、数据倾斜。</p>
+<p>同步优化：乐观锁、细粒度锁、无锁。<br>线程替代（如协程：Java WISP、Go routines、Kotlin coroutines）。<br>数据倾斜：负载均衡（Hash / RR / 动态）</p>
+<h6 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h6><p>方式：消息队列 + 任务线程 + 通知机制。</p>
+<p>优点：提升吞吐率、组件解耦、削峰填谷。</p>
+<p>缺点：排队延迟（队列积压）。</p>
+<p>避免过度积压：Back-pressure（Reactive思想）。</p>
+<h6 id="批量"><a href="#批量" class="headerlink" title="批量"></a>批量</h6><p>有些事，你可以合起来一起做。</p>
+<p>方式：多次单一操作 → 合并为单次批量操作。</p>
+<p>案例：TCP Nagel 算法；DB 的批量读写接口。</p>
+<p>优点：避免单次操作的固有开销，均摊后总开销更低。</p>
+<p>缺点：等待延迟 + 聚合延迟。</p>
+<p>减少等待延迟：Timeout 触发提交，控制延迟上限。</p>
+<h6 id="时间空间互换"><a href="#时间空间互换" class="headerlink" title="时间空间互换"></a>时间空间互换</h6><p>游戏的本质：要么有闲，要么有钱。</p>
+<p>空间换时间：避免重复计算、拉近传输距离、分流减少压力。</p>
+<p>案例：缓存、CDN、索引、只读副本（replication）。</p>
+<p>时间换空间：有时候也能达到“更快”的效果（数据量减少 → 传输时间减少）。</p>
+<p>案例：数据压缩（HTTP/2 头部压缩、Bitmap）。</p>
+<h6 id="数据结构与算法优化"><a href="#数据结构与算法优化" class="headerlink" title="数据结构与算法优化"></a>数据结构与算法优化</h6><p>程序 = 数据结构 + 算法</p>
+<p>多了解一些“冷门”的数据结构 ：Skip list、Bloom filter、Time Wheel 等。</p>
+<p>一些“简单”的算法思想：递归、分治、贪心、动态规划。</p>
+<h6 id="池化-amp-局部化"><a href="#池化-amp-局部化" class="headerlink" title="池化 &amp; 局部化"></a>池化 &amp; 局部化</h6><p>共享经济 &amp; 小区超市</p>
+<p>池化（Pooling）：减少资源创建和销毁开销。</p>
+<p>案例：线程池、内存池、DB 连接池、Socket 连接池。</p>
+<p>局部化（Localization）：避免共享资源竞争开销。</p>
+<p>案例：TLB（ThreadLocalBuffer）、多级缓存（本地局部缓存 -&gt; 共享全局缓存）。</p>
+<h6 id="更多优化手段"><a href="#更多优化手段" class="headerlink" title="更多优化手段"></a>更多优化手段</h6><p>升级红利：内核、JRE、依赖库、协议。<br>调参大师：配置、JVM、内核、网卡。<br>SQL 优化：索引、SELECT *、LIMIT 1。<br>业务特征定制优化：e.g. 凌晨业务低峰期做日志轮转。<br>Hybrid 思想（优点结合）：JDK sort() 实现、Weex/RN。</p>
+<h3 id="稳定性优化"><a href="#稳定性优化" class="headerlink" title="稳定性优化"></a>稳定性优化</h3><p>稳定是相对的，业务规模越大、场景越复杂，系统越容易出现不稳定，且带来的影响也越严重</p>
+<h4 id="衡量指标"><a href="#衡量指标" class="headerlink" title="衡量指标"></a>衡量指标</h4><p>定义服务的可用跟业务相关，越是底层的基础设施，可用性要求就越高</p>
+<p>定义服务的可用性：服务总的可用/不可用比例（服务时长 or 服务次数），监测和量化一个系统的稳定性</p>
+<p>可用性：</p>
+<ul>
+<li>服务可访问： 接口返回200 OK</li>
+<li>性能可接受： 99%的请求RT&lt;50ms</li>
+</ul>
+<p>商业化指标：</p>
+<ul>
+<li>SLI:</li>
+<li>SLO:</li>
+<li>SLA:</li>
+</ul>
+<h4 id="可用性测量"><a href="#可用性测量" class="headerlink" title="可用性测量"></a>可用性测量</h4><p><code>探针模拟</code>: 从客户端侧，模拟用户的调用行为</p>
+<ul>
+<li>优点：数据真实（客户端角度）</li>
+<li>缺点：数据不全面（单一客户数据）</li>
+</ul>
+<p><code>服务端采集</code>: 从服务端侧，直接分析日志和数据</p>
+<ul>
+<li>优点：覆盖所有调用数据</li>
+<li>缺点：缺失客户端链路数据</li>
+</ul>
+<h4 id="稳定性优化原则"><a href="#稳定性优化原则" class="headerlink" title="稳定性优化原则"></a>稳定性优化原则</h4><p>关注 RT 的数据分布（如：p50/p99/p999 分位点）,不要尝试承诺和优化可用性到 100%</p>
+<h5 id="稳定性优化手段"><a href="#稳定性优化手段" class="headerlink" title="稳定性优化手段"></a>稳定性优化手段</h5><h6 id="避免单点"><a href="#避免单点" class="headerlink" title="避免单点"></a>避免单点</h6><ul>
+<li>集群部署</li>
+<li>数据副本</li>
+<li>多机房容灾</li>
+</ul>
+<p>只堆量不够，还需要具备故障转移能力（Failover）。</p>
+<p>接入层：DNS、VipServer、SLB。</p>
+<p>服务层：服务发现 + 健康检查 + 剔除机制。</p>
+<p>应用层：无状态设计（Stateless），便于随时和快速切换。</p>
+<h6 id="流控-限流"><a href="#流控-限流" class="headerlink" title="流控/限流"></a>流控/限流</h6><p>类型：QPS 流控、并发度流控。</p>
+<p>工具：RateLimiter、信号量、Sentinel。</p>
+<p>粒度：全局、用户级、接口级。</p>
+<p>热点流控：避免意料之外的突增流量。</p>
+<h6 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h6><p>目的：防止连锁故障（雪崩效应）,及时止损</p>
+<p>工具：Hystrix、Failsafe、Resilience4j。</p>
+<p>功能：自动绕开异常服务并检测恢复状态。</p>
+<p>流程：关闭 → 打开 → 半开。</p>
+<h6 id="降级"><a href="#降级" class="headerlink" title="降级"></a>降级</h6><p>触发原因：流控、熔断、负载过高。</p>
+<p>常见降级方式：</p>
+<p>关闭非核心功能：停止应用日志打印</p>
+<p>牺牲数据时效性：返回缓存中旧数据</p>
+<p>牺牲数据精确性：降低数据采样频率</p>
+<h6 id="超时-重试"><a href="#超时-重试" class="headerlink" title="超时/重试"></a>超时/重试</h6><p>超时：避免调用端陷入永久阻塞。</p>
+<p>超时时间设置：全链路自上而下规划</p>
+<p>Timeout vs. Deadline：使用绝对时间会更好</p>
+<p>重试：确保可重试操作的幂等性。</p>
+<p>消息去重</p>
+<p>异步重试</p>
+<p>指数退避</p>
+<h6 id="资源设限"><a href="#资源设限" class="headerlink" title="资源设限"></a>资源设限</h6><p>目的：防止资源被异常流量耗尽</p>
+<p>资源类型：线程、队列、DB 连接</p>
+<p>设限方式：资源池化、有界队列</p>
+<p>超限处理：返回 ServiceUnavailable / QuotaExceeded</p>
+<h6 id="资源隔离"><a href="#资源隔离" class="headerlink" title="资源隔离"></a>资源隔离</h6><p>目的：防止资源被部分异常流量耗尽；为 VIP 客户提供服务质量保证（QoS）。</p>
+<p>隔离方式：队列划分、独立集群；注意处理优先级和资源分配比例。</p>
+<h6 id="安全生产"><a href="#安全生产" class="headerlink" title="安全生产"></a>安全生产</h6><p>程序动态性：开关、配置、热升级。</p>
+<p>Switch：类型安全；侵入性小。</p>
+<p>审核机制：代码 Review、发布审批。</p>
+<p>灰度发布；分批部署；回滚预案。</p>
+<p>DUCT：自动/手动调整 HSF 节点权重。</p>
+<h3 id="可维护性优化"><a href="#可维护性优化" class="headerlink" title="可维护性优化"></a>可维护性优化</h3><p>相比性能和稳定性而言，可维护性所体现的价值往往是最长远、但也最难在短期内可兑现的</p>
+<ul>
+<li><p>软件生命周期：维护周期 &gt;&gt; 开发周期。</p>
+</li>
+<li><p>破窗效应、熵增定律：可维护性会趋向于越来越差。</p>
+</li>
+<li><p>遗留系统的危害：理解难度，修改成本，变更风险；陷入不断踩坑、填坑、又挖坑的循环。</p>
+</li>
+</ul>
+<h4 id="可维护性衡量指标"><a href="#可维护性衡量指标" class="headerlink" title="可维护性衡量指标"></a>可维护性衡量指标</h4><ul>
+<li>复杂度（Complexity）：是否复杂度可控？</li>
+</ul>
+<p>编码：简洁度、命名一致性、代码行数等。</p>
+<p>架构：组件耦合度、层次清晰度、职责单一性等。</p>
+<ul>
+<li>可扩展性（Extensibility）：是否易于变更？</li>
+</ul>
+<p>需要变更代码或配置时，是否简单优雅、不易出错。</p>
+<ul>
+<li>可运维性（Operability）：是否方便运维？</li>
+</ul>
+<p>日志、监控是否完善；部署、扩容是否容易。</p>
+<h4 id="可维护性优化原则"><a href="#可维护性优化原则" class="headerlink" title="可维护性优化原则"></a>可维护性优化原则</h4><ul>
+<li>遵循 KISS 原则、DRY 原则、各种代码可读性和架构设计原则</li>
+<li>不应该引入过多临时性、Hack 代码；功能 Work 就 OK，欠一堆技术债</li>
+</ul>
+<h4 id="可维护性优化手段"><a href="#可维护性优化手段" class="headerlink" title="可维护性优化手段"></a>可维护性优化手段</h4><h5 id="编码规范"><a href="#编码规范" class="headerlink" title="编码规范"></a>编码规范</h5><p>编码：推荐《Java 开发手册》，另外也推荐 The Art of Readable Code 这本书。ESLint</p>
+<p>日志：无盲点、无冗余、TraceID。</p>
+<p>测试：代码覆盖度、自动化回归。</p>
+<h5 id="代码重构"><a href="#代码重构" class="headerlink" title="代码重构"></a>代码重构</h5><p>何时重构：任何时候代码中嗅到坏味道（bad smell）。</p>
+<p>重构节奏：小步迭代、回归验证。</p>
+<p>重构 vs. 重写：需要综合考虑成本、风险、并行版本维护等因素。</p>
+<h5 id="数据驱动"><a href="#数据驱动" class="headerlink" title="数据驱动"></a>数据驱动</h5><p>系统数据：监控覆盖、Metrics 采集等，对于理解系统、排查问题至关重要。</p>
+<p>业务数据：一致性校验、旧数据清理等；要相信，数据往往比代码要活得更久。</p>
+<h5 id="技术演进"><a href="#技术演进" class="headerlink" title="技术演进"></a>技术演进</h5><p>需要综合评估风险、生产力、学习成本。</p>
+<p>当前方向：微服务化、容器化。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/09/05/分布式锁/" itemprop="url">
+                  分布式锁
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-09-05T16:35:36+08:00" content="2020-09-05">
+              2020-09-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/09/05/分布式锁/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/09/05/分布式锁/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>当共享资源自身无法提供互斥能力的时候，为了避免多机器<strong>同时读写访问造成数据破坏</strong>，就需要一个第三方服务提供互斥锁，<strong>获取到锁的机器就可以排他性的访问共享资源</strong>，这样的服务我们统称为分布式锁服务，锁也就叫分布式锁</p>
+<p>锁 = 资源 + 并发控制 + 所有权展示</p>
+<h3 id="分布式锁的分类"><a href="#分布式锁的分类" class="headerlink" title="分布式锁的分类"></a>分布式锁的分类</h3><h4 id="异步复制"><a href="#异步复制" class="headerlink" title="异步复制"></a>异步复制</h4><ul>
+<li>基于异步复制的分布式系统，例如 mysql，tair，redis 等</li>
+</ul>
+<p><strong>存在数据丢失（丢锁）的风险</strong>，不够安全，往往通过 TTL 的机制承担细粒度的锁服务</p>
+<p>该系统<strong>接入简单</strong>，适用于对时间很敏感，期望设置一个较短的有效期，执行短期任务，丢锁对业务影响相对可控的服务</p>
+<h4 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h4><ul>
+<li>基于 paxos 协议的分布式一致性系统，例如 zookeeper，etcd，consul 等</li>
+</ul>
+<p>通过一致性协议保证数据的多副本，数据安全性高，往往通过租约（会话）的机制承担粗粒度的锁服务</p>
+<p>该系统<strong>需要一定的门槛</strong>，适用于对安全性很敏感，<strong>希望长期持有锁，不期望发生丢锁现象</strong>的服务</p>
+<h3 id="分布式锁的实践"><a href="#分布式锁的实践" class="headerlink" title="分布式锁的实践"></a>分布式锁的实践</h3><p>提升分布式锁使用时的正确性、保证锁的可用性以及提升锁的切换效率<br>x</p>
+<h4 id="互斥性"><a href="#互斥性" class="headerlink" title="互斥性"></a>互斥性</h4><p><strong>每把锁都和唯一的会话绑定</strong>，客户端通过定期<strong>发送心跳来保证会话的有效性</strong>，也就保证了锁的拥有权。当心跳不能维持时，会话连同关联的锁节点都会被释放，锁节点就可以被重新抢占</p>
+<p>全局锁服务提供全局自增的 token，Client 1 拿到锁返回的 token 是 33，并带入存储系统，发生 GC，当 Client 2 抢锁成功返回 34，带入存储系统，存储系统会拒绝 token 较小的请求，那么经过了长时间 full gc 重新恢复后的 Client 1 再次写入数据的时候，因为存储层记录的 token 已经更新，携带 token 值为 33 的请求将被直接拒绝，从而达到了数据保护的效果（像paxos中通过提案）</p>
+<h4 id="可用性"><a href="#可用性" class="headerlink" title="可用性"></a>可用性</h4><p>通过持续心跳来保证锁的健壮性</p>
+<p>处理异常的用户进程持续占据锁: 会话加黑机制，不再维护心跳，最终导致会话过期。</p>
+<p>不能强制删除锁：</p>
+<ol>
+<li><p>删除锁操作本身不安全，如果锁已经被其他人正常抢占，此时删锁请求会产生误删除。</p>
+</li>
+<li><p>删除锁后，持有锁的人会话依然正常，它仍然认为自己持有锁，会打破锁的互斥性原则。</p>
+</li>
+</ol>
+<h4 id="切换效率"><a href="#切换效率" class="headerlink" title="切换效率"></a>切换效率</h4><p>当进程持有的锁需要被重新调度时，持有者可以主动删除锁节点</p>
+<p>但当持有者发生异常(如进程重启，机器宕机等)，新的进程要重新抢占，就需要等待原先的会话过期后，才有机会抢占成功</p>
+<ol>
+<li><p>要提升切换精度，本质上要压缩会话生命周期，同时也意味着更快的心跳频率</p>
+</li>
+<li><p>守护进程发现锁持有进程挂掉的场景，提供锁的 CAS 释放操作，使得进程可以零等待进行抢锁，比如利用在锁节点中存放进程的唯一标识，强制释放已经不再使用的锁，并重新争抢</p>
+</li>
+</ol>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2020/09/01/es数据被黑事件记录和处理/" itemprop="url">
                   es数据被黑事件记录和处理
                 </a>
@@ -452,6 +884,8 @@
 <ol>
 <li>主动通知任务完成，实现方便，无需master等待完成结果</li>
 <li>避免进度丢失，单点问题</li>
+<li>可以查询记录</li>
+<li>master选举</li>
 </ol>
 <h5 id="master选举"><a href="#master选举" class="headerlink" title="master选举"></a>master选举</h5><p>key为/mif/schedule/leader,当版本为0时创建并设置ttl,其他scheduler监听该key，当失效时重新选举</p>
 <h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>service/job/init</p>
@@ -470,7 +904,7 @@
 <p>当请求返回此错误时，采取重试</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (response.data.errorMessage.indexOf(<span class="string">'Process exited unexpectedly before completing request'</span>) !== <span class="number">-1</span>) &#123;</div><div class="line">  <span class="keyword">const</span> &#123; missionId, serviceName, funcName, args &#125; = data;</div><div class="line">  app.logger.error(error);</div><div class="line">  <span class="keyword">return</span> app.send(missionId, serviceName, funcName, args);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="worker"><a href="#worker" class="headerlink" title="worker"></a>worker</h3><p>部署在函数计算，节省资源，方便扩容，无需健康检查</p>
-<p>接收任务与rpc处理逻辑类似不再重复</p>
+<p>接收任务与rpc处理逻辑类似不再重复<br>·</p>
 <h4 id="中间件finishMission"><a href="#中间件finishMission" class="headerlink" title="中间件finishMission"></a>中间件finishMission</h4><p>待执行完成后向etcd插入结果</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">await</span> next();</div><div class="line"><span class="keyword">if</span> (!ctx.missionId) <span class="keyword">return</span>;</div><div class="line"><span class="keyword">await</span> ctx.app.etcdMission.put(<span class="string">'finish/'</span> + ctx.missionId).value(<span class="built_in">JSON</span>.stringify(&#123;</div><div class="line">  <span class="attr">missionId</span>: ctx.missionId,</div><div class="line">  <span class="attr">time</span>: <span class="built_in">Date</span>.now(),</div><div class="line">  <span class="attr">status</span>: <span class="string">'S'</span>,</div><div class="line">&#125;));</div></pre></td></tr></table></figure>
 
@@ -516,7 +950,7 @@
               
                 
                 <a class="post-title-link" href="/2020/08/19/SaaS工程编译/" itemprop="url">
-                  未命名
+                  SaaS工程编译
                 </a>
               
             
@@ -526,11 +960,26 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2020-08-19T17:59:31+08:00" content="2020-08-19">
+            <time itemprop="dateCreated" datetime="2020-08-19T13:30:26+08:00" content="2020-08-19">
               2020-08-19
             </time>
           </span>
 
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/工作日常/" itemprop="url" rel="index">
+                    <span itemprop="name">工作日常</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
           
 
           
@@ -560,7 +1009,7 @@
         
           <span itemprop="articleBody">
             
-              <h2 id="SaaS工程编译"><a href="#SaaS工程编译" class="headerlink" title="SaaS工程编译"></a>SaaS工程编译</h2><h3 id="webpack配置"><a href="#webpack配置" class="headerlink" title="webpack配置"></a>webpack配置</h3><ul>
+              <h3 id="webpack配置"><a href="#webpack配置" class="headerlink" title="webpack配置"></a>webpack配置</h3><ul>
 <li>将工程打包到一个文件中</li>
 </ul>
 <p>工程中使用<code>app-module-path</code>设置src为根路径，所以在打包时需要对src做替换</p>
@@ -882,111 +1331,6 @@
             
               
                 
-                <a class="post-title-link" href="/2020/05/08/mq包更换/" itemprop="url">
-                  mq包更换
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2020-05-08T13:48:49+08:00" content="2020-05-08">
-              2020-05-08
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/工作日常/" itemprop="url" rel="index">
-                    <span itemprop="name">工作日常</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2020/05/08/mq包更换/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/05/08/mq包更换/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ol>
-<li>封装http版本的包，现有的js tcp版包已不再更新，有兼容问题</li>
-</ol>
-<h3 id="设计点记录"><a href="#设计点记录" class="headerlink" title="设计点记录"></a>设计点记录</h3>
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2020/05/08/rpc包更换/" itemprop="url">
                   rpc包更换
                 </a>
@@ -1071,6 +1415,111 @@
 <h4 id="middle"><a href="#middle" class="headerlink" title="middle"></a>middle</h4><p>client发送rpc请求，格式参考部分JSON-RPC</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attribute">method</span>: targetArgs.<span class="built_in">join</span>(<span class="string">'.'</span>),</div><div class="line">  param: [ ...args, ctx.rpcCtx ],</div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/05/08/mq包更换/" itemprop="url">
+                  mq包更换
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-05-08T13:48:49+08:00" content="2020-05-08">
+              2020-05-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/工作日常/" itemprop="url" rel="index">
+                    <span itemprop="name">工作日常</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/05/08/mq包更换/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/05/08/mq包更换/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ol>
+<li>封装http版本的包，现有的js tcp版包已不再更新，有兼容问题</li>
+</ol>
+<h3 id="设计点记录"><a href="#设计点记录" class="headerlink" title="设计点记录"></a>设计点记录</h3>
             
           </span>
         
@@ -1257,261 +1706,12 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/04/23/高效缓存的使用/" itemprop="url">
-                  在node中实现高效缓存
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2020-04-23T16:10:21+08:00" content="2020-04-23">
-              2020-04-23
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2020/04/23/高效缓存的使用/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/04/23/高效缓存的使用/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p><code>使用场景</code>: 对于量级小，常用的基础数据做内存缓存，提高运算速度</p>
-<p><code>getRegionCache</code>方法不仅对外输出，同时内部计算也会使用，为了保证高效，需要隐性异步，不能直接声明async</p>
-<h3 id="初始化缓存"><a href="#初始化缓存" class="headerlink" title="初始化缓存"></a>初始化缓存</h3><p>返回Promise 同步等待</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRegionCache</span>(<span class="params">key</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!cache) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</div><div class="line">      reflashCache().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        resolve(cache.get(key))</div><div class="line">      &#125;);</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>调用者拿到的是Promise对象，直接await即可</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">async</span> getRegionCacheAPI(key) &#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">await</span> getRegionCache(key)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="缓存异步刷新"><a href="#缓存异步刷新" class="headerlink" title="缓存异步刷新"></a>缓存异步刷新</h3><ul>
-<li>对于这类基础数据的缓存，低实时性，通过自维护方式失效，类似LRU的实现</li>
-</ul>
-<p>缓存到失效时间后通过<code>process.nextTick</code>放入微任务队列异步刷新, 同步计算先拿旧数据继续执行</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRegionCache</span>(<span class="params">key</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (overTime) &#123;</div><div class="line">    process.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> reflashCache());</div><div class="line">    updateCacheTime = <span class="built_in">Date</span>.now();</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> cache.get(key);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h3><ul>
-<li>在缓存初始化和失效时，大量并发请求同时触发缓存刷新，严重影响数据库性能</li>
-</ul>
-<p>通过设置once事件监听缓存刷新完成,待缓存刷新结束后，依次返回结果，避免并发刷新缓存</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">event</span> = <span class="keyword">new</span> events.EventEmitter();</div><div class="line"><span class="keyword">event</span>.setMaxListeners(<span class="number">100</span>); <span class="comment">//注意设置监听者数量，超过数量会触发leak memory告警</span></div><div class="line"></div><div class="line"><span class="keyword">await</span> reflashCache() &#123;</div><div class="line">  <span class="keyword">await</span> <span class="keyword">new</span> Promise(<span class="keyword">async</span> resolve =&gt; &#123;</div><div class="line">    <span class="keyword">event</span>.once(<span class="string">'finish'</span>, resolve);</div><div class="line">    <span class="keyword">if</span> (eventStatus === <span class="string">'ready'</span>) &#123;</div><div class="line">      eventStatus = <span class="string">'pending'</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">event</span>.emit(<span class="string">'finish'</span>);</div><div class="line">      eventStatus = <span class="string">'ready'</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过将数据库查询任务放入异步队列，避免了运算时同步等待，体现出node的性能优势</p>
-<p>利用事件监听能力，很方便就能处理缓存击穿的问题</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/04/04/胸有成竹(Calling the Shot)/" itemprop="url">
-                  未雨绸缪(Plan to Throw One Away)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2020-04-04T14:40:30+08:00" content="2020-04-04">
-              2020-04-04
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/人月神话/" itemprop="url" rel="index">
-                    <span itemprop="name">人月神话</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2020/04/04/胸有成竹(Calling the Shot)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/04/04/胸有成竹(Calling the Shot)/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>不变只是愿望，变化才是永恒</p>
-<h3 id="试验性工厂和增大规模"><a href="#试验性工厂和增大规模" class="headerlink" title="试验性工厂和增大规模"></a>试验性工厂和增大规模</h3><p>开发使用的环境由于规模、量级的限制，导致第一版开发的软件在真实环境运行时易出现各种问题,需要在测试中不断增大规模、模拟真实环境</p>
-<p>把第一版开发的产品发布给顾客，可以获得时间，但是对于用户，使用极度痛苦;对于重新开发的人员，分散了精力;对于产品，影响了声誉，即使最好的再设计也难以挽回名声</p>
-<h3 id="唯一不变的就是变化本身"><a href="#唯一不变的就是变化本身" class="headerlink" title="唯一不变的就是变化本身"></a>唯一不变的就是变化本身</h3><p>新的系统概念或新技术会不断出现，所以老版的系统必须被抛弃，但即使是最优秀的项目经理，也不能在最开始解决这些问题</p>
-<ul>
-<li><strong>开发人员交付的是用户满意程度，而不仅仅是实际的产品</strong></li>
-<li>用户的实际需要和用户感觉会随着程序使用而变化</li>
-</ul>
-<p>目标上的变化不可避免，而且设计策略和技术上的变化也不可避免，随着学习的过程更改设计</p>
-<h3 id="前进两步，后退一步"><a href="#前进两步，后退一步" class="headerlink" title="前进两步，后退一步"></a>前进两步，后退一步</h3><p>对于一个广泛使用的程序，其维护总成本通常是开发成本的 40%或更多，该成本受用户数目的严重影响。<strong>用户越多，所发现的错误也越多</strong></p>
-<p><img src="/picture/未雨绸缪.jpg" alt="Resize icon"></p>
-<ul>
-<li>缺陷修复总会以(20-50)%的机率引入新的bug </li>
-</ul>
-<p>原因:</p>
-<ol>
-<li>看似很轻微的错误，实际却是系统级别的问题，如果没有非常详细的文档，是很难被发现</li>
-<li>维护人员常常不是编写代码的开发人员，而是一些初级程序员或者新手</li>
-</ol>
-<p>成本: 在每次修复之后，必须重新运行先前所有的测试用例，从而确保系统不会以更隐蔽的方式被破坏</p>
-<p><strong>设计实现的人员越少、接口越少，产生的错误也就越少</strong> 微服务</p>
-<h3 id="前进一步，后退一步"><a href="#前进一步，后退一步" class="headerlink" title="前进一步，后退一步"></a>前进一步，后退一步</h3><ul>
-<li>维护越多系统越混乱，所有修改都倾向于破坏系统的架构，增加了系统的混乱程度</li>
-<li>用在修复原有设计上瑕疵的工作量越来越少，而早期维护造成的漏洞所引起修复工作越来越多</li>
-</ul>
-<p><strong>系统软件开发是减少混乱度(减少熵)的过程，所以它本身是处于亚稳态的。软件维护是提高混乱度(增加熵)的过程，即使是最熟练的软件维护工作，也只是放缓了系统退化到非稳态的进程</strong></p>
-<p>机器在变化，配置在变化，用户的需求在变化，所以现实系统不可能永远可用。<strong>基于原有系统的重新设计是完全必要的</strong></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1552,7 +1752,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-count">82</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
