@@ -253,6 +253,170 @@
             
               
                 
+                <a class="post-title-link" href="/2016/07/29/nodejs-网络-二/" itemprop="url">
+                  nodejs 网络(二)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-07-29T13:33:12+08:00" content="2016-07-29">
+              2016-07-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/29/nodejs-网络-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/29/nodejs-网络-二/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="构建websocket服务"><a href="#构建websocket服务" class="headerlink" title="构建websocket服务"></a>构建websocket服务</h3><p>websocket的优势：</p>
+<ul>
+<li>客户端与服务器只需要一个tcp连接</li>
+<li>服务器可以推送到客户端</li>
+<li>轻量化的协议头，提高传输效率</li>
+</ul>
+<p>node使用websocket的优势：</p>
+<ul>
+<li>WebSocket客户端基于事件的编程模式和node的自定义事件类似</li>
+<li>websocket需要客户端与服务器之间的长连接，node事件驱动的方式擅长与量大的客户端保持高并发连接</li>
+</ul>
+<h4 id="WebSocket握手"><a href="#WebSocket握手" class="headerlink" title="WebSocket握手"></a>WebSocket握手</h4><p>客户端发起升级协议请求：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">GET <span class="regexp">/ chat HTTP /</span> <span class="number">1.1</span></div><div class="line"><span class="string">Host:</span> server.example.com</div><div class="line"><span class="string">Upgrade:</span> websocket <span class="comment">//升级协议为websocket</span></div><div class="line"><span class="string">Connection:</span> Upgrade</div><div class="line">Sec - WebSocket - <span class="string">Key:</span> dGhlIHNhbXBsZSBub25jZQ == </div><div class="line">Sec - WebSocket - <span class="string">Protocol:</span> chat, superchat <span class="comment">//子协议</span></div><div class="line">Sec - WebSocket - <span class="string">Version:</span> <span class="number">13</span> <span class="comment">//版本号</span></div></pre></td></tr></table></figure>
+<p>Sec-WebSocket-Key用于安全校验，值是随机生成的Base64编码的字符串。服务端将其与字符串258EAFA5-E914-47DA-95CA-C5AB0DC85B11拼接，然后再用sha1计算再Base64编码</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var crypto = require(<span class="string">'crypto'</span>);</div><div class="line">var val = crypto.createHash(<span class="string">'sha1'</span>).update(key).digest(<span class="string">'base64'</span>);</div><div class="line"></div><div class="line"><span class="comment">//服务端响应b报文</span></div><div class="line">HTTP / <span class="number">1.1</span> <span class="number">101</span> Switching Protocols</div><div class="line"><span class="string">Upgrade:</span> websocket</div><div class="line"><span class="string">Connection:</span> Upgrade </div><div class="line">Sec - WebSocket - <span class="string">Accept:</span> s3pPLMBiTxaQ9kYGzzhZRbK + xOo =</div><div class="line">Sec - WebSocket - <span class="string">Protocol:</span> chat</div></pre></td></tr></table></figure>
+<p>客户端校验Sec-WebSocket-Accept，正确的话就开始数据传输</p>
+<h4 id="WebSocket数据传输"><a href="#WebSocket数据传输" class="headerlink" title="WebSocket数据传输"></a>WebSocket数据传输</h4><p> 在握手后就开始websocket数据帧协议， 握手完成客户端onopen()被触发</p>
+ <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">socket.onopen = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </div><div class="line">   <span class="comment">// <span class="doctag">TODO:</span> opened()</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p> 服务端没有onopen()方法，想完成tcp套接字事件到websocket事件的封装，需要在收发数据时处理，Websocket的数据帧是在底层data事件上封装的</p>
+ <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> <span class="comment">//接收</span></div><div class="line"> WebSocket.prototype.setSocket = <span class="function"><span class="keyword">function</span><span class="params">(socket)</span> </span>&#123;</div><div class="line">	<span class="keyword">this</span>.socket = socket;</div><div class="line">	<span class="keyword">this</span>.socket.on(<span class="string">'data'</span>, <span class="keyword">this</span>.receiver);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//发送</span></div><div class="line">WebSocket.prototype.send = <span class="function"><span class="keyword">function</span><span class="params">(data)</span> </span>&#123;</div><div class="line">	<span class="keyword">this</span>._send(data);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p> 当一端调用send()发送时，另一端会触发onmessage,协议可能将数据封装为多帧发送。客户端需要对发送的数据帧做掩码处理，服务端收到无掩码帧会断开连接，而服务端发送时不需要</p>
+<p> <code>websocket数据帧定义</code><br> <img src="../picture/websocket数据帧定义.png" alt="Smaller icon"></p>
+<ul>
+<li>fin 如果这数据帧是最后一帧时为1(如果数据就一帧，它也是1)，其余为0  <ul>
+<li>rsv1、rsv2、rsv3：1位长 用于标识拓展，当有拓展时为1</li>
+<li>opcode: 4位（0~15） 0：附加数据帧 ,1：文本数据帧  ,2：二进制数据帧,8：发送一个连接关闭帧,9：ping数据帧  ,10：pong数据帧 ping,pong用于心跳检测，一端发ping、一端发pong</li>
+<li>masked 是否进行掩码处理  客户端发送时是1 服务端是0 </li>
+<li>payload 标识数据长度</li>
+<li>masking key 当masked为1时存在 长度32位 用于解密</li>
+<li>payload data 目标数据 位数为8的倍数 </li>
+</ul>
+</li>
+</ul>
+<h3 id="网络服务和安全"><a href="#网络服务和安全" class="headerlink" title="网络服务和安全"></a>网络服务和安全</h3><ul>
+<li>ssl(Secure Sockets Layer,安全套接层)，应用在传输层</li>
+<li>TLS(Transport Layer Security,安全传输层协议)，由IETF标准化</li>
+</ul>
+<p>node提供crypto，tls,https。crypto用于加解密，tls与net功能类似，区别是它建立在TLS/SSL加密的tcp.https和http接口也一致，也是区别在建立于安全的连接</p>
+<h4 id="TLS-SSL"><a href="#TLS-SSL" class="headerlink" title="TLS/SSL"></a>TLS/SSL</h4><ul>
+<li><p>非对称加密，公钥用于加密传输数据，私钥解密</p>
+<p><img src="../picture/ssl交换秘钥.png" alt="Smaller icon"></p>
+<p>node的tls/ssl是用openssl实现的，公、私钥生成参照：</p>
+</li>
+</ul>
+ <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 生成服务器端私 </span>openssl genrsa -out server<span class="selector-class">.key</span> <span class="number">1024</span> <span class="comment">//生成客户端私 </span>openssl genrsa -out client<span class="selector-class">.key</span> <span class="number">1024</span></div><div class="line"><span class="comment">// 利用上面的1024位长的RSA私钥生成公钥</span>openssl rsa -<span class="keyword">in</span> server<span class="selector-class">.key</span> -pubout -out server<span class="selector-class">.pem</span>openssl rsa -<span class="keyword">in</span> client<span class="selector-class">.key</span> -pubout -out client.pem</div></pre></td></tr></table></figure>
+<h5 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h5><ul>
+<li>由CA颁发，并提供验证</li>
+<li>防止中间人攻击</li>
+</ul>
+<p><code>中间人攻击</code>：在服务端和客户端交换密钥时，伪装成其中一方发送公钥，如对客户端就伪装成服务端。所以需要对公钥认证，确认来自目标服务器</p>
+<p> 服务端通过私钥生成CSR（Certificate Signing Request，证书签名请求），ca通过它颁发属于该服务器的签名证书</p>
+<p> 自签名证书流程：</p>
+ <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> \\ca生成私钥，csr文件，和自签名的证书</div><div class="line">$ openssl genrsa -out ca<span class="selector-class">.key</span> <span class="number">1024</span>$ openssl req -new -key ca<span class="selector-class">.key</span> -out ca<span class="selector-class">.csr</span>$ openssl x509 -req -<span class="keyword">in</span> ca<span class="selector-class">.csr</span> -signkey ca<span class="selector-class">.key</span> -out ca<span class="selector-class">.crt</span></div><div class="line">\\服务器生成csr,向ca申请签名，获取证书$ openssl req -new -key server<span class="selector-class">.key</span> -out server<span class="selector-class">.csr</span>$ openssl x509 -req -CA ca<span class="selector-class">.crt</span> -CAkey ca<span class="selector-class">.key</span> -CAcreateserial -<span class="keyword">in</span> server<span class="selector-class">.csr</span> -out server.crt</div></pre></td></tr></table></figure>
+<p>客户端发起安全连接会获取服务端证书，然后用ca的证书验证服务器证书，包括真伪、服务器名称、ip等。对于知名ca,它的证书一般预装在浏览器，自签的ca需要客户端安装才能验证</p>
+<h4 id="创建tcl服务"><a href="#创建tcl服务" class="headerlink" title="创建tcl服务"></a>创建tcl服务</h4><ul>
+<li>通过node的tls创建安全的tcp服务</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//服务端</span></div><div class="line"><span class="keyword">var</span> tls = <span class="built_in">require</span>(<span class="string">'tls'</span>);</div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> options = &#123;</div><div class="line">	<span class="attr">key</span>: fs.readFileSync(<span class="string">'./keys/server.key'</span>),</div><div class="line">	<span class="attr">cert</span>: fs.readFileSync(<span class="string">'./keys/server.crt'</span>),</div><div class="line">	<span class="attr">requestCert</span>: <span class="literal">true</span>,</div><div class="line">	<span class="attr">ca</span>: [fs.readFileSync(<span class="string">'./keys/ca.crt'</span>)]</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> server = tls.createServer(options, <span class="function"><span class="keyword">function</span>(<span class="params">stream</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'server connected'</span>, stream.authorized ? <span class="string">'authorized'</span> : <span class="string">'unauthorized'</span>);</div><div class="line">	stream.write(<span class="string">"welcome!\n"</span>);</div><div class="line">	stream.setEncoding(<span class="string">'utf8'</span>);</div><div class="line">	stream.pipe(stream);</div><div class="line">&#125;);</div><div class="line">server.listen(<span class="number">8000</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'server bound'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">//测试： $ openssl s_client -connect 127.0.0.1:8000</span></div><div class="line"><span class="comment">//客户端</span></div><div class="line">$ openssl genrsa - out client.key <span class="number">1024</span></div><div class="line">$ openssl req - <span class="keyword">new</span> - key client.key - out client.csr</div><div class="line">$ openssl x509 - req - CA ca.crt - CAkey ca.key - CAcreateserial - <span class="keyword">in</span> client.csr - out client.crt</div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> tls = <span class="built_in">require</span>(<span class="string">'tls'</span>);</div><div class="line"><span class="keyword">var</span> options = &#123;</div><div class="line">	<span class="attr">key</span>: fs.readFileSync(<span class="string">'./keys/client.key'</span>),</div><div class="line">	<span class="attr">cert</span>: fs.readFileSync(<span class="string">'./keys/client.crt'</span>),</div><div class="line">	<span class="attr">ca</span>: [fs.readFileSync(<span class="string">'./keys/ca.crt'</span>)]</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> stream = tls.connect(<span class="number">8000</span>, options, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'client connected'</span>, stream.authorized ? <span class="string">'authorized'</span> : <span class="string">'unauthorized'</span>);</div><div class="line">	process.stdin.pipe(stream);</div><div class="line">&#125;);</div><div class="line">stream.setEncoding(<span class="string">'utf8'</span>);</div><div class="line">stream.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(data);</div><div class="line">&#125;);</div><div class="line">stream.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	server.close();</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">//和tcp相比只是多了证书配置</span></div></pre></td></tr></table></figure>
+<h4 id="https服务"><a href="#https服务" class="headerlink" title="https服务"></a>https服务</h4><ul>
+<li>使用node的https，比http多了一个配置</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> https = <span class="built_in">require</span>(<span class="string">'https'</span>);</div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> options = &#123;</div><div class="line">	<span class="attr">key</span>: fs.readFileSync(<span class="string">'./keys/server.key'</span>),</div><div class="line">	<span class="attr">cert</span>: fs.readFileSync(<span class="string">'./keys/server.crt'</span>)</div><div class="line">&#125;;</div><div class="line">https.createServer(options, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>);</div><div class="line">	res.end(<span class="string">"hello world\n"</span>);</div><div class="line">&#125;).listen(<span class="number">8000</span>);</div><div class="line"></div><div class="line"><span class="comment">//验证 $ curl https://localhost:8000/ -k, 忽略证书验证 -carcert ca证书地址</span></div><div class="line"><span class="comment">//客户端</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> https = <span class="built_in">require</span>(<span class="string">'https'</span>);</div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> options = &#123;</div><div class="line">	<span class="attr">hostname</span>: <span class="string">'localhost'</span>,</div><div class="line">	<span class="attr">port</span>: <span class="number">8000</span>,</div><div class="line">	<span class="attr">path</span>: <span class="string">'/'</span>,</div><div class="line">	<span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">	<span class="attr">key</span>: fs.readFileSync(<span class="string">'./keys/client.key'</span>),</div><div class="line">	<span class="attr">cert</span>: fs.readFileSync(<span class="string">'./keys/client.crt'</span>),</div><div class="line">	<span class="attr">ca</span>: [fs.readFileSync(<span class="string">'./keys/ca.crt'</span>)]</div><div class="line">&#125;;</div><div class="line">options.agent = <span class="keyword">new</span> https.Agent(options);<span class="comment">//https代理另设</span></div><div class="line"><span class="keyword">var</span> req = https.request(options, <span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">	res.setEncoding(<span class="string">'utf-8'</span>);</div><div class="line">	res.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">d</span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(d);</div><div class="line">	&#125;);</div><div class="line">&#125;);</div><div class="line">req.end();</div><div class="line">req.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(e);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/07/22/nodejs-网络(一)/" itemprop="url">
                   nodejs 网络(一)
                 </a>
@@ -1810,114 +1974,6 @@ node --max-new-space-size=1024 test.js // 单位为KB
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/13/openssl生成ssl证书及向申请CA流程/" itemprop="url">
-                  openssl生成ssl证书及向申请CA流程
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2016-05-13T10:57:49+08:00" content="2016-05-13">
-              2016-05-13
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/13/openssl生成ssl证书及向申请CA流程/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/13/openssl生成ssl证书及向申请CA流程/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="生成key"><a href="#生成key" class="headerlink" title="生成key"></a>生成key</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">openssl genrsa -des3 -out prvtkey<span class="selector-class">.pem</span> <span class="number">2048</span> </div><div class="line">或者无密码保护的</div><div class="line">openssl genrsa -out prvtkey<span class="selector-class">.pem</span> <span class="number">2048</span></div></pre></td></tr></table></figure>
-<h3 id="生成-csr-用这个向数字证书颁发机构（即CA）申请一个数字证书"><a href="#生成-csr-用这个向数字证书颁发机构（即CA）申请一个数字证书" class="headerlink" title="生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)"></a>生成.csr(用这个向数字证书颁发机构（即CA）申请一个数字证书)</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl req -<span class="keyword">new</span> -key prvtkey.pem -<span class="keyword">out</span> cert.csr</div></pre></td></tr></table></figure>
-<p>然后填写信息，注意<strong>Common Name (eg, your websites domain name)</strong>，要填写网站域名,如:pay.abc.com</p>
-<p>生成的.csr文件是否规范可以在这检测：<br><a href="https://cryptoreport.websecurity.symantec.com/checker/views/csrCheck.jsp" target="_blank" rel="external">https://cryptoreport.websecurity.symantec.com/checker/views/csrCheck.jsp</a></p>
-<p>然后向CA申请数字证书，再用CA给的cacert.pem替换原来的prvtkey.pem</p>
-<h3 id="自建CA"><a href="#自建CA" class="headerlink" title="自建CA"></a>自建CA</h3><p><a href="http://www.cnblogs.com/AloneSword/p/3809002.html" target="_blank" rel="external">http://www.cnblogs.com/AloneSword/p/3809002.html</a></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1964,7 +2020,7 @@ node --max-new-space-size=1024 test.js // 单位为KB
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">82</span>
+              <span class="site-state-item-count">83</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

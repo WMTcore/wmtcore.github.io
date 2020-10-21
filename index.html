@@ -248,6 +248,125 @@
             
               
                 
+                <a class="post-title-link" href="/2020/10/21/数组间取交集优化-二分查找 /" itemprop="url">
+                  数组间取交集优化-二分查找
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-10-21T18:24:30+08:00" content="2020-10-21">
+              2020-10-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/工作日常/" itemprop="url" rel="index">
+                    <span itemprop="name">工作日常</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/10/21/数组间取交集优化-二分查找 /#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/10/21/数组间取交集优化-二分查找 /" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>业务：下单时，手术类型中的商品需要与授权商品取交集过滤，剩下的商品才能返回给前端展示</p>
+<p>难点：某些大客户手术类型数量有<strong>两百</strong>多，每个又包含<strong>数百</strong>商品，需要和<strong>多达十万</strong>的商品循环做取交集运算</p>
+<p>问题：原先使用的lodash的intersection方法循环每个手术类型取交集,在技术用户德高的手术类型时<strong>需要耗时2500ms</strong></p>
+<p>设手术类型*商品数量为G,授权商品数量为N,当前时间复杂度为<code>GN</code></p>
+<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>使用二分法查找：先确定待查数据的范围，然后逐步缩小范围直到找到或找不到该记录为止，需要先将数组排序</p>
+<h4 id="有序数组"><a href="#有序数组" class="headerlink" title="有序数组"></a>有序数组</h4><p>先将授权商品排序,使用快速排序（NlogN），再用二分查找搜索商品(logN)</p>
+<p>合计时间复杂度为<code>NlogN+GlogN</code>，减去原先<code>N*G</code>得到<code>NlogN+(logN-N)*G</code>所以N,G越大时优化效果越明显</p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> searchSortArray(sortArray,val)&#123;</div><div class="line">  <span class="keyword">function</span> handle(<span class="built_in">left</span>, <span class="built_in">right</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">left</span> &gt; <span class="built_in">right</span>)&#123;</div><div class="line">      return <span class="literal">false</span>;</div><div class="line">    &#125; </div><div class="line">    <span class="keyword">const</span> <span class="built_in">mid</span> = Math.floor((<span class="built_in">left</span> + <span class="built_in">right</span> ) / <span class="number">2</span>);</div><div class="line">    <span class="keyword">const</span> midVal = sortArray[<span class="built_in">mid</span>];</div><div class="line">    <span class="keyword">if</span>(midVal===val)&#123;</div><div class="line">      return <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(midVal&gt;val)&#123;</div><div class="line">      return handle(<span class="built_in">left</span>,<span class="built_in">mid</span><span class="number">-1</span>)</div><div class="line">    &#125;</div><div class="line">    return handle(<span class="built_in">mid</span>+<span class="number">1</span>,<span class="built_in">right</span>)</div><div class="line">  &#125;</div><div class="line">  return handle(<span class="number">0</span>, sortArray.length - <span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="二叉搜索树-BST"><a href="#二叉搜索树-BST" class="headerlink" title="二叉搜索树(BST)"></a>二叉搜索树(BST)</h5><ul>
+<li>BST：根节点的值大于其左子树中任意一个节点的值，小于其右节点中任意一节点的值</li>
+</ul>
+<p>有序数组在计算时，每次都要计算一次中间值(logN)，使用BST能省掉这次计算</p>
+<p>再排序的基础上构建一个二叉搜索树（N）,再检索二叉树(logN)</p>
+<p>所以原先的有序数组时间复杂度为 <code>NlogN+2GlogN</code>,二叉树的时间复杂度为<code>NlogN+GlogN+N</code>,相减得到<code>GlogN-N</code>,<strong>当G较大时使用BST效果好</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 二叉树结构</span></div><div class="line">function TreeNode(<span class="keyword">val</span>, left, right) &#123;</div><div class="line">  <span class="keyword">this</span>.<span class="keyword">val</span> = (<span class="keyword">val</span> === undefined ? <span class="number">0</span> : <span class="keyword">val</span>);</div><div class="line">  <span class="keyword">this</span>.left = (left === undefined ? <span class="literal">null</span> : left);</div><div class="line">  <span class="keyword">this</span>.right = (right === undefined ? <span class="literal">null</span> : right);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 有序数组转BST</span></div><div class="line">function arrayToBST(sortArray) &#123;</div><div class="line">  function handle(left, right) &#123;</div><div class="line">    <span class="keyword">if</span> (left &gt; right)&#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    &#125; </div><div class="line">    const mid = Math.floor((left + right ) / <span class="number">2</span>);</div><div class="line">    const root = new TreeNode(sortArray[mid]);</div><div class="line">    root.left = handle(left, mid - <span class="number">1</span>);</div><div class="line">    root.right = handle(mid + <span class="number">1</span>, right);</div><div class="line">    <span class="keyword">return</span> root;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> handle(<span class="number">0</span>, sortArray.length - <span class="number">1</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 检索BST</span></div><div class="line">function searchBST(BST, <span class="keyword">val</span>) &#123;</div><div class="line">  <span class="keyword">if</span> (!BST) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  <span class="keyword">if</span> (<span class="keyword">val</span> === BST.<span class="keyword">val</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (<span class="keyword">val</span> &lt; BST.<span class="keyword">val</span>) &#123;;</div><div class="line">    <span class="keyword">return</span> searchBST(BST.left, <span class="keyword">val</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> searchBST(BST.right, <span class="keyword">val</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>在使用BST优化后时间降为<strong>480ms</strong>,比原先快了5倍,效果显著</p>
+<p>在实际业务处理中要对商品数量做<strong>判断后再选择合适的算法</strong></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2020/09/08/问题排查与系统优化/" itemprop="url">
                   问题排查与系统优化
                 </a>
@@ -1331,131 +1450,6 @@
             
               
                 
-                <a class="post-title-link" href="/2020/05/08/rpc包更换/" itemprop="url">
-                  rpc包更换
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2020-05-08T13:48:49+08:00" content="2020-05-08">
-              2020-05-08
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/工作日常/" itemprop="url" rel="index">
-                    <span itemprop="name">工作日常</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2020/05/08/rpc包更换/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/05/08/rpc包更换/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ol>
-<li>精简rpc包，剔除mq功能</li>
-<li>使用egg agent,支持多worker启动（支持多worker意义不大，egg 3.0的milestone对docker的singleprocess会做优化，到时候再根据情况做调整）</li>
-<li>提供尽量方便的配置性，支持开发自定义proto文件的同时不需要格外增加代码（屏蔽掉内部实现）</li>
-</ol>
-<h3 id="设计点记录"><a href="#设计点记录" class="headerlink" title="设计点记录"></a>设计点记录</h3><h4 id="client"><a href="#client" class="headerlink" title="client"></a>client</h4><ul>
-<li>call</li>
-</ul>
-<p>连接断开: 连接断开后直接抛错，删掉记录的client，等待下次调用再发起连接,<strong>因为只有调用时才能执行建立连接</strong>,直接用调用方法重试容易出现死循环</p>
-<p>报错: 通过判断response.body.code&lt;0,创建error,reject error</p>
-<ul>
-<li>stream</li>
-</ul>
-<p>连接断开: 连接断开后重试连接，通过监听error事件重试</p>
-<h4 id="server"><a href="#server" class="headerlink" title="server"></a>server</h4><p>启动失败: 设计只支持发生在申请端口时，直接reject error</p>
-<p>保存连接对应的client</p>
-<figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="built_in">key</span> = svcName + funcName + that._getRid();</div><div class="line"></div><div class="line">that.callHandle.<span class="built_in">set</span>(<span class="built_in">key</span>,client)</div></pre></td></tr></table></figure>
-<p>触发rpcData时带上key</p>
-<p>设置传输包大小</p>
-<h3 id="改动范围"><a href="#改动范围" class="headerlink" title="改动范围"></a>改动范围</h3><h4 id="fx-rpc"><a href="#fx-rpc" class="headerlink" title="fx-rpc"></a>fx-rpc</h4><p>启动rpc服务,处理client发送的请求，调用本地方法</p>
-<h5 id="传输格式"><a href="#传输格式" class="headerlink" title="传输格式"></a>传输格式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line"></div><div class="line">package fgrid;</div><div class="line"></div><div class="line">service Call &#123;</div><div class="line">  rpc Call (body) returns (body) &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">message body &#123;</div><div class="line">  string body = 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="middle"><a href="#middle" class="headerlink" title="middle"></a>middle</h4><p>client发送rpc请求，格式参考部分JSON-RPC</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attribute">method</span>: targetArgs.<span class="built_in">join</span>(<span class="string">'.'</span>),</div><div class="line">  param: [ ...args, ctx.rpcCtx ],</div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2020/05/08/mq包更换/" itemprop="url">
                   mq包更换
                 </a>
@@ -1561,8 +1555,8 @@
             
               
                 
-                <a class="post-title-link" href="/2020/04/29/授权重构及微服务开发问题总结/" itemprop="url">
-                  授权重构及微服务开发问题总结
+                <a class="post-title-link" href="/2020/05/08/rpc包更换/" itemprop="url">
+                  rpc包更换
                 </a>
               
             
@@ -1572,8 +1566,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2020-04-29T16:38:37+08:00" content="2020-04-29">
-              2020-04-29
+            <time itemprop="dateCreated" datetime="2020-05-08T13:48:49+08:00" content="2020-05-08">
+              2020-05-08
             </time>
           </span>
 
@@ -1598,8 +1592,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2020/04/29/授权重构及微服务开发问题总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/04/29/授权重构及微服务开发问题总结/" itemprop="commentsCount"></span>
+                <a href="/2020/05/08/rpc包更换/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/05/08/rpc包更换/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1621,70 +1615,29 @@
         
           <span itemprop="articleBody">
             
-              <h3 id="项目回顾"><a href="#项目回顾" class="headerlink" title="项目回顾"></a>项目回顾</h3><h4 id="重构目的"><a href="#重构目的" class="headerlink" title="重构目的"></a>重构目的</h4><p>优化授权数据的存储方式，避免原先冗长的缓存计算</p>
-<h4 id="成果"><a href="#成果" class="headerlink" title="成果"></a>成果</h4><p>无需再做定时的缓存刷新，据实施和客户反馈操作授权速度和流程度比原先有大幅提升</p>
-<h4 id="槽点和败笔"><a href="#槽点和败笔" class="headerlink" title="槽点和败笔"></a>槽点和败笔</h4><ol>
-<li>从目的出发业务基本无改动，完全搬运原先代码,也因此出现了一些纰漏</li>
-<li>过度设计，ra-backend无意义的透传，首先侧重代码的清晰、可读性，再考虑其他规范，避免形式主义</li>
-<li>缺少自测手段,过度依赖测试团队,效率很低</li>
-<li>前期在基础组件花费时间过长，缺乏进度管控,后期赶工,代码质量缺少保障</li>
-<li>// 沟通问题</li>
-</ol>
-<h3 id="开发体感"><a href="#开发体感" class="headerlink" title="开发体感"></a>开发体感</h3><h4 id="业务代码"><a href="#业务代码" class="headerlink" title="业务代码"></a>业务代码</h4><ol>
-<li>修改依赖授权数据的项目非常痛苦,要去了解原先的业务场景和数据格式后再设计接口，在后期测试时，这块花费了很大时间，出了bug难以排查</li>
-<li>原先项目参数定义比较奇怪，使用-1表示否定，mongo支持undefined为查询条件</li>
-</ol>
-<h4 id="基础组件"><a href="#基础组件" class="headerlink" title="基础组件"></a>基础组件</h4><ol>
-<li>缺少服务地址组件： 本地开发启动多服务联调比较麻烦，连接线上服务也需要不断修改配置文件</li>
-<li>log插件：线上报错信息不完整，没有显示具体的调用信息</li>
-</ol>
-<h3 id="工程化"><a href="#工程化" class="headerlink" title="工程化"></a>工程化</h3><h4 id="解耦"><a href="#解耦" class="headerlink" title="解耦"></a>解耦</h4><ol>
-<li>服务拆分颗粒度 要与公司业务发展趋势相契合，不能生搬硬套教程，做适当整合(基础信息类)</li>
-<li>避免类似ra-backend只做透传的项目</li>
-<li>传入参数的校验，存在将前端传入参数直接透传查询的情况，需要加以验证和鉴权</li>
-</ol>
-<h4 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h4><ol>
-<li>因为docker构建缓存，私有包不自动更新,增加Jenkins配置或者写明使用包版本</li>
-<li>私有包版本管理，不兼容问题</li>
-</ol>
-<h4 id="质量保证"><a href="#质量保证" class="headerlink" title="质量保证"></a>质量保证</h4><ol>
-<li>最小单元测试 确保不出现语法错误(await、拼写)</li>
-<li>健康检查，考虑开放http来提供健康检查，通过fx-rpc插件实现再调用rpc来自检</li>
-</ol>
-<h4 id="代码风格"><a href="#代码风格" class="headerlink" title="代码风格"></a>代码风格</h4><ol>
-<li>下划线转驼峰</li>
-<li>单文件代码行数,按controller映射service容易出现代码行数过大 需要做适当拆解</li>
-</ol>
-<h4 id="临时发布环境搭建"><a href="#临时发布环境搭建" class="headerlink" title="临时发布环境搭建"></a>临时发布环境搭建</h4><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><h4 id="测试准备"><a href="#测试准备" class="headerlink" title="测试准备"></a>测试准备</h4><ol>
-<li>撤下老的项目，防止再被调用</li>
-</ol>
-<h4 id="自测能力"><a href="#自测能力" class="headerlink" title="自测能力"></a>自测能力</h4><p>对复杂业务场景的自测能力</p>
-<h3 id="沟通"><a href="#沟通" class="headerlink" title="沟通"></a>沟通</h3><h4 id="团队会议"><a href="#团队会议" class="headerlink" title="团队会议"></a>团队会议</h4><ol>
-<li>回顾本周进度，指定下周计划，预防延期或及时做进度调整</li>
-<li>对于有争议的问题由tl做决策避免拖延</li>
-<li>确定责任边界，避免扯皮;回顾、调整目标，确保团队整体方向正确（避免无用功，有争议时从目标出发）</li>
-<li>做好会议记录（记录决策）发给与会者</li>
-</ol>
-<h3 id="下阶段计划"><a href="#下阶段计划" class="headerlink" title="下阶段计划"></a>下阶段计划</h3><h4 id="rpc包更换"><a href="#rpc包更换" class="headerlink" title="rpc包更换"></a>rpc包更换</h4><ol>
+              <h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ol>
 <li>精简rpc包，剔除mq功能</li>
-<li>使用egg agent,支持多worker启动</li>
+<li>使用egg agent,支持多worker启动（支持多worker意义不大，egg 3.0的milestone对docker的singleprocess会做优化，到时候再根据情况做调整）</li>
+<li>提供尽量方便的配置性，支持开发自定义proto文件的同时不需要格外增加代码（屏蔽掉内部实现）</li>
 </ol>
-<h4 id="mq包更换"><a href="#mq包更换" class="headerlink" title="mq包更换"></a>mq包更换</h4><ol>
-<li>封装http版本的包</li>
-<li>避免一个业务动作批量发送mq的场景（类似多段的分布式事务） 需要由业务侧做拆分</li>
-</ol>
-<h4 id="log"><a href="#log" class="headerlink" title="log"></a>log</h4><ol>
-<li>错误日志输出适配rpc，打印调用参数和traceId</li>
-</ol>
-<h4 id="减少rpc传输字段"><a href="#减少rpc传输字段" class="headerlink" title="减少rpc传输字段"></a>减少rpc传输字段</h4><ol>
-<li>禁用select * ,自协调参数输出</li>
-</ol>
-<h4 id="服务地址组件"><a href="#服务地址组件" class="headerlink" title="服务地址组件"></a>服务地址组件</h4><ol>
-<li>暂定在本地开发使用，线上运行不依赖它</li>
-<li>通过简单的声明即可获取服务地址，包括测试、预发、生产</li>
-</ol>
-<h3 id="技巧分享"><a href="#技巧分享" class="headerlink" title="技巧分享"></a>技巧分享</h3><p>在node中实现高效缓存<br><a href="http://wmtcore.com/2020/04/23/%E9%AB%98%E6%95%88%E7%BC%93%E5%AD%98%E7%9A%84%E4%BD%BF%E7%94%A8/" target="_blank" rel="external">http://wmtcore.com/2020/04/23/%E9%AB%98%E6%95%88%E7%BC%93%E5%AD%98%E7%9A%84%E4%BD%BF%E7%94%A8/</a></p>
-<p>反向授权性能优化<br><a href="http://wmtcore.com/2020/03/20/%E5%8F%8D%E5%90%91%E6%8E%88%E6%9D%83%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" target="_blank" rel="external">http://wmtcore.com/2020/03/20/%E5%8F%8D%E5%90%91%E6%8E%88%E6%9D%83%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</a></p>
+<h3 id="设计点记录"><a href="#设计点记录" class="headerlink" title="设计点记录"></a>设计点记录</h3><h4 id="client"><a href="#client" class="headerlink" title="client"></a>client</h4><ul>
+<li>call</li>
+</ul>
+<p>连接断开: 连接断开后直接抛错，删掉记录的client，等待下次调用再发起连接,<strong>因为只有调用时才能执行建立连接</strong>,直接用调用方法重试容易出现死循环</p>
+<p>报错: 通过判断response.body.code&lt;0,创建error,reject error</p>
+<ul>
+<li>stream</li>
+</ul>
+<p>连接断开: 连接断开后重试连接，通过监听error事件重试</p>
+<h4 id="server"><a href="#server" class="headerlink" title="server"></a>server</h4><p>启动失败: 设计只支持发生在申请端口时，直接reject error</p>
+<p>保存连接对应的client</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="built_in">key</span> = svcName + funcName + that._getRid();</div><div class="line"></div><div class="line">that.callHandle.<span class="built_in">set</span>(<span class="built_in">key</span>,client)</div></pre></td></tr></table></figure>
+<p>触发rpcData时带上key</p>
+<p>设置传输包大小</p>
+<h3 id="改动范围"><a href="#改动范围" class="headerlink" title="改动范围"></a>改动范围</h3><h4 id="fx-rpc"><a href="#fx-rpc" class="headerlink" title="fx-rpc"></a>fx-rpc</h4><p>启动rpc服务,处理client发送的请求，调用本地方法</p>
+<h5 id="传输格式"><a href="#传输格式" class="headerlink" title="传输格式"></a>传输格式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line"></div><div class="line">package fgrid;</div><div class="line"></div><div class="line">service Call &#123;</div><div class="line">  rpc Call (body) returns (body) &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">message body &#123;</div><div class="line">  string body = 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="middle"><a href="#middle" class="headerlink" title="middle"></a>middle</h4><p>client发送rpc请求，格式参考部分JSON-RPC</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attribute">method</span>: targetArgs.<span class="built_in">join</span>(<span class="string">'.'</span>),</div><div class="line">  param: [ ...args, ctx.rpcCtx ],</div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
             
           </span>
@@ -1752,7 +1705,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">82</span>
+              <span class="site-state-item-count">83</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
