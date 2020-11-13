@@ -248,6 +248,133 @@
             
               
                 
+                <a class="post-title-link" href="/2020/11/13/ELK日志之elasticsearch数据存储/" itemprop="url">
+                  ELK日志之elasticsearch数据存储
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2020-11-13T11:10:12+08:00" content="2020-11-13">
+              2020-11-13
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/工作日常/" itemprop="url" rel="index">
+                    <span itemprop="name">工作日常</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/11/13/ELK日志之elasticsearch数据存储/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/11/13/ELK日志之elasticsearch数据存储/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>使用es作为日志存储，上手使用方便，但资源消耗大</p>
+<h3 id="冷热节点"><a href="#冷热节点" class="headerlink" title="冷热节点"></a>冷热节点</h3><p>定期将旧日志热节点移动到冷节点中存储,热节点<strong>配置高速度快</strong>,冷节点<strong>存储成本低</strong>，且支持低频率查询</p>
+<p>使用<code>node.attr.box_type: hot/cold</code>标识冷热节点</p>
+<p>存储：热节点使用ssd,冷节点使用高效云盘</p>
+<h4 id="配置参考"><a href="#配置参考" class="headerlink" title="配置参考"></a>配置参考</h4><p><code>计算资源</code>:  2 核 8GB 的节点可以支持 5000 qps 的写入，随节点数量和节点规格提升，写入能力基本呈线性增长</p>
+<p><code>索引和分片数量</code>: 一个 shard 的数据量在 30-50 GB为宜,1GB 堆内存支持 20-30 个分片为宜,集群总体的分片数量一般不要超过 3w </p>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p><code>shard数量</code>: 一天单服务的日志最大在1g,链路追踪的日志最大为3g,shard设置为即可，后期考虑<strong>将服务日志做合并到一个索引，用appname区分</strong><br><!--`refresh_interval`: 索引刷新周期改为5s--></p>
+<h4 id="索引模板"><a href="#索引模板" class="headerlink" title="索引模板"></a>索引模板</h4><p>创建索引模板</p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">PUT _template/log_template</div><div class="line">&#123;</div><div class="line">  <span class="string">"template"</span>: <span class="string">"log_*”,  // 匹配索引</span></div><div class="line">  "orde<span class="string">r": 98,//优先级 值越大越高</span></div><div class="line">  "settings<span class="string">": &#123;</span></div><div class="line">    "index.number_of_shards<span class="string">": "</span><span class="number">1</span><span class="string">",</span></div><div class="line">    "index.refresh_interval<span class="string">": "</span><span class="number">5</span>s<span class="string">",</span></div><div class="line">    "index.routing.allocation.require.box_type<span class="string">":"</span>hot<span class="string">"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="ILM策略"><a href="#ILM策略" class="headerlink" title="ILM策略"></a>ILM策略</h4><p>索引生命周期策略</p>
+<p><code>warm阶段</code>： 因为日志是按天生成，设置24小时后过渡到warm阶段，索引已不再写入，合并segment为1,其余不变，保障搜索性能</p>
+<p><code>cold阶段</code>： 系统要求90天内日志可查，所以设置90天后过渡到cold,并将节点设置为cold，同时副本数（index.number_of_replicas）改为0，并冻结索引（把索引常驻内存的一些数据从内存中清理掉(比如 FST , 元数据等)，默认情况下无法查询已经冻结的索引，需要显式增加 “ignore_throttled=false” 参数）</p>
+<p>旧索引不会自动加入ILM，需要手动修改（建议分批修改，否则master可能会oom）</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">PUT log_*/<span class="class">_settings</span></div><div class="line">&#123;</div><div class="line">  <span class="string">"index.lifecycle.name"</span>: <span class="string">"mylifecycle"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>并且修改策略只对之后新创建的索引生效</p>
+<h4 id="快照"><a href="#快照" class="headerlink" title="快照"></a>快照</h4><p>自动快照的索引选择不支持时间表达式，只能自己写脚本生成每月快照</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">POST <span class="regexp">/_snapshot/</span>my_backup/my_snapshot?</div><div class="line">&#123;</div><div class="line">  "indices": <span class="string">"*-2020.11.*"</span>,</div><div class="line">  <span class="string">"ignore_unavailable"</span>: <span class="literal">true</span>, <span class="comment">// 忽略不可用索引</span></div><div class="line">  <span class="string">"include_global_state"</span>: <span class="literal">false</span>, <span class="comment">// 不包括全局状态</span></div><div class="line">  <span class="string">"metadata"</span>: &#123;</div><div class="line">    <span class="string">"taken_by"</span>: <span class="string">"kimchy"</span>,</div><div class="line">    <span class="string">"taken_because"</span>: <span class="string">"backup before upgrading"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>待快照完成后再删除索引</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DELETE /<span class="strong">*-2020.11.*</span></div></pre></td></tr></table></figure>
+<h3 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h3><h4 id="集群配置"><a href="#集群配置" class="headerlink" title="集群配置"></a>集群配置</h4><p><code>transient 临时</code>：这些设置在集群重启之前一直会生效。一旦整个集群重启，这些设置就被清除</p>
+<p><code>persistent 永久</code>：这些设置永久保存，除非再次被手动修改。是将修改持久化到文件中，重启之后也不影响。</p>
+<p>节点进行数据传输的每秒最大字节数，-1是指无限制，默认为40MB</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">PUT _cluster/settings</div><div class="line">&#123;</div><div class="line">  <span class="string">"transient"</span>: &#123;</div><div class="line">    <span class="string">"indices.recovery.max_bytes_per_sec"</span>: <span class="string">"-1"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>调整集群恢复时的单机并发度，默认是2</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">PUT _cluster/settings</div><div class="line">&#123;</div><div class="line">  <span class="string">"transient"</span>: &#123;</div><div class="line">    <span class="string">"cluster.routing.allocation.node_concurrent_recoveries"</span>: <span class="number">4</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2020/10/21/数组间取交集优化-二分查找 /" itemprop="url">
                   数组间取交集优化-二分查找
                 </a>
@@ -1534,131 +1661,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/05/08/rpc包更换/" itemprop="url">
-                  rpc包更换
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2020-05-08T13:48:49+08:00" content="2020-05-08">
-              2020-05-08
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/工作日常/" itemprop="url" rel="index">
-                    <span itemprop="name">工作日常</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2020/05/08/rpc包更换/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/05/08/rpc包更换/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ol>
-<li>精简rpc包，剔除mq功能</li>
-<li>使用egg agent,支持多worker启动（支持多worker意义不大，egg 3.0的milestone对docker的singleprocess会做优化，到时候再根据情况做调整）</li>
-<li>提供尽量方便的配置性，支持开发自定义proto文件的同时不需要格外增加代码（屏蔽掉内部实现）</li>
-</ol>
-<h3 id="设计点记录"><a href="#设计点记录" class="headerlink" title="设计点记录"></a>设计点记录</h3><h4 id="client"><a href="#client" class="headerlink" title="client"></a>client</h4><ul>
-<li>call</li>
-</ul>
-<p>连接断开: 连接断开后直接抛错，删掉记录的client，等待下次调用再发起连接,<strong>因为只有调用时才能执行建立连接</strong>,直接用调用方法重试容易出现死循环</p>
-<p>报错: 通过判断response.body.code&lt;0,创建error,reject error</p>
-<ul>
-<li>stream</li>
-</ul>
-<p>连接断开: 连接断开后重试连接，通过监听error事件重试</p>
-<h4 id="server"><a href="#server" class="headerlink" title="server"></a>server</h4><p>启动失败: 设计只支持发生在申请端口时，直接reject error</p>
-<p>保存连接对应的client</p>
-<figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="built_in">key</span> = svcName + funcName + that._getRid();</div><div class="line"></div><div class="line">that.callHandle.<span class="built_in">set</span>(<span class="built_in">key</span>,client)</div></pre></td></tr></table></figure>
-<p>触发rpcData时带上key</p>
-<p>设置传输包大小</p>
-<h3 id="改动范围"><a href="#改动范围" class="headerlink" title="改动范围"></a>改动范围</h3><h4 id="fx-rpc"><a href="#fx-rpc" class="headerlink" title="fx-rpc"></a>fx-rpc</h4><p>启动rpc服务,处理client发送的请求，调用本地方法</p>
-<h5 id="传输格式"><a href="#传输格式" class="headerlink" title="传输格式"></a>传输格式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line"></div><div class="line">package fgrid;</div><div class="line"></div><div class="line">service Call &#123;</div><div class="line">  rpc Call (body) returns (body) &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">message body &#123;</div><div class="line">  string body = 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="middle"><a href="#middle" class="headerlink" title="middle"></a>middle</h4><p>client发送rpc请求，格式参考部分JSON-RPC</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attribute">method</span>: targetArgs.<span class="built_in">join</span>(<span class="string">'.'</span>),</div><div class="line">  param: [ ...args, ctx.rpcCtx ],</div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1705,7 +1707,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">83</span>
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

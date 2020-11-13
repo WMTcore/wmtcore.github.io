@@ -253,6 +253,125 @@
             
               
                 
+                <a class="post-title-link" href="/2016/01/04/webpack-初步/" itemprop="url">
+                  webpack 初步
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-04T15:20:48+08:00" content="2016-01-04">
+              2016-01-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/04/webpack-初步/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/04/webpack-初步/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h3 id="这是啥"><a href="#这是啥" class="headerlink" title="这是啥"></a>这是啥</h3><ul>
+<li>模块加载器兼打包工具</li>
+<li>可以使用 require(XXX)来引入各模块</li>
+<li>加载器（loader）编译（JSX、sass、、、）</li>
+<li>以 commonJS 形式书写</li>
+<li>能打包、压缩混淆、图片转base64等</li>
+<li>扩展性强，插件机制完善，支持 React 热插拔</li>
+</ul>
+<h3 id="安装，配置"><a href="#安装，配置" class="headerlink" title="安装，配置"></a>安装，配置</h3><ul>
+<li>npm init,npm install webpack –save</li>
+<li>webpack.config.js配置文件</li>
+</ul>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">var webpack = require(<span class="string">'webpack'</span>);</div><div class="line"></div><div class="line">module.exports = &#123;</div><div class="line">    <span class="comment">//入口文件配置</span></div><div class="line"><span class="symbol">    entry:</span> &#123;</div><div class="line"><span class="symbol">        a:</span> <span class="string">"./a"</span>, <span class="string">b:</span> <span class="string">"./b"</span> </div><div class="line">    &#125;,</div><div class="line">    <span class="comment">//出口文件输出配置</span></div><div class="line"><span class="symbol">    output:</span> &#123;</div><div class="line"><span class="symbol">        path:</span> <span class="string">'dist/js/page'</span>,<span class="comment">//打包文件存放的绝对路径</span></div><div class="line"><span class="symbol">        filename:</span> <span class="string">'[name].js'</span>，<span class="comment">//打包后的文件名</span></div><div class="line">        publicPath：“<span class="regexp">/js” /</span>/网站运行时的访问路径</div><div class="line">    &#125;,</div><div class="line"><span class="symbol">   module:</span> &#123;</div><div class="line">        <span class="comment">//加载器配置，需要npm install *-loader</span></div><div class="line"><span class="symbol">        loaders:</span> [</div><div class="line">            <span class="comment">//.css 文件使用 style-loader 和 css-loader 来处理</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.css$/</span>, <span class="string">loader:</span> <span class="string">'style-loader!css-loader'</span> &#125;,</div><div class="line">            <span class="comment">//.js 文件使用 jsx-loader 来编译处理</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.js$/</span>, <span class="string">loader:</span> <span class="string">'jsx-loader?harmony'</span>,<span class="string">exclude:</span> <span class="regexp">/node_modules/</span> &#125;,<span class="comment">//exclude排除</span></div><div class="line">            <span class="comment">//.scss 文件使用 style-loader、css-loader 和 sass-loader 来编译处理</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.scss$/</span>, <span class="string">loader:</span> <span class="string">'style!css!sass?sourceMap'</span>&#125;,</div><div class="line">            <span class="comment">//图片文件使用 url-loader 来处理，小于8kb的直接转为base64</span></div><div class="line">            &#123; <span class="string">test:</span> <span class="regexp">/\.(png|jpg)$/</span>, <span class="string">loader:</span> <span class="string">'url-loader?limit=8192'</span>&#125;,</div><div class="line">            &#123;<span class="string">test:</span> <span class="regexp">/\.json$/</span>,<span class="string">loader:</span> <span class="string">'json'</span>&#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//插件项</span></div><div class="line"><span class="symbol">    plugins:</span> [<span class="keyword">new</span> webpack.CommonsChunkPlugin(<span class="string">"init.js"</span>) ],<span class="comment">//这个插件可以将多个打包后的资源中的公共部分打包成单独的文件，这里指定公共文件输出为“init.js” 生成文件：init.js,a.js,b.js</span></div><div class="line">    <span class="comment">//其它解决方案配置</span></div><div class="line"><span class="string">resolve:</span> &#123;</div><div class="line">        <span class="comment">//查找module的话从这里开始查找</span></div><div class="line"><span class="symbol">        root:</span> <span class="string">'E:/github/flux-example/src'</span>, <span class="comment">//绝对路径</span></div><div class="line">        <span class="comment">//自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名</span></div><div class="line"><span class="symbol">        extensions:</span> [<span class="string">''</span>, <span class="string">'.js'</span>, <span class="string">'.json'</span>, <span class="string">'.scss'</span>],</div><div class="line">        <span class="comment">//模块别名定义，方便后续直接引用别名，无须多写长长的地址</span></div><div class="line"><span class="symbol">        alias:</span> &#123;</div><div class="line">            <span class="string">AppStore :</span> <span class="string">'js/stores/AppStores.js'</span>,<span class="comment">//后续直接 require('AppStore') 即可</span></div><div class="line">            <span class="string">ActionType :</span> <span class="string">'js/actions/ActionType.js'</span>,</div><div class="line">            <span class="string">AppAction :</span> <span class="string">'js/actions/AppAction.js'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h3><p><code>CommonsChunkPlugin</code> 提取多个页面之间的公共模块</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">var CommonsChunkPlugin = require(<span class="string">"webpack/lib/optimize/CommonsChunkPlugin"</span>);</div><div class="line">module.exports = &#123;</div><div class="line"><span class="symbol">    entry:</span> &#123;</div><div class="line"><span class="symbol">        p1:</span> <span class="string">"./page1"</span>,</div><div class="line"><span class="symbol">        p2:</span> <span class="string">"./page2"</span>,</div><div class="line"><span class="symbol">        p3:</span> <span class="string">"./page3"</span>,</div><div class="line"><span class="symbol">        ap1:</span> <span class="string">"./admin/page1"</span>,</div><div class="line"><span class="symbol">        ap2:</span> <span class="string">"./admin/page2"</span></div><div class="line">    &#125;,</div><div class="line"><span class="symbol">    output:</span> &#123;</div><div class="line"><span class="symbol">        filename:</span> <span class="string">"[name].js"</span></div><div class="line">    &#125;,</div><div class="line"><span class="symbol">    plugins:</span> [</div><div class="line">        new CommonsChunkPlugin(<span class="string">"admin-commons.js"</span>, [<span class="string">"ap1"</span>, <span class="string">"ap2"</span>]),</div><div class="line">        new CommonsChunkPlugin(<span class="string">"commons.js"</span>, [<span class="string">"p1"</span>, <span class="string">"p2"</span>, <span class="string">"admin-commons.js"</span>])</div><div class="line">    ]</div><div class="line">&#125;;</div><div class="line"><span class="comment">// &lt;script&gt;s required:</span></div><div class="line"><span class="comment">// page1.html: commons.js, p1.js</span></div><div class="line"><span class="comment">// page2.html: commons.js, p2.js</span></div><div class="line"><span class="comment">// page3.html: p3.js</span></div><div class="line"><span class="comment">// admin-page1.html: commons.js, admin-commons.js, ap1.js</span></div><div class="line"><span class="comment">// admin-page2.html: commons.js, admin-commons.js, ap2.js</span></div></pre></td></tr></table></figure>
+<p><code>extract-text-webpack-plugin</code> 独立打包</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</div><div class="line">    <span class="keyword">var</span> commonsPlugin = <span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(<span class="string">'common.js'</span>);</div><div class="line">    <span class="keyword">var</span> ExtractTextPlugin = <span class="built_in">require</span>(<span class="string">"extract-text-webpack-plugin"</span>);</div><div class="line">    <span class="built_in">module</span>.exports = &#123;</div><div class="line">        <span class="attr">plugins</span>: [commonsPlugin, <span class="keyword">new</span> ExtractTextPlugin(<span class="string">"[name].css"</span>)],</div><div class="line">        <span class="attr">entry</span>: &#123;&#125;;</div><div class="line">     &#125;</div></pre></td></tr></table></figure>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/12/28/git-常用命令/" itemprop="url">
                   git 常用命令
                 </a>
@@ -1469,231 +1588,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/04/shell编程总结1-0/" itemprop="url">
-                  shell编程总结1.0
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-12-04T15:43:23+08:00" content="2015-12-04">
-              2015-12-04
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/shell/" itemprop="url" rel="index">
-                    <span itemprop="name">shell</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/04/shell编程总结1-0/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/04/shell编程总结1-0/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <ol>
-<li>chmod +x ./test.sh  #使脚本具有执行权限</li>
-<li>变量名和等号之间不能有空格</li>
-<li>$ 表示当前Shell进程的ID，即pid     $echo $$</li>
-<li>$<em> 和 $@ 都表示传递给函数或脚本的所有参数,当它们被双引号(“ “)包含时，”$</em>“ 会将所有的参数作为一个整体，以”$1 $2 … $n”的形式输出所有参数；”$@” 会将各个参数分开，以”$1” “$2” … “$n” 的形式输出所有参数。</li>
-<li><p>-e 表示对转义字符进行替换 echo -e “Value of a is $a \n”1；</p>
-</li>
-<li><p>使用 echo 命令的 -E 选项禁止转义，默认也是不转义的；使用 -n 选项可以禁止插入换行符。  </p>
-</li>
-<li>命令替换是指Shell可以先执行命令 DATE=<code>date</code></li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>变量</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$0</td>
-<td>当前脚本的文件名</td>
-</tr>
-<tr>
-<td>$n</td>
-<td>传递给脚本或函数的参数。n 是一个数字，表示第几个参数。例如，第一个参数是$1，第二个参数是$2。</td>
-</tr>
-<tr>
-<td>$#</td>
-<td>传递给脚本或函数的参数个数。</td>
-</tr>
-<tr>
-<td>$*</td>
-<td>传递给脚本或函数的所有参数。</td>
-</tr>
-<tr>
-<td>$@</td>
-<td>传递给脚本或函数的所有参数。被双引号(“ “)包含时，与 $* 稍有不同，下面将会讲到。</td>
-</tr>
-<tr>
-<td>$?</td>
-<td>上个命令的退出状态，或函数的返回值。</td>
-</tr>
-<tr>
-<td>$$</td>
-<td>当前Shell进程ID。对于 Shell 脚本，就是这些脚本所在的进程ID。</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">    <span class="comment">#!/bin/bash</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"File Name: <span class="variable">$0</span>"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"First Parameter : <span class="variable">$1</span>"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"First Parameter : <span class="variable">$2</span>"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Quoted Values: <span class="variable">$@</span>"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Quoted Values: $*"</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Total Number of Parameters : <span class="variable">$#</span>"</span></div><div class="line">$./test.sh Zara Ali</div><div class="line">File Name : ./test.sh</div><div class="line">First Parameter : Zara</div><div class="line">Second Parameter : Ali</div><div class="line">Quoted Values: Zara Ali</div><div class="line">Quoted Values: Zara Ali</div><div class="line">Total Number of Parameters : 2</div></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>转义</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>\</td>
-<td>反斜杠</td>
-</tr>
-<tr>
-<td>\a</td>
-<td>警报，响铃</td>
-</tr>
-<tr>
-<td>\b</td>
-<td>退格（删除键）</td>
-</tr>
-<tr>
-<td>\f</td>
-<td>换页(FF)，将当前位置移到下页开头</td>
-</tr>
-<tr>
-<td>\n</td>
-<td>换行</td>
-</tr>
-<tr>
-<td>\r</td>
-<td>回车</td>
-</tr>
-<tr>
-<td>\t</td>
-<td>水平制表符（tab键） </td>
-</tr>
-<tr>
-<td>\v</td>
-<td>垂直制表符</td>
-</tr>
-</tbody>
-</table>
-<p>变量替换：</p>
-<table>
-<thead>
-<tr>
-<th>形式</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>${var}</td>
-<td>变量本来的值</td>
-</tr>
-<tr>
-<td>${var:-word}</td>
-<td>如果变量 var 为空或已被删除(unset)，那么返回 word，但不改变 var 的值。</td>
-</tr>
-<tr>
-<td>${var:=word}</td>
-<td>如果变量 var 为空或已被删除(unset)，那么返回 word，并将 var 的值设置为 word。</td>
-</tr>
-<tr>
-<td>${var:?message}</td>
-<td>如果变量 var 为空或已被删除(unset)，那么将消息 message 送到标准错误输出，可以用来检测变量 var 是否可以被正常赋值。若此替换出现在Shell脚本中，那么脚本将停止运行。</td>
-</tr>
-<tr>
-<td>${var:+word}</td>
-<td>如果变量 var 被定义，那么返回 word，但不改变 var 的值。</td>
-</tr>
-</tbody>
-</table>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1740,7 +1634,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">83</span>
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
