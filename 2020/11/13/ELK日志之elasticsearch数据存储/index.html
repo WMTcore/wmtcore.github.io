@@ -67,7 +67,7 @@
 使用node.attr.box_type: hot/cold标识冷热节点
 存储：热节点使用ssd,冷节点使用高效云盘
 配置参考计算资源:  2 核 8GB 的节点可以支持 5000 qps 的写入，随节点数量和节点规格提升，写入能力基本呈线性增长">
-<meta property="og:updated_time" content="2020-11-13T10:30:23.854Z">
+<meta property="og:updated_time" content="2020-11-13T10:37:15.037Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ELK日志之elasticsearch数据存储">
 <meta name="twitter:description" content="使用es作为日志存储，上手使用方便，但资源消耗大
@@ -322,7 +322,8 @@
 <p>旧索引不会自动加入ILM，需要手动修改（建议分批修改，否则master可能会oom）</p>
 <figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">PUT log_*/<span class="class">_settings</span></div><div class="line">&#123;</div><div class="line">  <span class="string">"index.lifecycle.name"</span>: <span class="string">"mylifecycle"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>并且修改策略只对之后新创建的索引生效</p>
-<h4 id="快照"><a href="#快照" class="headerlink" title="快照"></a>快照</h4><p>自动快照的索引选择不支持时间表达式，只能自己写脚本生成每月快照</p>
+<h4 id="快照"><a href="#快照" class="headerlink" title="快照"></a>快照</h4><p>存储库：使用oss挂载到节点上作为共享存储</p>
+<p>自动快照的索引选择不支持时间表达式，只能自己写脚本生成每月快照</p>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">POST <span class="regexp">/_snapshot/</span>my_backup/my_snapshot?</div><div class="line">&#123;</div><div class="line">  "indices": <span class="string">"*-2020.11.*"</span>,</div><div class="line">  <span class="string">"ignore_unavailable"</span>: <span class="literal">true</span>, <span class="comment">// 忽略不可用索引</span></div><div class="line">  <span class="string">"include_global_state"</span>: <span class="literal">false</span>, <span class="comment">// 不包括全局状态</span></div><div class="line">  <span class="string">"metadata"</span>: &#123;</div><div class="line">    <span class="string">"taken_by"</span>: <span class="string">"kimchy"</span>,</div><div class="line">    <span class="string">"taken_because"</span>: <span class="string">"backup before upgrading"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>待快照完成后再删除索引</p>
 <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DELETE /<span class="strong">*-2020.11.*</span></div></pre></td></tr></table></figure>
