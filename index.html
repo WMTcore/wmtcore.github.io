@@ -225,6 +225,15 @@
 
     
     
+      
+      
+        
+        
+        
+      
+
+      
+    
 
     
       
@@ -334,125 +343,6 @@
 <figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">PUT _cluster/settings</div><div class="line">&#123;</div><div class="line">  <span class="string">"transient"</span>: &#123;</div><div class="line">    <span class="string">"indices.recovery.max_bytes_per_sec"</span>: <span class="string">"-1"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>调整集群恢复时的单机并发度，默认是2</p>
 <figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">PUT _cluster/settings</div><div class="line">&#123;</div><div class="line">  <span class="string">"transient"</span>: &#123;</div><div class="line">    <span class="string">"cluster.routing.allocation.node_concurrent_recoveries"</span>: <span class="number">4</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="https://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/10/21/数组间取交集优化-二分查找 /" itemprop="url">
-                  数组间取交集优化-二分查找
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2020-10-21T18:24:30+08:00" content="2020-10-21">
-              2020-10-21
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/工作日常/" itemprop="url" rel="index">
-                    <span itemprop="name">工作日常</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2020/10/21/数组间取交集优化-二分查找 /#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/10/21/数组间取交集优化-二分查找 /" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>业务：下单时，手术类型中的商品需要与授权商品取交集过滤，剩下的商品才能返回给前端展示</p>
-<p>难点：某些大客户手术类型数量有<strong>两百</strong>多，每个又包含<strong>数百</strong>商品，需要和<strong>多达十万</strong>的商品循环做取交集运算</p>
-<p>问题：原先使用的lodash的intersection方法循环每个手术类型取交集,在技术用户德高的手术类型时<strong>需要耗时2500ms</strong></p>
-<p>设手术类型*商品数量为G,授权商品数量为N,当前时间复杂度为<code>GN</code></p>
-<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>使用二分法查找：先确定待查数据的范围，然后逐步缩小范围直到找到或找不到该记录为止，需要先将数组排序</p>
-<h4 id="有序数组"><a href="#有序数组" class="headerlink" title="有序数组"></a>有序数组</h4><p>先将授权商品排序,使用快速排序（NlogN），再用二分查找搜索商品(logN)</p>
-<p>合计时间复杂度为<code>NlogN+GlogN</code>，减去原先<code>N*G</code>得到<code>NlogN+(logN-N)*G</code>所以N,G越大时优化效果越明显</p>
-<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> searchSortArray(sortArray,val)&#123;</div><div class="line">  <span class="keyword">function</span> handle(<span class="built_in">left</span>, <span class="built_in">right</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">left</span> &gt; <span class="built_in">right</span>)&#123;</div><div class="line">      return <span class="literal">false</span>;</div><div class="line">    &#125; </div><div class="line">    <span class="keyword">const</span> <span class="built_in">mid</span> = Math.floor((<span class="built_in">left</span> + <span class="built_in">right</span> ) / <span class="number">2</span>);</div><div class="line">    <span class="keyword">const</span> midVal = sortArray[<span class="built_in">mid</span>];</div><div class="line">    <span class="keyword">if</span>(midVal===val)&#123;</div><div class="line">      return <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(midVal&gt;val)&#123;</div><div class="line">      return handle(<span class="built_in">left</span>,<span class="built_in">mid</span><span class="number">-1</span>)</div><div class="line">    &#125;</div><div class="line">    return handle(<span class="built_in">mid</span>+<span class="number">1</span>,<span class="built_in">right</span>)</div><div class="line">  &#125;</div><div class="line">  return handle(<span class="number">0</span>, sortArray.length - <span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="二叉搜索树-BST"><a href="#二叉搜索树-BST" class="headerlink" title="二叉搜索树(BST)"></a>二叉搜索树(BST)</h5><ul>
-<li>BST：根节点的值大于其左子树中任意一个节点的值，小于其右节点中任意一节点的值</li>
-</ul>
-<p>有序数组在计算时，每次都要计算一次中间值(logN)，使用BST能省掉这次计算</p>
-<p>再排序的基础上构建一个二叉搜索树（N）,再检索二叉树(logN)</p>
-<p>所以原先的有序数组时间复杂度为 <code>NlogN+2GlogN</code>,二叉树的时间复杂度为<code>NlogN+GlogN+N</code>,相减得到<code>GlogN-N</code>,<strong>当G较大时使用BST效果好</strong></p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 二叉树结构</span></div><div class="line">function TreeNode(<span class="keyword">val</span>, left, right) &#123;</div><div class="line">  <span class="keyword">this</span>.<span class="keyword">val</span> = (<span class="keyword">val</span> === undefined ? <span class="number">0</span> : <span class="keyword">val</span>);</div><div class="line">  <span class="keyword">this</span>.left = (left === undefined ? <span class="literal">null</span> : left);</div><div class="line">  <span class="keyword">this</span>.right = (right === undefined ? <span class="literal">null</span> : right);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 有序数组转BST</span></div><div class="line">function arrayToBST(sortArray) &#123;</div><div class="line">  function handle(left, right) &#123;</div><div class="line">    <span class="keyword">if</span> (left &gt; right)&#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    &#125; </div><div class="line">    const mid = Math.floor((left + right ) / <span class="number">2</span>);</div><div class="line">    const root = new TreeNode(sortArray[mid]);</div><div class="line">    root.left = handle(left, mid - <span class="number">1</span>);</div><div class="line">    root.right = handle(mid + <span class="number">1</span>, right);</div><div class="line">    <span class="keyword">return</span> root;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> handle(<span class="number">0</span>, sortArray.length - <span class="number">1</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 检索BST</span></div><div class="line">function searchBST(BST, <span class="keyword">val</span>) &#123;</div><div class="line">  <span class="keyword">if</span> (!BST) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  <span class="keyword">if</span> (<span class="keyword">val</span> === BST.<span class="keyword">val</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (<span class="keyword">val</span> &lt; BST.<span class="keyword">val</span>) &#123;;</div><div class="line">    <span class="keyword">return</span> searchBST(BST.left, <span class="keyword">val</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> searchBST(BST.right, <span class="keyword">val</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>在使用BST优化后时间降为<strong>480ms</strong>,比原先快了5倍,效果显著</p>
-<p>在实际业务处理中要对商品数量做<strong>判断后再选择合适的算法</strong></p>
 
             
           </span>

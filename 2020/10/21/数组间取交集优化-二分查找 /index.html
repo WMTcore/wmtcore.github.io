@@ -55,7 +55,7 @@
 
 <meta name="description" content="场景业务：下单时，手术类型中的商品需要与授权商品取交集过滤，剩下的商品才能返回给前端展示
 难点：某些大客户手术类型数量有两百多，每个又包含数百商品，需要和多达十万的商品循环做取交集运算
-问题：原先使用的lodash的intersection方法循环每个手术类型取交集,在技术用户德高的手术类型时需要耗时2500ms
+问题：原先使用的lodash的intersection方法循环每个手术类型取交集,在获取用户德高的手术类型时需要耗时2500ms
 设手术类型*商品数量为G,授权商品数量为N,当前时间复杂度为GN
 优化使用二分法查找">
 <meta property="og:type" content="article">
@@ -64,15 +64,15 @@
 <meta property="og:site_name" content="大碗拉面">
 <meta property="og:description" content="场景业务：下单时，手术类型中的商品需要与授权商品取交集过滤，剩下的商品才能返回给前端展示
 难点：某些大客户手术类型数量有两百多，每个又包含数百商品，需要和多达十万的商品循环做取交集运算
-问题：原先使用的lodash的intersection方法循环每个手术类型取交集,在技术用户德高的手术类型时需要耗时2500ms
+问题：原先使用的lodash的intersection方法循环每个手术类型取交集,在获取用户德高的手术类型时需要耗时2500ms
 设手术类型*商品数量为G,授权商品数量为N,当前时间复杂度为GN
 优化使用二分法查找">
-<meta property="og:updated_time" content="2020-10-21T10:31:34.130Z">
+<meta property="og:updated_time" content="2020-11-16T07:12:47.247Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数组间取交集优化-二分查找">
 <meta name="twitter:description" content="场景业务：下单时，手术类型中的商品需要与授权商品取交集过滤，剩下的商品才能返回给前端展示
 难点：某些大客户手术类型数量有两百多，每个又包含数百商品，需要和多达十万的商品循环做取交集运算
-问题：原先使用的lodash的intersection方法循环每个手术类型取交集,在技术用户德高的手术类型时需要耗时2500ms
+问题：原先使用的lodash的intersection方法循环每个手术类型取交集,在获取用户德高的手术类型时需要耗时2500ms
 设手术类型*商品数量为G,授权商品数量为N,当前时间复杂度为GN
 优化使用二分法查找">
 
@@ -309,7 +309,7 @@
       
         <span itemprop="articleBody"><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>业务：下单时，手术类型中的商品需要与授权商品取交集过滤，剩下的商品才能返回给前端展示</p>
 <p>难点：某些大客户手术类型数量有<strong>两百</strong>多，每个又包含<strong>数百</strong>商品，需要和<strong>多达十万</strong>的商品循环做取交集运算</p>
-<p>问题：原先使用的lodash的intersection方法循环每个手术类型取交集,在技术用户德高的手术类型时<strong>需要耗时2500ms</strong></p>
+<p>问题：原先使用的lodash的intersection方法循环每个手术类型取交集,在获取用户德高的手术类型时<strong>需要耗时2500ms</strong></p>
 <p>设手术类型*商品数量为G,授权商品数量为N,当前时间复杂度为<code>GN</code></p>
 <h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>使用二分法查找：先确定待查数据的范围，然后逐步缩小范围直到找到或找不到该记录为止，需要先将数组排序</p>
 <h4 id="有序数组"><a href="#有序数组" class="headerlink" title="有序数组"></a>有序数组</h4><p>先将授权商品排序,使用快速排序（NlogN），再用二分查找搜索商品(logN)</p>
